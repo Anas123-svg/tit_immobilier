@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
         transition={{ delay: 0.2 }}
       >
         <h1 className="text-lg font-bold text-primary md:ml-3 heading-5">
-          ZenApi
+        TIT-immobilier
         </h1>
       </motion.div>
 

@@ -15,16 +15,26 @@ import {
 import { Icon as LucideIcon } from "lucide-react"; // Import Icon type from lucide-react
 
 // Dummy components for demonstration (replace these with actual imports)
-import Principal from "@/components/admin-panel/property-management/dashboard/Principal";
-import ProfileComponent from "@/components/admin-panel/profile/Profile";
-import ChangePassword from "@/components/admin-panel/profile/ChangePassword";
-import SettingsComponent from "@/components/admin-panel/profile/Settings";
-import LogoutComponent from "@/components/admin-panel/profile/Logout";
-import Owner from "@/components/admin-panel/property-management/dashboard/Owner";
-import Tenant from "@/components/admin-panel/property-management/dashboard/Tenant";
-import Promotion from "@/components/admin-panel/property-management/dashboard/Promotion";
-import Subdivision from "@/components/admin-panel/property-management/dashboard/Subdivision";
-import ManagementPortfolio from "@/components/admin-panel/property-management/management-portfolio";
+import Principal from "@/components/admin-panel/sidebar/property-management/dashboard/Principal";
+import ProfileComponent from "@/components/admin-panel/sidebar/profile/Profile";
+import ChangePassword from "@/components/admin-panel/sidebar/profile/ChangePassword";
+import SettingsComponent from "@/components/admin-panel/sidebar/profile/Settings";
+import LogoutComponent from "@/components/admin-panel/sidebar/profile/Logout";
+import Owner from "@/components/admin-panel/sidebar/property-management/dashboard/Owner";
+import Tenant from "@/components/admin-panel/sidebar/property-management/dashboard/Tenant";
+import Promotion from "@/components/admin-panel/sidebar/property-management/dashboard/Promotion";
+import Subdivision from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
+import ManagementPortfolio from "@/components/admin-panel/sidebar/property-management/management-portfolio";
+import MesValidations from "@/components/admin-panel/sidebar/property-management/mes-validatoins";
+import Tiers from "@/components/admin-panel/sidebar/property-management/tiers";
+import CRM from "@/components/admin-panel/sidebar/property-management/crm";
+import Heritage from "@/components/admin-panel/sidebar/property-management/heritage";
+import Treasury from "@/components/admin-panel/sidebar/property-management/treasury";
+import Report from "@/components/admin-panel/sidebar/property-management/report";
+import GeneralMeans from "@/components/admin-panel/sidebar/extra/general-means";
+import Ticket from "@/components/admin-panel/sidebar/extra/ticket";
+import Resource from "@/components/admin-panel/sidebar/extra/resource";
+import Extra from "@/components/admin-panel/sidebar/extra/extra";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -88,33 +98,33 @@ export const sidebarOptions: SidebarSection[] = [
           { name: "Subdivision", path: "/dashboard/subdivision", component: Subdivision },
         ],
       },
-      // { name: "Mes Validations", path: "/validations", icon: Clipboard, component: Dashboard },
-      // {
-      //   name: "Tiers",
-      //   path: "/tiers",
-      //   icon: Layers,
-      //   component: Tiers,
-      //   subOptions: [
-      //     { name: "Owner", path: "/tiers/owner", component: Owner },
-      //     { name: "Tenant", path: "/tiers/tenant", component: Tenant },
-      //     { name: "Client", path: "/tiers/client", component: Principal },
-      //   ],
-      // },
-      // { name: "CRM", path: "/crm", icon: User, component: CRM },
-      // { name: "Heritage", path: "/heritage", icon: Building, component: Heritage },
-      // { name: "Treasury", path: "/treasury", icon: DollarSign, component: Treasury },
-      // { name: "Report", path: "/report", icon: FileText, component: Report },
+      { name: "Mes Validations", path: "/validations", icon: Clipboard, component: MesValidations },
+      {
+        name: "Tiers",
+        path: "/tiers",
+        icon: Layers,
+        component: Tiers,
+        subOptions: [
+          { name: "Owner", path: "/tiers/owner", component: Owner },
+          { name: "Tenant", path: "/tiers/tenant", component: Tenant },
+          { name: "Client", path: "/tiers/client", component: Principal },
+        ],
+      },
+      { name: "CRM", path: "/crm", icon: User, component: CRM },
+      { name: "Heritage", path: "/heritage", icon: Building, component: Heritage },
+      { name: "Treasury", path: "/treasury", icon: DollarSign, component: Treasury },
+      { name: "Report", path: "/report", icon: FileText, component: Report },
     ],
   },
-  // {
-  //   section: "Extra",
-  //   options: [
-  //     { name: "General Means", path: "/general-means", icon: Clipboard, component: GeneralMeans },
-  //     { name: "Ticket", path: "/ticket", icon: Calendar, component: Ticket },
-  //     { name: "Resource", path: "/resource", icon: Layers, component: Resource },
-  //     { name: "Extra", path: "/extra", icon: Briefcase, component: Dashboard },
-  //   ],
-  // },
+  {
+    section: "Extra",
+    options: [
+      { name: "General Means", path: "/general-means", icon: Clipboard, component: GeneralMeans },
+      { name: "Ticket", path: "/ticket", icon: Calendar, component: Ticket },
+      { name: "Resource", path: "/resource", icon: Layers, component: Resource },
+      { name: "Extra", path: "/extra", icon: Briefcase, component: Extra },
+    ],
+  },
   // {
   //   section: "Security",
   //   options: [{ name: "User", path: "/user", icon: User, component: UserManagement }],

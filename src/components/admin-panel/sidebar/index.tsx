@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex border shadow-xl rounded">
+    <div className="flex border shadow-xl rounded ">
       {/* Sidebar */}
       <aside
         className={`top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
@@ -77,7 +77,7 @@ const Sidebar: React.FC = () => {
             <div key={sectionIndex}>
               {/* Section Title */}
               {isOpen && (
-                <li className="px-4 py-2 text-lg border-b-2 font-semibold text-primary">
+                <li className="px-4 py-2 text-lg border-y-2 font-semibold mt-3 text-primary">
                   {section.section}
                 </li>
               )}
