@@ -35,6 +35,8 @@ import GeneralMeans from "@/components/admin-panel/sidebar/extra/general-means";
 import Ticket from "@/components/admin-panel/sidebar/extra/ticket";
 import Resource from "@/components/admin-panel/sidebar/extra/resource";
 import Extra from "@/components/admin-panel/sidebar/extra/extra";
+import OwnerTier from "@/components/admin-panel/sidebar/property-management/tiers/owner";
+import TenantTier from "@/components/admin-panel/sidebar/property-management/tiers/tenant";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -105,8 +107,8 @@ export const sidebarOptions: SidebarSection[] = [
         icon: Layers,
         component: Tiers,
         subOptions: [
-          { name: "Owner", path: "/tiers/owner", component: Owner },
-          { name: "Tenant", path: "/tiers/tenant", component: Tenant },
+          { name: "Owner", path: "/tiers/owner", component: OwnerTier },
+          { name: "Tenant", path: "/tiers/tenant", component: TenantTier },
           { name: "Client", path: "/tiers/client", component: Principal },
         ],
       },

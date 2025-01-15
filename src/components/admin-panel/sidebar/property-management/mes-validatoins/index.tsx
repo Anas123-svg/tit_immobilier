@@ -1,13 +1,32 @@
-// Owner.tsx
 import React from "react";
+import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
+import StatsCardsSection from "./StatsCardsSection";
+import FilterSection from "./FilterSection";
+import NoContractsSection from "./NoContractsSection";
+import { validationStats } from "@/data/dummyData";
 
-const MesValidations: React.FC = () => {
+const MesValidation: React.FC = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold">Owner Component</h1>
-      <p>This is the placeholder component for the Owner section.</p>
+      {/* Header Section */}
+      <HeaderSection
+        title="Mes Validations"
+        breadcrumbs={[
+          { name: "Dashboard", path: "/dashboard" },
+          { name: "Mes Validations", path: "/dashboard/validations" },
+        ]}
+      />
+
+      {/* Statistics Cards Section */}
+      <StatsCardsSection stats={validationStats} />
+
+      {/* Filter Section */}
+      <FilterSection />
+
+      {/* No Contracts Section */}
+      <NoContractsSection message="Oupss!! No contracts found" />
     </div>
   );
 };
 
-export default MesValidations;
+export default MesValidation;
