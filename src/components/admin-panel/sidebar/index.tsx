@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Add useNavigate
 import UserImage from "../../../assets/avatar-default.png";
-
 import { sidebarOptions } from "@/data/sidebarOptions";
 import { ChevronRight, ChevronLeft, ChevronDown, LogOut } from "lucide-react";
 
@@ -10,6 +9,7 @@ const Sidebar: React.FC = () => {
   const [isProfileExpanded, setIsProfileExpanded] = useState(false); // State to toggle profile section
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({}); // State for expanded sections
   const location = useLocation(); // Get the current route
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
   // Function to toggle expanded section
   const toggleSection = (sectionName: string) => {
@@ -20,21 +20,20 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex  border shadow-xl roun ">
+    <div className="flex border shadow-xl rounded">
       {/* Sidebar */}
       <aside
-        className={` top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
-          isOpen ? "w-72" : "w-0 sm:w-12"
+        className={`top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
+          isOpen ? "w-60" : "w-0 sm:w-20"
         }`}
       >
         {/* Profile Section */}
         <div className="">
-        
           <div
             className="flex flex-col items-center justify-center mt-4 cursor-pointer"
             onClick={() => setIsProfileExpanded(!isProfileExpanded)}
           >
-            <div className="w-16 h-16 rounded-full  shadow-md border-4 border-white overflow-hidden">
+            <div className="w-16 h-16 rounded-full shadow-md border-4 border-white overflow-hidden">
               <img
                 src={UserImage}
                 alt="Profile"
@@ -63,7 +62,7 @@ const Sidebar: React.FC = () => {
                     to={item.path}
                     className="flex items-center space-x-2 text-sm text-secondary hover:text-primary"
                   >
-                    <item.icon size={18} />
+                    {item.icon && <item.icon size={18} />}
                     <span>{item.name}</span>
                   </Link>
                 </li>
@@ -98,10 +97,12 @@ const Sidebar: React.FC = () => {
                           : "hover:bg-secondary hover:text-white"
                       }`}
                       onClick={() =>
-                        item.subOptions ? toggleSection(item.name) : null
+                        item.subOptions
+                          ? toggleSection(item.name)
+                          : navigate(item.path) // Navigate directly if no sub-options
                       }
                     >
-                      <item.icon size={20} />
+                      {item.icon && <item.icon size={20} />}
                       {isOpen && <span>{item.name}</span>}
                       {item.subOptions && isOpen && (
                         <ChevronDown
@@ -129,7 +130,10 @@ const Sidebar: React.FC = () => {
                                   : ""
                               }`}
                             >
-                              {subItem.name}
+                              <div className="flex items-center justify-start gap-3 border-b pb-3">
+                                <ChevronRight size={15} /> {/* Render icon if available */}
+                                <span>{subItem.name}</span>
+                              </div>
                             </Link>
                           </li>
                         ))}
@@ -157,8 +161,8 @@ const Sidebar: React.FC = () => {
 
       {/* Toggle Button */}
       <button
-        className={`fixed top-36 transition-all duration-300 ease-in-out ${
-          isOpen ? "left-[270px]" : "left-0 sm:left-10"
+        className={`fixed top-20 transition-all duration-300 ease-in-out ${
+          isOpen ? "left-[220px]" : "left-0 sm:left-16"
         } z-50 bg-white text-primary p-1 rounded-md shadow-md`}
         onClick={() => setIsOpen(!isOpen)}
       >

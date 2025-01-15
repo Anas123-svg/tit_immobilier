@@ -15,7 +15,6 @@ import {
 import { Icon as LucideIcon } from "lucide-react"; // Import Icon type from lucide-react
 
 // Dummy components for demonstration (replace these with actual imports)
-import Dashboard from "@/components/admin-panel/property-management/dashboard";
 import Principal from "@/components/admin-panel/property-management/dashboard/Principal";
 import ProfileComponent from "@/components/admin-panel/profile/Profile";
 import ChangePassword from "@/components/admin-panel/profile/ChangePassword";
@@ -25,13 +24,14 @@ import Owner from "@/components/admin-panel/property-management/dashboard/Owner"
 import Tenant from "@/components/admin-panel/property-management/dashboard/Tenant";
 import Promotion from "@/components/admin-panel/property-management/dashboard/Promotion";
 import Subdivision from "@/components/admin-panel/property-management/dashboard/Subdivision";
+import ManagementPortfolio from "@/components/admin-panel/property-management/management-portfolio";
 
 // Type definition for a single route option
 export interface SidebarOption {
   name: string;
   path: string;
-  icon: React.ElementType; // Correctly typed using LucideIcon
-  component: React.FC;
+  icon?: React.ElementType; // Correctly typed using LucideIcon
+  component: React.FC<any>; // Allow components with any props
   subOptions?: SidebarOption[]; // Optional sub-options
 }
 
@@ -74,18 +74,18 @@ export const sidebarOptions: SidebarSection[] = [
   {
     section: "Property Management",
     options: [
-      { name: "Management Portfolio", path: "/portfolio", icon: Briefcase, component: Dashboard },
+      { name: "Management Portfolio", path: "/portfolio", icon: Briefcase, component: ManagementPortfolio,  },
       {
         name: "Dashboard",
         path: "/dashboard",
         icon: Home,
-        component: Dashboard,
+        component:Principal,
         subOptions: [
-          { name: "Principal", icon: Home, path: "/dashboard/principal", component: Principal },
-          { name: "Owner",icon: Home, path: "/dashboard/owner", component: Owner },
-          { name: "Tenant", icon: Home, path: "/dashboard/tenant", component: Tenant },
-          { name: "Promotion", icon: Home, path: "/dashboard/promotion", component: Promotion },
-          { name: "Subdivision",icon: Home, path: "/dashboard/subdivision", component: Subdivision },
+          { name: "Principal", path: "/dashboard/principal", component: Principal },
+          { name: "Owner", path: "/dashboard/owner", component: Owner },
+          { name: "Tenant", path: "/dashboard/tenant", component: Tenant },
+          { name: "Promotion", path: "/dashboard/promotion", component: Promotion },
+          { name: "Subdivision", path: "/dashboard/subdivision", component: Subdivision },
         ],
       },
       // { name: "Mes Validations", path: "/validations", icon: Clipboard, component: Dashboard },

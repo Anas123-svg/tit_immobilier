@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, ChevronDown, Menu, X,LogOut } from "lucide-react"; // Import icons
+import { User, ChevronDown, Menu, X,LogOut } from "lucide-react"; // Import icons
 import { motion, AnimatePresence } from "framer-motion"; // Importing framer-motion
 
 import { sidebarOptions } from "@/data/sidebarOptions";
@@ -23,59 +23,11 @@ const Navbar: React.FC = () => {
         transition={{ delay: 0.2 }}
       >
         <h1 className="text-lg font-bold text-primary md:ml-3 heading-5">
-          Trauma Support
+          ZenApi
         </h1>
       </motion.div>
 
-      {/* Middle Section: Links */}
-      <motion.ul
-        className={`${
-          isMobileMenuOpen ? "block" : "hidden"
-        } absolute top-24 md:top-16 border lg:border-none shadow-md  left-0 w-full lg:w-fit bg-white lg:static lg:space-x-8 lg:text-sm lg:font-medium lg:text-gray-700 lg:bg-transparent lg:shadow-none z-30 lg:flex text-sm font-medium text-gray-700`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-      >
-        
-        <li className="border-b lg:border-none">
-          <Link to="/" className="block    lg:hover:text-primary transition p-3 lg:p-0  ">
-            Main
-          </Link>
-        </li>
-        <li className="border-b lg:border-none">
-          <Link
-            to="/health-forum"
-            className="block   lg:hover:text-primary transition p-3 lg:p-0 "
-          >
-            Health Forum
-          </Link>
-        </li>
-        <li className="border-b lg:border-none">
-          <Link
-            to="/pharmacy-store"
-            className="block   lg:hover:text-primary transition  p-3 lg:p-0  "
-          >
-            Pharmacy & Store
-          </Link>
-        </li>
-        <li className="border-b lg:border-none">
-          <Link
-            to="/how-it-works"
-            className="block   lg:hover:text-primary transition p-3 lg:p-0  "
-          >
-            How It Work?
-          </Link>
-        </li>
-        <li className="border-b lg:border-none">
-          <Link
-            to="/pages"
-            className="block   lg:hover:text-primary transition p-3 lg:p-0  "
-          >
-            Pages
-          </Link>
-        </li>
-      </motion.ul>
-
+      
 
       {/* Right Section: Cart and Profile */}
       <motion.div
@@ -94,18 +46,12 @@ const Navbar: React.FC = () => {
         </button>
       </div>
 
-        {/* Cart Icon */}
-        <div className="relative justify-self-start">
-          <ShoppingCart size={20} className="text-primary cursor-pointer" />
-          <motion.span
-            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
-          >
-            0
-          </motion.span>
-        </div>
+      {/* User Icon */}
+<div className="relative justify-self-start">
+  <User size={20} className="text-primary cursor-pointer" />
+
+</div>
+
         </div>
         {/* Profile Dropdown */}
         <motion.div
@@ -117,8 +63,7 @@ const Navbar: React.FC = () => {
         >
         
           <div>
-            <p className="text-sm font-semibold text-gray-800">Ava Nguyen</p>
-            <p className="text-xs text-blue-500">MBBS, MCPS, MS...</p>
+            
           </div>
           <ChevronDown size={16} className="text-gray-600" />
         </motion.div>
