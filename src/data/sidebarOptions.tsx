@@ -27,7 +27,7 @@ import Subdivision from "@/components/admin-panel/sidebar/property-management/da
 import ManagementPortfolio from "@/components/admin-panel/sidebar/property-management/management-portfolio";
 import MesValidations from "@/components/admin-panel/sidebar/property-management/mes-validatoins";
 import Tiers from "@/components/admin-panel/sidebar/property-management/tiers";
-import CRM from "@/components/admin-panel/sidebar/property-management/crm";
+import CRM from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
 import Heritage from "@/components/admin-panel/sidebar/property-management/heritage";
 import Treasury from "@/components/admin-panel/sidebar/property-management/treasury";
 import Report from "@/components/admin-panel/sidebar/property-management/report";
@@ -39,6 +39,8 @@ import OwnerTier from "@/components/admin-panel/sidebar/property-management/tier
 import TenantTier from "@/components/admin-panel/sidebar/property-management/tiers/tenant";
 import SubdivisionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
 import ClientTier from "@/components/admin-panel/sidebar/property-management/tiers/client";
+import SalesProspect from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
+import LocationProspect from "@/components/admin-panel/sidebar/property-management/crm/LocationProspect";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -118,17 +120,17 @@ export const sidebarOptions: SidebarSection[] = [
         name: "CRM",
         path: "/crm",
         icon: User,
-       component:CRM,
+       component:SalesProspect,
         subOptions: [
           {
             name: "Sales Prospect",
             path: "/crm/sales-prospect",
-           component: CRM
+           component: SalesProspect
           },
           {
             name: "Prospect Location",
             path: "/crm/prospect-location",
-           component:CRM
+           component:LocationProspect
           },
           {
             name: "Setting",
