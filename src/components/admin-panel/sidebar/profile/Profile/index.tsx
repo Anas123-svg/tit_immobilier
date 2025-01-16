@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import UserImage from "@/assets/avatar-default.png"; // Replace with your actual image path
+import ChangePassword from "../ChangePassword"; // Import ChangePassword component
+import ProfilePictureModal from "./ProfilePictureModal";
 
 const ProfileComponent: React.FC = () => {
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [isPfModalOpen, setIsPfModalOpen] = useState(false);
+  const handleChangePassword = () => {
+    setIsModalOpen(true); // Show the ChangePassword modal
+  };
+
+  const handlePfModal= () => {
+    setIsPfModalOpen(true); // Show the ChangePassword modal
+  };
+  const handlePfToggleModal = (isOpen: boolean) => {
+    setIsPfModalOpen(isOpen);
+  };
+  const handleToggleModal = (isOpen: boolean) => {
+    setIsModalOpen(isOpen);
+  };
+
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
       {/* Profile Header */}
@@ -30,10 +48,15 @@ const ProfileComponent: React.FC = () => {
         <button className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400">
           Back
         </button>
-        <button className="px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500">
+        <button
+          onClick={handleChangePassword}
+          className="px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-500"
+        >
           Change My Password
         </button>
-        <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+        <button
+            onClick={handlePfModal}
+         className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
           Change My Profile Picture
         </button>
       </div>
@@ -73,6 +96,10 @@ const ProfileComponent: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Render ChangePassword Modal */}
+      {isModalOpen && <ChangePassword isModalOpen  setIsModalOpen={handleToggleModal} />}
+      {isPfModalOpen && <ProfilePictureModal isModalOpen={isPfModalOpen}  setIsModalOpen={handlePfToggleModal} />}
     </div>
   );
 };

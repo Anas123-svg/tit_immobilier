@@ -1,7 +1,7 @@
 import React from "react";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import StatsCardsSection from "./StatsCardsSection";
-import FilterSection from "./FilterSection";
+
 import NoContractsSection from "./NoContractsSection";
 import { validationStats } from "@/data/dummyData";
 
@@ -20,8 +20,7 @@ const MesValidation: React.FC = () => {
       {/* Statistics Cards Section */}
       <StatsCardsSection stats={validationStats} />
 
-      {/* Filter Section */}
-      <FilterSection />
+
 
       {/* No Contracts Section */}
       <NoContractsSection message="Oupss!! No contracts found" />

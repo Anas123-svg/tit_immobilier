@@ -9,8 +9,24 @@ interface PasswordFormInputs {
   confirmPassword: string;
 }
 
-const ChangePassword: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+interface ChangePasswordProps {
+  isModalOpen?: boolean; // Controlled mode
+  setIsModalOpen?: (isOpen: boolean) => void; // Controlled mode
+}
+
+const ChangePassword: React.FC<ChangePasswordProps> = ({
+  isModalOpen: externalIsModalOpen,
+  setIsModalOpen: externalSetIsModalOpen,
+}) => {
+  // Internal state for self-management (uncontrolled mode)
+  const [internalIsModalOpen, setInternalIsModalOpen] = useState(true);
+
+  // Determine actual state: prioritize external control
+  const isModalOpen = externalIsModalOpen ?? internalIsModalOpen;
+
+  // Fallback to internal state setter if external setter is not provided
+  const setIsModalOpen = externalSetIsModalOpen ?? setInternalIsModalOpen;
+
   const [showPassword, setShowPassword] = useState({
     current: false,
     new: false,
@@ -26,12 +42,11 @@ const ChangePassword: React.FC = () => {
 
   const onSubmit: SubmitHandler<PasswordFormInputs> = (data) => {
     console.log("Password Change Data:", data);
-    setIsModalOpen(false); // Close modal after successful submission
+    setIsModalOpen(false); // Close modal after submission
   };
 
   return (
     <div>
-      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
@@ -48,7 +63,9 @@ const ChangePassword: React.FC = () => {
             >
               {/* Modal Header */}
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-primary">Change Your Password</h2>
+                <h2 className="text-xl font-semibold text-primary">
+                  Change Your Password
+                </h2>
                 <button onClick={() => setIsModalOpen(false)}>
                   <X size={20} className="text-secondary" />
                 </button>

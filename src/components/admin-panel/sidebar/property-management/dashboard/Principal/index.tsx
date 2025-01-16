@@ -3,7 +3,7 @@ import React from "react";
 import StatisticCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
 import ChartSection from "./ChartSection";
 import SummaryCardsSection from "./SummaryCard";
-import { principalStats, summaryCardsData,tenantData,ownerData } from "@/data/dummyData";
+import { principalStats, summaryCardsData,tenantData } from "@/data/dummyData";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import TenantList from "./TenantList";
 import OwnerList from "./OwnerList";
@@ -34,11 +34,11 @@ const Principal: React.FC = () => {
       <TopListSection title="List of the Last 10 Tenants" data={tenantData} itemsPerPage={5} />
 
       {/* Owner List Section */}
-      <TopListSection title="List of the Last 10 Owners" data={ownerData} itemsPerPage={5} />
+      <TopListSection title="List of the Last 10 Owners" data={tenantData} itemsPerPage={5} />
       <TopListSection title="List of the Last 10 Tenants" data={tenantData} itemsPerPage={5} />
 
 {/* Owner List Section */}
-<TopListSection title="List of the Last 10 Owners" data={ownerData} itemsPerPage={5} />
+<TopListSection title="List of the Last 10 Owners" data={tenantData} itemsPerPage={5} />
     </div>
     </div>
     </div>

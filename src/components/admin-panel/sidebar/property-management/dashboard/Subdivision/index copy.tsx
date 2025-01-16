@@ -1,5 +1,5 @@
 import React from "react";
-import PromotionDashboardHeader from "./PromotionDashboardHeader";
+import PromotionDashboardHeader from "./SubdivisionDashboardHeader";
 import StatsCardsSection from "./StatsCardsSection";
 import CircularDiagram from "./CircularDiagram";
 import LineChart from "./LineChart";

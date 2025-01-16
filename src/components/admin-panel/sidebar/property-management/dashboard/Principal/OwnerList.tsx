@@ -1,4 +1,3 @@
-// OwnerList.tsx
 import React, { useState } from "react";
 import ListItem from "./ListItem";
 import Pagination from "./Pagination";
@@ -14,6 +13,9 @@ interface Owner {
 
 const OwnerList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
+
   const owners: Owner[] = [
     { name: "Mrs. DIOMANDE AUDREY ASTOU", phone: "627745376", code: "ZA-6972-8243-01", status: "ACTIVE", pay: "150,000 XOF" },
     { name: "Mr SANGARE YOU ARE THE ONE", phone: "0709739307", code: "ZA-6972-2150-01", status: "ACTIVE", pay: "0 XOF" },
@@ -21,19 +23,30 @@ const OwnerList: React.FC = () => {
     { name: "Mr DEMBELE BASSERIBA", phone: "19782278791", code: "ZA-6972-4802-01", status: "ACTIVE", pay: "0 XOF" },
   ];
 
-  const filteredOwners = owners.filter(owner =>
+  const filteredOwners = owners.filter((owner) =>
     owner.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedOwners = filteredOwners.slice(
+    startIndex,
+    startIndex + itemsPerPage
   );
 
   return (
     <div>
       <Search setSearchTerm={setSearchTerm} />
       <div className="overflow-hidden bg-white shadow-sm rounded-md">
-        {filteredOwners.map((owner, index) => (
+        {paginatedOwners.map((owner, index) => (
           <ListItem key={index} {...owner} />
         ))}
       </div>
-      <Pagination />
+      <Pagination
+       
+        totalPages={itemsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };

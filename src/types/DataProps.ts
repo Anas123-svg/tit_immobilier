@@ -81,3 +81,12 @@ export interface Tenant {
 export interface ListOfTenantsSectionProps {
   tenants: Tenant[];
 }
+
+export interface Contract {
+  reference: string;
+  tenant: string;
+  location: string;
+  contractStartDate:string
+  contractEndDate:string
+  amount:string
+}

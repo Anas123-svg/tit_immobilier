@@ -1,5 +1,5 @@
 import { DollarSign, Briefcase, AlertTriangle, User, FileText, CheckCircle, Building,Home,Repeat, } from "lucide-react";
-import { StatCardProps, SummaryCardProps, FilterOptions ,Mandate,Owner,Tenant,StatCard,ListOfTenantsSectionProps } from "@/types/DataProps"; // Assuming these types are defined in your project
+import { StatCardProps, SummaryCardProps, FilterOptions ,Mandate,Owner,Tenant,StatCard,Contract } from "@/types/DataProps"; // Assuming these types are defined in your project
 
 // Filter options for the dropdown
 export const filterOptions: FilterOptions = {
@@ -259,5 +259,111 @@ export const dummyOwners = [
       status: "Active",
       imgUrl: "https://randomuser.me/api/portraits/women/1.jpg",
     },
+  ];
+  export const tenantData = [
+    {
+      name: "ASSEMIAN N'GUESSAN ADOLPHE",
+      phone: "0707787973",
+      code: "ZA-6972-6414-01",
+      status: "Active",
+      pay: "OWE: 9,900,000 XOF",
+    },
+    {
+      name: "YAO N'GUESSAN ALAIN ROLAND",
+      phone: "0777120473",
+      code: "ZA-6972-2939-01",
+      status: "Active",
+      pay: "DUE: 0 XOF",
+    },
+    {
+      name: "KOUADIO JEAN MICHEL",
+      phone: "0778901234",
+      code: "ZA-6972-1293-01",
+      status: "Inactive",
+      pay: "OWE: 5,500,000 XOF",
+    },
+    {
+      name: "AHOUA MARIE LAURE",
+      phone: "0583920123",
+      code: "ZA-6972-9384-01",
+      status: "Active",
+      pay: "DUE: 0 XOF",
+    },
+  ];
+
+  
+  export const renewals: Contract[] = [
+    {
+      reference: "ZA-6972-9058-01",
+      tenant: "Miss YAO AMANY HOUPHOUET JEANNE",
+      location: "DEMBELE",
+      contractStartDate: "2024-01-01",
+      contractEndDate: "2024-12-31",
+      amount: "500,000 XOF",
+    },
+    {
+      reference: "ZA-6972-4083-01",
+      tenant: "Mr. YAO KOUAKOU NARCISSE",
+      location: "DEMBELE",
+      contractStartDate: "2023-02-01",
+      contractEndDate: "2024-02-01",
+      amount: "300,000 XOF",
+    },
+    {
+      reference: "ZA-6972-7895-01",
+      tenant: "Mrs. KOUASSI ANNE MARIE",
+      location: "YAO RESIDENCE",
+      contractStartDate: "2023-03-01",
+      contractEndDate: "2024-03-01",
+      amount: "700,000 XOF",
+    },
+    {
+      reference: "ZA-6972-9123-01",
+      tenant: "Mr. KOUADIO JEAN MICHEL",
+      location: "VERNE VILLA",
+      contractStartDate: "2023-04-01",
+      contractEndDate: "2024-04-01",
+      amount: "450,000 XOF",
+    },
+    {
+      reference: "ZA-6972-5643-01",
+      tenant: "Miss AHOUA MARIE",
+      location: "COCODY RESIDENCE",
+      contractStartDate: "2023-05-01",
+      contractEndDate: "2024-05-01",
+      amount: "650,000 XOF",
+    },
+    {
+      reference: "ZA-6972-3210-01",
+      tenant: "Mr. SANGARE YACOUBA",
+      location: "YAO APARTMENTS",
+      contractStartDate: "2023-06-01",
+      contractEndDate: "2024-06-01",
+      amount: "600,000 XOF",
+    },
+    {
+      reference: "ZA-6972-8765-01",
+      tenant: "Mrs. DEMBELE KAREN",
+      location: "DEMBELE VILLAS",
+      contractStartDate: "2023-07-01",
+      contractEndDate: "2024-07-01",
+      amount: "800,000 XOF",
+    },
+    {
+      reference: "ZA-6972-4321-01",
+      tenant: "Miss DIOMANDE AUDREY",
+      location: "COCODY VILLAS",
+      contractStartDate: "2023-08-01",
+      contractEndDate: "2024-08-01",
+      amount: "550,000 XOF",
+    },
+  ];
+  
+  export const tenantStats = [
+    { name: "Invoice(s)", value: 96, currency: "XOF", color: "bg-blue-500" },
+    { name: "Waiting(s)", value: 2, currency: "XOF", color: "bg-blue-400" },
+    { name: "Unpaid", value: 72, currency: "XOF", color: "bg-red-500" },
+    { name: "In progress", value: 0, currency: "XOF", color: "bg-yellow-500" },
+    { name: "Sales", value: 22, currency: "XOF", color: "bg-green-500" },
   ];
   

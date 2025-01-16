@@ -22,7 +22,7 @@ import SettingsComponent from "@/components/admin-panel/sidebar/profile/Settings
 import LogoutComponent from "@/components/admin-panel/sidebar/profile/Logout";
 import Owner from "@/components/admin-panel/sidebar/property-management/dashboard/Owner";
 import Tenant from "@/components/admin-panel/sidebar/property-management/dashboard/Tenant";
-import Promotion from "@/components/admin-panel/sidebar/property-management/dashboard/Promotion";
+import PromotionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Promotion";
 import Subdivision from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
 import ManagementPortfolio from "@/components/admin-panel/sidebar/property-management/management-portfolio";
 import MesValidations from "@/components/admin-panel/sidebar/property-management/mes-validatoins";
@@ -37,6 +37,8 @@ import Resource from "@/components/admin-panel/sidebar/extra/resource";
 import Extra from "@/components/admin-panel/sidebar/extra/extra";
 import OwnerTier from "@/components/admin-panel/sidebar/property-management/tiers/owner";
 import TenantTier from "@/components/admin-panel/sidebar/property-management/tiers/tenant";
+import SubdivisionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
+import ClientTier from "@/components/admin-panel/sidebar/property-management/tiers/client";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -96,8 +98,8 @@ export const sidebarOptions: SidebarSection[] = [
           { name: "Principal", path: "/dashboard/principal", component: Principal },
           { name: "Owner", path: "/dashboard/owner", component: Owner },
           { name: "Tenant", path: "/dashboard/tenant", component: Tenant },
-          { name: "Promotion", path: "/dashboard/promotion", component: Promotion },
-          { name: "Subdivision", path: "/dashboard/subdivision", component: Subdivision },
+          { name: "Promotion", path: "/dashboard/promotion", component: PromotionDashboard },
+          { name: "Subdivision", path: "/dashboard/subdivision", component: SubdivisionDashboard },
         ],
       },
       { name: "Mes Validations", path: "/validations", icon: Clipboard, component: MesValidations },
@@ -105,14 +107,37 @@ export const sidebarOptions: SidebarSection[] = [
         name: "Tiers",
         path: "/tiers",
         icon: Layers,
-        component: Tiers,
+        component: OwnerTier,
         subOptions: [
           { name: "Owner", path: "/tiers/owner", component: OwnerTier },
           { name: "Tenant", path: "/tiers/tenant", component: TenantTier },
-          { name: "Client", path: "/tiers/client", component: Principal },
+          { name: "Client", path: "/tiers/client", component: ClientTier },
         ],
       },
-      { name: "CRM", path: "/crm", icon: User, component: CRM },
+      {
+        name: "CRM",
+        path: "/crm",
+        icon: User,
+       component:CRM,
+        subOptions: [
+          {
+            name: "Sales Prospect",
+            path: "/crm/sales-prospect",
+           component: CRM
+          },
+          {
+            name: "Prospect Location",
+            path: "/crm/prospect-location",
+           component:CRM
+          },
+          {
+            name: "Setting",
+            path: "/crm/setting",
+           component: CRM
+          }
+        ]
+      },
+    
       { name: "Heritage", path: "/heritage", icon: Building, component: Heritage },
       { name: "Treasury", path: "/treasury", icon: DollarSign, component: Treasury },
       { name: "Report", path: "/report", icon: FileText, component: Report },
