@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AdminPanel from "@/pages/admin-panel";
+import SettingsRoutes from "./components/admin-panel/sidebar/profile/Settings/SettingsRoutes";
 
 const App = () => {
   return (
@@ -7,7 +8,7 @@ const App = () => {
       <Routes>
 
 <Route path="/*" element={<AdminPanel/>} />
-    
+
       </Routes>
     </div>
   );

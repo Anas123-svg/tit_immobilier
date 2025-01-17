@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Add useNavigate
 import UserImage from "../../../assets/avatar-default.png";
 import { sidebarOptions } from "@/data/sidebarOptions";
@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
       [sectionName]: !prevState[sectionName],
     }));
   };
-
+  
   return (
     <div className="flex border shadow-xl rounded ">
       {/* Sidebar */}
@@ -31,7 +31,7 @@ const Sidebar: React.FC = () => {
         <div className="">
           <div
             className="flex flex-col items-center justify-center mt-4 cursor-pointer"
-            onClick={() => setIsProfileExpanded(!isProfileExpanded)}
+            onClick={() =>{ setIsProfileExpanded(!isProfileExpanded);}}
           >
             <div className="w-16 h-16 rounded-full shadow-md border-4 border-white overflow-hidden">
               <img
@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
           {isProfileExpanded && isOpen && (
             <ul className="mt-2 pl-6">
               {sidebarOptions[0].options.map((item, index) => (
-                <li key={index} className="py-2">
+                <li key={index} className="py-2"  >
                   <Link
                     to={item.path}
                     className="flex items-center space-x-2 text-sm text-secondary hover:text-primary"
@@ -96,11 +96,14 @@ const Sidebar: React.FC = () => {
                           ? "bg-white text-primary"
                           : "hover:bg-secondary hover:text-white"
                       }`}
-                      onClick={() =>
+                      onClick={() =>{
+                      
                         item.subOptions
                           ? toggleSection(item.name)
-                          : navigate(item.path) // Navigate directly if no sub-options
-                      }
+                          : navigate(item.path); // Navigate directly if no sub-options
+                        
+                        
+                        }                      }
                     >
                       {item.icon && <item.icon size={20} />}
                       {isOpen && <span>{item.name}</span>}
@@ -158,7 +161,7 @@ const Sidebar: React.FC = () => {
           </Link>
         </div>
       </aside>
-
+   
       {/* Toggle Button */}
       <button
         className={`fixed top-20 transition-all duration-300 ease-in-out ${

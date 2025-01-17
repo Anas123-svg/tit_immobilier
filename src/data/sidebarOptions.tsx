@@ -31,7 +31,6 @@ import CRM from "@/components/admin-panel/sidebar/property-management/crm/SalesP
 import Report from "@/components/admin-panel/sidebar/property-management/report/client-report";
 import GeneralMeans from "@/components/admin-panel/sidebar/extra/general-means";
 import Ticket from "@/components/admin-panel/sidebar/extra/ticket";
-import Resource from "@/components/admin-panel/sidebar/extra/resource";
 import Extra from "@/components/admin-panel/sidebar/extra/extra";
 import OwnerTier from "@/components/admin-panel/sidebar/property-management/tiers/owner";
 import TenantTier from "@/components/admin-panel/sidebar/property-management/tiers/tenant";
@@ -50,6 +49,10 @@ import ClientReport from "@/components/admin-panel/sidebar/property-management/r
 import TicketDashboard from "@/components/admin-panel/sidebar/extra/ticket/TicketDashboard";
 import TicketList from "@/components/admin-panel/sidebar/extra/ticket/TicketList";
 import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguration";
+import UserManagement from "@/components/admin-panel/sidebar/security/UserManagement";
+import ResourceDashboard from "@/components/admin-panel/sidebar/extra/resource/ResourceDashboard";
+import ResourceList from "@/components/admin-panel/sidebar/extra/resource/ResourceList";
+import ResourceConfiguration from "@/components/admin-panel/sidebar/extra/resource/ResourceConfiguration";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -240,12 +243,34 @@ export const sidebarOptions: SidebarSection[] = [
         ],
       }
       ,
-      { name: "Resource", path: "/resource", icon: Layers, component: Resource },
+      {
+        name: "Resource",
+        path: "/resource",
+        icon: Layers,
+        component: ResourceDashboard, // Main dashboard component for Resource
+        subOptions: [
+          {
+            name: "Dashboard",
+            path: "/resource/dashboard",
+            component: ResourceDashboard, // Component for the Dashboard section
+          },
+          {
+            name: "Resource",
+            path: "/resource/resource",
+            component: ResourceList, // Component for the Resource section
+          },
+          {
+            name: "Configuration",
+            path: "/resource/configuration",
+            component: ResourceConfiguration, // Component for the Configuration section
+          },
+        ],
+      },
       { name: "Extra", path: "/extra", icon: Briefcase, component: Extra },
     ],
   },
-  // {
-  //   section: "Security",
-  //   options: [{ name: "User", path: "/user", icon: User, component: UserManagement }],
-  // },
+  {
+    section: "Security",
+    options: [{ name: "User", path: "/user", icon: User, component: UserManagement }],
+  },
 ];
