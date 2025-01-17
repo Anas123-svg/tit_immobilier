@@ -11,6 +11,7 @@ import {
   Building,
   Shield,
   HelpCircle,
+  TicketIcon,
 } from "lucide-react";
 import { Icon as LucideIcon } from "lucide-react"; // Import Icon type from lucide-react
 
@@ -26,11 +27,8 @@ import PromotionDashboard from "@/components/admin-panel/sidebar/property-manage
 import Subdivision from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
 import ManagementPortfolio from "@/components/admin-panel/sidebar/property-management/management-portfolio";
 import MesValidations from "@/components/admin-panel/sidebar/property-management/mes-validatoins";
-import Tiers from "@/components/admin-panel/sidebar/property-management/tiers";
 import CRM from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
-import Heritage from "@/components/admin-panel/sidebar/property-management/heritage";
-import Treasury from "@/components/admin-panel/sidebar/property-management/treasury";
-import Report from "@/components/admin-panel/sidebar/property-management/report";
+import Report from "@/components/admin-panel/sidebar/property-management/report/client-report";
 import GeneralMeans from "@/components/admin-panel/sidebar/extra/general-means";
 import Ticket from "@/components/admin-panel/sidebar/extra/ticket";
 import Resource from "@/components/admin-panel/sidebar/extra/resource";
@@ -41,6 +39,17 @@ import SubdivisionDashboard from "@/components/admin-panel/sidebar/property-mana
 import ClientTier from "@/components/admin-panel/sidebar/property-management/tiers/client";
 import SalesProspect from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
 import LocationProspect from "@/components/admin-panel/sidebar/property-management/crm/LocationProspect";
+import PromotionHeritage from "@/components/admin-panel/sidebar/property-management/heritage/promotion";
+import SubdivisionDashboardHeader from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision/SubdivisionDashboardHeader";
+import SubdivisionHeritage from "@/components/admin-panel/sidebar/property-management/heritage/subdivison";
+import TreasuryComponent from "@/components/admin-panel/sidebar/property-management/treasury/treasury";
+import TreasuryRequests from "@/components/admin-panel/sidebar/property-management/treasury/requests";
+import OwnerReport from "@/components/admin-panel/sidebar/property-management/report/owner-report";
+import TenantReport from "@/components/admin-panel/sidebar/property-management/report/tenant-report";
+import ClientReport from "@/components/admin-panel/sidebar/property-management/report/client-report";
+import TicketDashboard from "@/components/admin-panel/sidebar/extra/ticket/TicketDashboard";
+import TicketList from "@/components/admin-panel/sidebar/extra/ticket/TicketList";
+import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguration";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -140,16 +149,97 @@ export const sidebarOptions: SidebarSection[] = [
         ]
       },
     
-      { name: "Heritage", path: "/heritage", icon: Building, component: Heritage },
-      { name: "Treasury", path: "/treasury", icon: DollarSign, component: Treasury },
-      { name: "Report", path: "/report", icon: FileText, component: Report },
+      {
+        name: "Heritage",
+        path: "/heritage",
+        icon: Building,
+        component: PromotionHeritage,
+        subOptions: [
+          {
+            name: "Promotion",
+            path: "/heritage/promotion",
+            component: PromotionHeritage
+          },
+          {
+            name: "Subdivision",
+            path: "/heritage/subdivision",
+            component: SubdivisionHeritage
+          }
+        ]
+      },
+      {
+        name: "Treasury",
+        path: "/treasury",
+        icon: DollarSign,
+        component: TreasuryComponent,
+        subOptions: [
+          {
+            name: "Treasury",
+            path: "/treasury/treasury",
+            component: TreasuryComponent, // Replace with the actual component for Treasury
+          },
+          {
+            name: "Requests",
+            path: "/treasury/requests",
+            component: TreasuryRequests, // Replace with the actual component for Requests
+          },
+        ],
+      },
+      
+      {
+        name: "Report",
+        path: "/report",
+        icon: FileText, // Use the correct icon reference
+        component: Report, // The main Report component
+        subOptions: [
+          {
+            name: "Owner",
+            path: "/report/owner",
+            component: OwnerReport, // Component to handle Owner reports
+          },
+          {
+            name: "Tenant",
+            path: "/report/tenant",
+            component: TenantReport, // Component to handle Tenant reports
+          },
+          {
+            name: "Client",
+            path: "/report/client",
+            component: ClientReport, // Component to handle Client reports
+          },
+        ],
+      }
+      ,
     ],
   },
   {
     section: "Extra",
     options: [
       { name: "General Means", path: "/general-means", icon: Clipboard, component: GeneralMeans },
-      { name: "Ticket", path: "/ticket", icon: Calendar, component: Ticket },
+      {
+        name: "Ticket",
+        path: "/ticket",
+        icon: TicketIcon,
+        component: Ticket,
+        subOptions: [
+          {
+            name: "Dashboard",
+            path: "/ticket/dashboard",
+            component: TicketDashboard,
+          },
+          {
+            name: "Ticket",
+            path: "/ticket/ticket",
+            component: TicketList,
+          },
+          {
+            name: "Configuration",
+            path: "/ticket/configuration",
+            component: TicketConfiguration,
+          }
+        ],
+      }
+      ,
       { name: "Resource", path: "/resource", icon: Layers, component: Resource },
       { name: "Extra", path: "/extra", icon: Briefcase, component: Extra },
     ],

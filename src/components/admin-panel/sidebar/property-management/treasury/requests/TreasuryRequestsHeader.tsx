@@ -6,12 +6,12 @@ interface Breadcrumb {
   path: string;
 }
 
-interface LocationProspectHeaderProps {
+interface TreasuryRequestsHeaderProps {
   title: string;
   breadcrumbs: Breadcrumb[];
 }
 
-const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
+const TreasuryRequestsHeader: React.FC<TreasuryRequestsHeaderProps> = ({
   title,
   breadcrumbs,
 }) => {
@@ -45,7 +45,8 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
         <div>
           <label className="block text-sm font-medium">Type</label>
           <select className="w-full p-2 border rounded-md">
-            <option>PROSPECT</option>
+            <option>REQUEST FOR FUNDS</option>
+            <option>REQUEST FOR PAYMENT</option>
           </select>
         </div>
         <div>
@@ -57,11 +58,15 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Start Date</label>
-          <input type="date" className="w-full p-2 border rounded-md" />
+          <label className="block text-sm font-medium">Motif</label>
+          <input
+            type="text"
+            placeholder="Motif"
+            className="w-full p-2 border rounded-md"
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium">End Date</label>
+          <label className="block text-sm font-medium">Start Date</label>
           <input type="date" className="w-full p-2 border rounded-md" />
         </div>
       </div>
@@ -85,6 +90,14 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
       {isAdvancedFilterOpen && (
         <div className="grid grid-cols-4 gap-4 mt-4 p-4 bg-white text-black rounded-md shadow-md">
           <div>
+            <label className="block text-sm font-medium">State</label>
+            <select className="w-full p-2 border rounded-md">
+              <option>Please select</option>
+              <option>Approved</option>
+              <option>Pending</option>
+            </select>
+          </div>
+          <div>
             <label className="block text-sm font-medium">MIN Amount</label>
             <input
               type="number"
@@ -103,7 +116,9 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
           <div>
             <label className="block text-sm font-medium">Created By</label>
             <select className="w-full p-2 border rounded-md">
-              <option>Selector</option>
+              <option>Select User</option>
+              <option>User 1</option>
+              <option>User 2</option>
             </select>
           </div>
           <div>
@@ -138,4 +153,4 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
   );
 };
 
-export default LocationProspectHeader;
+export default TreasuryRequestsHeader;

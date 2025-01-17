@@ -6,15 +6,12 @@ interface Breadcrumb {
   path: string;
 }
 
-interface LocationProspectHeaderProps {
+interface TreasuryHeaderProps {
   title: string;
   breadcrumbs: Breadcrumb[];
 }
 
-const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
-  title,
-  breadcrumbs,
-}) => {
+const TreasuryHeader: React.FC<TreasuryHeaderProps> = ({ title, breadcrumbs }) => {
   const [isAdvancedFilterOpen, setIsAdvancedFilterOpen] = useState(false);
 
   const toggleAdvancedFilter = () => {
@@ -23,7 +20,7 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
 
   return (
     <div className="bg-primary text-white p-6 rounded-md mb-6">
-      {/* Breadcrumbs */}
+      {/* Breadcrumb */}
       <div className="mb-2">
         <p className="text-sm">
           {breadcrumbs.map((crumb, index) => (
@@ -40,12 +37,12 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
       {/* Title */}
       <h1 className="text-2xl font-semibold">{title}</h1>
 
-      {/* Basic Filter Section */}
+      {/* Basic Filters */}
       <div className="grid grid-cols-4 gap-4 mt-4">
         <div>
           <label className="block text-sm font-medium">Type</label>
           <select className="w-full p-2 border rounded-md">
-            <option>PROSPECT</option>
+            <option>TRESORERIE</option>
           </select>
         </div>
         <div>
@@ -73,56 +70,27 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
           className="flex items-center text-sm font-medium text-white hover:underline focus:outline-none"
         >
           {isAdvancedFilterOpen ? "Hide Advanced Filters" : "Show Advanced Filters"}
-          {isAdvancedFilterOpen ? (
-            <ChevronUp className="ml-2" size={16} />
-          ) : (
-            <ChevronDown className="ml-2" size={16} />
-          )}
+          {isAdvancedFilterOpen ? <ChevronUp className="ml-2" size={16} /> : <ChevronDown className="ml-2" size={16} />}
         </button>
       </div>
 
-      {/* Advanced Filter Section */}
+      {/* Advanced Filters */}
       {isAdvancedFilterOpen && (
         <div className="grid grid-cols-4 gap-4 mt-4 p-4 bg-white text-black rounded-md shadow-md">
           <div>
-            <label className="block text-sm font-medium">MIN Amount</label>
+            <label className="block text-sm font-medium">Name / Company Name</label>
             <input
-              type="number"
-              placeholder="MIN Amount"
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">MAX Amount</label>
-            <input
-              type="number"
-              placeholder="MAX Amount"
+              type="text"
+              placeholder="Name / Company Name"
               className="w-full p-2 border rounded-md"
             />
           </div>
           <div>
             <label className="block text-sm font-medium">Created By</label>
             <select className="w-full p-2 border rounded-md">
-              <option>Selector</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Creation Date</label>
-            <input type="date" className="w-full p-2 border rounded-md" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Order</label>
-            <select className="w-full p-2 border rounded-md">
-              <option>Ascending</option>
-              <option>Descending</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Results Per Page</label>
-            <select className="w-full p-2 border rounded-md">
-              <option>10</option>
-              <option>25</option>
-              <option>50</option>
+              <option>Select User</option>
+              <option>User 1</option>
+              <option>User 2</option>
             </select>
           </div>
         </div>
@@ -130,12 +98,10 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
 
       {/* Filter Button */}
       <div className="flex justify-end mt-4">
-        <button className="bg-secondary text-white px-4 py-2 rounded-md shadow-md">
-          Filter
-        </button>
+        <button className="bg-secondary text-white px-4 py-2 rounded-md shadow-md">Filter</button>
       </div>
     </div>
   );
 };
 
-export default LocationProspectHeader;
+export default TreasuryHeader;

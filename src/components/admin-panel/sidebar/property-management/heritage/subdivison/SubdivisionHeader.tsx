@@ -6,12 +6,12 @@ interface Breadcrumb {
   path: string;
 }
 
-interface LocationProspectHeaderProps {
+interface SubdivisionHeaderProps {
   title: string;
   breadcrumbs: Breadcrumb[];
 }
 
-const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
+const SubdivisionHeader: React.FC<SubdivisionHeaderProps> = ({
   title,
   breadcrumbs,
 }) => {
@@ -45,7 +45,7 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
         <div>
           <label className="block text-sm font-medium">Type</label>
           <select className="w-full p-2 border rounded-md">
-            <option>PROSPECT</option>
+            <option>SUBDIVISION</option>
           </select>
         </div>
         <div>
@@ -85,25 +85,21 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
       {isAdvancedFilterOpen && (
         <div className="grid grid-cols-4 gap-4 mt-4 p-4 bg-white text-black rounded-md shadow-md">
           <div>
-            <label className="block text-sm font-medium">MIN Amount</label>
-            <input
-              type="number"
-              placeholder="MIN Amount"
-              className="w-full p-2 border rounded-md"
-            />
+            <label className="block text-sm font-medium">Type of Subdivision</label>
+            <select className="w-full p-2 border rounded-md">
+              <option>Please select</option>
+            </select>
           </div>
           <div>
-            <label className="block text-sm font-medium">MAX Amount</label>
-            <input
-              type="number"
-              placeholder="MAX Amount"
-              className="w-full p-2 border rounded-md"
-            />
+            <label className="block text-sm font-medium">Availability?</label>
+            <select className="w-full p-2 border rounded-md">
+              <option>Please select</option>
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium">Created By</label>
             <select className="w-full p-2 border rounded-md">
-              <option>Selector</option>
+              <option>Select User</option>
             </select>
           </div>
           <div>
@@ -138,4 +134,4 @@ const LocationProspectHeader: React.FC<LocationProspectHeaderProps> = ({
   );
 };
 
-export default LocationProspectHeader;
+export default SubdivisionHeader;

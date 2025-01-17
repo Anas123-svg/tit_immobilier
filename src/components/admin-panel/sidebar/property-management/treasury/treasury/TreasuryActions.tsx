@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-interface LocationProspectActionsProps {
+interface TreasuryActionsProps {
   actions: { name: string; onClick: () => void; className: string }[];
-  tools: { name: string; onClick: () => void }[]; // Tools dropdown actions
+  tools: { name: string; onClick: () => void }[];
 }
 
-const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
-  actions,
-  tools,
-}) => {
+const TreasuryActions: React.FC<TreasuryActionsProps> = ({ actions, tools }) => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
   const toggleToolsDropdown = () => {
@@ -35,7 +32,7 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
       <div className="relative">
         <button
           onClick={toggleToolsDropdown}
-          className="px-4 py-2 bg-orange-500 text-white rounded-md flex items-center"
+          className="px-4 py-2 bg-yellow-500 text-white rounded-md flex items-center"
         >
           Tools
           <ChevronDown className="ml-2" size={16} />
@@ -59,4 +56,4 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
   );
 };
 
-export default LocationProspectActions;
+export default TreasuryActions;

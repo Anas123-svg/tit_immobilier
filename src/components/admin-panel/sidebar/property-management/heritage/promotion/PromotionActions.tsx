@@ -1,24 +1,16 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-interface LocationProspectActionsProps {
+interface PromotionActionsProps {
   actions: { name: string; onClick: () => void; className: string }[];
-  tools: { name: string; onClick: () => void }[]; // Tools dropdown actions
+  tools: { name: string; onClick: () => void }[];
 }
 
-const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
-  actions,
-  tools,
-}) => {
+const PromotionActions: React.FC<PromotionActionsProps> = ({ actions, tools }) => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
-
-  const toggleToolsDropdown = () => {
-    setIsToolsOpen(!isToolsOpen);
-  };
 
   return (
     <div className="flex justify-between items-center mb-6">
-      {/* Main Actions */}
       <div className="flex gap-4">
         {actions.map((action, index) => (
           <button
@@ -30,17 +22,14 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
           </button>
         ))}
       </div>
-
-      {/* Tools Dropdown */}
       <div className="relative">
         <button
-          onClick={toggleToolsDropdown}
-          className="px-4 py-2 bg-orange-500 text-white rounded-md flex items-center"
+          onClick={() => setIsToolsOpen(!isToolsOpen)}
+          className="px-4 py-2 bg-yellow-500 text-white rounded-md flex items-center"
         >
           Tools
           <ChevronDown className="ml-2" size={16} />
         </button>
-
         {isToolsOpen && (
           <div className="absolute right-0 mt-2 bg-white border shadow-md rounded-md w-40">
             {tools.map((tool, index) => (
@@ -59,4 +48,4 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
   );
 };
 
-export default LocationProspectActions;
+export default PromotionActions;

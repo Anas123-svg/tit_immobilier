@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-interface LocationProspectActionsProps {
+interface SubdivisionActionsProps {
   actions: { name: string; onClick: () => void; className: string }[];
-  tools: { name: string; onClick: () => void }[]; // Tools dropdown actions
+  tools: { name: string; onClick: () => void }[];
 }
 
-const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
+const SubdivisionActions: React.FC<SubdivisionActionsProps> = ({
   actions,
   tools,
 }) => {
@@ -35,7 +35,7 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
       <div className="relative">
         <button
           onClick={toggleToolsDropdown}
-          className="px-4 py-2 bg-orange-500 text-white rounded-md flex items-center"
+          className="px-4 py-2 bg-yellow-500 text-white rounded-md flex items-center"
         >
           Tools
           <ChevronDown className="ml-2" size={16} />
@@ -59,4 +59,4 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
   );
 };
 
-export default LocationProspectActions;
+export default SubdivisionActions;

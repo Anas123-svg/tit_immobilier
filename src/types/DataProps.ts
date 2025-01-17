@@ -90,3 +90,12 @@ export interface Contract {
   contractEndDate:string
   amount:string
 }
+
+
+export interface TreasuryItem {
+  id: string;
+  type: "BANK" | "BOX";
+  title: string;
+  manager: string;
+  company: string;
+}

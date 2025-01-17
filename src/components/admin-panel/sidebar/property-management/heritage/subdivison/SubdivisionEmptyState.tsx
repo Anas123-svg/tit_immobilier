@@ -1,10 +1,10 @@
 import React from "react";
 
-interface LocationProspectEmptyStateProps {
+interface SubdivisionEmptyStateProps {
   message: string;
 }
 
-const LocationProspectEmptyState: React.FC<LocationProspectEmptyStateProps> = ({
+const SubdivisionEmptyState: React.FC<SubdivisionEmptyStateProps> = ({
   message,
 }) => {
   return (
@@ -16,4 +16,4 @@ const LocationProspectEmptyState: React.FC<LocationProspectEmptyStateProps> = ({
   );
 };
 
-export default LocationProspectEmptyState;
+export default SubdivisionEmptyState;
