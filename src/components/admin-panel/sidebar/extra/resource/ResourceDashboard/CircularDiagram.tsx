@@ -1,5 +1,6 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
+import { ChartOptions } from "chart.js"; // Import the ChartOptions type
 
 const CircularDiagram: React.FC = () => {
   const data = {
@@ -12,14 +13,15 @@ const CircularDiagram: React.FC = () => {
     ],
   };
 
-  const options = {
+  // Define the options with the correct type
+  const options: ChartOptions<"doughnut"> = {
     maintainAspectRatio: false,
     responsive: true,
     cutout: "50%", // Adjust the inner radius (default for a doughnut is 50%)
     radius: "60%", // Increases the size of the chart
     plugins: {
       legend: {
-        position: "top",
+        position: "top", // Valid value for position
       },
     },
   };
