@@ -93,7 +93,7 @@ export const sidebarOptions: SidebarSection[] = [
       },
       {
         name: "Log out",
-        path: "/",
+        path: "/logout",
         icon: HelpCircle,
         component: LogoutComponent,
       },

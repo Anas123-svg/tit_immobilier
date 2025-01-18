@@ -46,7 +46,7 @@ const AdminPanel: React.FC = () => {
             ))}
 
             {/* Default Route */}
-            <Route path="/" element={<Navigate to="/admin-panel/dashboard" />} />
+            <Route path="/" element={<Navigate to="/portfolio" />} />
           </Routes>
         </div>
       </div>

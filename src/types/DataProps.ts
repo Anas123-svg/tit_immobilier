@@ -4,7 +4,7 @@ export interface StatCardProps {
     name: string;
     value: string ;
     color: string;
-    icon: React.ElementType; // Use React.ElementType for the icon component
+    icon: React.ElementType; 
     activeLabel?: string;
     inactiveLabel?: string;
   }

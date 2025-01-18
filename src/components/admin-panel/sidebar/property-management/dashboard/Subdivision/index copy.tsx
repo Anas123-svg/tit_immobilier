@@ -1,6 +1,6 @@
 import React from "react";
 import PromotionDashboardHeader from "./SubdivisionDashboardHeader";
-import StatsCardsSection from "./StatsCardsSection";
+import StatsCardsSection from "../Promotion/StatsCardsSection";
 import CircularDiagram from "./CircularDiagram";
 import LineChart from "./LineChart";
 import DeadlineTable from "./DeadlineTable";

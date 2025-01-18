@@ -159,17 +159,17 @@ export  const statsData: StatCard[] = [
 
 
 export const validationStats = [
-  { name: "Rental Payments", value: 0, icon: DollarSign, color: "bg-yellow-500" },
-  { name: "Payments Sale", value: 0, icon: Home, color: "bg-blue-500" },
-  { name: "Rental Contracts", value: 0, icon: FileText, color: "bg-red-500" },
-  { name: "Sales File", value: 0, icon: Repeat, color: "bg-gray-500" },
-  { name: "Management Mandate", value: 0, icon: FileText, color: "bg-green-500" },
-  { name: "Reversal", value: 0, icon: Repeat, color: "bg-purple-500" },
-  { name: "State of Play", value: 0, icon: DollarSign, color: "bg-teal-500" },
-  { name: "Termination of Contract", value: 0, icon: Home, color: "bg-orange-500" },
-  { name: "Contract Renewal", value: 0, icon: FileText, color: "bg-pink-500" },
-  { name: "Supply", value: 0, icon: Repeat, color: "bg-indigo-500" },
-  { name: "Spent", value: 0, icon: DollarSign, color: "bg-cyan-500" },
+  { name: "Rental Payments", value: "0", icon: DollarSign, color: "bg-yellow-500" },
+  { name: "Payments Sale", value: "0", icon: Home, color: "bg-blue-500" },
+  { name: "Rental Contracts", value: "0", icon: FileText, color: "bg-red-500" },
+  { name: "Sales File", value: "0", icon: Repeat, color: "bg-gray-500" },
+  { name: "Management Mandate", value: "0", icon: FileText, color: "bg-green-500" },
+  { name: "Reversal", value: "0", icon: Repeat, color: "bg-purple-500" },
+  { name: "State of Play", value: "0", icon: DollarSign, color: "bg-teal-500" },
+  { name: "Termination of Contract", value: "0", icon: Home, color: "bg-orange-500" },
+  { name: "Contract Renewal", value: "0", icon: FileText, color: "bg-pink-500" },
+  { name: "Supply", value: "0", icon: Repeat, color: "bg-indigo-500" },
+  { name: "Spent", value: "0", icon: DollarSign, color: "bg-cyan-500" },
 ];
 
 export const dummyOwners = [

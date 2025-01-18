@@ -1,5 +1,6 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
+import { ChartOptions } from "chart.js";
 
 const CircularDiagram: React.FC = () => {
   const data = {
@@ -12,22 +13,23 @@ const CircularDiagram: React.FC = () => {
     ],
   };
 
-  const options = {
+  // Explicitly type the options object
+  const options: ChartOptions<"doughnut"> = {
     maintainAspectRatio: false,
     responsive: true,
     cutout: "50%", // Adjust the inner radius (default for a doughnut is 50%)
-    radius: "60%", // Increases the size of the chart
+    radius: "60%", // Increase the size of the chart
     plugins: {
       legend: {
-        position: "top",
+        position: "top", // Use a valid position value
       },
     },
   };
 
   return (
-    <div className="p-4 bg-white shadow rounded-md h-[500px] w-[600px] mx-auto">
+    <div className="p-4 bg-white shadow rounded-md h-[300px] w-1/2">
       <h3 className="text-lg font-semibold mb-4">Circular Diagram of Amounts</h3>
-      <div className="h-full w-full">
+      <div className="w-full">
         <Doughnut data={data} options={options} />
       </div>
     </div>

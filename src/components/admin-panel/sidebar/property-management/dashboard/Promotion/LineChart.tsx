@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
+import type { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
 
 // Register all necessary Chart.js components
 Chart.register(...registerables);
 
 const LineChart: React.FC<{ title: string }> = ({ title }) => {
-  const chartRef = useRef<Chart | null>(null);
+  // Correctly type the ref to match react-chartjs-2 requirements
+  const chartRef = useRef<ChartJSOrUndefined<"line">>(null);
 
   const data = {
     labels: ["Jan 01", "Jan 08", "Jan 15", "Jan 22"],
@@ -60,6 +62,7 @@ const LineChart: React.FC<{ title: string }> = ({ title }) => {
     <div className="p-4 bg-white rounded-md shadow">
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
       <div style={{ height: "300px" }}>
+        {/* Pass the ref to the Line component */}
         <Line ref={chartRef} data={data} options={options} />
       </div>
     </div>

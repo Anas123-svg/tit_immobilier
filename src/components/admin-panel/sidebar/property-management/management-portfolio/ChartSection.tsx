@@ -97,7 +97,8 @@ const ChartSection: React.FC = () => {
       tooltip: {
         callbacks: {
           label: (tooltipItem) => {
-            return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString()} XOF`;
+            const rawValue = tooltipItem.raw as number; // Explicitly cast raw to number
+            return `${tooltipItem.dataset.label}: ${rawValue.toLocaleString()} XOF`;
           },
         },
       },
