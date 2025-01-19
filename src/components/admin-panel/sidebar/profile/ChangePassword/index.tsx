@@ -56,7 +56,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-offwhite rounded-lg shadow-lg w-[800px] p-6"
+           className="bg-offwhite rounded-lg shadow-lg w-11/12 sm:w-[600px] md:w-[700px] lg:w-[800px] p-4 sm:p-6"
               initial={{ y: -50 }}
               animate={{ y: 0 }}
               exit={{ y: -50 }}
@@ -76,7 +76,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({
                 PASSWORD DETAILS
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {/* Current Password */}
                   <div>
                     <label className="block font-medium mb-1 text-secondary">

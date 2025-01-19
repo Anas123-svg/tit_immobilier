@@ -27,50 +27,56 @@ const ChartSection: React.FC = () => {
       {
         label: "Commission",
         data: [15000, 12000, 13000, 14000, 15000],
-        backgroundColor: "#4F46E5", // Commission color
+        backgroundColor: "#4F46E5",
         borderColor: "#4F46E5",
         borderWidth: 1,
-        barThickness: 30,
+        barPercentage: 0.8, // Adjust bar width
+        categoryPercentage: 0.9, // Adjust spacing
       },
       {
         label: "Tax",
         data: [8000, 9000, 8500, 8700, 8900],
-        backgroundColor: "#F59E0B", // Tax color
+        backgroundColor: "#F59E0B",
         borderColor: "#F59E0B",
         borderWidth: 1,
-        barThickness: 30,
+        barPercentage: 0.8,
+        categoryPercentage: 0.9,
       },
       {
         label: "Spent",
         data: [6000, 5500, 5900, 5700, 6000],
-        backgroundColor: "#EF4444", // Spent color
+        backgroundColor: "#EF4444",
         borderColor: "#EF4444",
         borderWidth: 1,
-        barThickness: 30,
+        barPercentage: 0.8,
+        categoryPercentage: 0.9,
       },
       {
         label: "Registration Fee",
         data: [2000, 2500, 2200, 2300, 2100],
-        backgroundColor: "#9C27B0", // Registration Fee color
+        backgroundColor: "#9C27B0",
         borderColor: "#9C27B0",
         borderWidth: 1,
-        barThickness: 30,
+        barPercentage: 0.8,
+        categoryPercentage: 0.9,
       },
       {
         label: "Insurance",
         data: [3000, 2800, 2900, 3000, 3100],
-        backgroundColor: "#22C55E", // Insurance color
+        backgroundColor: "#22C55E",
         borderColor: "#22C55E",
         borderWidth: 1,
-        barThickness: 30,
+        barPercentage: 0.8,
+        categoryPercentage: 0.9,
       },
       {
         label: "Tax Stamps",
         data: [1000, 1200, 1100, 900, 800],
-        backgroundColor: "#6B7280", // Tax Stamps color
+        backgroundColor: "#6B7280",
         borderColor: "#6B7280",
         borderWidth: 1,
-        barThickness: 30,
+        barPercentage: 0.8,
+        categoryPercentage: 0.9,
       },
     ],
   };
@@ -124,9 +130,11 @@ const ChartSection: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 className="text-lg font-semibold mb-4">Portfolio Representation Diagram</h2>
-      <div style={{ height: "400px" }}>
+    <div className="bg-white p-4 sm:p-6 lg:p-8 rounded-lg shadow-md mb-6">
+      <h2 className="text-lg font-semibold mb-4 text-center sm:text-left">
+        Portfolio Representation Diagram
+      </h2>
+      <div className="w-full" style={{ height: "400px", maxWidth: "100%" }}>
         <Bar data={data} options={options} />
       </div>
     </div>

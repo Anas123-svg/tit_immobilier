@@ -29,7 +29,7 @@ const CircularDiagram: React.FC = () => {
   return (
     <div className="p-4 bg-white shadow rounded-md h-[300px] w-1/2">
       <h3 className="text-lg font-semibold mb-4">Circular Diagram of Amounts</h3>
-      <div className="w-full">
+      <div className="w-full h-full">
         <Doughnut data={data} options={options} />
       </div>
     </div>

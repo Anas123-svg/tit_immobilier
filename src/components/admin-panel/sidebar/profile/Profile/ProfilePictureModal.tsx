@@ -38,7 +38,7 @@ const ProfilePictureModal: React.FC<ProfilePictureModalProps> = ({
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-white rounded-lg shadow-lg w-[400px] p-6"
+            className="bg-white rounded-lg shadow-lg w-11/12 sm:w-[400px] p-6"
             initial={{ y: -50 }}
             animate={{ y: 0 }}
             exit={{ y: -50 }}

@@ -19,9 +19,9 @@ const transactions = [
 
 const TransactionHistory: React.FC = () => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-6 rounded-lg shadow-md overflow-auto">
       <h2 className="text-lg font-semibold mb-4">Transaction History</h2>
-      <table className="w-full border-collapse border border-gray-300">
+      <table className="sm:w-full w-[600px] border-collapse border border-gray-300 ">
         <thead>
           <tr className="bg-gray-100">
             <th className="border border-gray-300 p-2">ID</th>

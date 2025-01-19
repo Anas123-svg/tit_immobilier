@@ -15,7 +15,7 @@ const TenantDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen space-y-10">
       {/* Header Section */}
       <TenantDashboardHeader
         title="Tenant Dashboard"

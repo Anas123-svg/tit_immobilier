@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { User, ChevronDown, Menu, X,LogOut } from "lucide-react"; // Import icons
+import { User, ChevronDown, Menu, X,LogOut,Shield,Settings } from "lucide-react"; // Import icons
 import { motion, AnimatePresence } from "framer-motion"; // Importing framer-motion
 
-import { sidebarOptions } from "@/data/sidebarOptions";
+
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false); // State to handle dropdown visibility
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false); // Mobile menu toggle
-
+  const profileOptions = [
+    { name: "My Profile", path: "/profile", icon: User },
+    { name: "Change Password", path: "/change-password", icon: Shield },
+    { name: "Setting", path: "/settings", icon: Settings },
+    { name: "Log out", path: "/logout", icon: LogOut },
+  ];
   return (
     <motion.nav
-      className="bg-white shadow-md w-full  md:flex items-center justify-between px-6 py-4 z-40 relative" // Ensure proper z-index
+      className="bg-white shadow-md w-full  flex items-center justify-between px-6 py-4 z-40 relative" // Ensure proper z-index
       initial={{ opacity: 0, y: -20 }} // Starting state
       animate={{ opacity: 1, y: 0 }} // Animation on load
       transition={{ duration: 0.5, ease: "easeInOut" }} // Timing of the animation
@@ -29,30 +34,9 @@ const Navbar: React.FC = () => {
 
       
 
-      {/* Right Section: Cart and Profile */}
-      <motion.div
-        className="flex items-center justify-between space-x-6 relative"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-      >{/* Hamburger Icon for Mobile */}
-      <div className="flex gap-5">
-      <div className="lg:hidden flex justify-self-start items-center">
-        <button
-          className="text-primary focus:outline-none"
-          onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+  
 
-      {/* User Icon */}
-<div className="relative justify-self-start">
-  <User size={20} className="text-primary cursor-pointer" />
-
-</div>
-
-        </div>
+    
         {/* Profile Dropdown */}
         <motion.div
           className="flex items-center space-x-2 cursor-pointer"
@@ -65,6 +49,11 @@ const Navbar: React.FC = () => {
           <div>
             
           </div>
+                {/* User Icon */}
+<div className="relative justify-self-start">
+  <User size={20} className="text-primary cursor-pointer" />
+
+</div>
           <ChevronDown size={16} className="text-gray-600" />
         </motion.div>
 
@@ -85,23 +74,25 @@ const Navbar: React.FC = () => {
       transition={{ delay: 0.3, duration: 0.5 }}
     >
    
-          <li
-       
-          className={`border-b border-[#ffffff79] `}
+   {profileOptions.map((option, index) => (
+        <li
+          key={index}
+          className={`border-b border-[#ffffff79] last:border-b-0`}
         >
           <Link
-            to={"/logout"}
-            className={`flex p-3  transition-all duration-500 ease-in-out  hover:bg-white hover:text-primary`}
+            to={option.path}
+            className={`flex items-center p-3 transition-all duration-500 ease-in-out hover:bg-white hover:text-primary`}
           >
-          <LogOut size={20} className="mr-2" />
-            <span>Logout</span>
+            <option.icon size={20} className="mr-2" />
+            <span>{option.name}</span>
           </Link>
         </li>
+      ))}
     </motion.ul>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+   
     </motion.nav>
   );
 };

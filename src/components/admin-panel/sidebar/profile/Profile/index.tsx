@@ -21,18 +21,18 @@ const [isPfModalOpen, setIsPfModalOpen] = useState(false);
   };
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
+    <div className="sm:p-4 p-2  bg-gray-100 min-h-screen">
       {/* Profile Header */}
-      <div className="bg-primary text-white rounded-lg p-6 flex items-center gap-6">
+      <div className="bg-primary text-white rounded-lg p-6 flex flex-col sm:flex-row items-center gap-6">
         <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white">
           <img
             src={UserImage}
             alt="Profile"
-            className="w-full h-full object-cover"
+            className="w-full h-full  object-cover"
           />
         </div>
         <div>
-          <h2 className="text-2xl font-semibold">New IT Company...</h2>
+          <h2 className="text-2xl font-semibold">New IT Company</h2>
           <p className="text-sm">SERVICE COMMERCIAL</p>
           <p className="text-sm mt-2">
             <span className="font-medium">Email:</span> info@tit-immobilier.net
@@ -44,7 +44,7 @@ const [isPfModalOpen, setIsPfModalOpen] = useState(false);
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-4 mt-6">
+      <div className="flex flex-col sm:flex-row gap-4 mt-6">
         <button className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400">
           Back
         </button>

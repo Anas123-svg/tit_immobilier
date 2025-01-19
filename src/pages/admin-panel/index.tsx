@@ -31,7 +31,7 @@ const AdminPanel: React.FC = () => {
       <Navbar />
 
       {/* Main Content Area */}
-      <div className="flex flex-grow">
+      <div className="flex flex-grow ">
         {/* Sidebar */}
         <Sidebar />
 

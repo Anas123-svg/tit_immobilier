@@ -5,8 +5,6 @@ export interface StatCardProps {
     value: string ;
     color: string;
     icon: React.ElementType; 
-    activeLabel?: string;
-    inactiveLabel?: string;
   }
 export interface SummaryCardProps {
   name: string;
@@ -14,9 +12,14 @@ export interface SummaryCardProps {
   color: string;
 }
 
-export interface FilterOptions {
-  type: string[];
+export interface FilterOption {
+  type: "select" | "date" | "text" | "number"; // Extendable types
+  label: string;
+  name: string; // Name for identifying the filter
+  options?: string[]; // For select type
+  placeholder?: string; // For input types
 }
+
 
 export interface SummaryCardSectionProps {
   cards: SummaryCardProps[];

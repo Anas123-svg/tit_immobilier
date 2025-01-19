@@ -1,10 +1,5 @@
 import { DollarSign, Briefcase, AlertTriangle, User, FileText, CheckCircle, Building,Home,Repeat, } from "lucide-react";
-import { StatCardProps, SummaryCardProps, FilterOptions ,Mandate,Owner,Tenant,StatCard,Contract,TreasuryItem } from "@/types/DataProps"; // Assuming these types are defined in your project
-
-// Filter options for the dropdown
-export const filterOptions: FilterOptions = {
-  type: ["ALL", "Pay", "Commission Agency", "Caution", "VAT on Commission"],
-};
+import { StatCardProps, SummaryCardProps ,Mandate,Owner,Tenant,StatCard,Contract,TreasuryItem } from "@/types/DataProps"; // Assuming these types are defined in your project
 
 // Statistics cards data for Management Portfolio
 export const statCardsData: StatCardProps[] = [
@@ -34,32 +29,24 @@ export const principalStats: StatCardProps[] = [
     name: "Owner",
     value: "4",
     color: "bg-yellow-500",
-    activeLabel: "Active",
-    inactiveLabel: "Inactive",
     icon: User,
   },
   {
     name: "Tenant",
     value: "12",
     color: "bg-red-500",
-    activeLabel: "Active",
-    inactiveLabel: "Inactive",
     icon: Building,
   },
   {
     name: "Contract",
     value: "12",
     color: "bg-blue-500",
-    activeLabel: "Active",
-    inactiveLabel: "Terminated",
     icon: FileText,
   },
   {
     name: "Mandate",
     value: "4",
     color: "bg-green-500",
-    activeLabel: "Valid",
-    inactiveLabel: "Terminated",
     icon: CheckCircle,
   },
 ];

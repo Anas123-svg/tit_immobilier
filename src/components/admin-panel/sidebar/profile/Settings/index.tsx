@@ -24,14 +24,15 @@ const allRoutes = flattenRoutes(settingsOptions);
 
 const SettingsComponent: React.FC = () => {
   return (
-    <div className="flex min-h-screen gap-5">
+    <div className="flex flex-col sm:flex-row min-h-screen gap-4 sm:gap-5">
       {/* Left Sidebar */}
-      <div className="w-3/12 rounded-xl px-2 bg-gray-100">
+      <div className="w-full sm:w-6/12 md:w-4/12 lg:w-3/12 rounded-xl px-2 bg-gray-100">
         <SettingsSidebar options={settingsOptions} />
       </div>
 
       {/* Main Content */}
-      <div className="w-5/6 shadow-lg bg-white p-6 rounded-xl">
+      <div className="w-full sm:w-5/6 md:w-4/6  shadow-lg bg-white p-4 sm:p-6 rounded-xl">
+ 
       <Routes>
   {/* Dynamically render all settings routes */}
   {allRoutes.map((route) => (

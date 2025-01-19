@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
   };
   
   return (
-    <div className="flex border shadow-xl rounded ">
+    <div   className={`absolute top-16  sm:top-0 sm:relative flex border shadow-xl rounded transition-all duration-300 ease-in-out `}>
       {/* Sidebar */}
       <aside
         className={`top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
@@ -33,7 +33,7 @@ const Sidebar: React.FC = () => {
             className="flex flex-col items-center justify-center mt-4 cursor-pointer"
             onClick={() =>{ setIsProfileExpanded(!isProfileExpanded);}}
           >
-            <div className="w-16 h-16 rounded-full shadow-md border-4 border-white overflow-hidden">
+            <div className="w-16 h-16  rounded-full shadow-md border-4 border-white overflow-hidden">
               <img
                 src={UserImage}
                 alt="Profile"
@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
             </div>
             {isOpen && (
               <div className="ml-3 flex text-primary">
-                <h3 className="text-lg font-semibold">Mr New IT Company...</h3>
+                <h3 className="text-lg font-semibold">Mr New IT Company</h3>
                 <ChevronDown
                   size={20}
                   className={`transition-transform ${
