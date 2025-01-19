@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import StatisticCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
-import SummaryCardsSection from "./SummaryCard";
-import { principalStats, summaryCardsData, tenantData } from "@/data/dummyData";
+import { principalStats, tenantData } from "@/data/dummyData";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import TopListSection from "./TopListSection";
 import { FilterOption } from "@/types/DataProps";
 import ChartSection from "@/components/admin-panel/UI-components/ChartSection";
 import { ChartData, ChartOptions } from "chart.js";
-import SummaryCardSection2 from "@/components/admin-panel/UI-components/StatisticCardsSection2";
+import {  User,Home, Ticket,Tag} from "lucide-react";
+import { StatisticCard5 } from "@/components/admin-panel/UI-components/StatisticCard5";
+
+
 const Principal: React.FC = () => {
   // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
@@ -127,6 +129,16 @@ const Principal: React.FC = () => {
       },
     },
   };
+
+
+  // Summary cards data
+ const summaryCardsData = [
+  { name: "Real Estate", value: "4", currency:"XOF", color: "bg-yellow-500", icon: Home },
+  { name: "Ticket", value: "10", currency:"XOF", color: "bg-green-500", icon: Ticket },
+  { name: "Intervention", value: "22", currency:"XOF", color: "bg-red-500", icon: Tag },
+  { name: "Supplier", value: "14", currency:"XOF", color: "bg-blue-500", icon: User },
+];
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* Header Section */}
@@ -148,8 +160,17 @@ const Principal: React.FC = () => {
       <ChartSection title="Monthly Rent Collection Statistics" data={chartData} options={chartOptions} />
 
       {/* Summary Cards Section */}
-      <SummaryCardSection2 cards={summaryCardsData} />
-
+     <div className=" flex justify-between">
+            {summaryCardsData.map((stat, index) => (
+              <StatisticCard5
+                key={index}
+                name={stat.name}
+                value={stat.value}
+                color={stat.color}
+                icon={stat.icon}
+              />
+            ))}
+          </div>
       {/* Top 10 Lists Section */}
       <div className="my-6 p-5 bg-white rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6">Top 10 Lists</h1>
@@ -157,6 +178,8 @@ const Principal: React.FC = () => {
           {/* Tenant and Owner Lists */}
           <TopListSection title="List of the Last 10 Tenants" data={tenantData} itemsPerPage={5} />
           <TopListSection title="List of the Last 10 Owners" data={tenantData} itemsPerPage={5} />
+          <TopListSection title="List of the Last 10  BALANCE RECEIPTS" data={tenantData} itemsPerPage={5} />
+          <TopListSection title="List of the Last 10 RECEIPTS PENDING PAYMENT" data={tenantData} itemsPerPage={5} />
         </div>
       </div>
     </div>

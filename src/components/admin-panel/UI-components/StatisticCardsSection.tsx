@@ -1,37 +1,33 @@
 import React from "react";
+import StatCard from "./StatisticCard"; // Import the unit UI component
 
-interface StatCardProps {
+interface StatCard {
   name: string;
-  value: string;
-  icon: React.ElementType;
+  value: number | string;
+  currency?: string;
   color: string;
+  icon: React.ElementType;
 }
 
-interface StatsCardsSectionProps {
-  stats: StatCardProps[];
+interface StatisticCardsSectionProps {
+  stats: StatCard[];
 }
 
-const StatsCardsSection: React.FC<StatsCardsSectionProps> = ({ stats }) => {
+const StatisticCardsSection: React.FC<StatisticCardsSectionProps> = ({ stats }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-  
+    <div className="flex flex-wrap gap-5">
       {stats.map((stat, index) => (
-        <div
+        <StatCard
           key={index}
-          className={`p-4 rounded-lg shadow-md text-white ${stat.color}`}
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold">{stat.name}</h3>
-              <p className="text-lg font-bold">{stat.value}</p>
-            </div>
-            {/* Render icon component */}
-            <stat.icon size={30} />
-          </div>
-        </div>
+          name={stat.name}
+          value={stat.value}
+          currency={stat.currency}
+          color={stat.color}
+          icon={stat.icon}
+        />
       ))}
     </div>
   );
 };
 
-export default StatsCardsSection;
+export default StatisticCardsSection;

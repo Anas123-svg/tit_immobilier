@@ -1,11 +1,12 @@
 import React from "react";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
-import StatsCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
 import TransactionHistory from "./TransactionHistory";
-import { statCardsData } from "@/data/dummyData";
 import { FilterOption } from "@/types/DataProps";
 import ChartSection from "@/components/admin-panel/UI-components/ChartSection";
 import { ChartData, ChartOptions } from "chart.js";
+import { StatisticCard5 } from "@/components/admin-panel/UI-components/StatisticCard5";
+import { PiggyBank, ArrowRight } from "lucide-react"; // Use icons like PiggyBank and ArrowRight
+import StatisticCardsLayout from "./StatisticCardsLayout";
 
 // Define the filter options
 const filterOptions: FilterOption[] = [
@@ -165,9 +166,7 @@ const ManagementPortfolio: React.FC = () => {
         onFilterSubmit={handleFilterSubmit}
       />
 
-      {/* Stats Cards Section */}
-      <StatsCardsSection stats={statCardsData} />
-
+<StatisticCardsLayout/>
       {/* Chart Section */}
       <ChartSection title="Portfolio Representation Diagram" data={chartData} options={chartOptions} />
 

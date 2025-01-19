@@ -1,4 +1,4 @@
-import { DollarSign, Briefcase, AlertTriangle, User, FileText, CheckCircle, Building,Home,Repeat, } from "lucide-react";
+import { DollarSign, Briefcase, AlertTriangle, User, FileText, CheckCircle, Building,Home,Repeat, Ticket,Tag} from "lucide-react";
 import { StatCardProps, SummaryCardProps ,Mandate,Owner,Tenant,StatCard,Contract,TreasuryItem } from "@/types/DataProps"; // Assuming these types are defined in your project
 
 // Statistics cards data for Management Portfolio
@@ -52,13 +52,12 @@ export const principalStats: StatCardProps[] = [
 ];
 
 // Summary cards data
-export const summaryCardsData: SummaryCardProps[] = [
-  { name: "Real Estate", value: 4, color: "yellow" },
-  { name: "Ticket", value: 0, color: "green" },
-  { name: "Intervention", value: 0, color: "red" },
-  { name: "Supplier", value: 0, color: "blue" },
+export const summaryCardsData = [
+  { name: "Real Estate", value: 4, color: "yellow", icon: Home },
+  { name: "Ticket", value: 0, color: "green", icon: Ticket },
+  { name: "Intervention", value: 0, color: "red", icon: Tag },
+  { name: "Supplier", value: 0, color: "blue", icon: User },
 ];
-
 
 
 
@@ -137,10 +136,10 @@ export const activeOwners: Owner[] = [
   
 
 export  const statsData: StatCard[] = [
-   { name: "Owner", value: 4, color: "bg-red-100 text-red-700", icon: User },
-    { name: "Locative", value: 47, color: "bg-green-100 text-green-700", icon: Home },
-    { name: "Mandate", value: 4, color: "bg-yellow-100 text-yellow-700", icon: FileText },
-    { name: "Reversal", value: 0, color: "bg-blue-100 text-blue-700", icon: Repeat },
+   { name: "Owner", value: 4, color: "bg-red-500 text-red-700", icon: User },
+    { name: "Locative", value: 47, color: "bg-green-500 text-green-700", icon: Home },
+    { name: "Mandate", value: 4, color: "bg-yellow-500 ", icon: FileText },
+    { name: "Reversal", value: 0, color: "bg-blue-500 text-blue-700", icon: Repeat },
   ];
   
 
