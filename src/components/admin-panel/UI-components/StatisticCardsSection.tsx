@@ -15,7 +15,7 @@ interface StatisticCardsSectionProps {
 
 const StatisticCardsSection: React.FC<StatisticCardsSectionProps> = ({ stats }) => {
   return (
-    <div className="flex flex-wrap gap-5">
+    <div className="grid grid-cols-4 gap-5">
       {stats.map((stat, index) => (
         <StatCard
           key={index}

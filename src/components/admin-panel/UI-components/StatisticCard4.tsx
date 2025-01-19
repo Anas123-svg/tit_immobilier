@@ -2,18 +2,16 @@ import React, { useState } from "react";
 import Modal from "./Modal"; // Import your reusable Modal component
 
 
-export interface StatisticCard4Props {
+interface StatisticCard4Props {
   name: string;
   value: number | string;
   currency?: string;
   color: string;
-  icon: React.ElementType;
 }
-
 const StatisticCard4: React.FC<StatisticCard4Props> = ({  name,value,
   currency,
   color,
-  icon:Icon, }) => {
+ }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
@@ -33,16 +31,16 @@ const StatisticCard4: React.FC<StatisticCard4Props> = ({  name,value,
       {/* Card */}
       <div
         onClick={handleCardClick}
-        className={`p-4 rounded-lg shadow-md flex justify-between items-center relative overflow-hidden hover:shadow-xl cursor-pointer ${color}`}
+        className="rounded-md shadow bg-white w-52 h-fit flex flex-col">
+    
+      <p className="text-sm text-gray-700 p-4">{name}</p>
+      <div
+        className={`flex items-baseline justify-between rounded-br-md rounded-bl-md p-4 mt-2 text-white ${color}`}
       >
-        <div>
-          <p className="text-white text-sm font-medium">{name}</p>
-          <p className="text-white text-lg font-bold">{value}</p>
-        </div>
-        <div className="text-white opacity-50 -bottom-10 absolute -right-10">
-          <Icon size={180} />
-        </div>
+        {currency && <span className="text-lg">{currency}</span>}
+        <span className="text-2xl font-bold">{value}</span>
       </div>
+    </div>
 
       {/* Modal */}
       {isModalOpen && (

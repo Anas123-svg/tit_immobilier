@@ -1,13 +1,20 @@
 import React from "react";
-import StatisticCard4, { StatisticCard4Props } from "./StatisticCard4";
+import StatisticCard4 from "./StatisticCard4"; // Import the unit component
 
-interface StatsCardsSection4Props {
-  stats: StatisticCard4Props[]; // Ensure this matches the type defined for a single card
+interface StatCard {
+  name: string;
+  value: number | string;
+  currency?: string;
+  color: string;
 }
 
-const StatisticCardsSection4: React.FC<StatsCardsSection4Props> = ({ stats }) => {
+interface StatisticCardSection4Props {
+  stats: StatCard[];
+}
+
+const StatisticCardsSection4: React.FC<StatisticCardSection4Props> = ({ stats }) => {
   return (
-    <div className="grid grid-cols-4">
+    <div className="flex flex-wrap gap-5 w-1/2 h-fit">
       {stats.map((stat, index) => (
         <StatisticCard4
           key={index}
@@ -15,7 +22,6 @@ const StatisticCardsSection4: React.FC<StatsCardsSection4Props> = ({ stats }) =>
           value={stat.value}
           currency={stat.currency}
           color={stat.color}
-          icon={stat.icon}
         />
       ))}
     </div>

@@ -35,7 +35,7 @@ const StatisticCard2: React.FC<StatisticCardProps> = ({
       ];
   return (<>
     <div    onClick={handleCardClick}
-      className={`p-4 rounded-md shadow ${color} text-white ${additionalClasses}`}
+      className={`p-4 rounded-md shadow cursor-pointer hover:shadow-lg ${color} text-white ${additionalClasses}`}
     >
       <div className="flex items-center justify-between">
         <Icon size={24} />

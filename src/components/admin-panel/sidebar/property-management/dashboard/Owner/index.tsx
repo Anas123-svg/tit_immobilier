@@ -14,6 +14,7 @@ import {
 import StatisticCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
 import { FilterOption } from "@/types/DataProps";
 import StatisticCard6 from "@/components/admin-panel/UI-components/StatisticCard6";
+import StatisticCardsSection2 from "@/components/admin-panel/UI-components/StatisticCardsSection2";
 
 const Owner: React.FC = () => {
     const breadcrumbs = [
@@ -69,7 +70,7 @@ const Owner: React.FC = () => {
       }
     ]
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 space-y-10 min-h-screen">
       {/* Header Section */}
       <HeaderSection
         title="Owner"
@@ -80,7 +81,7 @@ const Owner: React.FC = () => {
       />
 
       {/* Owner Stats Cards Section */}
-      <StatisticCardsSection stats={statsData} />
+      <StatisticCardsSection2 stats={statsData} />
 
       {/* Circular Diagram Section */}
       <div className="flex">

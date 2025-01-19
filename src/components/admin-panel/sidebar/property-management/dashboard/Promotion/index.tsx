@@ -1,5 +1,5 @@
 import React from "react";
-import CircularDiagram from "../../../../UI-components/CircularDiagram";
+import CircularDiagram from "@/components/admin-panel/UI-components/CircularDiagram";
 import LineChart from "@/components/admin-panel/UI-components/LineChart";
 import DeadlineTable from "./DeadlineTable";
 import { HomeIcon,PiggyBank,Wrench,Home,CheckCircle} from "lucide-react";

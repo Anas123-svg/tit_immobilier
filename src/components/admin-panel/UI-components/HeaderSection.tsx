@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Filter, ChevronDown, ChevronUp } from "lucide-react"; // Icons for the buttons
 import { FilterOption } from "@/types/DataProps";
 
 interface Breadcrumb {
@@ -9,7 +10,8 @@ interface Breadcrumb {
 interface HeaderSectionProps {
   title: string;
   breadcrumbs: Breadcrumb[];
-  filters?: FilterOption[]; // Optional filters with default value
+  filters?: FilterOption[];
+  advancefilters?: FilterOption[];
   onFilterChange: (name: string, value: string) => void;
   onFilterSubmit: () => void;
 }
@@ -17,13 +19,21 @@ interface HeaderSectionProps {
 const HeaderSection: React.FC<HeaderSectionProps> = ({
   title,
   breadcrumbs,
-  filters = [], // Default value
+  filters = [], // Default filters
+  advancefilters = [], // Default advanced filters
   onFilterChange,
   onFilterSubmit,
 }) => {
+  const [isAdvancedFiltersVisible, setIsAdvancedFiltersVisible] = useState(false);
+
+  const toggleAdvancedFilters = () => {
+    setIsAdvancedFiltersVisible((prev) => !prev);
+  };
+
   return (
-    <div className="bg-primary text-white p-6 rounded-md mb-6">
-      <div className="mb-2">
+    <div className="bg-primary text-white p-6 rounded-md mb-6 space-y-5 relative">
+      {/* Breadcrumbs */}
+      <div>
         <p className="text-sm">
           {breadcrumbs.map((crumb, index) => (
             <span key={index}>
@@ -35,9 +45,12 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
           ))}
         </p>
       </div>
+
+      {/* Title */}
       <h1 className="text-2xl font-semibold">{title}</h1>
 
-      <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 sm:space-y-0 mt-4 text-black">
+      {/* Filters */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-black">
         {filters.map((filter, index) => (
           <div className="flex-1" key={index}>
             <label className="block text-sm text-white">{filter.label}</label>
@@ -65,15 +78,72 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
             )}
           </div>
         ))}
-        <div className="flex items-end">
+      </div>
+
+     
+      {/* Advanced Filters Section */}
+      {isAdvancedFiltersVisible && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 text-black">
+          {advancefilters.map((filter, index) => (
+            <div className="flex-1" key={index}>
+              <label className="block text-sm text-white">{filter.label}</label>
+              {filter.type === "select" && filter.options && (
+                <select
+                  className="w-full p-2 border rounded"
+                  name={filter.name}
+                  onChange={(e) => onFilterChange(filter.name, e.target.value)}
+                >
+                  {filter.options.map((option, idx) => (
+                    <option key={idx} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {(filter.type === "date" || filter.type === "text" || filter.type === "number") && (
+                <input
+                  className="w-full p-2 border rounded"
+                  type={filter.type}
+                  name={filter.name}
+                  placeholder={filter.placeholder || ""}
+                  onChange={(e) => onFilterChange(filter.name, e.target.value)}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+       {/* Advanced Filters Toggle */}
+      
+    {/* Filter Submit Button */}
+    <div className="flex gap-2 items-center  justify-end">  
+      
+    {advancefilters.length > 0 && (
+        <div className="flex justify-between">
+          {/* Advanced Filters Button */}
           <button
-            className="bg-secondary text-white px-4 py-2 rounded"
+            className="flex items-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+            onClick={toggleAdvancedFilters}
+          >
+            {isAdvancedFiltersVisible ? (
+              <>
+                <ChevronUp className="mr-2" /> Hide Advanced Filters
+              </>
+            ) : (
+              <>
+                <ChevronDown className="mr-2" /> Show Advanced Filters
+              </>
+            )}
+          </button>
+
+      
+        </div>
+      )}   <button
+            className="flex items-center px-4 py-2  h-fit bg-secondary text-white  rounded hover:bg-secondary-dark"
             onClick={onFilterSubmit}
           >
-            Filter
-          </button>
-        </div>
-      </div>
+            <Filter  /> Filter
+          </button></div> 
     </div>
   );
 };

@@ -9,7 +9,7 @@ interface StatisticCardsProps {
   icon: React.ElementType;
 }
 
-const StatisticCards: React.FC<StatisticCardsProps> = ({ name, value, currency, color, icon: Icon }) => {
+const StatisticCard: React.FC<StatisticCardsProps> = ({ name, value, currency, color, icon: Icon }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -25,7 +25,7 @@ const StatisticCards: React.FC<StatisticCardsProps> = ({ name, value, currency, 
       { id: "12346", date: "January 16, 2025", description: "Another transaction", amount: "0 XOF" },
     ];
   return (<>
-    <div   onClick={handleCardClick} className="rounded-md shadow cursor-pointer bg-white w-1/5
+    <div   onClick={handleCardClick} className="rounded-md shadow cursor-pointer bg-white w-full
     mb-10 mx-auto h-fit flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
@@ -51,4 +51,4 @@ const StatisticCards: React.FC<StatisticCardsProps> = ({ name, value, currency, 
   );
 };
 
-export default StatisticCards;
+export default StatisticCard;
