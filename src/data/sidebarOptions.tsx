@@ -25,14 +25,12 @@ import LogoutComponent from "@/components/admin-panel/sidebar/profile/Logout";
 import Owner from "@/components/admin-panel/sidebar/property-management/dashboard/Owner";
 import Tenant from "@/components/admin-panel/sidebar/property-management/dashboard/Tenant";
 import PromotionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Promotion";
-import Subdivision from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
 import ManagementPortfolio from "@/components/admin-panel/sidebar/property-management/management-portfolio";
 import MesValidations from "@/components/admin-panel/sidebar/property-management/mes-validatoins";
 import CRM from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
 import Report from "@/components/admin-panel/sidebar/property-management/report/client-report";
 import GeneralMeans from "@/components/admin-panel/sidebar/extra/general-means";
 import Ticket from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguratoin";
-import Extra from "@/components/admin-panel/sidebar/extra/extra";
 import OwnerTier from "@/components/admin-panel/sidebar/property-management/tiers/owner";
 import TenantTier from "@/components/admin-panel/sidebar/property-management/tiers/tenant";
 import SubdivisionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
@@ -272,9 +270,9 @@ export const sidebarOptions: SidebarSection[] = [
       },
       {
         name: "Extra",
-        path: "/extra",
+        path: "/extra/geolocation",
         icon: MapPin, // Icon for Extra section
-        component: Extra, // Component for the main Extra section
+        component: GeolocationGoods, // Component for the main Extra section
         subOptions: [
           {
             name: "Geolocation of goods",
