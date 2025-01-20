@@ -36,7 +36,7 @@ const DeadlineTable: React.FC = () => {
       <h3 className="text-lg font-bold mb-4">Deadline Table</h3>
       <table className="w-full border-collapse">
         <thead>
-          <tr className="bg-primary-light border-primary border border-2 text-white" >
+          <tr className="bg-primary-light border-primary  border-2 text-white" >
             <th className="p-2 border">Period</th>
             <th className="p-2 border">Schedule (Forecast)</th>
             <th className="p-2 border">Scheduled Schedule</th>
