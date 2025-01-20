@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
             </div>
             {isOpen && (
               <div className="ml-3 flex text-primary">
-                <h3 className="text-lg font-semibold">New IT Company</h3>
+                <h3 className="text-lg font-semibold">TIT-immobilier</h3>
                 <ChevronDown
                   size={20}
                   className={`transition-transform ${
