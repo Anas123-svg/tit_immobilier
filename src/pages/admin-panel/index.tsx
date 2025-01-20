@@ -4,6 +4,8 @@ import Sidebar from "@/components/admin-panel/sidebar";
 import Navbar from "@/components/admin-panel/navbar";
 import { sidebarOptions, SidebarOption } from "@/data/sidebarOptions";
 import SettingsComponent from "@/components/admin-panel/sidebar/profile/Settings";
+import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguratoin";
+import ResourceConfiguration from "@/components/admin-panel/sidebar/extra/resource/ResourceConfiguration";
 
 // Recursive function to flatten all routes, including sub-options
 const flattenRoutes = (options: SidebarOption[]): SidebarOption[] => {
@@ -40,6 +42,8 @@ const AdminPanel: React.FC = () => {
           <Routes>
             {/* Nested Settings Routes */}
             <Route path="/settings/*" element={<SettingsComponent />} />
+            <Route path="/ticket/*" element={<TicketConfiguration />} />
+            <Route path="/resource/*" element={<ResourceConfiguration />} />
             {/* Render all routes */}
             {allRoutes.map((route) => (
               <Route key={route.path} path={route.path} element={<route.component />} />
