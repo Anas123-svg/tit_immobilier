@@ -12,8 +12,9 @@ import {
   Shield,
   HelpCircle,
   TicketIcon,
+  MapPin,
+  Mail,
 } from "lucide-react";
-import { Icon as LucideIcon } from "lucide-react"; // Import Icon type from lucide-react
 
 // Dummy components for demonstration (replace these with actual imports)
 import Principal from "@/components/admin-panel/sidebar/property-management/dashboard/Principal";
@@ -24,14 +25,12 @@ import LogoutComponent from "@/components/admin-panel/sidebar/profile/Logout";
 import Owner from "@/components/admin-panel/sidebar/property-management/dashboard/Owner";
 import Tenant from "@/components/admin-panel/sidebar/property-management/dashboard/Tenant";
 import PromotionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Promotion";
-import Subdivision from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
 import ManagementPortfolio from "@/components/admin-panel/sidebar/property-management/management-portfolio";
 import MesValidations from "@/components/admin-panel/sidebar/property-management/mes-validatoins";
 import CRM from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
 import Report from "@/components/admin-panel/sidebar/property-management/report/client-report";
 import GeneralMeans from "@/components/admin-panel/sidebar/extra/general-means";
-import Ticket from "@/components/admin-panel/sidebar/extra/ticket";
-import Extra from "@/components/admin-panel/sidebar/extra/extra";
+import Ticket from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguratoin";
 import OwnerTier from "@/components/admin-panel/sidebar/property-management/tiers/owner";
 import TenantTier from "@/components/admin-panel/sidebar/property-management/tiers/tenant";
 import SubdivisionDashboard from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision";
@@ -39,7 +38,6 @@ import ClientTier from "@/components/admin-panel/sidebar/property-management/tie
 import SalesProspect from "@/components/admin-panel/sidebar/property-management/crm/SalesProspect";
 import LocationProspect from "@/components/admin-panel/sidebar/property-management/crm/LocationProspect";
 import PromotionHeritage from "@/components/admin-panel/sidebar/property-management/heritage/promotion";
-import SubdivisionDashboardHeader from "@/components/admin-panel/sidebar/property-management/dashboard/Subdivision/SubdivisionDashboardHeader";
 import SubdivisionHeritage from "@/components/admin-panel/sidebar/property-management/heritage/subdivison";
 import TreasuryComponent from "@/components/admin-panel/sidebar/property-management/treasury/treasury";
 import TreasuryRequests from "@/components/admin-panel/sidebar/property-management/treasury/requests";
@@ -48,11 +46,15 @@ import TenantReport from "@/components/admin-panel/sidebar/property-management/r
 import ClientReport from "@/components/admin-panel/sidebar/property-management/report/client-report";
 import TicketDashboard from "@/components/admin-panel/sidebar/extra/ticket/TicketDashboard";
 import TicketList from "@/components/admin-panel/sidebar/extra/ticket/TicketList";
-import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguration";
+
 import UserManagement from "@/components/admin-panel/sidebar/security/UserManagement";
 import ResourceDashboard from "@/components/admin-panel/sidebar/extra/resource/ResourceDashboard";
 import ResourceList from "@/components/admin-panel/sidebar/extra/resource/ResourceList";
 import ResourceConfiguration from "@/components/admin-panel/sidebar/extra/resource/ResourceConfiguration";
+import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguratoin";
+import GeolocationGoods from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods";
+import CalendarSettings from "@/components/admin-panel/sidebar/extra/extra/CalendarSettings";
+import SendMailSmsSettings from "@/components/admin-panel/sidebar/extra/extra/SendMailSmsSettings";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -266,7 +268,32 @@ export const sidebarOptions: SidebarSection[] = [
           },
         ],
       },
-      { name: "Extra", path: "/extra", icon: Briefcase, component: Extra },
+      {
+        name: "Extra",
+        path: "/extra/geolocation",
+        icon: MapPin, // Icon for Extra section
+        component: GeolocationGoods, // Component for the main Extra section
+        subOptions: [
+          {
+            name: "Geolocation of goods",
+            path: "/extra/geolocation",
+            icon: MapPin, // Icon for Geolocation of goods
+            component: GeolocationGoods, // Component for this sub-option
+          },
+          {
+            name: "Calendar",
+            path: "/extra/calendar",
+            icon: Calendar, // Icon for Calendar
+            component: CalendarSettings, // Component for this sub-option
+          },
+          {
+            name: "Send Mail/SMS",
+            path: "/extra/send-mail",
+            icon: Mail, // Icon for Send Mail/SMS
+            component: SendMailSmsSettings, // Component for this sub-option
+          },
+        ],
+      },
     ],
   },
   {

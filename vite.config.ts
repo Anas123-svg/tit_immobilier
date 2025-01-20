@@ -15,4 +15,7 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
   },
+  define: {
+    global: 'window', // Defining global as window to resolve this issue
+  },
 });
