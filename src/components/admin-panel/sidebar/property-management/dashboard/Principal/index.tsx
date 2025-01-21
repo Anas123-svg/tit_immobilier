@@ -8,6 +8,7 @@ import ChartSection from "@/components/admin-panel/UI-components/ChartSection";
 import { ChartData, ChartOptions } from "chart.js";
 import {  User,Home, Ticket,Tag} from "lucide-react";
 import { StatisticCard5 } from "@/components/admin-panel/UI-components/StatisticCard5";
+import StatisticCardsSection5 from "@/components/admin-panel/UI-components/StatisticCardsSection5";
 
 
 const Principal: React.FC = () => {
@@ -61,38 +62,53 @@ const Principal: React.FC = () => {
     ],
     datasets: [
       {
-        label: "Total",
-        data: [1786000, 1200000, 1300000, 1100000, 1500000],
+        label: "Commission",
+        data: [15000, 12000, 13000, 14000, 15000],
         backgroundColor: "#4F46E5",
         borderColor: "#4F46E5",
         borderWidth: 1,
-        borderRadius: 5,
-        barThickness: 30,
       },
       {
-        label: "Paid",
-        data: [893000, 870000, 850000, 830000, 900000],
-        backgroundColor: "#22C55E",
-        borderColor: "#22C55E",
+        label: "Tax",
+        data: [8000, 9000, 8500, 8700, 8900],
+        backgroundColor: "#F59E0B",
+        borderColor: "#F59E0B",
         borderWidth: 1,
-        borderRadius: 5,
-        barThickness: 30,
       },
       {
-        label: "Unpaid",
-        data: [893000, 700000, 600000, 750000, 600000],
+        label: "Spent",
+        data: [6000, 5500, 5900, 5700, 6000],
         backgroundColor: "#EF4444",
         borderColor: "#EF4444",
         borderWidth: 1,
-        borderRadius: 5,
-        barThickness: 30,
+      },
+      {
+        label: "Registration Fee",
+        data: [2000, 2500, 2200, 2300, 2100],
+        backgroundColor: "#9C27B0",
+        borderColor: "#9C27B0",
+        borderWidth: 1,
+      },
+      {
+        label: "Insurance",
+        data: [3000, 2800, 2900, 3000, 3100],
+        backgroundColor: "#22C55E",
+        borderColor: "#22C55E",
+        borderWidth: 1,
+      },
+      {
+        label: "Tax Stamps",
+        data: [1000, 1200, 1100, 900, 800],
+        backgroundColor: "#6B7280",
+        borderColor: "#6B7280",
+        borderWidth: 1,
       },
     ],
   };
-
+  
   const chartOptions: ChartOptions<"bar"> = {
     responsive: true,
-    maintainAspectRatio: false, // Prevents automatic aspect ratio maintenance
+    maintainAspectRatio: false, // Allow the chart to adjust aspect ratio based on container size
     plugins: {
       legend: {
         position: "top",
@@ -129,7 +145,7 @@ const Principal: React.FC = () => {
       },
     },
   };
-
+  
 
   // Summary cards data
  const summaryCardsData = [
@@ -140,7 +156,7 @@ const Principal: React.FC = () => {
 ];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className=" p-2 sm:p-6 bg-gray-100 min-h-screen space-y-6">
       {/* Header Section */}
       <HeaderSection
         title="Principal"
@@ -160,21 +176,12 @@ const Principal: React.FC = () => {
       <ChartSection title="Monthly Rent Collection Statistics" data={chartData} options={chartOptions} />
 
       {/* Summary Cards Section */}
-     <div className=" flex justify-between">
-            {summaryCardsData.map((stat, index) => (
-              <StatisticCard5
-                key={index}
-                name={stat.name}
-                value={stat.value}
-                color={stat.color}
-                icon={stat.icon}
-              />
-            ))}
-          </div>
+      <StatisticCardsSection5 stats={summaryCardsData}/>
+  
       {/* Top 10 Lists Section */}
       <div className="my-6 p-5 bg-white rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold mb-6">Top 10 Lists</h1>
-        <div className="flex justify-between gap-5 flex-wrap">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Tenant and Owner Lists */}
           <TopListSection title="List of the Last 10 Tenants" data={tenantData} itemsPerPage={5} />
           <TopListSection title="List of the Last 10 Owners" data={tenantData} itemsPerPage={5} />

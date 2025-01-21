@@ -14,6 +14,7 @@ import ChartSection from "@/components/admin-panel/UI-components/ChartSection";
 import { ChartData, ChartOptions } from "chart.js";
 import StatisticCardsSection4 from "@/components/admin-panel/UI-components/StatisticCardsSection4";
 import CircularDiagram from "@/components/admin-panel/UI-components/CircularDiagram";
+import StatisticCard4 from "@/components/admin-panel/UI-components/StatisticCard4";
  const stats = [
     { name: "Tenant", value: 12, icon: User, color: "bg-red-500" },
     { name: "Contract", value: 12, icon: FileText, color: "bg-blue-500" },
@@ -169,7 +170,7 @@ const TenantDashboard: React.FC = () => {
       },
     }
   return (
-    <div className="p-6 bg-gray-100 min-h-screen space-y-10">
+    <div className="p-2 sm:p-6 bg-gray-100 min-h-screen space-y-10">
       {/* Header Section */}
       <HeaderSection
       title="Tenant"
@@ -182,15 +183,30 @@ const TenantDashboard: React.FC = () => {
       <StatisticCardsSection2 stats={stats} />
 
       {/* Contracts Lists */}
-      <div className="grid grid-cols-2 gap-4 mt-6">
+      <div className="grid lg:grid-cols-2 gap-4 mt-6">
         <ContractsList title="Active Contracts" data={renewals} headerColor="bg-red-500"   itemsPerPage={5} />
         <ContractsList title="Renewals" data={renewals} headerColor="bg-yellow-500"  itemsPerPage={5} />
       </div>
 
-      {/* Circular Diagram */}
-      <div className="flex mt-6 ">
-      <StatisticCardsSection4 stats={tenantStats} />
-      <div className="w-1/2"> <CircularDiagram title="Circular Diagram of Amount" data={circulardata}  /></div> 
+   
+      <div className="grid grid-cols-2 gap-5">
+      
+   <div className="grid grid-cols-2  gap-5 h-fit">{tenantStats.map((tenantStat, index) => (
+    index==0 ? <div className=" col-span-2"> <StatisticCard4
+          key={index}
+          name={tenantStat.name}
+          value={tenantStat.value}
+          currency={tenantStat.currency}
+          color={tenantStat.color}
+        /></div>:<StatisticCard4
+        key={index}
+        name={tenantStat.name}
+        value={tenantStat.value}
+        currency={tenantStat.currency}
+        color={tenantStat.color}
+      />
+      ))}</div>
+      <div className=""> <CircularDiagram title="Circular Diagram of Amount" data={circulardata}  /></div> 
       </div>
       <div className="mt-6">
         

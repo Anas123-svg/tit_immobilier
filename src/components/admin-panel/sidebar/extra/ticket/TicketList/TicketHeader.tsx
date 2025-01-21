@@ -39,7 +39,7 @@ const TicketHeader: React.FC<TicketHeaderProps> = ({ title, breadcrumbs }) => {
       <div className="mb-4">
         <p className="text-sm">
           {breadcrumbs.map((crumb, index) => (
-            <span key={index} className="flex items-center inline">
+            <span key={index} className=" items-center inline">
               <a href={crumb.path} className="hover:underline">
                 {crumb.name}
               </a>

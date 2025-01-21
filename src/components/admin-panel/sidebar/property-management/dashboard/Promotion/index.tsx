@@ -2,13 +2,14 @@ import React from "react";
 import CircularDiagram from "@/components/admin-panel/UI-components/CircularDiagram";
 import LineChart from "@/components/admin-panel/UI-components/LineChart";
 import DeadlineTable from "./DeadlineTable";
-import { HomeIcon,PiggyBank,Wrench,Home,CheckCircle} from "lucide-react";
+import { HomeIcon,PiggyBank,Wrench,Home,CheckCircle, ChartColumn} from "lucide-react";
 import ChartSection from "@/components/admin-panel/UI-components/ChartSection";
 import StatisticCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
 import StatisticCardsSection5 from "@/components/admin-panel/UI-components/StatisticCardsSection5";
 import { ChartData, ChartOptions } from "chart.js";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import { FilterOption } from "@/types/DataProps";
+import { StatisticCard5 } from "@/components/admin-panel/UI-components/StatisticCard5";
 const stats = [
   { name: "Promotion", value: "0", currency: "XOF", color: "bg-blue-500", icon: HomeIcon },
   { name: "Occupied House", value: "0", currency: "XOF", color: "bg-red-500", icon: HomeIcon },
@@ -64,44 +65,7 @@ const data = {
     },
   ],
 };
- const bardata: ChartData<"bar"> = {
-    labels: [
-      "Jan 1 - Jan 5, 2025",
-      "Jan 6 - Jan 12, 2025",
-      "Jan 13 - Jan 19, 2025",
-      "Jan 20 - Jan 26, 2025",
-      "Jan 27 - Jan 31, 2025",
-    ],
-    datasets: [
-      {
-        label: "Total",
-        data: [1786000, 1200000, 1300000, 1100000, 1500000],
-        backgroundColor: "#4F46E5",
-        borderColor: "#4F46E5",
-        borderWidth: 1,
-        borderRadius: 5,
-        barThickness: 30,
-      },
-      {
-        label: "Paid",
-        data: [893000, 870000, 850000, 830000, 900000],
-        backgroundColor: "#22C55E",
-        borderColor: "#22C55E",
-        borderWidth: 1,
-        borderRadius: 5,
-        barThickness: 30,
-      },
-      {
-        label: "Unpaid",
-        data: [893000, 700000, 600000, 750000, 600000],
-        backgroundColor: "#EF4444",
-        borderColor: "#EF4444",
-        borderWidth: 1,
-        borderRadius: 5,
-        barThickness: 30,
-      },
-    ],
-  };
+
 const options = {
   maintainAspectRatio: false,
   responsive: true,
@@ -113,46 +77,59 @@ const options = {
 };
 
 
-  const baroptions: ChartOptions<"bar"> = {
-    responsive: true,
-    maintainAspectRatio: false, // Prevents automatic aspect ratio maintenance
-    plugins: {
-      legend: {
-        position: "top",
-        labels: {
-          font: {
-            size: 12,
-          },
-        },
-      },
-      title: {
-        display: true,
-        text: "Monthly Rent Collection Statistics",
-        font: {
-          size: 16,
-        },
-      },
+const chartData: ChartData<"bar"> = {
+  labels: [
+    "Jan 1 - Jan 5, 2025",
+    "Jan 6 - Jan 12, 2025",
+    "Jan 13 - Jan 19, 2025",
+    "Jan 20 - Jan 26, 2025",
+    "Jan 27 - Jan 31, 2025",
+  ],
+  datasets: [
+    {
+      label: "Commission",
+      data: [15000, 12000, 13000, 14000, 15000],
+      backgroundColor: "#4F46E5",
+      borderColor: "#4F46E5",
+      borderWidth: 1,
     },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Period",
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Amount (XOF)",
-        },
-        beginAtZero: true,
-        ticks: {
-          stepSize: 500000,
-        },
-      },
+    {
+      label: "Tax",
+      data: [8000, 9000, 8500, 8700, 8900],
+      backgroundColor: "#F59E0B",
+      borderColor: "#F59E0B",
+      borderWidth: 1,
     },
-  };
-
+    {
+      label: "Spent",
+      data: [6000, 5500, 5900, 5700, 6000],
+      backgroundColor: "#EF4444",
+      borderColor: "#EF4444",
+      borderWidth: 1,
+    },
+    {
+      label: "Registration Fee",
+      data: [2000, 2500, 2200, 2300, 2100],
+      backgroundColor: "#9C27B0",
+      borderColor: "#9C27B0",
+      borderWidth: 1,
+    },
+    {
+      label: "Insurance",
+      data: [3000, 2800, 2900, 3000, 3100],
+      backgroundColor: "#22C55E",
+      borderColor: "#22C55E",
+      borderWidth: 1,
+    },
+    {
+      label: "Tax Stamps",
+      data: [1000, 1200, 1100, 900, 800],
+      backgroundColor: "#6B7280",
+      borderColor: "#6B7280",
+      borderWidth: 1,
+    },
+  ],
+};
   const circulardata = {
     labels: ["Outstanding", "Paid", "Total"],
     datasets: [
@@ -205,7 +182,7 @@ const PromotionDashboard: React.FC = () => {
     console.log("Filters submitted");
   };
   return (
-    <div className="p-6 bg-gray-100 min-h-screen space-y-6 ">
+    <div className="p-2 sm:p-6 bg-gray-100 min-h-screen space-y-10 ">
          <HeaderSection
         title="Promotion Dashboard"
         breadcrumbs={breadcrumbs}
@@ -214,12 +191,21 @@ const PromotionDashboard: React.FC = () => {
         onFilterSubmit={handleFilterSubmit}
       />
       <StatisticCardsSection stats={stats} />
-      <div className="flex">
-      <div className="w-1/2"><StatisticCardsSection5 stats={statsData} /></div>
-       <div className=" w-1/2  ml-5"> <CircularDiagram  title="Circular Diagram of amount" data={circulardata}/></div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-5 ">
+     
+      <div className="grid grid-cols-2  gap-5 h-fit">{statsData.map((tenantStat, index) => (
+  <StatisticCard5
+        key={index}
+        name={tenantStat.name}
+        value={tenantStat.value}
+        icon={tenantStat.icon}
+        color={tenantStat.color}
+      />
+      ))}</div>
+      <CircularDiagram  title="Circular Diagram of amount" data={circulardata}/>
       
       </div>
-   <ChartSection title="Monthly Rent Collection Statistics" data={bardata} options={baroptions}/>
+   <ChartSection title="Monthly Rent Collection Statistics" data={chartData} options={options}/>
       <LineChart title="Payment Statistics" data={data} options={options} />
       <DeadlineTable />
     </div>

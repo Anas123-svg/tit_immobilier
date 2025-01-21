@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
-import StatsCardsSection from "./StatsCardsSection";
+
 import NoContractsSection from "./NoContractsSection";
 import { validationStats } from "@/data/dummyData";
 import { FilterOption } from "@/types/DataProps";
+import StatisticCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
+import StatisticCardsSection2 from "@/components/admin-panel/UI-components/StatisticCardsSection2";
 
 const MesValidation: React.FC = () => {
   // Filter options for dropdown and date inputs
@@ -59,7 +61,7 @@ const MesValidation: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-2 sm:p-6 bg-gray-100 min-h-screen space-y-10">
       {/* Header Section */}
       <HeaderSection
         title="Mes Validations"
@@ -73,7 +75,7 @@ const MesValidation: React.FC = () => {
       />
 
       {/* Statistics Cards Section */}
-      <StatsCardsSection stats={validationStats} />
+      <StatisticCardsSection2 stats={validationStats} />
 
       {/* No Contracts Section */}
       <NoContractsSection message="Oupss!! No contracts found" />

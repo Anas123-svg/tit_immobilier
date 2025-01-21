@@ -24,7 +24,7 @@ const StatisticCard6: React.FC<StatisticCard6Props> = ({ title, value, stats, co
   ];
 
   return (<>
-    <div onClick={handleCardClick} className=" max-w-xs h-fit  rounded-lg shadow-lg border cursor-pointer bg-white overflow-hidden">
+    <div onClick={handleCardClick} className="  h-fit  rounded-lg  border cursor-pointer bg-white overflow-hidden hover:shadow-lg">
       {/* Top Section */}
       <div className="p-4 flex flex-col items-start">
         <h3 className={`text-4xl font-bold text-${color}`}>{value}</h3>

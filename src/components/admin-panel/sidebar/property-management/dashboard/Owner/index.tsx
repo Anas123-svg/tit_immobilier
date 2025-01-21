@@ -70,7 +70,7 @@ const Owner: React.FC = () => {
       }
     ]
   return (
-    <div className="p-6 bg-gray-100 space-y-10 min-h-screen">
+    <div className="p-2 sm:p-6 bg-gray-100 space-y-10 min-h-screen">
       {/* Header Section */}
       <HeaderSection
         title="Owner"
@@ -84,8 +84,8 @@ const Owner: React.FC = () => {
       <StatisticCardsSection2 stats={statsData} />
 
       {/* Circular Diagram Section */}
-      <div className="flex">
-        <div className="grid grid-cols-2 w-11/12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 space-x-0 lg:space-y-0 space-y-5 lg:space-x-5 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2  gap-5">
         {cardData.map((item, index) => (
         <StatisticCard6
           key={index}
@@ -100,7 +100,7 @@ const Owner: React.FC = () => {
       </div>
 
       {/* Active Owners List and Validated Mandates List */}
-      <div className="grid grid-cols-2 gap-4 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2  gap-5">
         <ActiveOwnersList owners={activeOwners} />
         <ValidatedMandatesList mandates={validatedMandates} />
       </div>

@@ -10,8 +10,9 @@ const PromotionActions: React.FC<PromotionActionsProps> = ({ actions, tools }) =
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
   return (
-    <div className="flex justify-between items-center mb-6">
-      <div className="flex gap-4">
+    <div className="flex flex-col gap-5 md:flex-row  justify-between sm:items-center ">
+    {/* Main Actions */}
+    <div className="flex gap-5 flex-wrap">
         {actions.map((action, index) => (
           <button
             key={index}

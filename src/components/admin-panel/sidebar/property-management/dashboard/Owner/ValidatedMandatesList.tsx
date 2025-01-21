@@ -8,11 +8,11 @@ interface ValidatedMandatesListProps {
 
 const ValidatedMandatesList: React.FC<ValidatedMandatesListProps> = ({ mandates }) => {
   return (
-    <div className="p-4 bg-white shadow rounded-md">
-      <h3 className="text-lg font-semibold mb-4">List of the Last 10 Validated Mandates</h3>
-      <table className="w-full border">
+    <div className="p-4 bg-white shadow rounded-md overflow-auto">
+        <div className="w-fit ">   <h3 className="text-lg font-semibold mb-4">List of the Last 10 Validated Mandates</h3>
+      <table className=" border">
         <thead>
-          <tr className="bg-red-100 text-left">
+          <tr className="bg-red-100 gap-5 fle text-left">
             <th className="p-2">Good</th>
             <th className="p-2">Surface Area</th>
             <th className="p-2">Owner</th>
@@ -22,7 +22,7 @@ const ValidatedMandatesList: React.FC<ValidatedMandatesListProps> = ({ mandates 
         </thead>
         <tbody>
           {mandates.map((mandate, index) => (
-            <tr key={index} className="border-b">
+            <tr key={index} className="border-b w-fit">
               <td className="p-2">{mandate.good}</td>
               <td className="p-2">{mandate.surfaceArea}</td>
               <td className="p-2">{mandate.owner}</td>
@@ -32,7 +32,7 @@ const ValidatedMandatesList: React.FC<ValidatedMandatesListProps> = ({ mandates 
           ))}
         </tbody>
       </table>
-    </div>
+    </div> </div>
   );
 };
 

@@ -30,8 +30,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ title, data, itemsPerPage, 
 
   return (
     <div className="p-4 bg-white rounded-md shadow overflow-auto">
-      <h3 className="text-lg font-bold mb-4">{title}</h3>
-      <table className="w-fit " style={{ borderSpacing: "0 10px" }}>
+     <div className="w-fit"> <h3 className="text-lg font-bold mb-4">{title}</h3>
+      <table className=" " style={{ borderSpacing: "0 10px" }}>
         <thead>
           <tr className={` ${headerColor} text-white ` }>
             {headers.map((header) => (
@@ -55,7 +55,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ title, data, itemsPerPage, 
       </table>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-center mt-4 w-fit  gap-5 ">
         <button
           className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"}`}
           disabled={currentPage === 1}
@@ -73,6 +73,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ title, data, itemsPerPage, 
         >
           Next
         </button>
+      </div>
       </div>
     </div>
   );

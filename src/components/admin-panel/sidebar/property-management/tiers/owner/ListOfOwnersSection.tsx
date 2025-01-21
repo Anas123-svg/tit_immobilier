@@ -20,7 +20,7 @@ const ListOfOwnersSection: React.FC<ListOfOwnersSectionProps> = ({ owners }) => 
   return (
     <div className="p-4 bg-white shadow rounded-md">
       <h3 className="text-3xl text-center  font-semibold mb-4">List of Owners</h3>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         {owners.map((owner) => (
           <div
             key={owner.id}

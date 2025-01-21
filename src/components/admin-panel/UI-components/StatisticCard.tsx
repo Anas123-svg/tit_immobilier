@@ -26,7 +26,7 @@ const StatisticCard: React.FC<StatisticCardsProps> = ({ name, value, currency, c
     ];
   return (<>
     <div   onClick={handleCardClick} className="rounded-md shadow cursor-pointer bg-white w-full
-    mb-10 mx-auto h-fit flex flex-col">
+    mx-auto h-fit flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <p className="text-sm text-gray-700">{name}</p>
@@ -40,7 +40,7 @@ const StatisticCard: React.FC<StatisticCardsProps> = ({ name, value, currency, c
         className={`flex items-baseline justify-between rounded-br-md rounded-bl-md p-4 mt-2 text-white ${color}`}
       >
         {currency && <span className="text-lg">{currency}</span>}
-        <span className="text-2xl font-bold">{value}</span>
+        <span className="text-xl ">{value}</span>
       </div>
       
     

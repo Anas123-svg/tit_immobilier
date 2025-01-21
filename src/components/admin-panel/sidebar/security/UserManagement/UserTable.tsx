@@ -49,7 +49,7 @@ const UserTable: React.FC = () => {
 
   return (
     <div className="p-4 bg-white rounded-md shadow overflow-auto">
-      <h3 className="text-lg font-bold mb-4">USER LIST</h3>
+     <div className="min-w-fit  sm:w-full"> <h3 className="text-lg font-bold mb-4">USER LIST</h3>
       <table className="w-full table-auto border-collapse">
         <thead>
           <tr className="bg-primary-light text-white border-primary border-2">
@@ -115,6 +115,7 @@ const UserTable: React.FC = () => {
         >
           Next
         </button>
+      </div>
       </div>
     </div>
   );

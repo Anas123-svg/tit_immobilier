@@ -17,7 +17,7 @@ interface StatisticCardSection2Props {
 
 const StatisticCardsSection2: React.FC<StatisticCardSection2Props> = ({ stats }) => {
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {stats.map((stat, index) => (
        <StatisticCard2 name={stat.name} value={stat.value} color={stat.color} icon={stat.icon}/>
       ))}

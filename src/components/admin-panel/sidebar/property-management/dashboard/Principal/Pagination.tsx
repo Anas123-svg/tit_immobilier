@@ -20,7 +20,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex justify-between items-center py-3 px-4 border-t">
+    <div className="flex justify-between gap-10 sm:gap-0 sm:flex-row  w-fit sm:w-full items-center py-3 px-4 border-t ">
       <button
         className="text-blue-600"
         onClick={() => setCurrentPage(1)}

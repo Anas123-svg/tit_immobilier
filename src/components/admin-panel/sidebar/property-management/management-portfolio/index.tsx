@@ -152,7 +152,7 @@ const ManagementPortfolio: React.FC = () => {
   };
 
   return (
-    <div className="sm:p-6 lg:p-8 bg-gray-100 min-h-screen">
+    <div className="sm:p-6 p-2 bg-gray-100 min-h-screen">
       {/* Header Section */}
       <HeaderSection
         title="Management Portfolio"

@@ -31,7 +31,7 @@ const StatisticCard4: React.FC<StatisticCard4Props> = ({  name,value,
       {/* Card */}
       <div
         onClick={handleCardClick}
-        className="rounded-md shadow bg-white w-52 h-fit flex flex-col">
+        className="rounded-md shadow bg-white  h-fit flex flex-col">
     
       <p className="text-sm text-gray-700 p-4">{name}</p>
       <div
