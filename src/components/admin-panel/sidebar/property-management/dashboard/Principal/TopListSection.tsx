@@ -27,7 +27,8 @@ const TopListSection: React.FC<TopListSectionProps> = ({ title, data, itemsPerPa
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
-    <div className="bg-blue-50 p-6 rounded-lg shadow-lg mb-6 w-[49%] border border-gray-300">
+    <div className="bg-blue-50 p-6 rounded-lg shadow-lg mb-6 border border-gray-300 overflow-auto ">
+      <div className="  sm:w-full w-fit ">
       <h2 className="text-xl font-semibold text-gray-700 mb-4">{title}</h2>
       
       {/* Search */}
@@ -44,7 +45,7 @@ const TopListSection: React.FC<TopListSectionProps> = ({ title, data, itemsPerPa
         currentPage={currentPage} 
         setCurrentPage={setCurrentPage} 
         totalPages={totalPages} 
-      />
+      /></div>
     </div>
   );
 };

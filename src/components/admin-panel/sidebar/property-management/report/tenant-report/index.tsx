@@ -13,7 +13,7 @@ const TenantReport: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-2 sm:p-6 space-y-10 bg-gray-100 min-h-screen">
       {/* Header Section */}
       <div className="bg-primary text-white p-6 rounded-md mb-6">
         {/* Breadcrumbs */}
@@ -36,7 +36,7 @@ const TenantReport: React.FC = () => {
 
       {/* Filter Section */}
       <div className="bg-white p-6 rounded-md shadow-md">
-        <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {/* Type */}
           <div>
             <label className="block text-sm font-medium">Type</label>

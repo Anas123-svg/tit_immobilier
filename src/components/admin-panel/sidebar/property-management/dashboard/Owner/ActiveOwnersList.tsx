@@ -8,7 +8,8 @@ interface ActiveOwnersListProps {
 
 const ActiveOwnersList: React.FC<ActiveOwnersListProps> = ({ owners }) => {
   return (
-    <div className="p-4 bg-white shadow rounded-md">
+    <div className="p-4 bg-white shadow rounded-md overflow-auto">
+     <div className="w-fit "> 
       <h3 className="text-lg font-semibold mb-4">List of Last 10 Active Owners</h3>
       <table className="w-full border">
         <thead>
@@ -21,7 +22,7 @@ const ActiveOwnersList: React.FC<ActiveOwnersListProps> = ({ owners }) => {
         </thead>
         <tbody>
           {owners.map((owner, index) => (
-            <tr key={index} className="border-b">
+            <tr key={index} className="border-b w-fit">
               <td className="p-2">{owner.name}</td>
               <td className="p-2">{owner.contact}</td>
               <td className="p-2">{owner.profession}</td>
@@ -30,7 +31,7 @@ const ActiveOwnersList: React.FC<ActiveOwnersListProps> = ({ owners }) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </div></div>
   );
 };
 

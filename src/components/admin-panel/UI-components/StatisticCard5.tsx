@@ -30,14 +30,14 @@ export const StatisticCard5: React.FC<StatisticCards5Props> = ({ name, value, co
       {/* Statistic Card */}
       <div
         onClick={handleCardClick}
-        className={`p-4 rounded-lg shadow-md flex justify-between sm:h-[140px] min-w-[300px] items-center relative overflow-hidden hover:shadow-xl cursor-pointer ${color}`}
+        className={`p-4 rounded-lg shadow-md flex justify-between sm:h-[100px] items-center relative overflow-hidden hover:shadow-xl cursor-pointer ${color}`}
       >
         <div>
           <p className="text-white text-sm font-medium">{name}</p>
           <p className="text-white text-lg font-bold">{value}</p>
         </div>
         <div className="text-white opacity-50 -bottom-10 absolute -right-10">
-          <Icon size={160} />
+          <Icon  className=" size-40 md:size-40 sm:size-24"/>
         </div>
       </div>
 

@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
   };
   
   return (
-    <div   className={`absolute top-16  sm:top-0 sm:relative flex border shadow-xl rounded transition-all duration-300 ease-in-out `}>
+    <div   className={`absolute top-16  z-50 sm:top-0 sm:relative flex border shadow-xl rounded transition-all duration-300 ease-in-out `}>
       {/* Sidebar */}
       <aside
         className={`top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
@@ -33,7 +33,7 @@ const Sidebar: React.FC = () => {
             className="flex flex-col items-center justify-center mt-4 cursor-pointer"
             onClick={() =>{ setIsProfileExpanded(!isProfileExpanded);}}
           >
-            <div className="w-16 h-16  rounded-full shadow-md border-4 border-white overflow-hidden">
+            <div className={`w-16 h-16 ${isOpen?"visible":" opacity-0 sm:opacity-100"}   transition-all  rounded-full shadow-md border-4 border-white overflow-hidden`}>
               <img
                 src={UserImage}
                 alt="Profile"
@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className="mt-4 border-y border-[#ffffff79]">
+        <ul className={`mt-4 border-y border-[#ffffff79] ${isOpen?"visible":" opacity-0 sm:opacity-100"}  transition-all delay-300 ease-in-out`}>
           {sidebarOptions.slice(1).map((section, sectionIndex) => (
             <div key={sectionIndex}>
               {/* Section Title */}

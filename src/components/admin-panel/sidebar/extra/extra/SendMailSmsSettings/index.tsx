@@ -44,7 +44,7 @@ const SendMailSmsSettings: React.FC = () => {
           ))}
 
           {/* Default Redirect */}
-          <Route path="*" element={<Navigate to="/extra/send-mail" replace />} />
+          <Route path="*" element={<Navigate to="/extra/send-mail/new-message" replace />} />
         </Routes>
       </div>
     </div>

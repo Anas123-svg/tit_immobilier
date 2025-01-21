@@ -20,7 +20,7 @@ const TreasuryList: React.FC = () => {
 
     <div className="p-6 bg-white rounded-xl ">
     <h2 className="text-2xl font-bold mb-4 text-center">LIST OF THE TREASURE</h2>
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-6">
       {dummyTreasuryData.map((item) => (
         <TreasuryItemCard
           key={item.id}

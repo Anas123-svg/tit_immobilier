@@ -17,9 +17,9 @@ const SubdivisionActions: React.FC<SubdivisionActionsProps> = ({
   };
 
   return (
-    <div className="flex justify-between items-center mb-6">
-      {/* Main Actions */}
-      <div className="flex gap-4">
+    <div className="flex flex-col gap-5 sm:flex-row  justify-between lg:items-center ">
+    {/* Main Actions */}
+    <div className="flex gap-5 flex-wrap">
         {actions.map((action, index) => (
           <button
             key={index}

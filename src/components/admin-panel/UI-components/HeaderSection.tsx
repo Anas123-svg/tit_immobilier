@@ -31,7 +31,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
   };
 
   return (
-    <div className="bg-primary text-white p-6 rounded-md mb-6 space-y-5 relative">
+    <div className="bg-primary text-white p-6 rounded-md space-y-5 relative">
       {/* Breadcrumbs */}
       <div>
         <p className="text-sm">
@@ -116,7 +116,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
        {/* Advanced Filters Toggle */}
       
     {/* Filter Submit Button */}
-    <div className="flex gap-2 items-center  justify-end">  
+    <div className="flex flex-wrap gap-2 items-center  justify-end">  
       
     {advancefilters.length > 0 && (
         <div className="flex justify-between">

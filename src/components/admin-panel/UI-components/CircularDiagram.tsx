@@ -14,7 +14,7 @@ const CircularDiagram: React.FC<CircularDiagramProps> = ({
   title,
   data,
   options,
-  height = "400px",
+  height = "350px",
   width = "100%",
 }) => {
   // Default chart options if none are provided
