@@ -50,7 +50,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
       <h1 className="text-2xl font-semibold">{title}</h1>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-black">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 text-black">
         {filters.map((filter, index) => (
           <div className="flex-1" key={index}>
             <label className="block text-sm text-white">{filter.label}</label>
@@ -83,7 +83,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
      
       {/* Advanced Filters Section */}
       {isAdvancedFiltersVisible && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 text-black">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4 text-black">
           {advancefilters.map((filter, index) => (
             <div className="flex-1" key={index}>
               <label className="block text-sm text-white">{filter.label}</label>
