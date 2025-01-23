@@ -1,7 +1,26 @@
-import React from 'react'
 
-export default function CategorySettings() {
+import DynamicTable from '../../UI/DynamicTable'; // Importing the refactored table
+
+ 
+
+const CategorySettings = () => {
+  const data:any = []
+
+  const columns:any = [];
+
   return (
-    <div>CategorySettings</div>
-  )
-}
+    <div className="space-y-5">
+  
+    
+    <DynamicTable title='Category of Charges' columns={columns} data={data} pageSize={5} />
+      
+
+    </div>
+  );
+};
+
+export default CategorySettings;
+
+
+
+

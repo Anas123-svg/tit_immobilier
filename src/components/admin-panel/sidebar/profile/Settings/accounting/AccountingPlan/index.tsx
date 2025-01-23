@@ -1,7 +1,25 @@
-import React from 'react'
 
-export default function AccountingPlan() {
+import DynamicTable from "../../UI/DynamicTable";
+
+
+const AccountingPlan = () => {
+  const data:any = []
+
+  const columns:any = [];
+
   return (
-    <div>AccountingPlan</div>
-  )
-}
+    <div className="space-y-5">
+  
+    
+    <DynamicTable title='Accounting accounts' columns={columns} data={data} pageSize={5} />
+      
+
+    </div>
+  );
+};
+
+export default AccountingPlan;
+
+
+
+

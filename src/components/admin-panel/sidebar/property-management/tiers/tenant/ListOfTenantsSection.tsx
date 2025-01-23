@@ -10,7 +10,7 @@ const ListOfTenantsSection: React.FC<ListOfTenantsSectionProps> = ({ tenants }) 
   return (
     <div className="p-4 bg-white shadow rounded-md mt-6">
       <h3 className="text-lg font-semibold mb-4">List of Tenants</h3>
-      <div className="grid grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         {tenants.map((tenant) => (
           <div
             key={tenant.id}

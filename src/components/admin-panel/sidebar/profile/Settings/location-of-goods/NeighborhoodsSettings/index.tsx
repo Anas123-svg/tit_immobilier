@@ -1,7 +1,8 @@
 
+
 import React, { useState } from 'react';
 import DynamicTable from '../../UI/DynamicTable'; // Ensure DynamicTable is imported correctly
-import { Eye, Pen } from 'lucide-react';
+import { Eye, Pen, Trash2 } from 'lucide-react';
 
 // Initial data with more relevant country details
 const initialData = [
@@ -14,7 +15,7 @@ const initialData = [
   { label: 'Angola', createdAt: 'December 28, 2021 at 2:38:15 AM' }
 ];
 
-const CommunesSettings = () => {
+const NeighborhoodsSettings = () => {
   const [data, setData] = useState(initialData);
 
   const columns = [
@@ -25,11 +26,14 @@ const CommunesSettings = () => {
       accessor: "",
       render: () => ( // Modify render to use item if needed, currently just static
         <>
-          <button className="p-2 mr-1 rounded-full bg-gray-500 text-white hover:bg-gray-600">
+          <button className="p-2 mr-2 rounded-full bg-gray-500 text-white hover:bg-gray-600">
             <Eye size={18} />
           </button>
-          <button className="p-2  mr-1 rounded-full bg-blue-500 text-white hover:bg-blue-600">
+          <button className="p-2  mr-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
             <Pen size={18} />
+          </button>
+          <button className="p-2  mr-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
           </button>
         </>
       )
@@ -37,8 +41,8 @@ const CommunesSettings = () => {
   ];
 
   return (
-    <DynamicTable title='Commune'  columns={columns} data={data} pageSize={5} />
+    <DynamicTable title='Neighborhood'  columns={columns} data={data} pageSize={5} />
   );
 };
 
-export default CommunesSettings;
+export default NeighborhoodsSettings;

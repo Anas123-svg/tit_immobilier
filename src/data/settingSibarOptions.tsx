@@ -45,7 +45,7 @@ import AccountingCodesLength from "@/components/admin-panel/sidebar/profile/Sett
 import CountrySettings from "@/components/admin-panel/sidebar/profile/Settings/location-of-goods/CountrySettings";
 import CitiesSettings from "@/components/admin-panel/sidebar/profile/Settings/location-of-goods/CitiesSettings";
 import CommunesSettings from "@/components/admin-panel/sidebar/profile/Settings/location-of-goods/CommunesSettings";
-import NeighborhoodsSettings from "@/components/admin-panel/sidebar/profile/Settings/NeighborhoodsSettings";
+import NeighborhoodsSettings from "@/components/admin-panel/sidebar/profile/Settings/location-of-goods/NeighborhoodsSettings";
   
   
   export const settingsOptions = [
@@ -63,7 +63,7 @@ import NeighborhoodsSettings from "@/components/admin-panel/sidebar/profile/Sett
       subOptions: [
         { name: "Equipment", path: "/settings/other/equipment", icon: Wrench, component: EquipmentSettings },
         { name: "Thousandths", path: "/settings/other/thousandths", icon: Divide, component: ThousandthsSettings },
-    { name: "Category of charges", path: "/settings/other/thousandths", icon: DollarSign, component: CategorySettings },
+    { name: "Category of charges", path: "/settings/other/categoryOfcharges", icon: DollarSign, component: CategorySettings },
       ],
     },
  
