@@ -32,13 +32,13 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ columns, data, pageSize, ti
   return (
 
 
-    <div className=" p-4 rounded-lg overflow-x-auto shadow-lg border-2 bg-gray-50">
-      <div className="flex justify-between items-center mb-4 border-b-2 pb-5">
+    <div className=" p-4 rounded-lg  shadow-lg border-2 bg-gray-50">
+      <div className="flex justify-between items-center mb-4 border-b-2 pb-5 ">
         <h1 className="text-2xl font-semibold text-gray-700">{title}</h1>
        {addButton && <button className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark">Add+</button>
 }</div>
-      <div className="overflow-x-auto ">
-        {columns.length > 0 ? <table className=" lg:min-w-full min-w-[600px] text-sm text-left text-gray-500 border border-gray-300">
+      <div className=" overflow-auto">
+        {columns.length > 0 ? <table className=" min-w-[600px] lg:w-full    text-sm text-left text-gray-500 border border-gray-300">
           <thead className="text-xs uppercase bg-secondary text-white">
             <tr>
               {columns.map((column, index) => (
@@ -64,7 +64,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ columns, data, pageSize, ti
                 </td>
               </tr>}</tbody>
         </table> : <EmptyState message={title} />
-        }   <div className="flex  justify-between items-center mt-4 lg:min-w-full min-w-[600px]">
+        }   <div className="flex min-w-[600px]   lg:w-full  justify-between items-center mt-4 ">
         <span>Showing item {pageSize * (currentPage - 1) + 1} to {Math.min(pageSize * currentPage, data.length)} of {data.length} items</span>
         <div className="btn-group flex gap-5 ">
           <button className="btn" onClick={() => handlePageChange(1)}>First</button>

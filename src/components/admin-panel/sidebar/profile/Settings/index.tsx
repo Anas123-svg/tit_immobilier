@@ -31,7 +31,7 @@ const SettingsComponent: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className=" bg-white h-fit shadow-lg  p-4 sm:p-6 rounded-xl">
+      <div className=" md:6/12 sm:w-full bg-white h-fit shadow-lg  p-4 sm:p-6 rounded-xl">
  
       <Routes>
   {/* Dynamically render all settings routes */}

@@ -28,7 +28,7 @@ const AccountingCodesLength = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-4">Length of accounting accounts</h1>
       <form onSubmit={handleSubmit} className="space-y-6 ">
-        <div className="flex justify-between items-center">
+        <div className="flex sm:flex-row flex-col justify-between items-start sm:items-center">
           <label htmlFor="thirdPartyLength" className="flex-1">
             Length of Third Party Accounting Accounts
           </label>
@@ -40,7 +40,7 @@ const AccountingCodesLength = () => {
             className="w-20 p-1 border rounded text-right"
           />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex sm:flex-row flex-col items-start justify-between sm:items-center">
           <label htmlFor="generalAccountLength" className="flex-1">
             Length of general accounting accounts
           </label>

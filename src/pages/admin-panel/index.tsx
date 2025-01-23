@@ -39,7 +39,7 @@ const AdminPanel: React.FC = () => {
         <Sidebar />
 
         {/* Main Content */}
-        <div className="flex-grow p-4 bg-gray-100  min-h-screen">
+        <div className="flex-grow p-4 bg-gray-100 overflow-auto min-h-screen">
           <Routes>
             {/* Nested Settings Routes */}
             <Route path="/settings/*" element={<SettingsComponent />} />
