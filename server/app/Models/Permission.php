@@ -18,4 +18,8 @@ class Permission extends Model
     protected $casts = [
         'assigned_permissions' => 'array', // Automatically cast to array when retrieving
     ];
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_permissions');
+    }
 }

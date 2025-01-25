@@ -35,5 +35,4 @@ class User extends Authenticatable
         'permissions' => 'array', // Ensure permissions are cast as an array
         'documents' => 'array',   // Ensure documents are cast as an array
     ];
-    
 }

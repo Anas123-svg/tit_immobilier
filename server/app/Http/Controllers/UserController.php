@@ -12,8 +12,21 @@ class UserController extends Controller
     // Fetch all users
     public function index()
     {
-        return response()->json(User::all());
+        $users = User::all();
+    
+        $usersWithPermissions = $users->map(function($user) {
+            $permissionIds = is_array($user->permissions) ? $user->permissions : [];
+    
+            $permissions = !empty($permissionIds) ? \App\Models\Permission::whereIn('id', $permissionIds)->get() : [];
+    
+            $user->permissions = $permissions;
+    
+            return $user;
+        });
+    
+        return response()->json($usersWithPermissions);
     }
+    
 
     // Fetch single user by ID
     public function show($id)
@@ -22,7 +35,26 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-        return response()->json($user);
+        $permissionIds = $user->permissions;
+
+        $permissions = \App\Models\Permission::whereIn('id', $permissionIds)->get();    
+        return response()->json([
+            'user' => $user->only([
+                'id',
+                'name',
+                'email',
+                'Gender',
+                'userLogin',
+                'service',
+                'contact',
+                'pronouns',
+                'photo',
+                //'permissions'=> $permissions,
+                'documents'
+            ]),
+            'permissions' => $permissions
+        ]);
+    
     }
 
     // Create a new user
@@ -111,6 +143,11 @@ class UserController extends Controller
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        $permissionIds = $user->permissions;
+
+        $permissions = \App\Models\Permission::whereIn('id', $permissionIds)->get();
+    
+
         return response()->json([
             'message' => 'Login successful',
             'token' => $token,
@@ -126,7 +163,8 @@ class UserController extends Controller
                 'photo',
                 'permissions',
                 'documents'
-            ])
+            ]),
+            'permissions' => $permissions
         ]);
     }
 
@@ -147,6 +185,9 @@ public function getUserByToken(Request $request)
     if (!$user) {
         return response()->json(['error' => 'User not found'], 404);
     }
+    $permissionIds = $user->permissions;
+
+    $permissions = \App\Models\Permission::whereIn('id', $permissionIds)->get();
 
     return response()->json([
         'user' => $user->only([
@@ -159,9 +200,10 @@ public function getUserByToken(Request $request)
             'contact',
             'pronouns',
             'photo',
-            'permissions',
+            //'permissions'=> $permissions,
             'documents'
-        ])
+        ]),
+        'permissions' => $permissions
     ]);
 }
 
