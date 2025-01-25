@@ -6,7 +6,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PrivateOwnerController;
+use App\Http\Controllers\OwnerRentPropertyController;
+use App\Http\Controllers\OwnerSalePropertyController;
 use App\Http\Controllers\BusinessOwnerController;
+use App\Http\Controllers\OwnerController;
 
 Route::post('/users/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
@@ -20,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::post('/users/logout', [UserController::class, 'logout']);
 });
+Route::get('/get-all-owners', [OwnerController::class, 'getAllOwners']);
 
 
 Route::prefix('permissions')->group(function() {
@@ -39,19 +43,35 @@ Route::prefix('services')->group(function() {
 });
 
 Route::prefix('private-owners')->group(function() {
-    Route::get('/', [PrivateOwnerController::class, 'index']); // Get all services
-    Route::get('{id}', [PrivateOwnerController::class, 'show']); // Get a single service
-    Route::post('/', [PrivateOwnerController::class, 'store']); // Create a new service
-    Route::put('{id}', [PrivateOwnerController::class, 'update']); // Update a service
-    Route::delete('{id}', [PrivateOwnerController::class, 'destroy']); // Delete a service
+    Route::get('/', [PrivateOwnerController::class, 'index']); // Get all private-owners
+    Route::get('{id}', [PrivateOwnerController::class, 'show']); // Get a single private-owners
+    Route::post('/', [PrivateOwnerController::class, 'store']); // Create a new private-owners
+    Route::put('{id}', [PrivateOwnerController::class, 'update']); // Update a private-owners
+    Route::delete('{id}', [PrivateOwnerController::class, 'destroy']); // Delete a private-owners
 });
 
 
 
 Route::prefix('business-owners')->group(function() {
-    Route::get('/', [BusinessOwnerController::class, 'index']); // Get all services
-    Route::get('{id}', [BusinessOwnerController::class, 'show']); // Get a single service
-    Route::post('/', [BusinessOwnerController::class, 'store']); // Create a new service
-    Route::put('{id}', [BusinessOwnerController::class, 'update']); // Update a service
-    Route::delete('{id}', [BusinessOwnerController::class, 'destroy']); // Delete a service
+    Route::get('/', [BusinessOwnerController::class, 'index']); // Get all business-owners
+    Route::get('{id}', [BusinessOwnerController::class, 'show']); // Get a single business-owners
+    Route::post('/', [BusinessOwnerController::class, 'store']); // Create a new business-owners
+    Route::put('{id}', [BusinessOwnerController::class, 'update']); // Update a business-owners
+    Route::delete('{id}', [BusinessOwnerController::class, 'destroy']); // Delete a business-owners
+});
+
+Route::prefix('owner-rent-properties')->group(function() {
+    Route::get('/', [OwnerRentPropertyController::class, 'index']); // Get all owner-rent-properties
+    Route::get('{id}', [OwnerRentPropertyController::class, 'show']); // Get a single owner-rent-properties
+    Route::post('/', [OwnerRentPropertyController::class, 'store']); // Create a new owner-rent-properties
+    Route::put('{id}', [OwnerRentPropertyController::class, 'update']); // Update a owner-rent-properties
+    Route::delete('{id}', [OwnerRentPropertyController::class, 'destroy']); // Delete a owner-rent-properties
+});
+
+Route::prefix('owner-sale-properties')->group(function() {
+    Route::get('/', [OwnerSalePropertyController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerSalePropertyController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerSalePropertyController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerSalePropertyController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerSalePropertyController::class, 'destroy']); // Delete a owner-sale-properties
 });
