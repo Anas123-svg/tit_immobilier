@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\PrivateOwnerController;
+use App\Http\Controllers\BusinessOwnerController;
 
 Route::post('/users/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
@@ -34,4 +36,22 @@ Route::prefix('services')->group(function() {
     Route::post('/', [ServiceController::class, 'store']); // Create a new service
     Route::put('{id}', [ServiceController::class, 'update']); // Update a service
     Route::delete('{id}', [ServiceController::class, 'destroy']); // Delete a service
+});
+
+Route::prefix('private-owners')->group(function() {
+    Route::get('/', [PrivateOwnerController::class, 'index']); // Get all services
+    Route::get('{id}', [PrivateOwnerController::class, 'show']); // Get a single service
+    Route::post('/', [PrivateOwnerController::class, 'store']); // Create a new service
+    Route::put('{id}', [PrivateOwnerController::class, 'update']); // Update a service
+    Route::delete('{id}', [PrivateOwnerController::class, 'destroy']); // Delete a service
+});
+
+
+
+Route::prefix('business-owners')->group(function() {
+    Route::get('/', [BusinessOwnerController::class, 'index']); // Get all services
+    Route::get('{id}', [BusinessOwnerController::class, 'show']); // Get a single service
+    Route::post('/', [BusinessOwnerController::class, 'store']); // Create a new service
+    Route::put('{id}', [BusinessOwnerController::class, 'update']); // Update a service
+    Route::delete('{id}', [BusinessOwnerController::class, 'destroy']); // Delete a service
 });
