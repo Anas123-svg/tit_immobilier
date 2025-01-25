@@ -23,7 +23,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::post('/users/logout', [UserController::class, 'logout']);
 });
-Route::get('/get-all-owners', [OwnerController::class, 'getAllOwners']);
+
+// Owner routes
+Route::get('/get-all-owners', [OwnerController::class, 'index']);
+Route::post('/owners', [OwnerController::class, 'store']);
+Route::put('/owners/{id}', [OwnerController::class, 'update']);
+Route::get('/owners/{id}', [OwnerController::class, 'show']);
+Route::delete('/owners/{id}', [OwnerController::class, 'destroy']);
+
+
+//
 
 
 Route::prefix('permissions')->group(function() {
