@@ -11,6 +11,19 @@ use App\Http\Controllers\OwnerSalePropertyController;
 use App\Http\Controllers\BusinessOwnerController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\OwnerARentalPropertyController;
+use App\Http\Controllers\OwnerMandateController;
+use App\Http\Controllers\OwnerReversalRentalPropertyController;
+use App\Http\Controllers\OwnerReversalSalePropertyController;
+use App\Http\Controllers\OwnerPortfolioManagementController;
+use App\Http\Controllers\OwnerValidatorAssignmentController;
+
+
+
+
+
+
+
+
 
 Route::post('/users/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
@@ -94,4 +107,50 @@ Route::prefix('owner-a-rental-property')->group(function() {
     Route::post('/', [OwnerARentalPropertyController::class, 'store']); // Create a new owner-sale-properties
     Route::put('{id}', [OwnerARentalPropertyController::class, 'update']); // Update a owner-sale-properties
     Route::delete('{id}', [OwnerARentalPropertyController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+Route::prefix('owner-mandate')->group(function() {
+    Route::get('/', [OwnerMandateController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerMandateController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerMandateController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerMandateController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerMandateController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+
+
+Route::prefix('owner-reversal-rental-property')->group(function() {
+    Route::get('/', [OwnerReversalRentalPropertyController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerReversalRentalPropertyController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerReversalRentalPropertyController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerReversalRentalPropertyController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerReversalRentalPropertyController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+
+Route::prefix('owner-reversal-sale-property')->group(function() {
+    Route::get('/', [OwnerReversalSalePropertyController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerReversalSalePropertyController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerReversalSalePropertyController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerReversalSalePropertyController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerReversalSalePropertyController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+
+
+
+Route::prefix('owner-portfolio-management')->group(function() {
+    Route::get('/', [OwnerPortfolioManagementController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerPortfolioManagementController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerPortfolioManagementController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerPortfolioManagementController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerPortfolioManagementController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+Route::prefix('owner-validator-assignment')->group(function() {
+    Route::get('/', [OwnerValidatorAssignmentController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerValidatorAssignmentController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerValidatorAssignmentController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerValidatorAssignmentController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerValidatorAssignmentController::class, 'destroy']); // Delete a owner-sale-properties
 });
