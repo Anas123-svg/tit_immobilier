@@ -10,6 +10,7 @@ use App\Http\Controllers\OwnerRentPropertyController;
 use App\Http\Controllers\OwnerSalePropertyController;
 use App\Http\Controllers\BusinessOwnerController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\OwnerARentalPropertyController;
 
 Route::post('/users/login', [UserController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
@@ -83,4 +84,14 @@ Route::prefix('owner-sale-properties')->group(function() {
     Route::post('/', [OwnerSalePropertyController::class, 'store']); // Create a new owner-sale-properties
     Route::put('{id}', [OwnerSalePropertyController::class, 'update']); // Update a owner-sale-properties
     Route::delete('{id}', [OwnerSalePropertyController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+
+
+Route::prefix('owner-a-rental-property')->group(function() {
+    Route::get('/', [OwnerARentalPropertyController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [OwnerARentalPropertyController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [OwnerARentalPropertyController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [OwnerARentalPropertyController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [OwnerARentalPropertyController::class, 'destroy']); // Delete a owner-sale-properties
 });
