@@ -8,12 +8,14 @@ interface Breadcrumb {
 }
 
 interface HeaderSectionProps {
-  title: string;
-  breadcrumbs: Breadcrumb[];
+  title?: string;
+  breadcrumbs?: Breadcrumb[];
   filters?: FilterOption[];
   advancefilters?: FilterOption[];
   onFilterChange: (name: string, value: string) => void;
   onFilterSubmit: () => void;
+  additionclassName?:string
+  gridSize?:string
 }
 
 const HeaderSection: React.FC<HeaderSectionProps> = ({
@@ -23,6 +25,8 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
   advancefilters = [], // Default advanced filters
   onFilterChange,
   onFilterSubmit,
+  additionclassName="p-6",
+  gridSize="5"
 }) => {
   const [isAdvancedFiltersVisible, setIsAdvancedFiltersVisible] = useState(false);
 
@@ -31,11 +35,11 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
   };
 
   return (
-    <div className="bg-primary text-white p-6 rounded-md space-y-5 relative">
+    <div className={`${additionclassName} bg-primary text-white  rounded-md space-y-5 relative  `}>
       {/* Breadcrumbs */}
       <div>
         <p className="text-sm">
-          {breadcrumbs.map((crumb, index) => (
+          {breadcrumbs?.map((crumb, index) => (
             <span key={index}>
               <a href={crumb.path} className="hover:underline">
                 {crumb.name}
@@ -50,7 +54,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
       <h1 className="text-2xl font-semibold">{title}</h1>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-black">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${gridSize} gap-4 text-black`}>
         {filters.map((filter, index) => (
           <div className="flex-1" key={index}>
             <label className="block text-sm text-white">{filter.label}</label>
@@ -83,7 +87,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
      
       {/* Advanced Filters Section */}
       {isAdvancedFiltersVisible && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 text-black">
+     <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-${gridSize} gap-4 text-black`}>
           {advancefilters.map((filter, index) => (
             <div className="flex-1" key={index}>
               <label className="block text-sm text-white">{filter.label}</label>

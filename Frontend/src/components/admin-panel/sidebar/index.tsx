@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
       {/* Sidebar */}
       <aside
         className={`top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
-          isOpen ? "w-60" : "w-0 sm:w-20"
+          isOpen ? "w-60" : "w-0 md:w-20"
         }`}
       >
         {/* Profile Section */}
@@ -33,7 +33,7 @@ const Sidebar: React.FC = () => {
             className="flex flex-col items-center justify-center mt-4 cursor-pointer"
             onClick={() =>{ setIsProfileExpanded(!isProfileExpanded);}}
           >
-            <div className={`w-16 h-16 ${isOpen?"visible":" opacity-0 sm:opacity-100"}   transition-all  rounded-full shadow-md border-4 border-white overflow-hidden`}>
+            <div className={`w-16 h-16 ${isOpen?"visible":" opacity-0 md:opacity-100"}   transition-all  rounded-full shadow-md border-4 border-white overflow-hidden`}>
               <img
                 src={UserImage}
                 alt="Profile"
@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className={`mt-4 border-y border-[#ffffff79] ${isOpen?"visible":" opacity-0 sm:opacity-100"}  transition-all delay-300 ease-in-out`}>
+        <ul className={`mt-4 border-y border-[#ffffff79] ${isOpen?"visible":" opacity-0 md:opacity-100"}  transition-all delay-300 ease-in-out`}>
           {sidebarOptions.slice(1).map((section, sectionIndex) => (
             <div key={sectionIndex}>
               {/* Section Title */}
@@ -165,7 +165,7 @@ const Sidebar: React.FC = () => {
       {/* Toggle Button */}
       <button
         className={`fixed top-20 transition-all duration-300 ease-in-out ${
-          isOpen ? "left-[220px]" : "left-0 sm:left-16"
+          isOpen ? "left-[220px]" : "left-0 md:left-16"
         } z-50 bg-white text-primary p-1 rounded-md shadow-md`}
         onClick={() => setIsOpen(!isOpen)}
       >

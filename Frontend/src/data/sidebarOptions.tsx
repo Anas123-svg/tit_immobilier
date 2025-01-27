@@ -55,6 +55,8 @@ import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/T
 import GeolocationGoods from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods";
 import CalendarSettings from "@/components/admin-panel/sidebar/extra/extra/CalendarSettings";
 import SendMailSmsSettings from "@/components/admin-panel/sidebar/extra/extra/SendMailSmsSettings";
+import Intervention from "@/components/admin-panel/sidebar/extra/general-means/intervention";
+import SupplierServiceProvider from "@/components/admin-panel/sidebar/extra/general-means/supplier-service-provider";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -220,7 +222,26 @@ export const sidebarOptions: SidebarSection[] = [
   {
     section: "Extra",
     options: [
-      { name: "General Means", path: "/general-means", icon: Clipboard, component: GeneralMeans },
+      {
+        name: "General Means",
+        path: "/general-means",
+        icon: Clipboard,
+        component: SupplierServiceProvider,
+        subOptions: [
+          {
+            name: "Supplier and Service Provider",
+            path: "/general-means/supplier-service-provider",
+            component: SupplierServiceProvider
+          },
+          {
+            name: "Intervention",
+            path: "/general-means/intervention",
+            component: Intervention
+          }
+        ]
+      }
+      
+,      
       {
         name: "Ticket",
         path: "/ticket",
