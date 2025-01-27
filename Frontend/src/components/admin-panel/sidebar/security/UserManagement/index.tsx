@@ -33,38 +33,39 @@ const filters: FilterOption[] = [
     label: "End date",
     name: "endDate",
   },
- 
 ];
 
-const advancefilters :FilterOption[] = [ {
-  type: "text",
-  label: "MIN Amount",
-  name: "minAmount",
-  placeholder: "MIN Amount",
-},
-{
-  type: "text",
-  label: "MAX amount",
-  name: "maxAmount",
-  placeholder: "MAX amount",
-},
-{
-  type: "date",
-  label: "Creation date",
-  name: "creationDate",
-},
-{
-  type: "select",
-  label: "Order",
-  name: "order",
-  options: ["Descending", "Ascending"],
-},
-{
-  type: "select",
-  label: "Name",
-  name: "nameEntries",
-  options: ["10", "20", "50", "100"],
-},]
+const advancefilters: FilterOption[] = [
+  {
+    type: "text",
+    label: "MIN Amount",
+    name: "minAmount",
+    placeholder: "MIN Amount",
+  },
+  {
+    type: "text",
+    label: "MAX amount",
+    name: "maxAmount",
+    placeholder: "MAX amount",
+  },
+  {
+    type: "date",
+    label: "Creation date",
+    name: "creationDate",
+  },
+  {
+    type: "select",
+    label: "Order",
+    name: "order",
+    options: ["Descending", "Ascending"],
+  },
+  {
+    type: "select",
+    label: "Name",
+    name: "nameEntries",
+    options: ["10", "20", "50", "100"],
+  },
+];
 // Example Data
 const userList = [
   { name: "John Doe", email: "john@example.com", status: "Active" },
@@ -74,8 +75,16 @@ const userList = [
 const UserManagement: React.FC = () => {
   // Example actions and tools
   const actions = [
-    { name: "Add User", onClick: () => alert("Add User Clicked"), className: "bg-teal-500" },
-    { name: "Permissions", onClick: () => alert("Permissions Clicked"), className: "bg-blue-500" },
+    {
+      name: "Add User",
+      onClick: () => alert("Add User Clicked"),
+      className: "bg-teal-500",
+    },
+    {
+      name: "Permissions",
+      onClick: () => alert("Permissions Clicked"),
+      className: "bg-blue-500",
+    },
   ];
 
   const tools = [
@@ -96,18 +105,21 @@ const UserManagement: React.FC = () => {
       {/* Header Section */}
       <HeaderSection
         title="User Management"
-        breadcrumbs={[{ name: "Dashboard", path: "/dashboard" }, { name: "User Management", path: "/user-management" }]}
+        breadcrumbs={[
+          { name: "Dashboard", path: "/dashboard" },
+          { name: "User Management", path: "/user-management" },
+        ]}
         filters={filters}
         advancefilters={advancefilters}
         onFilterChange={(name, value) => console.log(`${name}: ${value}`)}
         onFilterSubmit={() => console.log("Filters submitted")}
       />
-      
+
       {/* Action Section */}
       <ActionSection actions={actions} tools={tools} />
 
       {/* Table Section */}
-      <TableSection   />
+      <TableSection />
     </div>
   );
 };
