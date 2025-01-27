@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react"; // Icon for dropdown
+import UserForm from "./UserForm";
+import ServiceForm from "./ServiceForm";
+import PermissionForm from "./PermissionForm";
 
 interface ActionSectionProps {
   actions: { name: string; onClick: () => void; className: string }[];
@@ -17,15 +20,9 @@ const ActionSection: React.FC<ActionSectionProps> = ({ actions, tools }) => {
     <div className="flex justify-between items-center mb-6">
       {/* Main Actions */}
       <div className="flex gap-4">
-        {actions.map((action, index) => (
-          <button
-            key={index}
-            onClick={action.onClick}
-            className={`px-4 py-2 text-white rounded-md ${action.className}`}
-          >
-            {action.name}
-          </button>
-        ))}
+        <UserForm />
+        <PermissionForm />
+        <ServiceForm />
       </div>
 
       {/* Tools Dropdown */}
