@@ -1,65 +1,64 @@
+import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
+import { FilterOption } from "@/types/DataProps";
+// import DynamicTable from '../../UI/DynamicTable'; // Importing the refactored table
+import { Edit2, Eye, Trash2 } from "lucide-react";
 
-import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
-import DynamicTable from '../../UI/DynamicTable'; // Importing the refactored table
-import { Edit2, Eye, Trash2 } from 'lucide-react';
-
- // Define the breadcrumb data
- const breadcrumbs = [
-  { name: 'Home', path: '/home' },
-  { name: 'Settings', path: '/settings' },
-  { name: 'Other', path: '/settings/other' },
-  { name: 'Equipment', path: '/home/settings/other/equipment' }
+// Define the breadcrumb data
+const breadcrumbs = [
+  { name: "Home", path: "/home" },
+  { name: "Settings", path: "/settings" },
+  { name: "Other", path: "/settings/other" },
+  { name: "Equipment", path: "/home/settings/other/equipment" },
 ];
 
 // Define the filter options
-const filters:FilterOption[] = [
+const filters: FilterOption[] = [
   {
-    label: 'Type',
-    name: 'type',
-    type: 'select',
-    options: ['Dragonfly', 'Other']
+    label: "Type",
+    name: "type",
+    type: "select",
+    options: ["Dragonfly", "Other"],
   },
   {
-    label: 'Created by',
-    name: 'createdBy',
-    type: 'text'
+    label: "Created by",
+    name: "createdBy",
+    type: "text",
   },
   {
-    label: 'Start date',
-    name: 'startDate',
-    type: 'date'
+    label: "Start date",
+    name: "startDate",
+    type: "date",
   },
   {
-    label: 'End date',
-    name: 'endDate',
-    type: 'date'
-  }
+    label: "End date",
+    name: "endDate",
+    type: "date",
+  },
 ];
-const advancefilters:FilterOption[] = [
+const advancefilters: FilterOption[] = [
   {
-    label: 'Created by',
-    name: 'createdBy',
-    type: 'select',
-    options: ['Selector'] // Assuming 'Selector' as an example; replace with actual options as needed
+    label: "Created by",
+    name: "createdBy",
+    type: "select",
+    options: ["Selector"], // Assuming 'Selector' as an example; replace with actual options as needed
   },
   {
-    label: 'Creation date',
-    name: 'creationDate',
-    type: 'date'
+    label: "Creation date",
+    name: "creationDate",
+    type: "date",
   },
   {
-    label: 'Order',
-    name: 'order',
-    type: 'select',
-    options: ['Ascending', 'Descending'] // Assuming order types; adjust as necessary
+    label: "Order",
+    name: "order",
+    type: "select",
+    options: ["Ascending", "Descending"], // Assuming order types; adjust as necessary
   },
   {
-    label: 'Name',
-    name: 'name',
-    type: 'number', // Assuming it's a numeric input for the sake of example; adjust if it's different
-    options: ["10", "20", "50"] // Example values for the number of entries per page
-  }
+    label: "Name",
+    name: "name",
+    type: "number", // Assuming it's a numeric input for the sake of example; adjust if it's different
+    options: ["10", "20", "50"], // Example values for the number of entries per page
+  },
 ];
 const handleFilterChange = (name: string, value: string) => {
   console.log(`${name}: ${value}`);
@@ -73,7 +72,7 @@ const EquipmentSettings = () => {
   const data = new Array(15).fill(null).map((_, index) => ({
     id: index + 1,
     label: `Equipment ${index + 1}`,
-    createdAt: `January 7, 2025 at 1:25:13 AM`
+    createdAt: `January 7, 2025 at 1:25:13 AM`,
   }));
 
   const columns = [
@@ -94,33 +93,33 @@ const EquipmentSettings = () => {
             <Trash2 size={18} />
           </button>
         </>
-      )
-    }
+      ),
+    },
   ];
 
   return (
     <div className="space-y-5">
       <HeaderSection
-        gridSize='4'
-  
-        breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Equipment', path: '/equipment' }]}
+        gridSize="4"
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Equipment", path: "/equipment" },
+        ]}
         title="Equipment"
         filters={filters}
         advancefilters={advancefilters}
         onFilterChange={handleFilterChange}
         onFilterSubmit={handleFilterSubmit}
       />
-      
 
-    <DynamicTable title='Equipment' columns={columns} data={data} pageSize={5} />
-
-
+      <DynamicTable
+        title="Equipment"
+        columns={columns}
+        data={data}
+        pageSize={5}
+      />
     </div>
   );
 };
 
 export default EquipmentSettings;
-
-
-
-
