@@ -69,6 +69,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('dd_owner_sale_props');
     }
 };

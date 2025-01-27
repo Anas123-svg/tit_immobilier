@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TenantContractController;
+use App\Http\Controllers\TenantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -16,8 +18,7 @@ use App\Http\Controllers\OwnerReversalRentalPropertyController;
 use App\Http\Controllers\OwnerReversalSalePropertyController;
 use App\Http\Controllers\OwnerPortfolioManagementController;
 use App\Http\Controllers\OwnerValidatorAssignmentController;
-
-
+use App\Http\Controllers\TenantShortTermContractController;
 
 
 
@@ -153,4 +154,32 @@ Route::prefix('owner-validator-assignment')->group(function() {
     Route::post('/', [OwnerValidatorAssignmentController::class, 'store']); // Create a new owner-sale-properties
     Route::put('{id}', [OwnerValidatorAssignmentController::class, 'update']); // Update a owner-sale-properties
     Route::delete('{id}', [OwnerValidatorAssignmentController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+
+
+//tenant routes
+
+Route::get('/get-all-tenants', [TenantController::class, 'index']);
+Route::post('/tenants', [TenantController::class, 'store']);
+Route::put('/tenants/{id}', [TenantController ::class, 'update']);
+Route::get('/tenants/{id}', [TenantController::class, 'show']);
+Route::delete('/tenants/{id}', [TenantController::class, 'destroy']);
+
+
+//tenant contract routes
+Route::prefix('tenant-contract')->group(function() {
+    Route::get('/', action: [TenantContractController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantContractController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantContractController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantContractController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantContractController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+Route::prefix('tenant-short-term-contract')->group(function() {
+    Route::get('/', action: [TenantShortTermContractController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantShortTermContractController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantShortTermContractController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantShortTermContractController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantShortTermContractController::class, 'destroy']); // Delete a owner-sale-properties
 });
