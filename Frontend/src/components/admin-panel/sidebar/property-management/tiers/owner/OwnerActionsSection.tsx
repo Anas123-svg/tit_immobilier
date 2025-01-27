@@ -6,6 +6,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import PrivateOwnerForm from "./PrivateOwnerForm";
+import BusinessOwnerForm from "./BusinessOwnerForm";
 
 const OwnerActionsSection: React.FC = () => {
   return (
@@ -16,8 +18,12 @@ const OwnerActionsSection: React.FC = () => {
           Add
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <PrivateOwnerForm />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <BusinessOwnerForm />
+          </DropdownMenuItem>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuItem>Subscription</DropdownMenuItem>
         </DropdownMenuContent>

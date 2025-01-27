@@ -304,7 +304,7 @@ const UserForm = () => {
               }
             />
             <h2 className="bg-teal-500 text-white text-center p-2 text-sm md:text-base">
-              DOCUMENTS
+              PHOTO AND DOCUMENTS
             </h2>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="w-full md:w-1/3">
@@ -318,9 +318,9 @@ const UserForm = () => {
                 className="hidden md:block h-50"
               />
               <Uploader
-                onChange={(files) => console.log(files)}
+                onChange={(files) => userForm.setValue("documents", files)}
                 maxFiles={5}
-                addedFiles={[]}
+                addedFiles={userForm.watch("documents") || []}
               />
             </div>
             <Button type="submit" className="w-full my-2 bg-teal-500">
