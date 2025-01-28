@@ -6,8 +6,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import PrivateOwnerForm from "./PrivateOwnerForm";
-import BusinessOwnerForm from "./BusinessOwnerForm";
+import PrivateOwnerForm from "./forms/PrivateOwnerForm";
+import BusinessOwnerForm from "./forms/BusinessOwnerForm";
+
+import PropertyForSaleOwnerForm from "./forms/PropertyForSaleOwnerForm";
+import ReversalPropertyForSaleOwnerForm from "./forms/ReversalPropertyForSaleOwnerForm";
+import ReversalPropertyForRentalOwnerForm from "./forms/ReversalPropertyForRentalOwnerForm";
+import ManagmentFormOwner from "./forms/ManagmentFormOwner";
+import MandateOwnerForm from "./forms/MandateOwnerForm";
+import RentalPropertyOwnerForm from "./forms/RentalPropertyOwnerForm";
+import PropertyForRentOwnerForm from "./forms/PropertyForRentOwnerForm";
+import ValidatorsOwnerForm from "./forms/ValidatorsOwnerForm";
 
 const OwnerActionsSection: React.FC = () => {
   return (
@@ -24,8 +33,31 @@ const OwnerActionsSection: React.FC = () => {
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
             <BusinessOwnerForm />
           </DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
+       
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <PropertyForRentOwnerForm />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <PropertyForSaleOwnerForm />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ReversalPropertyForSaleOwnerForm />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ReversalPropertyForRentalOwnerForm />
+          </DropdownMenuItem><DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ManagmentFormOwner />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <MandateOwnerForm />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <ValidatorsOwnerForm />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <RentalPropertyOwnerForm />
+          </DropdownMenuItem>
+        
         </DropdownMenuContent>
       </DropdownMenu>
 
