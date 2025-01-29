@@ -7,10 +7,10 @@ const App = () => {
   return (
     <div className="overflow-x-hidden md:overflow-x-visible">
       <Routes>
-
+<Route path="/" element={<Login/>} />
 <Route path="/*" element={<AdminPanel/>} />
 
-<Route path="/login" element={<Login/>} />
+
 
 
       </Routes>
