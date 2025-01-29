@@ -30,6 +30,7 @@ import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import MapComponent from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods/MapComponent";
 import Selection from "@/components/common";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // **Define validation schema**
 const FormSchema = z.object({
@@ -55,16 +56,16 @@ const FormSchema = z.object({
   latitude: z.number(),
   height: z.number(),
   altitude: z.number(),
-  on_the_corner: z.boolean(),
-  near_water: z.boolean(),
+  on_the_corner: z.string(),
+  near_water: z.string(),
   feet_in_water: z.boolean(),
   distance_from_water: z.string().nonempty("Distance from Water is required"),
   on_main_road: z.boolean(),
   distance_from_road: z.string().nonempty("Distance from Road is required"),
-  dry_land: z.boolean(),
-  low_depth: z.boolean(),
-  school_nearby: z.boolean(),
-  market_nearby: z.boolean(),
+  dry_land: z.string(),
+  low_depth: z.string(),
+  school_nearby: z.string(),
+  market_nearby: z.string(),
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(
@@ -106,16 +107,16 @@ const PropertyForRentOwnerForm = () => {
       latitude: 40.6587,
       height: 15,
       altitude: 30,
-      on_the_corner: true,
-      near_water: true,
+      on_the_corner: "Yes",
+      near_water: "Yes",
       feet_in_water: false,
       distance_from_water: "100 meters",
       on_main_road: true,
       distance_from_road: "30 meters",
-      dry_land: true,
-      low_depth: false,
-      school_nearby: true,
-      market_nearby: true,
+      dry_land: "yes",
+      low_depth: "No",
+      school_nearby:  "No",
+      market_nearby:  "No",
       assigned_agents: ["Agent X", "Agent Y"],
       photo: "",
       documents: [
@@ -138,9 +139,8 @@ const PropertyForRentOwnerForm = () => {
     "New IT Company...",
   ];
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
-  };
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-properties';
+  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -407,7 +407,7 @@ const PropertyForRentOwnerForm = () => {
   <FormField control={form.control} name="feet_in_water" render={({ field }) => (
     <FormItem>
       <FormLabel>Feet in the water?</FormLabel>
-      <Select onValueChange={field.onChange}>
+      <Select onValueChange={(value) => form.setValue('feet_in_water', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -426,7 +426,7 @@ const PropertyForRentOwnerForm = () => {
   <FormField control={form.control} name="on_main_road" render={({ field }) => (
     <FormItem>
       <FormLabel>Edge of a main road?</FormLabel>
-      <Select onValueChange={field.onChange}>
+      <Select onValueChange={(value) => form.setValue('on_main_road', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />

@@ -28,6 +28,7 @@ import {
   } from "@/components/ui/form";
   import { useState } from "react";
   import { Separator } from "@/components/ui/separator";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
@@ -60,31 +61,32 @@ const FormSchema = z.object({
 const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_id: 0,
-      tenant_id: 0,
-      concerned: '',
-      location: '',
-      cost_of_rent: 0,
-      contract_type: '',
-      date_of_signature: '',
-      entry_date: '',
-      end_date: '',
-      number_of_months_of_deposit: 0,
-      deposit_amount: 0,
-      caution_to_be_paid: 'No',
-      number_of_months_in_advance: 0,
-      advance_amount: 0,
-      penalty_for_delay: 0,
-      payment_limit: '',
-      tacit_renewal: 'No',
-      frequency: 'Monthly',
-      digital_signature_of_the_contract: '',
-      due_date: '',
+       owner_id: 1001,  // Example owner ID
+      tenant_id: 2001,  // Example tenant ID
+      concerned: 'Property Lease Agreement',  // Example for concerned field
+      location: '1234 Main St, Anytown, USA',  // Example location
+      cost_of_rent: 1200.00,  // Example rent cost per month
+      contract_type: 'Lease',  // Example contract type
+      date_of_signature: '2025-01-01',  // Example date of signature
+      entry_date: '2025-01-15',  // Example entry date
+      end_date: '2030-01-15',  // Example end date
+      number_of_months_of_deposit: 2,  // Example for months of deposit
+      deposit_amount: 2400.00,  // Example deposit amount
+      caution_to_be_paid: 'Yes',  // Example caution to be paid
+      number_of_months_in_advance: 1,  // Example months in advance
+      advance_amount: 1200.00,  // Example advance payment amount
+      penalty_for_delay: 50.00,  // Example penalty for delay in payment
+      payment_limit: '5th of each month',  // Example payment limit
+      tacit_renewal: 'Yes',  // Example for tacit renewal
+      frequency: 'Monthly',  // Payment frequency
+      digital_signature_of_the_contract: 'Signed by digital certificate',  // Example digital signature status
+      due_date: '2025-02-05',  // Example due date for the next payment
     }
   });
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
-      console.log(values);
-    };
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
+
   
   
     return (
@@ -105,15 +107,15 @@ const form = useForm<z.infer<typeof FormSchema>>({
     render={({ field }) => (
       <FormItem>
         <FormLabel>Tenant *</FormLabel>
-        <Select onValueChange={field.onChange}>
+        <Select onValueChange={(value) => field.onChange(Number(value))}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select a tenant" />
             </SelectTrigger>
           </FormControl>
           <SelectContent>
-            <SelectItem value="1">Tenant 1</SelectItem>
-            <SelectItem value="2">Tenant 2</SelectItem>
+            <SelectItem value={"1"}>Tenant 1</SelectItem>
+            <SelectItem value={"2"}>Tenant 2</SelectItem>
           </SelectContent>
         </Select>
         <FormMessage className="text-xs" />
@@ -128,7 +130,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
     render={({ field }) => (
       <FormItem>
         <FormLabel>Owner *</FormLabel>
-        <Select onValueChange={field.onChange}>
+        <Select onValueChange={(value) => field.onChange(Number(value))}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select an Owner" />

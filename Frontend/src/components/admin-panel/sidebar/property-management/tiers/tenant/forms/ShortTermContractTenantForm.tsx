@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import InvoiceOptionsForm from "./InvoiceOptionsForm";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Define validation schema
 const FormSchema = z.object({
@@ -40,6 +41,7 @@ const FormSchema = z.object({
   due_date: z.string().nonempty("Due Date is required"),
   number_of_hours: z.number().min(0, "Number of Hours must be non-negative"),
   rental_amount: z.number().min(0, "Rental Amount must be non-negative"),
+  
 });
 
 const ShortTermContractTenantForm = () => {
@@ -63,9 +65,9 @@ const ShortTermContractTenantForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log("Form Submitted:", values);
-  };
+const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract ";
+  const onSubmit =  useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>

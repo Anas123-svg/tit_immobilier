@@ -17,7 +17,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select";  import axios from 'axios';
+
 import {
   Form,
   FormControl,
@@ -30,7 +31,9 @@ import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import MapComponent from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods/MapComponent";
 import Selection from "@/components/common";
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  // Import toastify CSS
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 // Define validation schema
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
@@ -132,11 +135,11 @@ const PropertyForSaleOwnerForm = () => {
     "MY VOUCHERS",
     "New IT Company...",
   ];
-  
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
-  };
 
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-sale-properties';
+  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+
+   
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Property for Sale</DialogTrigger>
@@ -235,7 +238,7 @@ const PropertyForSaleOwnerForm = () => {
   <FormField control={form.control} name="boundary_marking_done" render={({ field }) => (
     <FormItem>
       <FormLabel>Boundary Marking Done?</FormLabel>
-      <Select onValueChange={field.onChange}>
+      <Select  onValueChange={(value) => form.setValue('boundary_marking_done', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -254,7 +257,7 @@ const PropertyForSaleOwnerForm = () => {
   <FormField control={form.control} name="serviced" render={({ field }) => (
     <FormItem>
       <FormLabel>Serviced?</FormLabel>
-      <Select onValueChange={field.onChange}>
+      <Select  onValueChange={(value) => form.setValue('serviced', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />

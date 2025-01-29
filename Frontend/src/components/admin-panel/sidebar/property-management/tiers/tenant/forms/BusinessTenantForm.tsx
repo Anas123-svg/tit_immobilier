@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import Uploader from "@/components/common/uploader";
@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 const FormSchema = z.object({
   business_company_name: z.string().min(1, "Company Name is required"),
   business_taxpayer_account_number: z.string().min(1, "Taxpayer Account Number is required"),
@@ -54,6 +55,7 @@ const FormSchema = z.object({
   business_manager_expiry_date: z.string().min(1, "Manager's Expiry Date is required"),
   business_photo: z.string().optional(),
   business_documents: z.array(z.string()).optional(),
+  is_business_tenant:z.boolean()
 });
 
 // Functional component for business tenant form
@@ -62,38 +64,41 @@ const BusinessTenantForm = () => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      business_company_name: "",
-      business_taxpayer_account_number: "",
-      business_business_registration_number: "",
-      business_industry_sector: "",
-      business_office_phone_number: "",
-      business_whatsapp_contact: "",
-      business_email: "",
-      business_head_office: "",
-      business_mail_box: "",
-      business_capital: 0,
-      business_manager_pronouns_title: "",
-      business_manager_name: "",
-      business_manager_gender: "",
-      business_manager_contact: "",
-      business_manager_date_of_birth: "",
-      business_manager_place_of_birth: "",
-      business_manager_address: "",
-      business_manager_job_position: "",
-      business_manager_type_of_document: "",
-      business_manager_document_number: "",
-      business_manager_date_of_issue: "",
-      business_manager_authorizing_authority: "",
-      business_manager_expiry_date: "",
-      business_photo: "",
-      business_documents: [],
+      business_company_name: "ABC Enterprises",  // Example company name
+      business_taxpayer_account_number: "TAX12345678",  // Example taxpayer number
+      business_business_registration_number: "REG987654",  // Example business registration
+      business_industry_sector: "Technology",  // Example industry sector
+      business_office_phone_number: "+1234567890",  // Example office phone
+      business_whatsapp_contact: "+1987654321",  // Example WhatsApp number
+      business_email: "info@abc-enterprises.com",  // Example business email
+      business_head_office: "123 Business Street, City, Country",  // Example head office address
+      business_mail_box: "PO Box 456",  // Example mail box
+      business_capital: 500000,  // Example capital amount
+      business_manager_pronouns_title: "Mr.",  // Example pronoun title
+      business_manager_name: "John Doe",  // Example manager name
+      business_manager_gender: "Male",  // Example manager gender
+      business_manager_contact: "+1122334455",  // Example manager contact
+      business_manager_date_of_birth: "1985-06-15",  // Example DOB
+      business_manager_place_of_birth: "City, Country",  // Example place of birth
+      business_manager_address: "789 Manager Avenue, City, Country",  // Example manager address
+      business_manager_job_position: "CEO",  // Example job position
+      business_manager_type_of_document: "Passport",  // Example document type
+      business_manager_document_number: "P123456789",  // Example document number
+      business_manager_date_of_issue: "2015-08-20",  // Example date of issue
+      business_manager_authorizing_authority: "Govt. Agency",  // Example authorizing authority
+      business_manager_expiry_date: "2030-08-20",  // Example expiry date
+      business_photo: "https://example.com/photo.jpg",  // Example photo URL
+      business_documents: [
+        "https://example.com/doc1.pdf",
+        "https://example.com/doc2.pdf",
+      ],  
+      is_business_tenant:true
     },
   });
   
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
-  };
-
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/tenants';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>

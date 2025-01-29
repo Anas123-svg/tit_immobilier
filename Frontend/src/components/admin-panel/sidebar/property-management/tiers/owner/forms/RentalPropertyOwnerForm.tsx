@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import axios from 'axios';
 import {
   Form,
   FormControl,
@@ -28,9 +29,11 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Define validation schema
 const FormSchema = z.object({
+  owner_id:z.number().min(1, "Numerotation is required"),
   owner_name: z.string().nonempty("Owner Name is required"),
   very_concerned: z.boolean(),
   type_of_property: z.string().nonempty("Type of Property is required"),
@@ -52,26 +55,29 @@ const RentalPropertyOwnerForm = () => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_name: "",
-      very_concerned: false,
-      type_of_property: "",
-      numerotation: 0,
-      total: 1,
-      door_no: "",
-      type_of_rental: "",
-      floor: 0,
-      number_of_rooms: 1,
-      surface: 0,
-      rent_amount: 0,
-      amount_of_charges: 0,
-      profile_photo: "",
-      documents: [],
+      owner_id:1,
+      owner_name: "John Doe",
+      very_concerned: true,
+      type_of_property: "Apartment",
+      numerotation: 101,
+      total: 10,
+      door_no: "101A",
+      type_of_rental: "Residential",
+      floor: 2,
+      number_of_rooms: 3,
+      surface: 120.5,
+      rent_amount: 1500,
+      amount_of_charges: 200,
+      profile_photo: "example_profile.jpg",  // Assume you have a default or placeholder image
+      documents: ["lease_agreement.pdf", "inspection_report.pdf"],
     },
   });
 
-   const onSubmit = (values: z.infer<typeof FormSchema>) => {
-     console.log(values);
-   };
+ 
+
+const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
+  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Rental Property</DialogTrigger>
@@ -108,7 +114,7 @@ const RentalPropertyOwnerForm = () => {
       <FormItem>
         <FormLabel>Very Concerned *</FormLabel>
         <FormControl>
-          <Select onValueChange={field.onChange}>
+          <Select onValueChange={(value) => form.setValue('very_concerned', value === 'yes')}>
             <SelectTrigger>
               <SelectValue placeholder="Select a property" />
             </SelectTrigger>

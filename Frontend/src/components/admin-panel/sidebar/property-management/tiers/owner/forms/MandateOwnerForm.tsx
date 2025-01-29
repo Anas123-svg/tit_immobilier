@@ -25,6 +25,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
   const FormSchema = z.object({
     owner_id: z.number().min(1, "Owner ID is required"),
     type_of_mandate: z.string().nonempty("Type of Mandate is required"),
@@ -68,9 +69,10 @@ import {
       },
     });
   
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
-      console.log(values);
-    };
+   
+     const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
+     const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+   
   
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>

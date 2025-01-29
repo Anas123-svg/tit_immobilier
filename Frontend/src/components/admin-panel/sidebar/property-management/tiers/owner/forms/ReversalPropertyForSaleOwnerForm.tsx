@@ -18,7 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-
+import axios from 'axios';
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
   property_type: z.string().nonempty("Property Type is required"),
@@ -40,9 +41,9 @@ const ReversalPropertyForSaleOwnerForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
-  };
+
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-reversal-sale-property';  // Adjust URL as necessary
+  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>

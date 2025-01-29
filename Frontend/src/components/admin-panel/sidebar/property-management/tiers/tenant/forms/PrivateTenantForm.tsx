@@ -29,6 +29,7 @@ import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import ProfilePicUploader from "@/components/common/profilePicUploader";
 import FileUploader from "@/components/common/uploader";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 const FormSchema = z.object({
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
@@ -56,7 +57,7 @@ const FormSchema = z.object({
   private_photo: z.string().optional(),
   private_documents: z.array(z.string()).optional(),
   private_mail_box: z.string().nonempty({ message: "mail box is required" }),
-
+  is_business_tenant:z.boolean()
 });
 
 const PrivateTenantForm = () => {
@@ -70,37 +71,42 @@ const PrivateTenantForm = () => {
     resolver: zodResolver(FormSchema),
     mode: 'onTouched',
     defaultValues: {
-      private_name: "",
-      private_gender: "",
-      private_birth_date: "",
-      private_place_of_birth: "",
-      private_address: "",
-      private_nationality: "",
-      private_document_type: "",
-      private_document_number: "",
-      private_date_of_issue: "",
-      private_expiry_date: "",
-      private_taxpayer_account_number: "",
-      private_occupation: "",
-      private_contact: "",
-      private_whatsapp_contact: "",
-      private_email: "",
-      private_signatory_authority: "",
-      private_marital_status: "",
-      private_number_of_children: 0,
-      private_emergency_contact_name: "",
-      private_emergency_contact: "",
-      private_emergency_contact_relation: "",
-      private_photo: "",
-      private_pronouns:"",
-      private_mail_box: "",
-      private_documents: [],
-    },
+      private_name: "Jane Doe",  // Example full name
+      private_gender: "Female",  // Example gender
+      private_birth_date: "1990-05-15",  // Example birth date (YYYY-MM-DD)
+      private_place_of_birth: "New York, USA",  // Example place of birth
+      private_address: "123 Main Street, New York, USA",  // Example address
+      private_nationality: "American",  // Example nationality
+      private_document_type: "Passport",  // Example document type
+      private_document_number: "A12345678",  // Example document number
+      private_date_of_issue: "2015-06-20",  // Example date of issue
+      private_expiry_date: "2030-06-20",  // Example expiry date
+      private_taxpayer_account_number: "TAX987654321",  // Example taxpayer account number
+      private_occupation: "Software Engineer",  // Example occupation
+      private_contact: "+11234567890",  // Example phone number
+      private_whatsapp_contact: "+11234567890",  // Example WhatsApp contact
+      private_email: "jane.doe@example.com",  // Example email
+      private_signatory_authority: "Self",  // Example signatory authority
+      private_marital_status: "Married",  // Example marital status
+      private_number_of_children: 2,  // Example number of children
+      private_emergency_contact_name: "John Doe",  // Example emergency contact name
+      private_emergency_contact: "+19876543210",  // Example emergency contact number
+      private_emergency_contact_relation: "Spouse",  // Example relation
+      private_photo: "https://example.com/jane-doe.jpg",  // Example photo URL
+      private_pronouns: "She/Her",  // Example pronouns
+      private_mail_box: "PO Box 789",  // Example mail box
+      private_documents: [
+        "https://example.com/document1.pdf",
+        "https://example.com/document2.pdf"
+      ],  // Example document URLs
+      is_business_tenant: false  // Example business tenant status
+    }
+    
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = (values) => {
-    console.log(values);
-  };
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/tenants';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
 
   return (
     <Dialog open={open} onOpenChange={openChange}>

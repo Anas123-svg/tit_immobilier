@@ -6,7 +6,7 @@ import {
   } from "@/components/ui/dialog";
   import { Input } from "@/components/ui/input";
   import { zodResolver } from "@hookform/resolvers/zod";
-  import { useForm } from "react-hook-form";
+  import { useForm, useFormState } from "react-hook-form";
   import { z } from "zod";
   import { Button } from "@/components/ui/button";
   import {
@@ -19,6 +19,7 @@ import {
   } from "@/components/ui/form";
   import { useState } from "react";
   import Selection from "@/components/common";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
   
   // Define validation schema
   const FormSchema = z.object({
@@ -42,10 +43,10 @@ import {
       },
     });
   
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
-      console.log(values);
-    };
-  
+        const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-portfolio-management ';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
+    
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger>Manage Owner Portfolio</DialogTrigger>

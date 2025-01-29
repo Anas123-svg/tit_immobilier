@@ -26,6 +26,7 @@ import {
   } from "@/components/ui/select";
   import { useState } from "react";
   import Selection from "@/components/common";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
   
   // Define validation schema
   const FormSchema = z.object({
@@ -45,9 +46,9 @@ import {
       },
     });
   
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
-      console.log(values);
-    };
+  const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-validator-assignment";
+    const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+  
   
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
