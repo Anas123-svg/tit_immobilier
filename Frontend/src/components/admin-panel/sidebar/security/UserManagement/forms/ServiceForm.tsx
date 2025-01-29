@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 const FormSchema = z.object({
   name: z.string().nonempty({
@@ -41,15 +42,16 @@ const ServiceForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
-      department: "",
-      description: "",
+      name: "Customer Support",
+      department: "Support",
+      description: "Handles customer inquiries and support requests.",
     },
   });
+  
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
-  };
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/services';
+          const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+        
 
   return (
     <Dialog open={open} onOpenChange={openChange}>

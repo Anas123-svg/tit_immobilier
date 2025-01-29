@@ -44,6 +44,7 @@ import ProfilePicUploader from "@/components/common/profilePicUploader";
 import { Separator } from "@/components/ui/separator";
 import Selection from "@/components/common";
 import { useState } from "react";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 const UserFormSchema = z.object({
   name: z.string().nonempty({ message: "Name is required" }),
   email: z.string().email({ message: "Invalid email" }),
@@ -81,23 +82,26 @@ const UserForm = () => {
   const userForm = useForm<z.infer<typeof UserFormSchema>>({
     resolver: zodResolver(UserFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      Gender: "",
-      userLogin: "",
-      service: "",
-      contact: "",
-      pronouns: "",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "password123",  // Ensure to hash this in real applications
+      Gender: "Male",
+      userLogin: "johndoe",
+      service: "service1",  // Default to first service
+      contact: "+1234567890",
+      pronouns: "he/him",
       photo: "",
-      permissions: [],
+      permissions: ["permission1"], // Default permission
       documents: [],
+    
     },
   });
+ 
 
-  const onSubmit = (values: z.infer<typeof UserFormSchema>) => {
-    console.log(values);
-  };
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/users';
+          const onSubmit = useFormSubmit<typeof UserFormSchema>(apiUrl);  // Use custom hook
+        
+
 
   return (
     <Dialog open={open} onOpenChange={openChange}>

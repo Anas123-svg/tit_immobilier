@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import Selection from "@/components/common";
 import { useState } from "react";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 const FormSchema = z.object({
   label: z.string().nonempty({ message: "Label is required" }),
@@ -39,16 +40,15 @@ const PermissionForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      label: "",
-      description: "",
-      assigned_permissions: [],
+      label: "Admin",
+      description: "Administrator role with full access",
+      assigned_permissions: ["Read", "Write"], // Pre-selected permissions
     },
   });
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
-  };
-
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/permissions';
+         const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+       
   return (
     <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger className="px-4 py-2 text-white rounded-md bg-blue-500">

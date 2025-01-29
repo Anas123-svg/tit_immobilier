@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react"; // Icon for dropdown
-import UserForm from "./UserForm";
-import ServiceForm from "./ServiceForm";
-import PermissionForm from "./PermissionForm";
+import UserForm from "./forms/UserForm";
+import ServiceForm from "./forms/ServiceForm";
+import PermissionForm from "./forms/PermissionForm";
 
 interface ActionSectionProps {
   actions: { name: string; onClick: () => void; className: string }[];
