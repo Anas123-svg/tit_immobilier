@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify"; // Importing toast
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,21 +9,43 @@ import { Label } from "@/components/ui/label";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ userLogin: "", password: "" });
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check credentials
-    if (formData.email === "admin@gmail.com" && formData.password === "123123") {
-      navigate("/portfolio"); // Redirect on success
-    } else {
-      setError("Invalid email or password"); // Show error message
+    // Clear any previous error message
+    setError(null);
+
+    try {
+      // Make the POST request using axios
+      const response = await axios.post(import.meta.env.VITE_API_URL +"/api/users/login", {
+        userLogin: formData.userLogin,
+        password: formData.password,
+      });
+      
+      // Check if the response is successful
+      if (response.data.token) {
+        // Save the token (if needed) and navigate to the portfolio page on success
+        localStorage.setItem("authToken", response.data.token);
+        navigate("/portfolio");
+
+        // Show success notification using react-toastify
+        toast.success("Login successful!");
+      } else {
+        // If login fails, show an error message
+        setError("Invalid username or password");
+        toast.error("Invalid username or password");
+      }
+    } catch (err) {
+      // If there's an error (network error, server error, etc.)
+      setError("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -34,16 +58,15 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       <div className="grid gap-6">
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-        {/* Email Field */}
+        {/* User Login Field */}
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="userLogin">Username</Label>
           <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="m@example.com"
+            id="userLogin"
+            name="userLogin"
+            placeholder="m@example"
             required
-            value={formData.email}
+            value={formData.userLogin}
             onChange={handleChange}
           />
         </div>

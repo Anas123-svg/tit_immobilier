@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
     { name: "My Profile", path: "/profile", icon: User },
     { name: "Change Password", path: "/change-password", icon: Shield },
     { name: "Setting", path: "/settings", icon: Settings },
-    { name: "Log out", path: "/logout", icon: LogOut },
+    { name: "Log out", path: "/", icon: LogOut },
   ];
   return (
     <motion.nav

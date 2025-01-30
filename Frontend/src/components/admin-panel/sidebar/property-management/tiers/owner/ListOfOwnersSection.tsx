@@ -1,38 +1,39 @@
 import React from "react";
 import { Eye, Edit, Printer } from "lucide-react";
-import useFetchData from "@/hooks/useFetchData"; // Import custom fetch hook
+import useFetchData from "@/hooks/useFetchData"; // Assuming you have a custom hook to fetch data
 
-// Define BusinessOwner Interface matching Laravel Model
+// Define the BusinessOwner Interface matching the backend model
 interface BusinessOwner {
   id: number;
-  company_name: string;
-  taxpayer_identification_number: string;
-  business_registration_number: string;
-  industry_sector: string;
-  office_phone_number: string;
-  whatsapp_contact: string;
-  email: string;
-  head_office: string;
-  po_box: string;
-  capital: number;
-  manager_name: string;
-  manager_gender: string;
-  manager_contact: string;
-  manager_job_position: string;
-  manager_address: string;
-  manager_type_of_document: string;
-  manager_document_number: string;
-  manager_date_of_issue: string;
-  manager_expiry_date: string;
-  photo: string | null; // Nullable field for photo
-  documents: string[]; // Array of documents
+  business_company_name: string;
+  business_taxpayer_identification_number: string;
+  business_business_registration_number: string;
+  business_industry_sector: string;
+  business_office_phone_number: string;
+  business_whatsapp_contact: string;
+  business_email: string;
+  business_head_office: string;
+  business_po_box: string;
+  business_capital: number;
+  business_manager_name: string;
+  business_manager_gender: string;
+  business_manager_contact: string;
+  business_manager_job_position: string;
+  business_manager_address: string;
+  business_manager_type_of_document: string;
+  business_manager_document_number: string;
+  business_manager_date_of_issue: string;
+  business_manager_expiry_date: string;
+  business_photo: string | null; // Nullable field for photo
+  business_documents: { type: string; number: string; date_of_issue: string }[]; // Array of documents
+  is_business_owner: boolean;
+  status: string;
 }
 
-// Component
 const ListOfOwnersSection: React.FC = () => {
-  // Fetch owners data from API
+  // Fetch owners data from API using the useFetchData hook
   const { data: businessOwners, loading, error } = useFetchData<BusinessOwner[]>(
-    "http://127.0.0.1:8000/api/business-owners"
+    `${import.meta.env.VITE_API_URL}/api/get-all-owners`
   );
 
   return (
@@ -43,9 +44,7 @@ const ListOfOwnersSection: React.FC = () => {
       {loading && <p className="text-center text-gray-500">Loading business owners...</p>}
 
       {/* Error State */}
-      {error && (
-        <p className="text-center text-red-500">Error fetching data: {error}</p>
-      )}
+      {error && <p className="text-center text-red-500">Error fetching data: {error}</p>}
 
       {/* Empty State */}
       {!loading && businessOwners?.length === 0 && (
@@ -60,39 +59,39 @@ const ListOfOwnersSection: React.FC = () => {
           >
             {/* Owner Status */}
             <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">
-              Active
+              {owner.status}
             </div>
 
             {/* Business Owner Info */}
             <div className="text-center mb-4">
               <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 mx-auto mb-2">
                 <img
-                  src={owner.photo || "/default-avatar.png"} // Fallback image
-                  alt={owner.company_name}
+                  src={owner.business_photo || "/default-avatar.png"} // Fallback image
+                  alt={owner.business_company_name}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h4 className="text-xl font-bold">{owner.company_name}</h4>
+              <h4 className="text-xl font-bold">{owner.business_company_name}</h4>
               <p className="text-sm text-gray-500">
-                TIN: {owner.taxpayer_identification_number}
+                TIN: {owner.business_taxpayer_identification_number}
               </p>
               <p className="text-sm text-gray-500">
-                Business Reg: {owner.business_registration_number}
+                Business Reg: {owner.business_business_registration_number}
               </p>
               <p className="text-sm text-gray-500">
-                Industry: {owner.industry_sector}
+                Industry: {owner.business_industry_sector}
               </p>
-              <p className="text-sm text-blue-600">Head Office: {owner.head_office}</p>
-              <p className="text-sm text-green-600">Capital: ${owner.capital}</p>
+              <p className="text-sm text-blue-600">Head Office: {owner.business_head_office}</p>
+              <p className="text-sm text-green-600">Capital: ${owner.business_capital}</p>
             </div>
 
             {/* Manager Details */}
             <div className="border-t pt-3 mt-3">
               <p className="text-sm font-semibold text-gray-600">Manager:</p>
-              <p className="text-sm text-gray-700">{owner.manager_name} ({owner.manager_gender})</p>
-              <p className="text-sm text-gray-500">Contact: {owner.manager_contact}</p>
-              <p className="text-sm text-gray-500">Job: {owner.manager_job_position}</p>
-              <p className="text-sm text-gray-500">Address: {owner.manager_address}</p>
+              <p className="text-sm text-gray-700">{owner.business_manager_name} ({owner.business_manager_gender})</p>
+              <p className="text-sm text-gray-500">Contact: {owner.business_manager_contact}</p>
+              <p className="text-sm text-gray-500">Job: {owner.business_manager_job_position}</p>
+              <p className="text-sm text-gray-500">Address: {owner.business_manager_address}</p>
             </div>
 
             {/* Action Buttons */}

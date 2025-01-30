@@ -31,69 +31,70 @@ import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 const FormSchema = z.object({
-  pronouns: z.string().nonempty({ message: "Pronouns is required" }),
-  name: z.string().nonempty({ message: "Name is required" }),
-  gender: z.string().nonempty({ message: "Gender is required" }),
-  birth_date: z
+  private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
+  private_name: z.string().nonempty({ message: "Name is required" }),
+  private_gender: z.string().nonempty({ message: "Gender is required" }),
+  private_birth_date: z
     .string()
     .nonempty({ message: "Birth date is required" }),
-  place_of_birth: z
+  private_place_of_birth: z
     .string()
     .nonempty({ message: "Place of birth is required" }),
-  address: z.string().nonempty({ message: "Address is required" }),
-  nationality: z
+  private_address: z.string().nonempty({ message: "Address is required" }),
+  private_nationality: z
     .string()
     .nonempty({ message: "Nationality is required" }),
-  document_type: z
+  private_document_type: z
     .string()
     .nonempty({ message: "Document type is required" }),
-  document_number: z
+  private_document_number: z
     .string()
     .nonempty({ message: "Document number is required" }),
-  date_of_issue: z
+  private_date_of_issue: z
     .string()
     .nonempty({ message: "Date of issue is required" }),
-  expiry_date: z
+  private_expiry_date: z
     .string()
     .nonempty({ message: "Expiry date is required" }),
-  taxpayer_identification_number: z
+  private_taxpayer_identification_number: z
     .string()
     .nonempty({ message: "Taxpayer identification number is required" }),
-  occupation: z
+  private_occupation: z
     .string()
     .nonempty({ message: "Occupation is required" }),
-  contact: z.string().nonempty({ message: "Contact is required" }),
-  whatsapp_contact: z
+  private_contact: z.string().nonempty({ message: "Contact is required" }),
+  private_whatsapp_contact: z
     .string()
     .nonempty({ message: "Whatsapp contact is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  po_box: z.string().nonempty({ message: "PO box is required" }),
-  marital_status: z
+  private_email: z.string().email({ message: "Invalid email address" }),
+  private_po_box: z.string().nonempty({ message: "PO box is required" }),
+  private_marital_status: z
     .string()
     .nonempty({ message: "Marital status is required" }),
-  spouses_name: z
+  private_spouses_name: z
     .string()
     .nonempty({ message: "Spouses name is required" }),
-  number_of_children: z
+  private_number_of_children: z
     .number()
     .min(0, { message: "Number of children is required" }),
-  employer_name: z
+  private_employer_name: z
     .string()
     .nonempty({ message: "Employer name is required" }),
-  bank_statement_rib: z
+  private_bank_statement_rib: z
     .string()
     .nonempty({ message: "Bank statement RIB is required" }),
-  emergency_contact_name: z
+  private_emergency_contact_name: z
     .string()
     .nonempty({ message: "Emergency contact name is required" }),
-  emergency_contact: z
+  private_emergency_contact: z
     .string()
     .nonempty({ message: "Emergency contact is required" }),
-  emergency_contact_relation: z
+  private_emergency_contact_relation: z
     .string()
     .nonempty({ message: "Emergency contact relation is required" }),
-  photo: z.string().optional(),
-  documents: z.array(z.string()).optional(),
+  private_photo: z.string().optional(),
+  private_documents: z.array(z.string()).optional(),
+  is_business_owner: z.boolean(),
 });
 
 const PrivateOwnerForm = () => {
@@ -106,37 +107,38 @@ const PrivateOwnerForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      pronouns: "he/him",
-  name: "John Doe",
-  gender: "Male",
-  birth_date: "1980-01-01",
-  place_of_birth: "New York, USA",
-  address: "1234 Main St, New York, NY 10001",
-  nationality: "American",
-  document_type: "Passport",
-  document_number: "A12345678",
-  date_of_issue: "2015-01-01",
-  expiry_date: "2025-01-01",
-  taxpayer_identification_number: "123-45-6789",
-  occupation: "Software Engineer",
-  contact: "+1234567890",
-  whatsapp_contact: "+1234567890",
-  email: "johndoe@example.com",
-  po_box: "PO Box 10001",
-  marital_status: "Married",
-  spouses_name: "Jane Doe",
-  number_of_children: 2,
-  employer_name: "Tech Innovations Ltd",
-  bank_statement_rib: "12345678901234567890",
-  emergency_contact_name: "Mary Doe",
-  emergency_contact: "+10987654321",
-  emergency_contact_relation: "Sister",
-  photo: "",
-  documents: [],
+      private_pronouns: "he/him",
+      private_name: "John Doe",
+      private_gender: "Male",
+      private_birth_date: "1980-01-01",
+      private_place_of_birth: "New York, USA",
+      private_address: "1234 Main St, New York, NY 10001",
+      private_nationality: "American",
+      private_document_type: "Passport",
+      private_document_number: "A12345678",
+      private_date_of_issue: "2015-01-01",
+      private_expiry_date: "2025-01-01",
+      private_taxpayer_identification_number: "123-45-6789",
+      private_occupation: "Software Engineer",
+      private_contact: "+1234567890",
+      private_whatsapp_contact: "+1234567890",
+      private_email: "johndoe@example.com",
+      private_po_box: "PO Box 10001",
+      private_marital_status: "Married",
+      private_spouses_name: "Jane Doe",
+      private_number_of_children: 2,
+      private_employer_name: "Tech Innovations Ltd",
+      private_bank_statement_rib: "12345678901234567890",
+      private_emergency_contact_name: "Mary Doe",
+      private_emergency_contact: "+10987654321",
+      private_emergency_contact_relation: "Sister",
+      private_photo: "",
+      private_documents: [],
+      is_business_owner: false,
     },
   });
 
-  const apiUrl = import.meta.env.VITE_API_URL + '/api/private-owners';
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
   const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
 
 
@@ -155,31 +157,31 @@ const PrivateOwnerForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="pronouns"
+                name="private_pronouns"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pronouns</FormLabel>
+                    <FormLabel>private_pronouns</FormLabel>
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value);
                         switch (value) {
                           case "he/him":
-                            form.setValue("gender", "Male");
+                            form.setValue("private_gender", "Male");
                             break;
                           case "she/her":
-                            form.setValue("gender", "Female");
+                            form.setValue("private_gender", "Female");
                             break;
                           case "they/them":
-                            form.setValue("gender", "Non-binary");
+                            form.setValue("private_gender", "Non-binary");
                             break;
                           default:
-                            form.setValue("gender", "");
+                            form.setValue("private_gender", "");
                         }
                       }}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Pronouns" />
+                          <SelectValue placeholder="Select private_pronouns" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -194,7 +196,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="gender"
+                name="private_gender"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
@@ -207,7 +209,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="name"
+                name="private_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
@@ -220,7 +222,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="birth_date"
+                name="private_birth_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Birth Date</FormLabel>
@@ -233,7 +235,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="place_of_birth"
+                name="private_place_of_birth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Place of Birth</FormLabel>
@@ -246,7 +248,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="address"
+                name="private_address"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Address</FormLabel>
@@ -259,7 +261,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="nationality"
+                name="private_nationality"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nationality</FormLabel>
@@ -272,7 +274,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="document_type"
+                name="private_document_type"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Document Type</FormLabel>
@@ -296,7 +298,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="document_number"
+                name="private_document_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Document Number</FormLabel>
@@ -309,7 +311,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="date_of_issue"
+                name="private_date_of_issue"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Date of Issue</FormLabel>
@@ -326,7 +328,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="expiry_date"
+                name="private_expiry_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Expiry Date</FormLabel>
@@ -339,7 +341,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="taxpayer_identification_number"
+                name="private_taxpayer_identification_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Taxpayer Identification Number</FormLabel>
@@ -355,7 +357,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="occupation"
+                name="private_occupation"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Occupation</FormLabel>
@@ -368,7 +370,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="contact"
+                name="private_contact"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Contact</FormLabel>
@@ -381,7 +383,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="whatsapp_contact"
+                name="private_whatsapp_contact"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Whatsapp Contact</FormLabel>
@@ -394,7 +396,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name="private_email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -407,7 +409,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="po_box"
+                name="private_po_box"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>PO Box</FormLabel>
@@ -420,7 +422,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="marital_status"
+                name="private_marital_status"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Marital Status</FormLabel>
@@ -443,7 +445,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="spouses_name"
+                name="private_spouses_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Spouses Name</FormLabel>
@@ -456,7 +458,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="number_of_children"
+                name="private_number_of_children"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Number of Children</FormLabel>
@@ -473,7 +475,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="employer_name"
+                name="private_employer_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Employer Name</FormLabel>
@@ -486,7 +488,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="bank_statement_rib"
+                name="private_bank_statement_rib"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Bank Statement RIB</FormLabel>
@@ -504,7 +506,7 @@ const PrivateOwnerForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="emergency_contact_name"
+                name="private_emergency_contact_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Emergency Contact Name</FormLabel>
@@ -517,7 +519,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="emergency_contact"
+                name="private_emergency_contact"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Emergency Contact</FormLabel>
@@ -530,7 +532,7 @@ const PrivateOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="emergency_contact_relation"
+                name="private_emergency_contact_relation"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Emergency Contact Relation</FormLabel>
@@ -559,8 +561,8 @@ const PrivateOwnerForm = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="w-full md:w-1/3">
                 <ProfilePicUploader
-                  profilePic={form.watch("photo") || ""}
-                  onChange={(url) => form.setValue("photo", url)}
+                  profilePic={form.watch("private_photo") || ""}
+                  onChange={(url) => form.setValue("private_photo", url)}
                 />
               </div>
               <Separator
@@ -568,9 +570,9 @@ const PrivateOwnerForm = () => {
                 className="hidden md:block h-50"
               />
               <Uploader
-                onChange={(files) => form.setValue("documents", files)}
+                onChange={(files) => form.setValue("private_documents", files)}
                 maxFiles={5}
-                addedFiles={form.watch("documents") || []}
+                addedFiles={form.watch("private_documents") || []}
               />
             </div>
             <Button type="submit" className="w-full my-2 bg-primary">

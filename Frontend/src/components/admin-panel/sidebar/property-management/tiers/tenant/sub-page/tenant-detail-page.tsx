@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
 import PersonalDetails from './PersonalDetails';
 import Documents from './Contract';
-import EmergencyContact from './EmergencyContact';
+import EmergencyContact from './StateofPlay';
 import OtherInformation from './OtherInformation';
+import StateofPlay from './StateofPlay';
 
 interface TenantDetailPageProps {
-  referenceNo: string;
-  fullName: string;
-  type: string;
-  email: string;
-  phone: string;
-  residence: string;
-  postalCode: string;
-  profession: string;
-  birthDate: string;
-  sharedAffinity: string;
-  documentType: string;
-  gender: string;
-  maritalStatus: string;
-  children: number;
-  emergencyContactPerson: string;
-  emergencyContactNumber: string;
-  fileNotes: string;
+  referenceNo?: string;
+  fullName?: string;
+  type?: string;
+  email?: string;
+  phone?: string;
+  residence?: string;
+  postalCode?: string;
+  profession?: string;
+  birthDate?: string;
+  sharedAffinity?: string;
+  documentType?: string;
+  gender?: string;
+  maritalStatus?: string;
+  children?: number;
+  emergencyContactPerson?: string;
+  emergencyContactNumber?: string;
+  fileNotes?: string;
 }
 
 const TenantDetailPage = ({
@@ -82,10 +83,8 @@ const TenantDetailPage = ({
         return <Documents />;
       case "emergency":
         return (
-          <EmergencyContact
-          emergencyContactRelation={"N/A"}
-            emergencyContactName={emergencyContactPerson}
-            emergencyContactNumber={emergencyContactNumber}
+          <StateofPlay
+        
           />
         );
       case "other":
@@ -130,7 +129,7 @@ const TenantDetailPage = ({
             onClick={() => setActiveTab("emergency")}
             className={`py-2 px-4 text-sm font-semibold ${activeTab === "emergency" ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-600 hover:text-gray-800"}`}
           >
-            Emergency Contact
+        State of Play
           </button>
           <button
             onClick={() => setActiveTab("other")}
@@ -146,15 +145,8 @@ const TenantDetailPage = ({
         </div>
       </div>
 
-      {/* Buttons to Edit Profile or Delete Account */}
-      <div className="mt-6 flex justify-between">
-        <button className="py-2 px-4 bg-gray-200 hover:bg-gray-300 rounded-md text-sm font-semibold">
-          Edit Profile
-        </button>
-        <button className="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm font-semibold">
-          Delete Account
-        </button>
-      </div>
+ 
+   
     </div>
   );
 };

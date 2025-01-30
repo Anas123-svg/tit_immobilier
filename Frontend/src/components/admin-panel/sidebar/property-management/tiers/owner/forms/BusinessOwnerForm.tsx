@@ -95,6 +95,7 @@ const FormSchema = z.object({
     .nonempty({ message: "Expiry Date is required" }),
   photo: z.string().optional(),
   documents: z.array(z.string()).optional(),
+  is_business_owner:z.boolean()
 });
 
 const BusinessOwnerForm = () => {
@@ -131,10 +132,11 @@ const BusinessOwnerForm = () => {
     manager_expiry_date: "2025-03-01",
     photo: "", // Path to a placeholder image if needed
     documents: [], // List of document paths or identifiers
+    is_business_owner: true,
   },
   });
 
-       const apiUrl = import.meta.env.VITE_API_URL + '/api/business-owners';
+       const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
         const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
       
     
