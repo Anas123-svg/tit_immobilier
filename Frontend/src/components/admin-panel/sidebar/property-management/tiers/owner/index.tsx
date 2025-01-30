@@ -1,16 +1,24 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import OwnerNotificationSection from "./OwnerNotificationSection";
 import OwnerActionsSection from "./OwnerActionsSection";
 import ListOfOwnersSection from "./ListOfOwnersSection";
 import { dummyOwners } from "@/data/dummyData"; // Dummy data import
 import { FilterOption } from "@/types/DataProps";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
-const filters : FilterOption[] = [
+const filters: FilterOption[] = [
   {
     type: "select",
     label: "Type",
     name: "type",
-    options: ["OWNER", "GOOD", "LOCATIVE", "MANDATE", "REVERSAL", "RENEWAL", "TERMINATION"],
+    options: [
+      "OWNER",
+      "GOOD",
+      "LOCATIVE",
+      "MANDATE",
+      "REVERSAL",
+      "RENEWAL",
+      "TERMINATION",
+    ],
   },
   {
     type: "text",
@@ -34,17 +42,16 @@ const filters : FilterOption[] = [
     label: "End date",
     name: "endDate",
   },
- 
 ];
 
-const advancefilters :FilterOption[] = [
+const advancefilters: FilterOption[] = [
   {
     type: "select",
     label: "Owner Type",
     name: "ownerType",
     options: ["Please select", "Type 1", "Type 2", "Type 3"],
   },
-  
+
   {
     type: "select",
     label: "Mandates",
@@ -74,20 +81,21 @@ const advancefilters :FilterOption[] = [
     name: "nameEntries",
     options: ["10", "20", "50", "100"],
   },
-]
+];
 const OwnerTier: React.FC = () => {
-  
-  const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({});
+  const [filterValues, setFilterValues] = useState<{ [key: string]: string }>(
+    {}
+  );
 
-// Handle changes in filters
-const handleFilterChange = (name: string, value: string) => {
-  setFilterValues((prev) => ({ ...prev, [name]: value }));
-};
+  // Handle changes in filters
+  const handleFilterChange = (name: string, value: string) => {
+    setFilterValues((prev) => ({ ...prev, [name]: value }));
+  };
 
-// Handle filter submission
-const handleFilterSubmit = () => {
-  console.log("Filter values:", filterValues);
-};
+  // Handle filter submission
+  const handleFilterSubmit = () => {
+    console.log("Filter values:", filterValues);
+  };
 
   return (
     <div className="p-2 sm:p-6 space-y-10 bg-gray-100 min-h-screen">
@@ -104,7 +112,7 @@ const handleFilterSubmit = () => {
       />
       <OwnerNotificationSection />
       <OwnerActionsSection />
-      <ListOfOwnersSection owners={dummyOwners} />
+      <ListOfOwnersSection />
     </div>
   );
 };

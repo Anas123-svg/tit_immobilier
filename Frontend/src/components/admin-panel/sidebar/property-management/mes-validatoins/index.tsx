@@ -75,7 +75,7 @@ const MesValidation: React.FC = () => {
       />
 
       {/* Statistics Cards Section */}
-      <StatisticCardsSection2 stats={validationStats} />
+      {/* <StatisticCardsSection2 stats={validationStats} /> */}
 
       {/* No Contracts Section */}
       <NoContractsSection message="Oupss!! No contracts found" />
