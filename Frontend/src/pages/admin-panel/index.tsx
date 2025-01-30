@@ -7,6 +7,7 @@ import SettingsComponent from "@/components/admin-panel/sidebar/profile/Settings
 import TicketConfiguration from "@/components/admin-panel/sidebar/extra/ticket/TicketConfiguratoin";
 import ResourceConfiguration from "@/components/admin-panel/sidebar/extra/resource/ResourceConfiguration";
 import SendMailSmsSettings from "@/components/admin-panel/sidebar/extra/extra/SendMailSmsSettings";
+import TenantDetailPage from "@/components/admin-panel/sidebar/property-management/tiers/tenant/sub-page/tenant-detail-page";
 
 // Recursive function to flatten all routes, including sub-options
 const flattenRoutes = (options: SidebarOption[]): SidebarOption[] => {
@@ -42,6 +43,8 @@ const AdminPanel: React.FC = () => {
         <div className="flex-grow p-4 bg-gray-100 overflow-auto min-h-screen">
           <Routes>
             {/* Nested Settings Routes */}
+            <Route path="/detail-page" element={<TenantDetailPage/>} />
+
             <Route path="/settings/*" element={<SettingsComponent />} />
             <Route path="/ticket/*" element={<TicketConfiguration />} />
             <Route path="/resource/*" element={<ResourceConfiguration />} />
