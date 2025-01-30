@@ -54,6 +54,7 @@ class OwnerRentProperty extends Model
         'charges',
         'room',
         'area',
+        'status'
     ];
 
     protected $casts = [

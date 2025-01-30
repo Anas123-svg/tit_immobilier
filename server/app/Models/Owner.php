@@ -71,6 +71,7 @@ class Owner extends Model
         'business_photo',
         'business_documents',
         'is_business_owner',
+        'status'
     ];
 
     /**

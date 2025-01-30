@@ -19,7 +19,7 @@ class OwnerSaleProperty extends Model
         'pool', 'on_the_corner', 'near_water', 'feet_in_water', 
         'distance_from_water', 'on_main_road', 'distance_from_road', 
         'dry_land', 'low_depth', 'school_nearby', 'market_nearby', 
-        'assigned_agents', 'photo', 'documents'
+        'assigned_agents', 'photo', 'documents','status'
     ];
 
     protected $casts = [
