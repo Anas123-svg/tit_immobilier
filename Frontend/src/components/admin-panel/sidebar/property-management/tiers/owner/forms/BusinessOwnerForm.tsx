@@ -29,73 +29,34 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+
 const FormSchema = z.object({
-  company_name: z
-    .string()
-    .nonempty({ message: "Company Name is required" }),
-  taxpayer_identification_number: z
-    .string()
-    .nonempty({ message: "Taxpayer Identification Number is required" }),
-  business_registration_number: z
-    .string()
-    .nonempty({ message: "Business Registration Number is required" }),
-  industry_sector: z
-    .string()
-    .nonempty({ message: "Industry Sector is required" }),
-  office_phone_number: z
-    .string()
-    .nonempty({ message: "Office Phone Number is required" }),
-  whatsapp_contact: z
-    .string()
-    .nonempty({ message: "Whatsapp Contact is required" }),
-  email: z.string().nonempty({ message: "Email is required" }),
-  head_office: z
-    .string()
-    .nonempty({ message: "Head Office is required" }),
-  po_box: z.string().nonempty({ message: "PO Box is required" }),
-  capital: z.number().min(1, { message: "Capital is required" }),
-  manager_pronouns_title: z
-    .string()
-    .nonempty({ message: "Pronouns is required" }),
-  manager_name: z
-    .string()
-    .nonempty({ message: "Manager Name is required" }),
-  manager_gender: z
-    .string()
-    .nonempty({ message: "Manager Gender is required" }),
-  manager_contact: z
-    .string()
-    .nonempty({ message: "Manager Contact is required" }),
-  manager_date_of_birth: z
-    .string()
-    .nonempty({ message: "Date of Birth is required" }),
-  manager_place_of_birth: z
-    .string()
-    .nonempty({ message: "Place of Birth is required" }),
-  manager_address: z
-    .string()
-    .nonempty({ message: "Address is required" }),
-  manager_job_position: z
-    .string()
-    .nonempty({ message: "Job Position is required" }),
-  manager_type_of_document: z
-    .string()
-    .nonempty({ message: "Type of Document is required" }),
-  manager_document_number: z
-    .string()
-    .nonempty({ message: "Document Number is required" }),
-  manager_date_of_issue: z
-    .string()
-    .nonempty({ message: "Date of Issue is required" }),
-  manager_authorizing_authority: z
-    .string()
-    .nonempty({ message: "Authorizing Authority is required" }),
-  manager_expiry_date: z
-    .string()
-    .nonempty({ message: "Expiry Date is required" }),
-  photo: z.string().optional(),
-  documents: z.array(z.string()).optional(),
-  is_business_owner:z.boolean()
+  business_company_name: z.string().nonempty({ message: "Company Name is required" }),
+  business_taxpayer_identification_number: z.string().nonempty({ message: "Taxpayer Identification Number is required" }),
+  business_business_registration_number: z.string().nonempty({ message: "Business Registration Number is required" }),
+  business_industry_sector: z.string().nonempty({ message: "Industry Sector is required" }),
+  business_office_phone_number: z.string().nonempty({ message: "Office Phone Number is required" }),
+  business_whatsapp_contact: z.string().nonempty({ message: "Whatsapp Contact is required" }),
+  business_email: z.string().email({ message: "Invalid email address" }).nonempty({ message: "Email is required" }),
+  business_head_office: z.string().nonempty({ message: "Head Office is required" }),
+  business_po_box: z.string().nonempty({ message: "PO Box is required" }),
+  business_capital: z.number().min(1, { message: "Capital is required" }),
+  business_manager_pronouns_title: z.string().nonempty({ message: "Pronouns is required" }),
+  business_manager_name: z.string().nonempty({ message: "Manager Name is required" }),
+  business_manager_gender: z.string().nonempty({ message: "Manager Gender is required" }),
+  business_manager_contact: z.string().nonempty({ message: "Manager Contact is required" }),
+  business_manager_date_of_birth: z.string().nonempty({ message: "Date of Birth is required" }),
+  business_manager_place_of_birth: z.string().nonempty({ message: "Place of Birth is required" }),
+  business_manager_address: z.string().nonempty({ message: "Manager Address is required" }),
+  business_manager_job_position: z.string().nonempty({ message: "Manager Job Position is required" }),
+  business_manager_type_of_document: z.string().nonempty({ message: "Manager Document Type is required" }),
+  business_manager_document_number: z.string().nonempty({ message: "Manager Document Number is required" }),
+  business_manager_date_of_issue: z.string().nonempty({ message: "Manager Document Issue Date is required" }),
+  business_manager_authorizing_authority: z.string().nonempty({ message: "Manager Authorizing Authority is required" }),
+  business_manager_expiry_date: z.string().nonempty({ message: "Manager Document Expiry Date is required" }),
+  business_photo: z.string().optional(),
+  business_documents: z.array(z.string()).optional(),
+  is_business_owner: z.boolean(),
 });
 
 const BusinessOwnerForm = () => {
@@ -107,35 +68,35 @@ const BusinessOwnerForm = () => {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues:{ company_name: "Doe Industries",
-    taxpayer_identification_number: "TIN123456789",
-    business_registration_number: "BRN987654321",
-    industry_sector: "Manufacturing",
-    office_phone_number: "+1234567890",
-    whatsapp_contact: "+1987654321",
-    email: "info@doeindustries.com",
-    head_office: "101 Industrial Way, Techville",
-    po_box: "PO Box 1010",
-    capital: 500000, // Example capital amount
-    manager_pronouns_title: "Ms.",
-    manager_name: "Jane Doe",
-    manager_gender: "Female",
-    manager_contact: "+1234567890",
-    manager_date_of_birth: "1975-08-25", // Example date of birth
-    manager_place_of_birth: "Techtown",
-    manager_address: "200 Executive Drive, Techville",
-    manager_job_position: "Chief Operating Officer",
-    manager_type_of_document: "Driver's License",
-    manager_document_number: "D123456789012",
-    manager_date_of_issue: "2015-03-01",
-    manager_authorizing_authority: "DMV Techville",
-    manager_expiry_date: "2025-03-01",
-    photo: "", // Path to a placeholder image if needed
-    documents: [], // List of document paths or identifiers
-    is_business_owner: true,
-  },
+    defaultValues: {
+      business_company_name: "Doe Industries",
+      business_taxpayer_identification_number: "TIN123456789",
+      business_business_registration_number: "BRN987654321",
+      business_industry_sector: "Manufacturing",
+      business_office_phone_number: "+1234567890",
+      business_whatsapp_contact: "+1987654321",
+      business_email: "info@doeindustries.com",
+      business_head_office: "101 Industrial Way, Techville",
+      business_po_box: "PO Box 1010",
+      business_capital: 500000,
+      business_manager_pronouns_title: "Ms.",
+      business_manager_name: "Jane Doe",
+      business_manager_gender: "Female",
+      business_manager_contact: "+1234567890",
+      business_manager_date_of_birth: "1975-08-25",
+      business_manager_place_of_birth: "Techtown",
+      business_manager_address: "200 Executive Drive, Techville",
+      business_manager_job_position: "Chief Operating Officer",
+      business_manager_type_of_document: "Driver's License",
+      business_manager_document_number: "D123456789012",
+      business_manager_date_of_issue: "2015-03-01",
+      business_manager_authorizing_authority: "DMV Techville",
+      business_manager_expiry_date: "2025-03-01",
+      business_photo: "",
+      business_documents: [],
+      is_business_owner: true,
+    },
   });
-
        const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
         const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
       
@@ -155,7 +116,7 @@ const BusinessOwnerForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="company_name"
+                name="business_company_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Company Name</FormLabel>
@@ -168,7 +129,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="taxpayer_identification_number"
+                name="business_taxpayer_identification_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Taxpayer Identification Number</FormLabel>
@@ -184,7 +145,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="business_registration_number"
+                name="business_business_registration_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Business Registration Number</FormLabel>
@@ -200,7 +161,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="industry_sector"
+                name="business_industry_sector"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Industry Sector</FormLabel>
@@ -213,7 +174,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="office_phone_number"
+                name="business_office_phone_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Office Phone Number</FormLabel>
@@ -226,7 +187,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="whatsapp_contact"
+                name="business_whatsapp_contact"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Whatsapp Contact</FormLabel>
@@ -239,7 +200,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name="business_email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -252,7 +213,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="head_office"
+                name="business_head_office"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Head Office</FormLabel>
@@ -265,7 +226,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="po_box"
+                name="business_po_box"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>PO Box</FormLabel>
@@ -278,7 +239,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="capital"
+                name="business_capital"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Capital</FormLabel>
@@ -296,7 +257,7 @@ const BusinessOwnerForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="manager_pronouns_title"
+                name="business_manager_pronouns_title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Pronouns</FormLabel>
@@ -305,19 +266,19 @@ const BusinessOwnerForm = () => {
                         field.onChange(value);
                         switch (value) {
                           case "he/him":
-                            form.setValue("manager_gender", "Male");
+                            form.setValue("business_manager_gender", "Male");
                             break;
                           case "she/her":
-                            form.setValue("manager_gender", "Female");
+                            form.setValue("business_manager_gender", "Female");
                             break;
                           case "they/them":
                             form.setValue(
-                              "manager_gender",
+                              "business_manager_gender",
                               "Non-binary"
                             );
                             break;
                           default:
-                            form.setValue("manager_gender", "");
+                            form.setValue("business_manager_gender", "");
                         }
                       }}
                     >
@@ -338,7 +299,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_name"
+                name="business_manager_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
@@ -351,7 +312,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_gender"
+                name="business_manager_gender"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
@@ -364,7 +325,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_contact"
+                name="business_manager_contact"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Contact</FormLabel>
@@ -377,7 +338,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_date_of_birth"
+                name="business_manager_date_of_birth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Date of Birth</FormLabel>
@@ -394,7 +355,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_place_of_birth"
+                name="business_manager_place_of_birth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Place of Birth</FormLabel>
@@ -407,7 +368,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_address"
+                name="business_manager_address"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Address</FormLabel>
@@ -420,7 +381,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_job_position"
+                name="business_manager_job_position"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Job Position</FormLabel>
@@ -433,7 +394,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_type_of_document"
+                name="business_manager_type_of_document"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Document Type</FormLabel>
@@ -457,7 +418,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_document_number"
+                name="business_manager_document_number"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Document Number</FormLabel>
@@ -470,7 +431,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_date_of_issue"
+                name="business_manager_date_of_issue"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Date of Issue</FormLabel>
@@ -483,7 +444,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_authorizing_authority"
+                name="business_manager_authorizing_authority"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Authorizing Authority</FormLabel>
@@ -496,7 +457,7 @@ const BusinessOwnerForm = () => {
               />
               <FormField
                 control={form.control}
-                name="manager_expiry_date"
+                name="business_manager_expiry_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Expiry Date</FormLabel>
@@ -514,8 +475,8 @@ const BusinessOwnerForm = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="w-full md:w-1/3">
                 <ProfilePicUploader
-                  profilePic={form.watch("photo") || ""}
-                  onChange={(url) => form.setValue("photo", url)}
+                  profilePic={form.watch("business_photo") || ""}
+                  onChange={(url) => form.setValue("business_photo", url)}
                 />
               </div>
               <Separator
@@ -523,9 +484,9 @@ const BusinessOwnerForm = () => {
                 className="hidden md:block h-50"
               />
               <Uploader
-                onChange={(files) => form.setValue("documents", files)}
+                onChange={(files) => form.setValue("business_documents", files)}
                 maxFiles={5}
-                addedFiles={form.watch("documents") || []}
+                addedFiles={form.watch("business_documents") || []}
               />
             </div>
             <Button type="submit" className="w-full my-2 bg-primary">
