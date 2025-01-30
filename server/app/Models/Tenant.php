@@ -69,6 +69,8 @@ class Tenant extends Model
         'business_photo',
         'business_documents',
         'is_business_tenant',
+        'status',
+        'payment_status',
     ];
 
     /**

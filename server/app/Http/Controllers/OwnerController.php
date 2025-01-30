@@ -142,7 +142,6 @@ class OwnerController extends Controller
             $totalCount = OwnerSaleProperty::count() + OwnerRentProperty::count();
             Log::info('Total properties counted: ' . $totalCount);
 
-            // Fetch last 10 active owners
             Log::info('Fetching last 10 active owners.');
             $lastOwners = Owner::where('status', 'active')
             ->orderBy('created_at', 'desc')
@@ -165,6 +164,11 @@ class OwnerController extends Controller
             $totalLocative = OwnerRentProperty::count() + OwnerARentalProperty::count();
             $totalVente = OwnerSaleProperty::count();
 
+            $locative = OwnerRentProperty::limit(10)->get();
+
+            $reversals = OwnerReversalSaleProperty::limit(10)->get();
+            $vente = OwnerSaleProperty::limit(10)->get();
+
             Log::info('Owner Dashboard data fetched successfully.');
 
             return response()->json([
@@ -172,12 +176,15 @@ class OwnerController extends Controller
                 'total_mandates' => $totalMandates,
                 'total_reversals' => $totalReversals,
                 'total_locative' => $totalLocative,
-                'vente' => $totalVente,
+                'total_vente' => $totalVente,
                 'occupied' => $occupiedCount,
                 'reserved' => $reservedCount,
                 'available' => $availableCount,
                 'last_owners' => $lastOwners,
                 'last_mandates' => $lastMandates,
+                'locative' => $locative,
+                'reversals' => $reversals,
+                'vente' => $vente
             ]);
         } catch (Exception $e) {
             Log::error('Error in OwnerDashboard: ' . $e->getMessage());
