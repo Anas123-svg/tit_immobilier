@@ -38,7 +38,7 @@ const ListOfOwnersSection: React.FC = () => {
 
   return (
     <div className="p-4 bg-white shadow rounded-md">
-      <h3 className="text-3xl text-center font-semibold mb-4">List of Business Owners</h3>
+      <h3 className="text-3xl text-center font-semibold mb-4">List of Owners</h3>
 
       {/* Loading State */}
       {loading && <p className="text-center text-gray-500">Loading business owners...</p>}
