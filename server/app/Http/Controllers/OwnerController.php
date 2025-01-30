@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusinessOwner;
+use App\Models\OwnerARentalProperty;
 use App\Models\PrivateOwner;
 use Illuminate\Http\Request;
 use App\Models\Owner;
+use App\Models\OwnerSaleProperty;
+use App\Models\OwnerRentProperty;
+use App\Models\OwnerMandate;
+use App\Models\OwnerReversalSaleProperty;
 
+use App\Models\OwnerReversalRentalProperty;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class OwnerController extends Controller
 {
@@ -103,6 +111,94 @@ class OwnerController extends Controller
         $Owner->delete();
         return response()->json(['message' => ' owner deleted successfully.']);
     }
+
+
+    public function OwnerDashboard()
+    {
+        try {
+            Log::info('Fetching property counts for Owner Dashboard.');
+
+            $occupiedCount = OwnerSaleProperty::whereNotNull('owner_id')
+                ->where('status', 'occupied')
+                ->count()
+                + OwnerRentProperty::whereNotNull('owner_id')
+                ->where('status', 'occupied')
+                ->count();
+
+            $reservedCount = OwnerSaleProperty::whereNotNull('owner_id')
+                ->where('status', 'reserved')
+                ->count()
+                + OwnerRentProperty::whereNotNull('owner_id')
+                ->where('status', 'reserved')
+                ->count();
+
+            $availableCount = OwnerSaleProperty::whereNull('owner_id')
+                ->where('status', 'available')
+                ->count()
+                + OwnerRentProperty::whereNull('owner_id')
+                ->where('status', 'available')
+                ->count();
+                
+            $totalCount = OwnerSaleProperty::count() + OwnerRentProperty::count();
+            Log::info('Total properties counted: ' . $totalCount);
+
+            Log::info('Fetching last 10 active owners.');
+            $lastOwners = Owner::where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get()
+            ->map(function ($owner) {
+                return array_filter($owner->toArray(), function ($value) {
+                    return !is_null($value);
+                });
+            });
+            Log::info('Fetching last 10 validated mandates.');
+            $lastMandates = OwnerMandate::where('status', 'validated')
+                ->orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
+
+            $totalOwners = Owner::count();
+            $totalMandates = OwnerMandate::count();
+            $totalReversals = OwnerReversalSaleProperty::count() + OwnerReversalRentalProperty::count();
+            $totalLocative = OwnerRentProperty::count() + OwnerARentalProperty::count();
+            $totalVente = OwnerSaleProperty::count();
+
+            $locative = OwnerRentProperty::limit(10)->get();
+
+            $reversals = OwnerReversalSaleProperty::limit(10)->get();
+            $vente = OwnerSaleProperty::limit(10)->get();
+
+            Log::info('Owner Dashboard data fetched successfully.');
+
+            return response()->json([
+                'total_owners' => $totalOwners,
+                'total_mandates' => $totalMandates,
+                'total_reversals' => $totalReversals,
+                'total_locative' => $totalLocative,
+                'total_vente' => $totalVente,
+                'occupied' => $occupiedCount,
+                'reserved' => $reservedCount,
+                'available' => $availableCount,
+                'last_owners' => $lastOwners,
+                'last_mandates' => $lastMandates,
+                'locative' => $locative,
+                'reversals' => $reversals,
+                'vente' => $vente
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error in OwnerDashboard: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Something went wrong!',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    
+
 
 
 }

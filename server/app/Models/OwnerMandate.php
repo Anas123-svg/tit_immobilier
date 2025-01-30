@@ -28,5 +28,6 @@ class OwnerMandate extends Model
         'end_date',
         'digital_signature_of_the_mandate',
         'tacit_renewal',
+        'status'
     ];
 }

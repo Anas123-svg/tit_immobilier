@@ -34,6 +34,7 @@ class TenantContract extends Model
         'Frequency',
         'digital_signature_of_the_contract',
         'due_date',
+        'status'
     ];
 
     /**

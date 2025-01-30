@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Owner routes
+Route::get('/dashboard/owners', [OwnerController::class, 'OwnerDashboard']);
 Route::get('/get-all-owners', [OwnerController::class, 'index']);
 Route::post('/owners', [OwnerController::class, 'store']);
 Route::put('/owners/{id}', [OwnerController::class, 'update']);
