@@ -27,7 +27,17 @@ import {
   Briefcase,
   ArrowLeft, Wallet, ArrowRight
 } from "lucide-react";
-
+import ReversalPropertyForRentalOwnerForm from "../forms/ReversalPropertyForRentalOwnerForm";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MakeDepositOwnerForm from "./forms/MakeDepositOwnerForm";
+import MakeWithdrawalOwnerForm from "./forms/MakeWithdrawalOwnerForm";
+import PullAccountStatementForm from "./forms/PullAccountStatementFormProps";
 
 interface TenantDetailPageProps {
   referenceNo?: string;
@@ -159,6 +169,27 @@ const OwnerDetailPage = ({
     const activeTabContent = tabs.find((tab) => tab.name === activeTab);
     return activeTabContent ? activeTabContent.component : null;
   };
+  const [isDepositFormOpen, setIsDepositFormOpen] = useState(false); // State to manage the dialog open/close
+  const handleDepositFormOpen = () => setIsDepositFormOpen(true); // Open dialog
+  const handleDepositFormClose = () => setIsDepositFormOpen(false); // Close dialog
+
+
+    // State to manage the dialog open/close for withdrawal form
+    const [isWithdrawalFormOpen, setIsWithdrawalFormOpen] = useState(false);
+
+    // Open dialog function
+    const handleWithdrawalFormOpen = () => setIsWithdrawalFormOpen(true);
+  
+    // Close dialog function
+    const handleWithdrawalFormClose = () => setIsWithdrawalFormOpen(false);
+    const [isPullAccountFormOpen, setIsPullAccountFormOpen] = useState(false);
+
+  // Open dialog function
+  const handlePullAccountFormOpen = () => setIsPullAccountFormOpen(true);
+
+  // Close dialog function
+  const handlePullAccountFormClose = () => setIsPullAccountFormOpen(false);
+
 
   return (
     <div className="bg-white shadow-lg p-0 sm:p-6 space-y-9 rounded-lg ">
@@ -237,26 +268,42 @@ const OwnerDetailPage = ({
       </button>
 
       {/* Wallet Deposit Button */}
-      <button className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+      <button className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" onSelect={(e)=>e.preventDefault()}  onClick={handleDepositFormOpen}>
         <Wallet className="mr-2" /> Wallet Deposit
       </button>
-
+      <MakeDepositOwnerForm open={isDepositFormOpen} onClose={handleDepositFormClose}/>
       {/* Wallet Withdrawal Button */}
-      <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+      <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"  onSelect={(e)=>e.preventDefault()}  onClick={handleWithdrawalFormOpen}>
         <ArrowRight className="mr-2" /> Wallet Withdrawal
       </button>
-
+      <MakeWithdrawalOwnerForm open={isWithdrawalFormOpen} onClose={handleWithdrawalFormClose}/>
       {/* Account Statement Button */}
-      <button className="flex items-center bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">
+      <button className="flex items-center bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" onSelect={(e)=>e.preventDefault()}  onClick={handlePullAccountFormOpen}>
         <FileText className="mr-2" /> Account Statement
       </button>
+      <PullAccountStatementForm open={isPullAccountFormOpen} onClose={handlePullAccountFormClose}/>
     </div>
-
+      {/* Reversal Property for Sale Form */}
+      
         {/* Tab Content */}
         <div className="space-y-4">{renderTabContent()}</div>
+            {/* Dialog Component */}
+      
       </div>
+  
     </div>
   );
 };
 
 export default OwnerDetailPage;
+
+// DummyComponent that will show content when opened
+const DummyComponent: React.FC = () => {
+  return (
+    <div className="p-6 bg-white rounded-md shadow-md">
+      <h2 className="text-xl mb-4">This is a dummy component</h2>
+      <p>Here you can add your content or form.</p>
+      <Button className="mt-4 bg-primary">Submit</Button>
+    </div>
+  );
+};

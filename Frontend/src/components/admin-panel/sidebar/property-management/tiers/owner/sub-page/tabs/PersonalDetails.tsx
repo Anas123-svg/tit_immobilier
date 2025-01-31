@@ -57,70 +57,70 @@ const PersonalDetails = ({
       </div>
 
       {/* Details Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-5">
         {/* Name and Type */}
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Name and First Name:</p>
-          <p>{fullName}</p>
+          {fullName}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Type:</p>
-          <p>{type}</p>
+          {type}  
         </div>
 
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Email:</p>
-          <p>{email}</p>
+          {email}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Phone:</p>
-          <p>{phone}</p>
+          {phone}  
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Residence:</p>
-          <p>{residence}</p>
+          {residence}
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Postal Code:</p>
-          <p>{postalCode}</p>
+          {postalCode}  
         </div>
 
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Profession:</p>
-          <p>{profession}</p>
+          {profession}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Date of Birth:</p>
-          <p>{birthDate}</p>
+          {birthDate}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Shared Affinity:</p>
-          <p>{sharedAffinity}</p>
+          {sharedAffinity}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Type of Document:</p>
-          <p>{documentType}</p>
+          {documentType}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Gender:</p>
-          <p>{gender}</p>
+          {gender}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Marital Status:</p>
-          <p>{maritalStatus}</p>
+          {maritalStatus}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Number of Children:</p>
-          <p>{children}</p>
+          {children}  
         </div>
 
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Emergency Contact Person:</p>
-          <p>{emergencyContactPerson}</p>
+          {emergencyContactPerson}  
         </div>
-        <div className="space-y-2">
+       <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Emergency Contact Number:</p>
-          <p>{emergencyContactNumber}</p>
+          {emergencyContactNumber}  
         </div>
       </div>
 
