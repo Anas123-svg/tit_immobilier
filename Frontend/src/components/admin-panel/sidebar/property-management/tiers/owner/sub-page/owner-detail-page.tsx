@@ -261,7 +261,7 @@ const OwnerDetailPage = ({
 
 
 
-        <div className="flex gap-4 p-4">
+        <div className="flex flex-wrap gap-4 p-4">
       {/* Back Button */}
       <button className="flex items-center bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
         <ArrowLeft className="mr-2" /> Back
@@ -271,17 +271,17 @@ const OwnerDetailPage = ({
       <button className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600" onSelect={(e)=>e.preventDefault()}  onClick={handleDepositFormOpen}>
         <Wallet className="mr-2" /> Wallet Deposit
       </button>
-      <MakeDepositOwnerForm open={isDepositFormOpen} onClose={handleDepositFormClose}/>
+      
       {/* Wallet Withdrawal Button */}
       <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"  onSelect={(e)=>e.preventDefault()}  onClick={handleWithdrawalFormOpen}>
         <ArrowRight className="mr-2" /> Wallet Withdrawal
       </button>
-      <MakeWithdrawalOwnerForm open={isWithdrawalFormOpen} onClose={handleWithdrawalFormClose}/>
+    
       {/* Account Statement Button */}
       <button className="flex items-center bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600" onSelect={(e)=>e.preventDefault()}  onClick={handlePullAccountFormOpen}>
         <FileText className="mr-2" /> Account Statement
       </button>
-      <PullAccountStatementForm open={isPullAccountFormOpen} onClose={handlePullAccountFormClose}/>
+     
     </div>
       {/* Reversal Property for Sale Form */}
       
@@ -290,7 +290,9 @@ const OwnerDetailPage = ({
             {/* Dialog Component */}
       
       </div>
-  
+      <MakeDepositOwnerForm open={isDepositFormOpen} onClose={handleDepositFormClose}/>
+      <MakeWithdrawalOwnerForm open={isWithdrawalFormOpen} onClose={handleWithdrawalFormClose}/>
+       <PullAccountStatementForm open={isPullAccountFormOpen} onClose={handlePullAccountFormClose}/>
     </div>
   );
 };
