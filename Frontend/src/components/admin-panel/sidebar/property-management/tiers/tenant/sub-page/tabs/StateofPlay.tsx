@@ -113,7 +113,7 @@ const StateofPlay = () => {
       // Add logic to filter data or make API calls based on filterValues
     };
   return (
-    <div className='space-y-10'>
+    <div className='space-y-5'>
      <HeaderSection
         gridSize={"5"}
         filters={filterOptions}
@@ -122,7 +122,7 @@ const StateofPlay = () => {
       />
    <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable addButton={false} title="Plan of Auxiliary Accounts" columns={columns} data={data} pageSize={5} />
+      <DynamicTable addButton={false} title="LIST OF STATE REPORTS" columns={columns} data={data} pageSize={5} />
     </div>
     </div>
   );

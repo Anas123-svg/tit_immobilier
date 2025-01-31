@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import PersonalDetails from "./tabs/PersonalDetails";
-import Documents from "./tabs/Contract";
-import EmergencyContact from "./tabs/StateofPlay";
-import OtherInformation from "./tabs/OtherInformation";
-import StateofPlay from "./tabs/StateofPlay";
-import Bills from "./tabs/Bills";
-import NoticeofExpiry from "./tabs/NoticeofExpiry";
-import Payments from "./tabs/Payments";
-import Tickets from "./tabs/Tickets";
+import WalletComponent from './tabs/Wallet'; // Import your components
+import ProfileComponent from './tabs/PersonalDetails';
+import GoodComponent from './tabs/Good';
+import LocativeComponent from './tabs/Locative';
+import MandateComponent from './tabs/Mandate';
+import ReversalComponent from './tabs/Reversal';
+import TicketComponent from './tabs/Ticket';
+import WalletWithdrawalComponent from './tabs/WalletWithdrawal';
+import ApproAccountComponent from './tabs/ApproAccount';
 import {
   User,
   FileText,
@@ -19,12 +19,15 @@ import {
   MapIcon,
   Phone,
   Mail,
+  Home,
   CaseLowerIcon,
   Badge,
   BadgeCheck,
   BadgeCheckIcon,
   Briefcase,
+  ArrowLeft, Wallet, ArrowRight
 } from "lucide-react";
+
 
 interface TenantDetailPageProps {
   referenceNo?: string;
@@ -46,7 +49,7 @@ interface TenantDetailPageProps {
   fileNotes?: string;
 }
 
-const TenantDetailPage = ({
+const OwnerDetailPage = ({
   referenceNo = "ZA-6972-6414-01",
   fullName = "Mr. Assemian N'Guessan Adolphe",
   type = "INDIVIDUAL",
@@ -65,7 +68,7 @@ const TenantDetailPage = ({
   emergencyContactNumber = "0701234567",
   fileNotes = "Accepted formats and sizes: JPEG, JPG, PNG, PDF, DOCS, DOCX, etc.",
 }: TenantDetailPageProps) => {
-  const [activeTab, setActiveTab] = useState("personal");
+  const [activeTab, setActiveTab] = useState("wallet");
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,49 +101,60 @@ const TenantDetailPage = ({
 
   const tabs = [
     { 
-      name: 'personal', 
-      label: 'Personal Details', 
+      name: 'wallet', 
+      label: 'Wallet', 
+      icon: <Wallet className="inline mr-2" />, 
+      component: <WalletComponent />
+    },
+    { 
+      name: 'profile', 
+      label: 'Profile', 
       icon: <User className="inline mr-2" />, 
-      component: <PersonalDetails {...personalDetailsProps} />
+      component: <ProfileComponent {...personalDetailsProps} />
     },
     { 
-      name: 'documents', 
-      label: 'Contract', 
+      name: 'good', 
+      label: 'GOOD', 
       icon: <FileText className="inline mr-2" />, 
-      component: <Documents />
+      component: <GoodComponent />
     },
     { 
-      name: 'emergency', 
-      label: 'State of Play', 
-      icon: <File className="inline mr-2" />, 
-      component: <StateofPlay />
+      name: 'locative', 
+      label: 'Locative', 
+      icon: <Home className="inline mr-2" />, 
+      component: <LocativeComponent />
     },
     { 
-      name: 'bills', 
-      label: 'Bills', 
-      icon: <File className="inline mr-2" />, 
-      component: <Bills />
+      name: 'mandate', 
+      label: 'Mandate', 
+      icon: <FileText className="inline mr-2" />, 
+      component: <MandateComponent />
     },
     { 
-      name: 'noticeofexpiry', 
-      label: 'Notice of Expiry', 
-      icon: <Clock className="inline mr-2" />, 
-      component: <NoticeofExpiry />
+      name: 'reversal', 
+      label: 'Reversal', 
+      icon: <FileText className="inline mr-2" />, 
+      component: <ReversalComponent />
     },
     { 
-      name: 'payments', 
-      label: 'Payments', 
-      icon: <CreditCard className="inline mr-2" />, 
-      component: <Payments />
-    },
-    { 
-      name: 'tickets', 
-      label: 'Tickets', 
+      name: 'ticket', 
+      label: 'Ticket', 
       icon: <Ticket className="inline mr-2" />, 
-      component: <Tickets />
+      component: <TicketComponent />
+    },
+    { 
+      name: 'walletwithdrawal', 
+      label: 'Wallet Withdrawal', 
+      icon: <CreditCard className="inline mr-2" />, 
+      component: <WalletWithdrawalComponent />
+    },
+    { 
+      name: 'approaccount', 
+      label: 'Approve Account', 
+      icon: <CreditCard className="inline mr-2" />, 
+      component: <ApproAccountComponent />
     },
   ];
-  
   const renderTabContent = () => {
     const activeTabContent = tabs.find((tab) => tab.name === activeTab);
     return activeTabContent ? activeTabContent.component : null;
@@ -188,8 +202,8 @@ const TenantDetailPage = ({
             </div>
           </div>
 
-          <div className="  text-red-500 text-center font-semibold ">
-            <p className="text-lg">OWE: 585,000 XOF</p>
+          <div className="  text-green-500 text-center font-semibold ">
+            <p className="text-lg">Sold: 585,000 XOF</p>
           </div>
         </div>
       </div>
@@ -214,6 +228,30 @@ const TenantDetailPage = ({
 </div>
 
 
+
+
+        <div className="flex gap-4 p-4">
+      {/* Back Button */}
+      <button className="flex items-center bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+        <ArrowLeft className="mr-2" /> Back
+      </button>
+
+      {/* Wallet Deposit Button */}
+      <button className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+        <Wallet className="mr-2" /> Wallet Deposit
+      </button>
+
+      {/* Wallet Withdrawal Button */}
+      <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+        <ArrowRight className="mr-2" /> Wallet Withdrawal
+      </button>
+
+      {/* Account Statement Button */}
+      <button className="flex items-center bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">
+        <FileText className="mr-2" /> Account Statement
+      </button>
+    </div>
+
         {/* Tab Content */}
         <div className="space-y-4">{renderTabContent()}</div>
       </div>
@@ -221,4 +259,4 @@ const TenantDetailPage = ({
   );
 };
 
-export default TenantDetailPage;
+export default OwnerDetailPage;

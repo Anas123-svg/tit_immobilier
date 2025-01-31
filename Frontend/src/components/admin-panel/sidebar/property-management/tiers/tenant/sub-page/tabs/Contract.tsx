@@ -117,7 +117,7 @@ const Documents = () => {
     // Add logic to filter data or make API calls based on filterValues
   };
   return (
-    <div>
+    <div className='space-y-5'>
        <HeaderSection
         gridSize={"5"}
         filters={filterOptions}

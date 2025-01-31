@@ -1,6 +1,7 @@
 import React from "react";
 import { Eye, Edit, Printer } from "lucide-react";
 import useFetchData from "@/hooks/useFetchData"; // Assuming you have a custom hook to fetch data
+import { Link } from "react-router-dom";
 
 // Define the BusinessOwner Interface matching the backend model
 interface BusinessOwner {
@@ -97,7 +98,7 @@ const ListOfOwnersSection: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex justify-end space-x-4 mt-4">
               <button className="p-2 bg-gray-100 rounded-full shadow hover:bg-gray-200">
-                <Eye size={25} className="text-gray-700" />
+            <Link to="/tier/owners/detail-page">   <Eye size={25} className="text-gray-700" /></Link>
               </button>
               <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
                 <Edit size={25} className="text-blue-700" />
