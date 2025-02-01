@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { ProspectSalesForm } from "./forms/ProspectSalesForm";
+import { NeedSalesForm } from "./forms/NeedSalesForm";
+import { OfferSalesForm } from "./forms/OfferSalesForm";
+import { PaymentSalesForm } from "./forms/PaymentSalesForm";
+import { CommercialActionSalesForm } from "./forms/CommercialActionSalesForm";
 
-interface SalesProspectActionsProps {
-  actions: { name: string; onClick: () => void; className: string }[];
-  tools: { name: string; onClick: () => void }[]; // Tools dropdown actions
-}
 
-const SalesProspectActions: React.FC<SalesProspectActionsProps> = ({
-  actions,
-  tools,
-}) => {
+  const tools = [
+    { name: "Print", onClick: () => console.log("Print") },
+    { name: "Export", onClick: () => console.log("Export") },
+    { name: "Import", onClick: () => console.log("Import") },
+    { name: "Generate", onClick: () => console.log("Generate") },
+  ];
+const SalesProspectActions = () => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
   const toggleToolsDropdown = () => {
@@ -18,24 +22,20 @@ const SalesProspectActions: React.FC<SalesProspectActionsProps> = ({
 
   return (
     <div className="flex justify-between items-center mb-6">
-      {/* Main Actions */}
-      <div className="flex gap-4">
-        {actions.map((action, index) => (
-          <button
-            key={index}
-            onClick={action.onClick}
-            className={`px-4 py-2 text-white rounded-md ${action.className}`}
-          >
-            {action.name}
-          </button>
-        ))}
-      </div>
+      <div className="flex gap-5">
+    
+<ProspectSalesForm/>
+<NeedSalesForm/>
+<CommercialActionSalesForm/>
+<PaymentSalesForm/>
 
+<OfferSalesForm/>
+</div>
       {/* Tools Dropdown */}
       <div className="relative">
         <button
           onClick={toggleToolsDropdown}
-          className="px-4 py-2 bg-yellow-500 text-white rounded-md flex items-center"
+          className="px-4 py-2 bg-primary text-white rounded-md flex items-center"
         >
           Tools
           <ChevronDown className="ml-2" size={16} />
