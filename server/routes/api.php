@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CrmManagementController;
+use App\Http\Controllers\CrmManagementProspectingfunnelController;
+use App\Http\Controllers\CrmManagementProspectingStageController;
 use App\Http\Controllers\ProspectSalesOfferController;
 use App\Http\Controllers\SaleProspectController;
 use App\Http\Controllers\SalesProspectCommercialPlanController;
@@ -240,4 +242,19 @@ Route::prefix('crm-management/general-configuration')->group(function() {
     Route::post('/', [CrmManagementController::class, 'store']); // Create a new owner-sale-properties
     Route::put('{id}', [CrmManagementController::class, 'update']); // Update a owner-sale-properties
     Route::delete('{id}', [CrmManagementController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+Route::prefix('crm-management/prospecting-stage')->group(function() {
+    Route::get('/', [CrmManagementProspectingStageController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [CrmManagementProspectingStageController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [CrmManagementProspectingStageController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [CrmManagementProspectingStageController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [CrmManagementProspectingStageController::class, 'destroy']); // Delete a owner-sale-properties
+});
+Route::prefix('crm-management/sales/prospecting-funnel')->group(function() {
+    Route::get('/', [CrmManagementProspectingfunnelController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [CrmManagementProspectingfunnelController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [CrmManagementProspectingfunnelController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [CrmManagementProspectingfunnelController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [CrmManagementProspectingfunnelController::class, 'destroy']); // Delete a owner-sale-properties
 });
