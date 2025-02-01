@@ -17,6 +17,12 @@ class CrmManagementController extends Controller
         $data = $request->validate([
             'user_id' => 'required|exists:users,id',
             'chef_commerçial' => 'nullable|string',
+            'charge_a_fee_for_pre_booking_a_sale' => 'nullable|boolean',
+            'charge_a_fee_for_pre_booking_a_rental' => 'nullable|boolean',
+            'sale_pre_reservation_fees' => 'nullable|numeric',
+            'rental_pre_reservation_fees' => 'nullable|numeric',
+
+
         ]);
 
         $crmManagement = CrmManagement::create($data);
@@ -35,6 +41,11 @@ class CrmManagementController extends Controller
         $data = $request->validate([
             'user_id' => 'required|exists:users,id',
             'chef_commerçial' => 'nullable|string',
+            'charge_a_fee_for_pre_booking_a_sale' => 'nullable|boolean',
+            'charge_a_fee_for_pre_booking_a_rental' => 'nullable|boolean',
+            'sale_pre_reservation_fees' => 'nullable|numeric',
+            'rental_pre_reservation_fees' => 'nullable|numeric',
+
         ]);
 
         $crmManagement = CrmManagement::findOrFail($id);
