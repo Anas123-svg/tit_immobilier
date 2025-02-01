@@ -71,18 +71,9 @@ const FormSchema = z.object({
   private_marital_status: z
     .string()
     .nonempty({ message: "Marital status is required" }),
-  private_spouses_name: z
-    .string()
-    .nonempty({ message: "Spouses name is required" }),
   private_number_of_children: z
     .number()
     .min(0, { message: "Number of children is required" }),
-  private_employer_name: z
-    .string()
-    .nonempty({ message: "Employer name is required" }),
-  private_bank_statement_rib: z
-    .string()
-    .nonempty({ message: "Bank statement RIB is required" }),
   private_emergency_contact_name: z
     .string()
     .nonempty({ message: "Emergency contact name is required" }),
@@ -92,12 +83,13 @@ const FormSchema = z.object({
   private_emergency_contact_relation: z
     .string()
     .nonempty({ message: "Emergency contact relation is required" }),
+    private_authorizing_authority: z.string().nonempty({ message: "Authorizing Authority is required" }),
   private_photo: z.string().optional(),
   private_documents: z.array(z.string()).optional(),
-  is_business_owner: z.boolean(),
+  is_business_client: z.boolean(),
 });
 
-const PrivateOwnerForm = () => {
+const PrivateClientForm = () => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
@@ -117,6 +109,7 @@ const PrivateOwnerForm = () => {
       private_document_type: "Passport",
       private_document_number: "A12345678",
       private_date_of_issue: "2015-01-01",
+      private_authorizing_authority: "DMV Techville",
       private_expiry_date: "2025-01-01",
       private_taxpayer_identification_number: "123-45-6789",
       private_occupation: "Software Engineer",
@@ -125,34 +118,31 @@ const PrivateOwnerForm = () => {
       private_email: "johndoe@example.com",
       private_po_box: "PO Box 10001",
       private_marital_status: "Married",
-      private_spouses_name: "Jane Doe",
       private_number_of_children: 2,
-      private_employer_name: "Tech Innovations Ltd",
-      private_bank_statement_rib: "12345678901234567890",
       private_emergency_contact_name: "Mary Doe",
       private_emergency_contact: "+10987654321",
       private_emergency_contact_relation: "Sister",
       private_photo: "",
       private_documents: [],
-      is_business_owner: false,
+      is_business_client: false,
     },
   });
 
-  const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
   const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
 
 
   return (
     <Dialog open={open} onOpenChange={openChange}>
-      <DialogTrigger>Private Owner</DialogTrigger>
+      <DialogTrigger>Private Client</DialogTrigger>
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
-          Add a private owner
+          Add a private Client
         </DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
-              PRIVATE OWNER DETAILS
+              PRIVATE Client DETAILS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
@@ -443,19 +433,7 @@ const PrivateOwnerForm = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="private_spouses_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Spouses Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Spouses Name" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
+            
               <FormField
                 control={form.control}
                 name="private_number_of_children"
@@ -473,32 +451,7 @@ const PrivateOwnerForm = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="private_employer_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Employer Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Employer Name" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="private_bank_statement_rib"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bank Statement RIB</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Bank Statement RIB" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
+    
             </div>
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               EMERGENCY CONTACT DETAILS
@@ -585,4 +538,4 @@ const PrivateOwnerForm = () => {
   );
 };
 
-export default PrivateOwnerForm;
+export default PrivateClientForm;
