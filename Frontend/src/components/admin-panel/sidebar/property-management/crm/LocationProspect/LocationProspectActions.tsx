@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { ProspectLocationForm } from "./forms/ProspectLocationForm";
+import { OfferLocationForm } from "./forms/OfferLocationForm";
+import { NeedLocationForm } from "./forms/NeedLocationForm";
+import { OfficialResponseLocationForm } from "./forms/OfficialResponseLocationForm";
 
-interface LocationProspectActionsProps {
-  actions: { name: string; onClick: () => void; className: string }[];
-  tools: { name: string; onClick: () => void }[]; // Tools dropdown actions
-}
 
-const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
-  actions,
-  tools,
-}) => {
+const tools = [
+    { name: "Print", onClick: () => console.log("Print") },
+    { name: "Export", onClick: () => console.log("Export") },
+    { name: "Import", onClick: () => console.log("Import") },
+  ];
+const LocationProspectActions = () => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
   const toggleToolsDropdown = () => {
+    
     setIsToolsOpen(!isToolsOpen);
   };
 
@@ -20,18 +23,13 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
     <div className="flex flex-col gap-5 md:flex-row  justify-between sm:items-center gpa-">
       {/* Main Actions */}
       <div className="flex gap-5 flex-wrap">
-        {actions.map((action, index) => (
-          <button
-            key={index}
-            onClick={action.onClick}
-            className={`px-4 py-2 text-white rounded-md ${action.className}`}
-          >
-            {action.name}
-          </button>
-        ))}
+     <ProspectLocationForm/>
+     <OfferLocationForm/>
+     <NeedLocationForm/>
+     <OfficialResponseLocationForm/>
       </div>
-
-      {/* Tools Dropdown */}
+     
+       {/* Tools Dropdown */}
       <div className="relative">
         <button
           onClick={toggleToolsDropdown}
@@ -54,7 +52,7 @@ const LocationProspectActions: React.FC<LocationProspectActionsProps> = ({
             ))}
           </div>
         )}
-      </div>
+      </div> 
     </div>
   );
 };

@@ -137,7 +137,7 @@ const TenantTier: React.FC = () => {
       <ActionButtonsSection />
 
       {/* List of Tenants Section */}
-      <ListOfTenantsSection tenants={dummyTenants} />
+      <ListOfTenantsSection />
     </div>
   );
 };

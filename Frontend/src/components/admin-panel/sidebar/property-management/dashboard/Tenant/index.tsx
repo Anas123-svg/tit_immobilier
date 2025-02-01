@@ -3,7 +3,6 @@ import ContractsList from "./ContractsList";
 
 import { renewals } from "@/data/dummyData";
 
-
 import { tenantStats } from "@/data/dummyData";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import { FilterOption } from "@/types/DataProps";
@@ -15,12 +14,12 @@ import { ChartData, ChartOptions } from "chart.js";
 import StatisticCardsSection4 from "@/components/admin-panel/UI-components/StatisticCardsSection4";
 import CircularDiagram from "@/components/admin-panel/UI-components/CircularDiagram";
 import StatisticCard4 from "@/components/admin-panel/UI-components/StatisticCard4";
- const stats = [
-    { name: "Tenant", value: 12, icon: User, color: "bg-red-500" },
-    { name: "Contract", value: 12, icon: FileText, color: "bg-blue-500" },
-    { name: "Bill", value: 96, icon: Briefcase, color: "bg-green-500" },
-    { name: "Payment", value: 18, icon: DollarSign, color: "bg-yellow-500" },
-  ];
+const stats = [
+  { name: "Tenant", value: 12, icon: User, color: "bg-red-500" },
+  { name: "Contract", value: 12, icon: FileText, color: "bg-blue-500" },
+  { name: "Bill", value: 96, icon: Briefcase, color: "bg-green-500" },
+  { name: "Payment", value: 18, icon: DollarSign, color: "bg-yellow-500" },
+];
 
 const TenantDashboard: React.FC = () => {
   const breadcrumbs = [
@@ -39,27 +38,27 @@ const TenantDashboard: React.FC = () => {
         "PENALTY",
         "OTHER INVOICES",
         "RENEWAL",
-        "TERMINATION"
-      ]
+        "TERMINATION",
+      ],
     },
     {
       type: "text",
       label: "Tenant",
       name: "tenant",
-      placeholder: "Tenant"
+      placeholder: "Tenant",
     },
     {
       type: "date",
       label: "Start date",
       name: "startDate",
-      placeholder: "mm/dd/yyyy"
+      placeholder: "mm/dd/yyyy",
     },
     {
       type: "date",
       label: "End date",
       name: "endDate",
-      placeholder: "mm/dd/yyyy"
-    }
+      placeholder: "mm/dd/yyyy",
+    },
   ];
 
   const handleFilterChange = (name: string, value: string) => {
@@ -148,75 +147,105 @@ const TenantDashboard: React.FC = () => {
     },
   };
 
-
-    const circulardata = {
-      labels: ["Outstanding", "Paid", "Total"],
-      datasets: [
-        {
-          data: [72, 22, 96],
-          backgroundColor: ["#F87171", "#34D399", "#3B82F6"],
-        },
-      ],
-    };
-  
-    // Explicitly type the options object
-    const circularoptions: ChartOptions<"doughnut"> = {
-      maintainAspectRatio: false,
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "top", // Explicitly use a valid value
-        },
+  const circulardata = {
+    labels: ["Outstanding", "Paid", "Total"],
+    datasets: [
+      {
+        data: [72, 22, 96],
+        backgroundColor: ["#F87171", "#34D399", "#3B82F6"],
       },
-    }
+    ],
+  };
+
+  // Explicitly type the options object
+  const circularoptions: ChartOptions<"doughnut"> = {
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top", // Explicitly use a valid value
+      },
+    },
+  };
   return (
     <div className="p-2 sm:p-6 bg-gray-100 min-h-screen space-y-10">
       {/* Header Section */}
       <HeaderSection
-      title="Tenant"
-      breadcrumbs={breadcrumbs}
-      filters={filters}
-      onFilterChange={handleFilterChange}
-      onFilterSubmit={handleFilterSubmit}
-    />
+        title="Tenant"
+        breadcrumbs={breadcrumbs}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onFilterSubmit={handleFilterSubmit}
+      />
       {/* Statistics Cards Section */}
-      <StatisticCardsSection2 stats={stats} />
+      {/* <StatisticCardsSection2 stats={stats} /> */}
 
       {/* Contracts Lists */}
       <div className="grid lg:grid-cols-2 gap-4 mt-6">
-        <ContractsList title="Active Contracts" data={renewals} headerColor="bg-red-500"   itemsPerPage={5} />
-        <ContractsList title="Renewals" data={renewals} headerColor="bg-yellow-500"  itemsPerPage={5} />
+        <ContractsList
+          title="Active Contracts"
+          data={renewals}
+          headerColor="bg-red-500"
+          itemsPerPage={5}
+        />
+        <ContractsList
+          title="Renewals"
+          data={renewals}
+          headerColor="bg-yellow-500"
+          itemsPerPage={5}
+        />
       </div>
 
-   
       <div className="grid grid-cols-2 gap-5">
-      
-   <div className="grid grid-cols-2  gap-5 h-fit">{tenantStats.map((tenantStat, index) => (
-    index==0 ? <div className=" col-span-2"> <StatisticCard4
-          key={index}
-          name={tenantStat.name}
-          value={tenantStat.value}
-          currency={tenantStat.currency}
-          color={tenantStat.color}
-        /></div>:<StatisticCard4
-        key={index}
-        name={tenantStat.name}
-        value={tenantStat.value}
-        currency={tenantStat.currency}
-        color={tenantStat.color}
-      />
-      ))}</div>
-      <div className=""> <CircularDiagram title="Circular Diagram of Amount" data={circulardata}  /></div> 
+        <div className="grid grid-cols-2  gap-5 h-fit">
+          {tenantStats.map((tenantStat, index) =>
+            index == 0 ? (
+              <div className=" col-span-2">
+                {" "}
+                <StatisticCard4
+                  key={index}
+                  name={tenantStat.name}
+                  value={tenantStat.value}
+                  currency={tenantStat.currency}
+                  color={tenantStat.color}
+                />
+              </div>
+            ) : (
+              <StatisticCard4
+                key={index}
+                name={tenantStat.name}
+                value={tenantStat.value}
+                currency={tenantStat.currency}
+                color={tenantStat.color}
+              />
+            )
+          )}
+        </div>
+        <div className="">
+          {" "}
+          <CircularDiagram
+            title="Circular Diagram of Amount"
+            data={circulardata}
+          />
+        </div>
       </div>
       <div className="mt-6">
-        
-      <ChartSection title="Monthly Reveneu" data={data} options={options} />
-
+        <ChartSection title="Monthly Reveneu" data={data} options={options} />
       </div>
 
       <div className="grid grid-cols-2 gap-4 mt-6">
-        <ContractsList title="Active Contracts" data={renewals} headerColor="bg-red-500"   itemsPerPage={5} />
-        <ContractsList title="Renewals" data={renewals} headerColor="bg-yellow-500"  itemsPerPage={5} />
+        <ContractsList
+          title="Active Contracts"
+          data={renewals}
+          headerColor="bg-red-500"
+          itemsPerPage={5}
+        />
+        <ContractsList
+          title="Renewals"
+          data={renewals}
+          headerColor="bg-yellow-500"
+          itemsPerPage={5}
+        />
       </div>
     </div>
   );
