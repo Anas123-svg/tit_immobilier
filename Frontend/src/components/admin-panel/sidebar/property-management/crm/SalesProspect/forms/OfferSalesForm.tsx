@@ -25,7 +25,7 @@ export function OfferSalesForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-        prospect_sales_type_of_offer: "Tenant",
+        prospect_sales_type_of_offer: "",
 
     }
   });
