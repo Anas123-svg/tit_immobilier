@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 // Zod Schema for validation
 const FormSchema = z.object({
   prospect_id: z.string().nonempty("Prospect ID is required"),
@@ -34,11 +35,10 @@ export function NeedLocationForm() {
     },
   });
 
-  // Handle form submission
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-  };
-
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/pre-booking ';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
+    
   return (
     <Dialog>
       <DialogTrigger asChild>

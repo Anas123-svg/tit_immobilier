@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import FileUploader from "@/components/common/uploader";
 import { Save } from "lucide-react";
 import { Editor } from "@tinymce/tinymce-react";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Zod Schema for validation
 const FormSchema = z.object({
@@ -46,11 +47,10 @@ export function OfficialResponseLocationForm() {
         documents: [],
     }
   });
-
-  // Handle form submission
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-  };
+const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/official-response';
+          const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+        
+  
   const Assessment = form.watch("assessment")
     return (
     <Dialog>

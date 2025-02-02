@@ -24,6 +24,7 @@ import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
 import AddCityForm from "./sub-forms/AddCityForm";
 import AddMunicipalityForm from "./sub-forms/AddMunicipalityForm";
 import AddNeighborhoodForm from "./sub-forms/AddNeighborhoodForm";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Zod Schema with prospect_sales_ prefix
 const FormSchema = z.object({
@@ -92,10 +93,7 @@ export function ProspectSalesForm() {
   const handleStepChange = (step: number) => {
     setActiveStep(step);
   };
-   // Handle form submission
-   const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-  };
+
   const selectedProspectType = form.watch("prospect_sales_prospect_type");
   
   // Set default value for 'prospect_sales_type_of_need' based on the selected prospect type
@@ -112,7 +110,10 @@ export function ProspectSalesForm() {
     defaultNeedValue = "Purchase";
     disabledNeedField = true;
   }
-
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
+    
   return (
     <Dialog>
       <DialogTrigger asChild>
