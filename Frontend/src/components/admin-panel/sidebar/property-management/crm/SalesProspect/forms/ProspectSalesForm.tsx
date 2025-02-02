@@ -20,7 +20,10 @@ import { useState } from "react";
 import ProfilePicUploader from "@/components/common/profilePicUploader";
 import { Separator } from "@/components/ui/separator";
 import FileUploader from "@/components/common/uploader";
-import { Editor } from "tinymce";
+import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
+import AddCityForm from "./sub-forms/AddCityForm";
+import AddMunicipalityForm from "./sub-forms/AddMunicipalityForm";
+import AddNeighborhoodForm from "./sub-forms/AddNeighborhoodForm";
 
 // Zod Schema with prospect_sales_ prefix
 const FormSchema = z.object({
@@ -346,7 +349,7 @@ export function ProspectSalesForm() {
               <Select
              {...field}
                 onValueChange={field.onChange}
-                value={ defaultNeedValue}
+                value={field.value ||defaultNeedValue}
                 disabled={disabledNeedField}  // Set value here
               >
                 <SelectTrigger >
@@ -525,12 +528,12 @@ export function ProspectSalesForm() {
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
     {/* Would */}
-  <div className="">
+  <div className="grid grid-cols-5 gap-2 items-center">
     <FormField
       control={form.control}
       name="prospect_sales_would"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-4 ">
           <FormLabel>Would</FormLabel>
           <FormControl>
               <Select  onValueChange={field.onChange}>
@@ -547,13 +550,16 @@ export function ProspectSalesForm() {
         </FormItem>
       )}
     />
+<div className="pt-5">
+    <AddCityForm /></div>
 </div>
     {/* Municipality */}
+    <div className="grid grid-cols-5 gap-2 items-center">
     <FormField
       control={form.control}
       name="prospect_sales_municipality"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-4 ">
           <FormLabel>Municipality</FormLabel>
           <FormControl>
               <Select  onValueChange={field.onChange}>
@@ -571,13 +577,17 @@ export function ProspectSalesForm() {
         </FormItem>
       )}
     />
-
+<div className="pt-5">
+    <AddMunicipalityForm /></div>
+</div>
     {/* Neighborhood */}
+
+    <div className="grid grid-cols-5 gap-2 items-center">
     <FormField
       control={form.control}
       name="prospect_sales_neighborhood"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-4 ">
           <FormLabel>Neighborhood</FormLabel>
           <FormControl>
               <Select  onValueChange={field.onChange}>
@@ -595,6 +605,9 @@ export function ProspectSalesForm() {
         </FormItem>
       )}
     />
+    <div className="pt-5">
+    <AddNeighborhoodForm /></div>
+</div>
 
                 </div>
                 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
@@ -602,6 +615,7 @@ export function ProspectSalesForm() {
       </h2>
 
    
+    
       <FormField
   control={form.control}
   name="prospect_sales_description"
@@ -609,8 +623,14 @@ export function ProspectSalesForm() {
     <FormItem>
       <FormLabel>Description</FormLabel>
       <FormControl>
-       
-          <Editor
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-white dark:text-white"
+          >
+            Content
+          </label>
+          <TinyMCEEditor
             apiKey="g0zqs3p6v9zx7zhnrzgdphkxjcz3dvgt6kl7bxln19etxto6"
             init={{
               plugins:
@@ -618,17 +638,18 @@ export function ProspectSalesForm() {
               toolbar:
                 "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
             }}
-            value={field.value || ""}  // Ensure editor value is controlled by React Hook Form
+            value={field.value || ""}
             onEditorChange={(content) => {
-              field.onChange(content);  // Use field.onChange to update React Hook Form state
+              field.onChange(content); // Use field.onChange to update React Hook Form state
             }}
           />
-     
+        </div>
       </FormControl>
       <FormMessage />
     </FormItem>
   )}
 />
+
                 </div>
                 <div className="space-y-5">   
                 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">

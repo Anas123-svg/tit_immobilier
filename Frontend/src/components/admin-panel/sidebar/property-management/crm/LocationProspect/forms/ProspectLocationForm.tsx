@@ -20,53 +20,71 @@ import { useState } from "react";
 import ProfilePicUploader from "@/components/common/profilePicUploader";
 import { Separator } from "@/components/ui/separator";
 import FileUploader from "@/components/common/uploader";
+import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
+import AddCityForm from "./sub-forms/AddCityForm";
+import AddMunicipalityForm from "./sub-forms/AddMunicipalityForm";
+import AddNeighborhoodForm from "./sub-forms/AddNeighborhoodForm";
 
-// Zod Schema with prospect_location_ prefix
+// Zod Schema with prospect_sales_ prefix
 const FormSchema = z.object({
-  prospect_location_prospect_type: z.string().nonempty("Prospect Type is required"),
-  prospect_location_source_of_prospect: z.string().nonempty("Source of Prospect is required"),
-  prospect_location_phone: z.string().min(10, "Phone number is required"),
-  prospect_location_contact_whatsapp: z.string().min(10, "Whatsapp number is required"),
-  prospect_location_civility: z.string().nonempty("Civility is required"),
-  prospect_location_name_surname: z.string().nonempty("Name and Surname is required"),
-  prospect_location_email: z.string().email("Invalid email format"),
-  prospect_location_marital_status: z.string().nonempty("Marital Status is required"),
-  prospect_location_children: z.string().nonempty("Children status is required"),
-  prospect_location_profession: z.string().nonempty("Profession is required"),
-  // New fields for the additional sections
-  prospect_location_type_of_need: z.string().nonempty("Type of Need is required"),
-  prospect_location_type_of_property: z.string().nonempty("Type of Property is required"),
-  prospect_location_would: z.string().nonempty("Would is required"),
-  prospect_location_municipality: z.string().nonempty("Municipality is required"),
-  prospect_location_neighborhood: z.string().nonempty("Neighborhood is required"),
-  prospect_location_description: z.string().optional(),
-  prospect_location_photo: z.string().optional(),
-  prospect_location_documents: z.array(z.string()).optional(),
+  prospect_sales_prospect_type: z.string().nonempty("Prospect Type is required"),
+  prospect_sales_source_of_prospect: z.string().nonempty("Source of Prospect is required"),
+  prospect_sales_phone: z.string().min(10, "Phone number is required"),
+  prospect_sales_contact_whatsapp: z.string().min(10, "Whatsapp number is required"),
+  prospect_sales_civility: z.string().nonempty("Civility is required"),
+  prospect_sales_name_surname: z.string().nonempty("Name and Surname is required"),
+  prospect_sales_email: z.string().email("Invalid email format"),
+  prospect_sales_marital_status: z.string().nonempty("Marital Status is required"),
+  prospect_sales_children: z.string().nonempty("Children status is required"),
+  prospect_sales_profession: z.string().nonempty("Profession is required"),
+  prospect_sales_number_of_children: z.number().int().min(0, "Number of children must be a non-negative integer"),
+  prospect_sales_type_of_need: z.string().nonempty("Type of Need is required"),
+  prospect_sales_type_of_property: z.string().nonempty("Type of Property is required"),
+  prospect_sales_management_rentals: z.number().min(0, "Management rentals must be a non-negative number"),
+  prospect_sales_management_rentals_income: z.number().min(0, "Management rentals income must be a non-negative number"),
+  prospect_sales_management_percentage: z.number().min(0, "Management percentage must be a non-negative number"),
+  prospect_sales_purchase_budget_min: z.number().min(0, "Minimum purchase budget must be a non-negative number"),
+  prospect_sales_purchase_budget_max: z.number().min(0, "Maximum purchase budget must be a non-negative number"),
+  prospect_sales_description: z.string().optional(),
+  prospect_sales_would: z.string().nonempty("Would is required"),
+  prospect_sales_municipality: z.string().nonempty("Municipality is required"),
+  prospect_sales_neighborhood: z.string().nonempty("Neighborhood is required"),
+  prospect_sales_photo: z.string().optional(),
+  prospect_sales_documents: z.array(z.string()).optional(),
+  is_prospect_location: z.boolean(),
 });
+
 
 export function ProspectLocationForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_location_prospect_type: "Tenant", // Default selected value
-      prospect_location_source_of_prospect: "Referral", // Default selected value
-      prospect_location_phone: "1234567890", // Default phone number
-      prospect_location_contact_whatsapp: "1234567890", // Default whatsapp number
-      prospect_location_civility: "Sir", // Default civility
-      prospect_location_name_surname: "John Doe", // Default name and surname
-      prospect_location_email: "johndoe@example.com", // Default email
-      prospect_location_marital_status: "Single", // Default marital status
-      prospect_location_children: "No", // Default children status
-      prospect_location_profession: "Software Developer", // Default profession
-      // New fields for the additional sections
-      prospect_location_type_of_need: "Rent", // Default type of need
-      prospect_location_type_of_property: "Apartment", // Default type of property
-      prospect_location_would: "Yes", // Default for Would
-      prospect_location_municipality: "New York", // Default municipality
-      prospect_location_neighborhood: "Downtown", // Default neighborhood
-      prospect_location_description: "A detailed description of the property.", // Default description
-      prospect_location_photo: "", // Default photo (could be empty initially)
-      prospect_location_documents: [], // No documents by default
+      prospect_sales_prospect_type: "Individual",
+      prospect_sales_source_of_prospect: "Referral",
+      prospect_sales_phone: "+1234567890",
+      prospect_sales_contact_whatsapp: "+1234567890",
+      prospect_sales_civility: "Mr.",
+      prospect_sales_name_surname: "John Doe",
+      prospect_sales_email: "johndoe@example.com",
+      prospect_sales_marital_status: "Single",
+      prospect_sales_children: "No",
+      prospect_sales_profession: "Software Engineer",
+      prospect_sales_number_of_children: 0,
+      prospect_sales_type_of_need: "Purchase",
+      prospect_sales_type_of_property: "Apartment",
+      prospect_sales_management_rentals: 3,
+      prospect_sales_management_rentals_income: 2000.00,
+      prospect_sales_management_percentage: 10.5,
+      prospect_sales_purchase_budget_min: 100000.00,
+      prospect_sales_purchase_budget_max: 500000.00,
+      prospect_sales_description: "Looking for a 2-bedroom apartment in a central location.",
+      prospect_sales_would: "Yes",
+      prospect_sales_municipality: "Central City",
+      prospect_sales_neighborhood: "Downtown",
+      prospect_sales_photo: "https://img.freepik.com/free-photo/abstract-dark-background-with-flowing-colouful-waves_1048-13124.jpg",
+      prospect_sales_documents: [
+      ],
+      is_prospect_location: true,
     }
   });
   const [activeStep, setActiveStep] = useState(0);
@@ -78,6 +96,22 @@ export function ProspectLocationForm() {
    const onSubmit = (data: any) => {
     console.log("Form Data:", data);
   };
+  const selectedProspectType = form.watch("prospect_sales_prospect_type");
+  
+  // Set default value for 'prospect_sales_type_of_need' based on the selected prospect type
+  let defaultNeedValue="";
+  let disabledNeedField = false;
+
+  if (selectedProspectType === "Tenant") {
+    defaultNeedValue = "Location";
+    disabledNeedField = true;
+  } else if (selectedProspectType === "Owner") {
+    defaultNeedValue = "Management";
+    disabledNeedField = true;
+  } else if (selectedProspectType === "Client") {
+    defaultNeedValue = "Purchase";
+    disabledNeedField = true;
+  }
 
   return (
     <Dialog>
@@ -103,7 +137,7 @@ export function ProspectLocationForm() {
                   {/* Prospect Type */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_prospect_type"
+                    name="prospect_sales_prospect_type"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Prospect Type</FormLabel>
@@ -127,7 +161,7 @@ export function ProspectLocationForm() {
                   {/* Source of Prospect */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_source_of_prospect"
+                    name="prospect_sales_source_of_prospect"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Source of Prospect</FormLabel>
@@ -154,7 +188,7 @@ export function ProspectLocationForm() {
                   {/* Phone */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_phone"
+                    name="prospect_sales_phone"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Phone</FormLabel>
@@ -169,7 +203,7 @@ export function ProspectLocationForm() {
                   {/* Contact Whatsapp */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_contact_whatsapp"
+                    name="prospect_sales_contact_whatsapp"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Contact Whatsapp</FormLabel>
@@ -184,7 +218,7 @@ export function ProspectLocationForm() {
                   {/* Civility */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_civility"
+                    name="prospect_sales_civility"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Civility</FormLabel>
@@ -208,7 +242,7 @@ export function ProspectLocationForm() {
                   {/* Name and Surname */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_name_surname"
+                    name="prospect_sales_name_surname"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Name and Surname</FormLabel>
@@ -223,7 +257,7 @@ export function ProspectLocationForm() {
                   {/* Email */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_email"
+                    name="prospect_sales_email"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Email</FormLabel>
@@ -238,7 +272,7 @@ export function ProspectLocationForm() {
                   {/* Marital Status */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_marital_status"
+                    name="prospect_sales_marital_status"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Marital Status</FormLabel>
@@ -262,7 +296,7 @@ export function ProspectLocationForm() {
                   {/* Do you have children? */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_children"
+                    name="prospect_sales_children"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Do you have children?</FormLabel>
@@ -285,7 +319,7 @@ export function ProspectLocationForm() {
                   {/* Profession */}
                   <FormField
                     control={form.control}
-                    name="prospect_location_profession"
+                    name="prospect_sales_profession"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Profession</FormLabel>
@@ -304,33 +338,44 @@ export function ProspectLocationForm() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             
-                  {/* Prospect Type */}
-                  <FormField
-                    control={form.control}
-                    name="prospect_location_type_of_need"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Type of Need</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Type of Need" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Location">Location</SelectItem>
-                              <SelectItem value="Management">Management</SelectItem>
-                              <SelectItem value="Purchase">Purchase</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                 {/* Type of Need */}
+      <FormField
+        control={form.control}
+        name="prospect_sales_type_of_need"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Type of Need</FormLabel>
+            <FormControl>
+              <Select
+             {...field}
+                onValueChange={field.onChange}
+                value={field.value ||defaultNeedValue}
+                disabled={disabledNeedField}  // Set value here
+              >
+                <SelectTrigger >
+                  <SelectValue placeholder="Select Type of Need" />
+                </SelectTrigger>
+                <SelectContent >
+               
+                
+                      <SelectItem value="Location">Location</SelectItem>
+                      <SelectItem value="Management">Management</SelectItem>
+                      <SelectItem value="Purchase">Purchase</SelectItem>
+              
+
+
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
 
 <FormField
   control={form.control}
-  name="prospect_location_type_of_property"
+  name="prospect_sales_type_of_property"
   render={({ field }) => (
     <FormItem>
       <FormLabel>Type of Property</FormLabel>
@@ -357,6 +402,119 @@ export function ProspectLocationForm() {
     </FormItem>
   )}
 />
+{defaultNeedValue === "Management" && (
+  <>
+   
+    <FormField
+      control={form.control}
+      name="prospect_sales_management_rentals"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Number of Rentals</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Number of Rentals"
+              min="0"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
+    {/* Rental Income */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_management_rentals_income"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Rental Income</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Rental Income"
+              min="0"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
+  
+
+    {/* Management Percentage */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_management_percentage"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Management Percentage (%)</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Management Percentage"
+              min="0"
+              max="100"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </>
+)}
+{defaultNeedValue === "Purchase" && (
+  <>
+    {/* Budget Minimum */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_purchase_budget_min"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Budget Minimum</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Budget Minimum"
+              min="0"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
+    {/* Budget Maximum */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_purchase_budget_max"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Budget Maximum</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Budget Maximum"
+              min="0"  onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </>
+)}
 
                 </div>
 
@@ -370,11 +528,12 @@ export function ProspectLocationForm() {
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
     {/* Would */}
+  <div className="grid grid-cols-5 gap-2 items-center">
     <FormField
       control={form.control}
-      name="prospect_location_would"
+      name="prospect_sales_would"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-4 ">
           <FormLabel>Would</FormLabel>
           <FormControl>
               <Select  onValueChange={field.onChange}>
@@ -391,13 +550,16 @@ export function ProspectLocationForm() {
         </FormItem>
       )}
     />
-
+<div className="pt-5">
+    <AddCityForm /></div>
+</div>
     {/* Municipality */}
+    <div className="grid grid-cols-5 gap-2 items-center">
     <FormField
       control={form.control}
-      name="prospect_location_municipality"
+      name="prospect_sales_municipality"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-4 ">
           <FormLabel>Municipality</FormLabel>
           <FormControl>
               <Select  onValueChange={field.onChange}>
@@ -415,13 +577,17 @@ export function ProspectLocationForm() {
         </FormItem>
       )}
     />
-
+<div className="pt-5">
+    <AddMunicipalityForm /></div>
+</div>
     {/* Neighborhood */}
+
+    <div className="grid grid-cols-5 gap-2 items-center">
     <FormField
       control={form.control}
-      name="prospect_location_neighborhood"
+      name="prospect_sales_neighborhood"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-4 ">
           <FormLabel>Neighborhood</FormLabel>
           <FormControl>
               <Select  onValueChange={field.onChange}>
@@ -439,6 +605,9 @@ export function ProspectLocationForm() {
         </FormItem>
       )}
     />
+    <div className="pt-5">
+    <AddNeighborhoodForm /></div>
+</div>
 
                 </div>
                 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
@@ -446,23 +615,41 @@ export function ProspectLocationForm() {
       </h2>
 
    
+    
       <FormField
-        control={form.control}
-        name="prospect_location_description"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Description</FormLabel>
-            <FormControl>
-            <textarea
-          {...field}
-          placeholder="Enter description"
-          className="w-full p-2 border border-gray-300 rounded-md"
-        />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+  control={form.control}
+  name="prospect_sales_description"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Description</FormLabel>
+      <FormControl>
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-white dark:text-white"
+          >
+            Content
+          </label>
+          <TinyMCEEditor
+             apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+            init={{
+              plugins:
+                "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
+              toolbar:
+                "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
+            }}
+            value={field.value || ""}
+            onEditorChange={(content) => {
+              field.onChange(content); // Use field.onChange to update React Hook Form state
+            }}
+          />
+        </div>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
                 </div>
                 <div className="space-y-5">   
                 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
@@ -471,8 +658,8 @@ export function ProspectLocationForm() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="w-full md:w-1/3">
                 <ProfilePicUploader
-                  profilePic={form.watch("prospect_location_photo") || ""}
-                  onChange={(url) => form.setValue("prospect_location_photo", url)}
+                  profilePic={form.watch("prospect_sales_photo") || ""}
+                  onChange={(url) => form.setValue("prospect_sales_photo", url)}
                 />
               </div>
               <Separator
@@ -480,9 +667,9 @@ export function ProspectLocationForm() {
                 className="hidden md:block h-50"
               />
               <FileUploader
-                onChange={(files) => form.setValue("prospect_location_documents", files)}
+                onChange={(files) => form.setValue("prospect_sales_documents", files)}
                 maxFiles={5}
-                addedFiles={form.watch("prospect_location_documents") || []}
+                addedFiles={form.watch("prospect_sales_documents") || []}
               />
             </div>
                 </div>

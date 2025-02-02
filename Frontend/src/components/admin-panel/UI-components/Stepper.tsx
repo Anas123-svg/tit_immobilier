@@ -23,7 +23,7 @@ const Stepper: React.FC<StepperProps> = ({ children, activeStep, onStepChange,st
   };
 
   return (
-    <div className='space-y-5'>
+    <div className='space-y-12'>
         {/* Step Indicator */}
         <div className="flex items-center w-full">
   
