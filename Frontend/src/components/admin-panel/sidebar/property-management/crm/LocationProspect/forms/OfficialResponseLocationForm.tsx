@@ -21,7 +21,9 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Zod Schema for validation
 const FormSchema = z.object({
-  prospect_id: z.string().nonempty("Prospect is required"),
+  prospect_ids: z.string().nonempty("Prospect is required"),
+  prospect_id: z.number(),
+
   prebooking: z.string().nonempty("Pre-booking is required"),
   status: z.string().nonempty("Status is required"),
   availability: z.string().nonempty("Availability is required"),
@@ -37,7 +39,7 @@ export function OfficialResponseLocationForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_id: "",
+      prospect_id: 1,
       prebooking: "",
       assessment_from_us:"",
       status: "",
@@ -73,12 +75,12 @@ const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/official-resp
                     {/* Prospect Field */}
                     <FormField
                       control={form.control}
-                      name="prospect_id"
+                      name="prospect_ids"
                       render={({ field }) => (
                         <FormItem className=" col-span-2">
                           <FormLabel>Prospect *</FormLabel>
                           <FormControl>
-                            <Select {...field}>
+                            <Select onValueChange={field.onChange}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a prospect" />
                               </SelectTrigger>
@@ -102,7 +104,7 @@ const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/official-resp
                         <FormItem className=" col-span-2">
                           <FormLabel>Pre-booking *</FormLabel>
                           <FormControl>
-                            <Select {...field}>
+                          <Select onValueChange={field.onChange}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Pre-booking" />
                               </SelectTrigger>
@@ -126,7 +128,7 @@ const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/official-resp
                         <FormItem>
                           <FormLabel>Status *</FormLabel>
                           <FormControl>
-                            <Select {...field}>
+                          <Select onValueChange={field.onChange}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Status" />
                               </SelectTrigger>
@@ -150,7 +152,7 @@ const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/official-resp
                         <FormItem className="col-span-2">
                           <FormLabel>Availability *</FormLabel>
                           <FormControl>
-                            <Select {...field}>
+                          <Select onValueChange={field.onChange}>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Availability" />
                               </SelectTrigger>
@@ -196,7 +198,7 @@ const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/official-resp
     <FormItem>
       <FormLabel>Does the good come from us? *</FormLabel>
       <FormControl>
-        <Select {...field}>
+      <Select onValueChange={field.onChange}>
           <SelectTrigger>
             <SelectValue placeholder="Select Yes or No" />
           </SelectTrigger>

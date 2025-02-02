@@ -79,7 +79,7 @@ const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/commercial-pl
                         <FormItem className=" col-span-2">
                           <FormLabel>Type of Commercial Action *</FormLabel>
                           <FormControl>
-                          <Select {...field}>
+                          <Select onValueChange={field.onChange}>
       <SelectTrigger>
         <SelectValue placeholder="Select Type of Commercial Action" />
       </SelectTrigger>

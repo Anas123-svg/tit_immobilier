@@ -17,7 +17,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 // Zod Schema for validation
 const FormSchema = z.object({
-  prospect_id: z.string().nonempty("Prospect ID is required"),
+  prospect_id: z.number(),
+  prospect_ids: z.string(),
   email: z.string().email("Invalid email format"),
   phone: z.string().min(10, "Phone number must be at least 10 characters"),
   is_prospect_location: z.boolean().default(true), // Default value set for boolean
@@ -28,7 +29,7 @@ export function NeedSalesForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_id: "prospect_1", // Set default value for prospect_id
+      prospect_id: 1, // Set default value for prospect_id
       email: "johndoe@example.com",
       phone: "+1234567890",
       is_prospect_location: false,
@@ -59,7 +60,7 @@ export function NeedSalesForm() {
                     {/* Prospect Field */}
                     <FormField
                     control={form.control}
-                name="prospect_id"
+                   name="prospect_ids"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Prospect *</FormLabel>
