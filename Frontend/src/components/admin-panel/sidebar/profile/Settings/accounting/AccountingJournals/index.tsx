@@ -1,4 +1,4 @@
-import DynamicTable from "../../UI/DynamicTable";
+import DynamicTable from "../../../../../UI-components/DynamicTable";
 
 
 const AccountingJournals = () => {

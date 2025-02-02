@@ -3,7 +3,7 @@ import { FilterOption } from '@/types/DataProps';
 
 import React, { useState } from 'react';
 import { Download, Edit, Eye, Flag, Trash2, Upload } from 'lucide-react';
-import DynamicTable from '@/components/admin-panel/sidebar/profile/Settings/UI/DynamicTable';
+import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 
 interface EmergencyContactProps {
   emergencyContactName: string;

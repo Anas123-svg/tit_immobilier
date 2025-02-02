@@ -9,6 +9,7 @@ import ResourceConfiguration from "@/components/admin-panel/sidebar/extra/resour
 import SendMailSmsSettings from "@/components/admin-panel/sidebar/extra/extra/SendMailSmsSettings";
 import TenantDetailPage from "@/components/admin-panel/sidebar/property-management/tiers/tenant/sub-page/tenant-detail-page";
 import OwnerDetailPage from "@/components/admin-panel/sidebar/property-management/tiers/owner/sub-page/owner-detail-page";
+import CRMSettingsComponent from "@/components/admin-panel/sidebar/property-management/crm/Settings";
 
 // Recursive function to flatten all routes, including sub-options
 const flattenRoutes = (options: SidebarOption[]): SidebarOption[] => {
@@ -48,6 +49,7 @@ const AdminPanel: React.FC = () => {
             <Route path="/tier/owners/detail-page" element={<OwnerDetailPage/>} />
 
             <Route path="/settings/*" element={<SettingsComponent />} />
+            <Route path="/crm/setting/*" element={<CRMSettingsComponent />} />
             <Route path="/ticket/*" element={<TicketConfiguration />} />
             <Route path="/resource/*" element={<ResourceConfiguration />} />
             <Route path="/extra/*" element={<SendMailSmsSettings />} />

@@ -57,6 +57,7 @@ import CalendarSettings from "@/components/admin-panel/sidebar/extra/extra/Calen
 import SendMailSmsSettings from "@/components/admin-panel/sidebar/extra/extra/SendMailSmsSettings";
 import Intervention from "@/components/admin-panel/sidebar/extra/general-means/intervention";
 import SupplierServiceProvider from "@/components/admin-panel/sidebar/extra/general-means/supplier-service-provider";
+import CRMSettingsComponent from "@/components/admin-panel/sidebar/property-management/crm/Settings";
 
 // Type definition for a single route option
 export interface SidebarOption {
@@ -151,7 +152,7 @@ export const sidebarOptions: SidebarSection[] = [
           {
             name: "Setting",
             path: "/crm/setting",
-           component: CRM
+           component: CRMSettingsComponent
           }
         ]
       },
