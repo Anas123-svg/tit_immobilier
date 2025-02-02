@@ -25,7 +25,7 @@ export function OfferLocationForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-        prospect_location_type_of_offer: "Tenant",
+        prospect_location_type_of_offer: "",
 
     }
   });

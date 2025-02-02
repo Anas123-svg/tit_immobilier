@@ -20,6 +20,7 @@ import { useState } from "react";
 import ProfilePicUploader from "@/components/common/profilePicUploader";
 import { Separator } from "@/components/ui/separator";
 import FileUploader from "@/components/common/uploader";
+import { Editor } from "tinymce";
 
 // Zod Schema with prospect_sales_ prefix
 const FormSchema = z.object({
@@ -33,40 +34,54 @@ const FormSchema = z.object({
   prospect_sales_marital_status: z.string().nonempty("Marital Status is required"),
   prospect_sales_children: z.string().nonempty("Children status is required"),
   prospect_sales_profession: z.string().nonempty("Profession is required"),
-  // New fields for the additional sections
+  prospect_sales_number_of_children: z.number().int().min(0, "Number of children must be a non-negative integer"),
   prospect_sales_type_of_need: z.string().nonempty("Type of Need is required"),
   prospect_sales_type_of_property: z.string().nonempty("Type of Property is required"),
+  prospect_sales_management_rentals: z.number().min(0, "Management rentals must be a non-negative number"),
+  prospect_sales_management_rentals_income: z.number().min(0, "Management rentals income must be a non-negative number"),
+  prospect_sales_management_percentage: z.number().min(0, "Management percentage must be a non-negative number"),
+  prospect_sales_purchase_budget_min: z.number().min(0, "Minimum purchase budget must be a non-negative number"),
+  prospect_sales_purchase_budget_max: z.number().min(0, "Maximum purchase budget must be a non-negative number"),
+  prospect_sales_description: z.string().optional(),
   prospect_sales_would: z.string().nonempty("Would is required"),
   prospect_sales_municipality: z.string().nonempty("Municipality is required"),
   prospect_sales_neighborhood: z.string().nonempty("Neighborhood is required"),
-  prospect_sales_description: z.string().optional(),
   prospect_sales_photo: z.string().optional(),
   prospect_sales_documents: z.array(z.string()).optional(),
+  is_prospect_location: z.boolean(),
 });
+
 
 export function ProspectSalesForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_sales_prospect_type: "Tenant", // Default selected value
-      prospect_sales_source_of_prospect: "Referral", // Default selected value
-      prospect_sales_phone: "1234567890", // Default phone number
-      prospect_sales_contact_whatsapp: "1234567890", // Default whatsapp number
-      prospect_sales_civility: "Sir", // Default civility
-      prospect_sales_name_surname: "John Doe", // Default name and surname
-      prospect_sales_email: "johndoe@example.com", // Default email
-      prospect_sales_marital_status: "Single", // Default marital status
-      prospect_sales_children: "No", // Default children status
-      prospect_sales_profession: "Software Developer", // Default profession
-      // New fields for the additional sections
-      prospect_sales_type_of_need: "Rent", // Default type of need
-      prospect_sales_type_of_property: "Apartment", // Default type of property
-      prospect_sales_would: "Yes", // Default for Would
-      prospect_sales_municipality: "New York", // Default municipality
-      prospect_sales_neighborhood: "Downtown", // Default neighborhood
-      prospect_sales_description: "A detailed description of the property.", // Default description
-      prospect_sales_photo: "", // Default photo (could be empty initially)
-      prospect_sales_documents: [], // No documents by default
+      prospect_sales_prospect_type: "Individual",
+      prospect_sales_source_of_prospect: "Referral",
+      prospect_sales_phone: "+1234567890",
+      prospect_sales_contact_whatsapp: "+1234567890",
+      prospect_sales_civility: "Mr.",
+      prospect_sales_name_surname: "John Doe",
+      prospect_sales_email: "johndoe@example.com",
+      prospect_sales_marital_status: "Single",
+      prospect_sales_children: "No",
+      prospect_sales_profession: "Software Engineer",
+      prospect_sales_number_of_children: 0,
+      prospect_sales_type_of_need: "Purchase",
+      prospect_sales_type_of_property: "Apartment",
+      prospect_sales_management_rentals: 3,
+      prospect_sales_management_rentals_income: 2000.00,
+      prospect_sales_management_percentage: 10.5,
+      prospect_sales_purchase_budget_min: 100000.00,
+      prospect_sales_purchase_budget_max: 500000.00,
+      prospect_sales_description: "Looking for a 2-bedroom apartment in a central location.",
+      prospect_sales_would: "Yes",
+      prospect_sales_municipality: "Central City",
+      prospect_sales_neighborhood: "Downtown",
+      prospect_sales_photo: "https://img.freepik.com/free-photo/abstract-dark-background-with-flowing-colouful-waves_1048-13124.jpg",
+      prospect_sales_documents: [
+      ],
+      is_prospect_location: false,
     }
   });
   const [activeStep, setActiveStep] = useState(0);
@@ -78,6 +93,22 @@ export function ProspectSalesForm() {
    const onSubmit = (data: any) => {
     console.log("Form Data:", data);
   };
+  const selectedProspectType = form.watch("prospect_sales_prospect_type");
+  
+  // Set default value for 'prospect_sales_type_of_need' based on the selected prospect type
+  let defaultNeedValue="";
+  let disabledNeedField = false;
+
+  if (selectedProspectType === "Tenant") {
+    defaultNeedValue = "Location";
+    disabledNeedField = true;
+  } else if (selectedProspectType === "Owner") {
+    defaultNeedValue = "Management";
+    disabledNeedField = true;
+  } else if (selectedProspectType === "Client") {
+    defaultNeedValue = "Purchase";
+    disabledNeedField = true;
+  }
 
   return (
     <Dialog>
@@ -304,29 +335,40 @@ export function ProspectSalesForm() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             
-                  {/* Prospect Type */}
-                  <FormField
-                    control={form.control}
-                    name="prospect_sales_type_of_need"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Type of Need</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Type of Need" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Location">Location</SelectItem>
-                              <SelectItem value="Management">Management</SelectItem>
-                              <SelectItem value="Purchase">Purchase</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                 {/* Type of Need */}
+      <FormField
+        control={form.control}
+        name="prospect_sales_type_of_need"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Type of Need</FormLabel>
+            <FormControl>
+              <Select
+             {...field}
+                onValueChange={field.onChange}
+                value={ defaultNeedValue}
+                disabled={disabledNeedField}  // Set value here
+              >
+                <SelectTrigger >
+                  <SelectValue placeholder="Select Type of Need" />
+                </SelectTrigger>
+                <SelectContent >
+               
+                
+                      <SelectItem value="Location">Location</SelectItem>
+                      <SelectItem value="Management">Management</SelectItem>
+                      <SelectItem value="Purchase">Purchase</SelectItem>
+              
+
+
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
 
 <FormField
   control={form.control}
@@ -357,6 +399,119 @@ export function ProspectSalesForm() {
     </FormItem>
   )}
 />
+{defaultNeedValue === "Management" && (
+  <>
+   
+    <FormField
+      control={form.control}
+      name="prospect_sales_management_rentals"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Number of Rentals</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Number of Rentals"
+              min="0"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
+    {/* Rental Income */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_management_rentals_income"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Rental Income</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Rental Income"
+              min="0"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
+  
+
+    {/* Management Percentage */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_management_percentage"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Management Percentage (%)</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Management Percentage"
+              min="0"
+              max="100"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </>
+)}
+{defaultNeedValue === "Purchase" && (
+  <>
+    {/* Budget Minimum */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_purchase_budget_min"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Budget Minimum</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Budget Minimum"
+              min="0"
+              onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+
+    {/* Budget Maximum */}
+    <FormField
+      control={form.control}
+      name="prospect_sales_purchase_budget_max"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Budget Maximum</FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              placeholder="Enter Budget Maximum"
+              min="0"  onChange={(e) => field.onChange(Number(e.target.value))} // Convert string to number
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </>
+)}
 
                 </div>
 
@@ -370,6 +525,7 @@ export function ProspectSalesForm() {
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
     {/* Would */}
+  <div className="">
     <FormField
       control={form.control}
       name="prospect_sales_would"
@@ -391,7 +547,7 @@ export function ProspectSalesForm() {
         </FormItem>
       )}
     />
-
+</div>
     {/* Municipality */}
     <FormField
       control={form.control}
@@ -447,22 +603,32 @@ export function ProspectSalesForm() {
 
    
       <FormField
-        control={form.control}
-        name="prospect_sales_description"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Description</FormLabel>
-            <FormControl>
-            <textarea
-          {...field}
-          placeholder="Enter description"
-          className="w-full p-2 border border-gray-300 rounded-md"
-        />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+  control={form.control}
+  name="prospect_sales_description"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Description</FormLabel>
+      <FormControl>
+       
+          <Editor
+            apiKey="g0zqs3p6v9zx7zhnrzgdphkxjcz3dvgt6kl7bxln19etxto6"
+            init={{
+              plugins:
+                "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
+              toolbar:
+                "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
+            }}
+            value={field.value || ""}  // Ensure editor value is controlled by React Hook Form
+            onEditorChange={(content) => {
+              field.onChange(content);  // Use field.onChange to update React Hook Form state
+            }}
+          />
+     
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
                 </div>
                 <div className="space-y-5">   
                 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
