@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientFileController;
 use App\Http\Controllers\CrmManagementController;
 use App\Http\Controllers\CrmManagementProspectingfunnelController;
 use App\Http\Controllers\CrmManagementProspectingStageController;
@@ -199,62 +201,84 @@ Route::prefix('tenant-short-term-contract')->group(function() {
 
 //crm
 Route::prefix('sales-prospect')->group(function() {
-    Route::get('/', [SaleProspectController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [SaleProspectController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [SaleProspectController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [SaleProspectController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [SaleProspectController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [SaleProspectController::class, 'index']); // Get all sales-prospect
+    Route::get('{id}', [SaleProspectController::class, 'show']); // Get a single sales-prospect
+    Route::post('/', [SaleProspectController::class, 'store']); // Create a new sales-prospect
+    Route::put('{id}', [SaleProspectController::class, 'update']); // Update a sales-prospect
+    Route::delete('{id}', [SaleProspectController::class, 'destroy']); // Delete a sales-prospect
 });
 Route::prefix('sales-prospect/pre-booking')->group(function() {
-    Route::get('/', [SalesProspectPreBookingController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [SalesProspectPreBookingController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [SalesProspectPreBookingController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [SalesProspectPreBookingController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [SalesProspectPreBookingController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [SalesProspectPreBookingController::class, 'index']); // Get all sales-prospect pre-booking
+    Route::get('{id}', [SalesProspectPreBookingController::class, 'show']); // Get a single sales-prospect pre-booking
+    Route::post('/', [SalesProspectPreBookingController::class, 'store']); // Create a new sales-prospect pre-booking
+    Route::put('{id}', [SalesProspectPreBookingController::class, 'update']); // Update a sales-prospect pre-booking
+    Route::delete('{id}', [SalesProspectPreBookingController::class, 'destroy']); // Delete a sales-prospect pre-booking
 });
 Route::prefix('sales-prospect/commercial-plan')->group(function() {
-    Route::get('/', [SalesProspectCommercialPlanController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [SalesProspectCommercialPlanController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [SalesProspectCommercialPlanController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [SalesProspectCommercialPlanController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [SalesProspectCommercialPlanController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [SalesProspectCommercialPlanController::class, 'index']); // Get all sales-prospect commercial-plan
+    Route::get('{id}', [SalesProspectCommercialPlanController::class, 'show']); // Get a single sales-prospect commercial-plan
+    Route::post('/', [SalesProspectCommercialPlanController::class, 'store']); // Create a new sales-prospect commercial-plan
+    Route::put('{id}', [SalesProspectCommercialPlanController::class, 'update']); // Update a sales-prospect commercial-plan
+    Route::delete('{id}', [SalesProspectCommercialPlanController::class, 'destroy']); // Delete a sales-prospect commercial-plan
 });
 Route::prefix('sales-prospect/offer')->group(function() {
-    Route::get('/', [ProspectSalesOfferController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [ProspectSalesOfferController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [ProspectSalesOfferController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [ProspectSalesOfferController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [ProspectSalesOfferController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [ProspectSalesOfferController::class, 'index']); // Get all sales-prospect offer
+    Route::get('{id}', [ProspectSalesOfferController::class, 'show']); // Get a single sales-prospect offer
+    Route::post('/', [ProspectSalesOfferController::class, 'store']); // Create a new sales-prospect offer
+    Route::put('{id}', [ProspectSalesOfferController::class, 'update']); // Update a sales-prospect offer
+    Route::delete('{id}', [ProspectSalesOfferController::class, 'destroy']); // Delete a sales-prospect offer
 });
 
 
 Route::prefix('sales-prospect/official-response')->group(function() {
-    Route::get('/', [LocationProspectOfficialResponseController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [LocationProspectOfficialResponseController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [LocationProspectOfficialResponseController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [LocationProspectOfficialResponseController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [LocationProspectOfficialResponseController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [LocationProspectOfficialResponseController::class, 'index']); // Get all sales-prospect official-response
+    Route::get('{id}', [LocationProspectOfficialResponseController::class, 'show']); // Get a single sales-prospect official-response
+    Route::post('/', [LocationProspectOfficialResponseController::class, 'store']); // Create a new sales-prospect official-response
+    Route::put('{id}', [LocationProspectOfficialResponseController::class, 'update']); // Update a sales-prospect official-response
+    Route::delete('{id}', [LocationProspectOfficialResponseController::class, 'destroy']); // Delete a sales-prospect official-response
 });
 
 Route::prefix('crm-management/general-configuration')->group(function() {
-    Route::get('/', [CrmManagementController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [CrmManagementController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [CrmManagementController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [CrmManagementController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [CrmManagementController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [CrmManagementController::class, 'index']); // Get all crm-management-general-configuration
+    Route::get('{id}', [CrmManagementController::class, 'show']); // Get a single crm-management-general-configuration
+    Route::post('/', [CrmManagementController::class, 'store']); // Create a new crm-management-general-configuration
+    Route::put('{id}', [CrmManagementController::class, 'update']); // Update a crm-management-general-configuration
+    Route::delete('{id}', [CrmManagementController::class, 'destroy']); // Delete a crm-management-general-configuration
 });
 
 Route::prefix('crm-management/prospecting-stage')->group(function() {
-    Route::get('/', [CrmManagementProspectingStageController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [CrmManagementProspectingStageController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [CrmManagementProspectingStageController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [CrmManagementProspectingStageController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [CrmManagementProspectingStageController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [CrmManagementProspectingStageController::class, 'index']); // Get all crm-management prospecting-stage
+    Route::get('{id}', [CrmManagementProspectingStageController::class, 'show']); // Get a single crm-management prospecting-stage
+    Route::post('/', [CrmManagementProspectingStageController::class, 'store']); // Create a new crm-management prospecting-stage
+    Route::put('{id}', [CrmManagementProspectingStageController::class, 'update']); // Update a crm-management prospecting-stage
+    Route::delete('{id}', [CrmManagementProspectingStageController::class, 'destroy']); // Delete a crm-management prospecting-stage
 });
 Route::prefix('crm-management/sales/prospecting-funnel')->group(function() {
-    Route::get('/', [CrmManagementProspectingfunnelController::class, 'index']); // Get all owner-sale-properties
-    Route::get('{id}', [CrmManagementProspectingfunnelController::class, 'show']); // Get a single owner-sale-properties
-    Route::post('/', [CrmManagementProspectingfunnelController::class, 'store']); // Create a new owner-sale-properties
-    Route::put('{id}', [CrmManagementProspectingfunnelController::class, 'update']); // Update a owner-sale-properties
-    Route::delete('{id}', [CrmManagementProspectingfunnelController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('/', [CrmManagementProspectingfunnelController::class, 'index']); // Get all crm-management-sales prospecting-funnel
+    Route::get('{id}', [CrmManagementProspectingfunnelController::class, 'show']); // Get a single crm-management-sales prospecting-funnel
+    Route::post('/', [CrmManagementProspectingfunnelController::class, 'store']); // Create a new crm-management-sales prospecting-funnel
+    Route::put('{id}', [CrmManagementProspectingfunnelController::class, 'update']); // Update a crm-management-sales prospecting-funnel
+    Route::delete('{id}', [CrmManagementProspectingfunnelController::class, 'destroy']); // Delete a crm-management-sales prospecting-funnel
 });
+
+
+//client routes
+
+Route::prefix('clients')->group(function() {
+    Route::get('/', [ClientController::class, 'index']); // Get all clients
+    Route::get('{id}', [ClientController::class, 'show']); // Get a single clients
+    Route::post('/', [ClientController::class, 'store']); // Create a new clients
+    Route::put('{id}', [ClientController::class, 'update']); // Update a clients
+    Route::delete('{id}', [ClientController::class, 'destroy']); // Delete a clients
+});
+
+
+Route::prefix('clients/file')->group(function() {
+    Route::get('/', [ClientFileController::class, 'index']); // Get all clients file
+    Route::get('{id}', [ClientFileController::class, 'show']); // Get a single clients file
+    Route::post('/', [ClientFileController::class, 'store']); // Create a new clients file
+    Route::put('{id}', [ClientFileController::class, 'update']); // Update a clients file
+    Route::delete('{id}', [ClientFileController::class, 'destroy']); // Delete a clients file
+});
+
+

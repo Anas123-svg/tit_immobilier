@@ -11,21 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales_prospect_pre_booking', function (Blueprint $table) {
+        Schema::create('client_mutation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('prospect_id')->constrained('sale_prospects')->onDelete('cascade');
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-
+            $table->foreignId('client_id')->nullable()->constrained('clients')->nullOnDelete();
+            $table->foreignId('file_id')->nullable()->constrained('client_file')->nullOnDelete();
+            $table->decimal('Amount')->d();
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales_prospect_pre_booking');
+        Schema::dropIfExists('client_mutation');
     }
 };

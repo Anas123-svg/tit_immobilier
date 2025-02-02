@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('pre_booking')->default(false);
             $table->string('status')->nullable();
             $table->string('availability')->nullable();
-            $table->text('assessment')->nullable();
+            $table->string('assessment')->nullable();
             $table->text('assessment_from_us')->nullable();
             $table->string('object')->nullable();
             $table->text('comments')->nullable();
