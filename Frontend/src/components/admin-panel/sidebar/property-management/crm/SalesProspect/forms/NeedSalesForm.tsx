@@ -14,12 +14,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
 // Zod Schema for validation
 const FormSchema = z.object({
-  prospect_sales_prospect: z.string().nonempty("Prospect is required"),
-  prospect_sales_email: z.string().email("Invalid email format"),
-  prospect_sales_telephone: z.string().min(10, "Telephone number is required"),
+  prospect_id: z.string().nonempty("Prospect ID is required"),
+  email: z.string().email("Invalid email format"),
+  phone: z.string().min(10, "Phone number must be at least 10 characters"),
+  is_prospect_location: z.boolean().default(true), // Default value set for boolean
 });
 
 export function NeedSalesForm() {
@@ -27,10 +27,11 @@ export function NeedSalesForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_sales_prospect: "",
-      prospect_sales_email: "",
-      prospect_sales_telephone: "",
-    }
+      prospect_id: "prospect_1", // Set default value for prospect_id
+      email: "johndoe@example.com",
+      phone: "+1234567890",
+      is_prospect_location: false,
+    },
   });
 
   // Handle form submission
@@ -58,13 +59,17 @@ export function NeedSalesForm() {
 
                     {/* Prospect Field */}
                     <FormField
-                      control={form.control}
-                      name="prospect_sales_prospect"
+                    control={form.control}
+                name="prospect_id"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Prospect *</FormLabel>
                           <FormControl>
-                            <Select {...field}>
+                            <Select
+                              {...field} // Bind the field value
+                              value={field.value} // Set the value
+                              onValueChange={field.onChange} // Update field value on change
+                            >
                               <SelectTrigger>
                                 <SelectValue placeholder="Select a prospect" />
                               </SelectTrigger>
@@ -79,11 +84,11 @@ export function NeedSalesForm() {
                         </FormItem>
                       )}
                     />
-
+ 
                     {/* Email Field */}
                     <FormField
                       control={form.control}
-                      name="prospect_sales_email"
+                      name="email"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Email</FormLabel>
@@ -98,7 +103,7 @@ export function NeedSalesForm() {
                     {/* Telephone Field */}
                     <FormField
                       control={form.control}
-                      name="prospect_sales_telephone"
+                      name="phone"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Telephone</FormLabel>

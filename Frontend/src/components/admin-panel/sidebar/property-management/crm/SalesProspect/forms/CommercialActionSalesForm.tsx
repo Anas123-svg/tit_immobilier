@@ -16,12 +16,23 @@ import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import FileUploader from "@/components/common/uploader";
 import { Save } from "lucide-react";
+import { Editor } from "@tinymce/tinymce-react";
 
-// Zod Schema for validation
 const FormSchema = z.object({
+  // Type of Commercial Action: Required string field
   prospect_sales_type_of_commercial_action: z.string().nonempty("Type of Commercial Action is required"),
-  prospect_sales_prospect: z.string().nonempty("Prospect is required"),
-  prospect_sales_object: z.string().nonempty("Object is required"), prospect_sales_comment: z.string().optional(),  prospect_sales_documents: z.array(z.string()).optional(),
+
+  // Prospect ID: Required number field
+  prospect_id: z.string().min(0,"Prospect is required"),
+
+  // Object: Required string field
+  prospect_sales_object: z.string().nonempty("Object is required"),
+
+  // Comment: Optional string field for additional comments
+  prospect_sales_comment: z.string().optional(),
+
+  // Documents: Optional array of strings for document URLs or paths
+  prospect_sales_documents: z.array(z.string()).optional(),
 });
 
 export function CommercialActionSalesForm() {
@@ -29,13 +40,14 @@ export function CommercialActionSalesForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_sales_type_of_commercial_action: "",
-      prospect_sales_prospect: "",
-      prospect_sales_object: "",  prospect_sales_comment:"",
-        prospect_sales_documents: [],
+      prospect_sales_type_of_commercial_action: "", // Default value for commercial action (empty string as placeholder)
+      prospect_id: "", // Default value for prospect_id (should be a number, defaulting to 0 as placeholder)
+      prospect_sales_object: "", // Default value for object (empty string)
+      prospect_sales_comment: "", // Default value for comment (empty string, optional)
+      prospect_sales_documents: [], // Default value for documents (empty array)
     }
   });
-
+  
   // Handle form submission
   const onSubmit = (data: any) => {
     console.log("Form Data:", data);
@@ -87,30 +99,35 @@ export function CommercialActionSalesForm() {
                         </FormItem>
                       )}
                     />
+<FormField
+  control={form.control}
+  name="prospect_id"
+  render={({ field }) => (
+    <FormItem className="col-span-2">
+      <FormLabel>Pre-booking *</FormLabel>
+      <FormControl>
+        <Select
+          {...field}
+          onValueChange={field.onChange} // Ensure the value is a number
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select a prospect" />
+          </SelectTrigger>
+          <SelectContent>
+            {/* Set numeric values directly */}
+            <SelectItem value={"1"}>Prospect 1</SelectItem>
+            <SelectItem value={"2"}>Prospect 2</SelectItem>
+            <SelectItem value={"3"}>Prospect 3</SelectItem>
+          </SelectContent>
+        </Select>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
 
-                    {/* Pre-booking Field */}
-                    <FormField
-                      control={form.control}
-                      name="prospect_sales_prospect"
-                      render={({ field }) => (
-                        <FormItem className=" col-span-2">
-                          <FormLabel>Pre-booking *</FormLabel>
-                          <FormControl>
-                            <Select {...field}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a prospect" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="prospect_1">Prospect 1</SelectItem>
-                                <SelectItem value="prospect_2">Prospect 2</SelectItem>
-                                <SelectItem value="prospect_3">Prospect 3</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+
+
 
                     {/* Object Field */}
                     <FormField
@@ -129,23 +146,40 @@ export function CommercialActionSalesForm() {
 
                   </div>
                 </div>
-                <FormField
-        control={form.control}
-        name="prospect_sales_comment"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Comment </FormLabel>
-            <FormControl>
-            <textarea
-          {...field}
-          placeholder="Enter Comments"
-          className="w-full p-2 border border-gray-300 rounded-md"
-        />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+                     <FormField
+                  control={form.control}
+                  name="prospect_sales_comment"
+                  render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Comment </FormLabel>
+                      <FormControl>
+                        <div>
+                          <label
+                            htmlFor="content"
+                            className="block text-sm font-medium text-white dark:text-white"
+                          >
+                            Content
+                          </label>
+                          <Editor
+                            apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+                            init={{
+                              plugins:
+                                "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
+                              toolbar:
+                                "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
+                            }}
+                            value={field.value || ""}
+                            onEditorChange={(content) => {
+                              field.onChange(content); // Use field.onChange to update React Hook Form state
+                            }}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+           
             <FileUploader
                       onChange={(files) => form.setValue("prospect_sales_documents", files)}
                       maxFiles={5}
