@@ -9,8 +9,13 @@ use App\Http\Controllers\ProspectSalesOfferController;
 use App\Http\Controllers\SaleProspectController;
 use App\Http\Controllers\SalesProspectCommercialPlanController;
 use App\Http\Controllers\SalesProspectPreBookingController;
+use App\Http\Controllers\TenantBillController;
 use App\Http\Controllers\TenantContractController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\TenantFillInventoryController;
+use App\Http\Controllers\TenantInvoiceController;
+use App\Http\Controllers\TenantPaymentController;
+use App\Http\Controllers\TenantPenaltyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -189,6 +194,61 @@ Route::prefix('tenant-short-term-contract')->group(function() {
     Route::delete('{id}', [TenantShortTermContractController::class, 'destroy']); // Delete a owner-sale-properties
 });
 
+
+Route::prefix('tenant-fill-inventory')->group(function() {
+    Route::get('/', action: [TenantFillInventoryController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantFillInventoryController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantFillInventoryController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantFillInventoryController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantFillInventoryController::class, 'destroy']); // Delete a owner-sale-properties
+});
+
+
+Route::prefix('tenant-bill')->group(function() {
+    Route::get('/', action: [TenantBillController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantBillController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantBillController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantBillController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantBillController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('contract/{id}', [TenantBillController::class, 'getByContractId']); // Delete a owner-sale-properties
+    Route::get('tenant/{id}', [TenantBillController::class, 'getByTenantId']); // Delete a owner-sale-properties
+});
+
+
+Route::prefix('tenant-penalty')->group(function() {
+    Route::get('/', action: [TenantPenaltyController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantPenaltyController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantPenaltyController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantPenaltyController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantPenaltyController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('contract/{id}', [TenantPenaltyController::class, 'getByContractId']); // Delete a owner-sale-properties
+    Route::get('tenant/{id}', [TenantPenaltyController::class, 'getByTenantId']); // Delete a owner-sale-properties
+});
+
+
+
+
+Route::prefix('tenant-invoice')->group(function() {
+    Route::get('/', action: [TenantInvoiceController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantInvoiceController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantInvoiceController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantInvoiceController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantInvoiceController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('contract/{id}', [TenantInvoiceController::class, 'getByContractId']); // Delete a owner-sale-properties
+    Route::get('tenant/{id}', [TenantInvoiceController::class, 'getByTenantId']); // Delete a owner-sale-properties
+});
+
+
+
+Route::prefix('tenant-payment')->group(function() {
+    Route::get('/', action: [TenantPaymentController::class, 'index']); // Get all owner-sale-properties
+    Route::get('{id}', [TenantPaymentController::class, 'show']); // Get a single owner-sale-properties
+    Route::post('/', [TenantPaymentController::class, 'store']); // Create a new owner-sale-properties
+    Route::put('{id}', [TenantPaymentController::class, 'update']); // Update a owner-sale-properties
+    Route::delete('{id}', [TenantPaymentController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('contract/{id}', [TenantPaymentController::class, 'getByContractId']); // Delete a owner-sale-properties
+    Route::get('tenant/{id}', [TenantPaymentController::class, 'getByTenantId']); // Delete a owner-sale-properties
+});
 
 
 
