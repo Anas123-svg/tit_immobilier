@@ -1,4 +1,4 @@
-import Costs from "@/components/admin-panel/sidebar/property-management/crm/Settings/settings/costs";
+import {Costs} from "@/components/admin-panel/sidebar/property-management/crm/Settings/settings/costs";
 import GeneralConfiguration from "@/components/admin-panel/sidebar/property-management/crm/Settings/settings/general-configuration";
 import ProspectingStage from "@/components/admin-panel/sidebar/property-management/crm/Settings/settings/prospecting-stage";
 import ProspectingTunnelRental from "@/components/admin-panel/sidebar/property-management/crm/Settings/settings/rospecting-tunnel-rental";

@@ -43,7 +43,7 @@ const CRMSettingsComponent: React.FC = () => {
   ))}
 
   {/* Default Redirect */}
-  <Route path="*" element={<Navigate to="/crm/setting" replace />} />
+  <Route path="*" element={<Navigate to="/crm/setting/general" replace />} />
 </Routes>
       </div>
     </div>
