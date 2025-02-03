@@ -1,4 +1,4 @@
-import DynamicTable from '@/components/admin-panel/sidebar/profile/Settings/UI/DynamicTable';
+import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { FilterOption } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';

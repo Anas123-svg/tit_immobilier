@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DynamicTable from '../../UI/DynamicTable'; // Ensure DynamicTable is imported correctly
+import DynamicTable from '../../../../../UI-components/DynamicTable'; // Ensure DynamicTable is imported correctly
 import { Trash2 } from 'lucide-react';
 
 const initialData = new Array(10).fill(null).map((_, index) => ({

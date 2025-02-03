@@ -2,7 +2,7 @@
 
 import { Edit2, Trash2, DollarSign } from 'lucide-react';
 
-import DynamicTable from "../../UI/DynamicTable";
+import DynamicTable from "../../../../../UI-components/DynamicTable";
 
 
 const Treasury = () => {

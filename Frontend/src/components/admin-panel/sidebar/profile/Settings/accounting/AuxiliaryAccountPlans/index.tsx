@@ -1,6 +1,6 @@
 
 import { Trash2 } from "lucide-react";
-import DynamicTable from "../../UI/DynamicTable";
+import DynamicTable from "../../../../../UI-components/DynamicTable";
 
 
 const AuxiliaryAccountPlans = () => {

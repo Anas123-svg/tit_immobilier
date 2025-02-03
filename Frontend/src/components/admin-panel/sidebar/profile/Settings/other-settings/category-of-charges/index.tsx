@@ -1,5 +1,5 @@
 
-import DynamicTable from '../../UI/DynamicTable'; // Importing the refactored table
+import DynamicTable from '../../../../../UI-components/DynamicTable'; // Importing the refactored table
 
  
 

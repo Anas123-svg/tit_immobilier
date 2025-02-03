@@ -1,7 +1,7 @@
 
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { FilterOption } from '@/types/DataProps';
-import DynamicTable from '../../UI/DynamicTable'; // Importing the refactored table
+import DynamicTable from '../../../../../UI-components/DynamicTable'; // Importing the refactored table
 import { Edit2, Eye, Trash2 } from 'lucide-react';
 
  // Define the breadcrumb data

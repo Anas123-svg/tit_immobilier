@@ -36,6 +36,7 @@ import MapComponent from "@/components/admin-panel/sidebar/extra/extra/Geolocati
 
 import ProfilePicUploader from "@/components/common/profilePicUploader";
 import { Separator } from "@/components/ui/separator";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Zod Schema for validation
 const FormSchema = z.object({
@@ -146,10 +147,9 @@ export function OfferSalesForm() {
     },
   });
 
-  // Handle form submission
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-  };
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/offer ';
+          const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+        
   const [activeStep, setActiveStep] = useState(0);
 
   const handleStepChange = (step: number) => {

@@ -1,7 +1,7 @@
 
 
 import React, { useState } from 'react';
-import DynamicTable from '../../UI/DynamicTable'; // Ensure DynamicTable is imported correctly
+import DynamicTable from '../../../../../UI-components/DynamicTable'; // Ensure DynamicTable is imported correctly
 import { Eye, Pen, Trash2 } from 'lucide-react';
 
 // Initial data with more relevant country details

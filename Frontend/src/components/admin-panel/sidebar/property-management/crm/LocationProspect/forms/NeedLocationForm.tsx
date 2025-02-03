@@ -14,9 +14,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 // Zod Schema for validation
 const FormSchema = z.object({
-  prospect_id: z.string().nonempty("Prospect ID is required"),
+  prospect_ids: z.string(),
+  prospect_id: z.number().min(0,"invalid"),
   email: z.string().email("Invalid email format"),
   phone: z.string().min(10, "Phone number must be at least 10 characters"),
   is_prospect_location: z.boolean().default(true), // Default value set for boolean
@@ -27,18 +29,17 @@ export function NeedLocationForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prospect_id: "prospect_1", // Set default value for prospect_id
+      prospect_id: 1, // Set default value for prospect_id
       email: "johndoe@example.com",
       phone: "+1234567890",
       is_prospect_location: true,
     },
   });
 
-  // Handle form submission
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-  };
-
+   const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/pre-booking ';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
+    
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -60,7 +61,7 @@ export function NeedLocationForm() {
                     {/* Prospect Field */}
                     <FormField
                     control={form.control}
-                name="prospect_id"
+                name="prospect_ids"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Prospect *</FormLabel>

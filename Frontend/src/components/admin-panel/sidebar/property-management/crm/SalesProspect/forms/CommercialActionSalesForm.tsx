@@ -10,13 +10,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import FileUploader from "@/components/common/uploader";
 import { Save } from "lucide-react";
 import { Editor } from "@tinymce/tinymce-react";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 const FormSchema = z.object({
   // Type of Commercial Action: Required string field
@@ -48,11 +49,10 @@ export function CommercialActionSalesForm() {
     }
   });
   
-  // Handle form submission
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-  };
-
+const apiUrl = import.meta.env.VITE_API_URL + '/api/sales-prospect/commercial-plan ';
+          const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+        
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -79,7 +79,7 @@ export function CommercialActionSalesForm() {
                         <FormItem className=" col-span-2">
                           <FormLabel>Type of Commercial Action *</FormLabel>
                           <FormControl>
-                          <Select {...field}>
+                          <Select onValueChange={field.onChange}>
       <SelectTrigger>
         <SelectValue placeholder="Select Type of Commercial Action" />
       </SelectTrigger>
