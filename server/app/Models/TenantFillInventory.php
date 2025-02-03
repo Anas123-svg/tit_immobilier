@@ -17,6 +17,8 @@ class TenantFillInventory extends Model
         'date_of_establishment',
         'state_type',
         'observation',
+        'inventory_of_elements',
+        'documents'
     ];
 
     public function tenant()
@@ -28,4 +30,8 @@ class TenantFillInventory extends Model
     {
         return $this->belongsTo(TenantContract::class, 'contract_id');
     }
+    protected $casts = [
+        'inventory_of_elements' => 'array',
+        'documents' => 'array'
+    ];
 }

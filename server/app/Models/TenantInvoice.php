@@ -14,6 +14,7 @@ class TenantInvoice extends Model
         'Label',
         'Echeance',
         'details',
+        'status'
     ];
 
     public function tenant()

@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessOwner;
 use App\Models\PrivateOwner;
+use App\Models\TenantBill;
 use App\Models\TenantContract;
+use App\Models\TenantInvoice;
+use App\Models\TenantPayment;
 use Illuminate\Http\Request;
 use App\Models\Tenant;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 
 class TenantController extends Controller
@@ -98,34 +103,13 @@ class TenantController extends Controller
     }
 
 
-    public function OwnerDashboard()
+    public function TenantDashboard()
     {
         try {
             Log::info('Fetching property counts for Owner Dashboard.');
 
-            $occupiedCount = OwnerSaleProperty::whereNotNull('owner_id')
-                ->where('status', 'occupied')
-                ->count()
-                + OwnerRentProperty::whereNotNull('owner_id')
-                ->where('status', 'occupied')
-                ->count();
-
-            $reservedCount = OwnerSaleProperty::whereNotNull('owner_id')
-                ->where('status', 'reserved')
-                ->count()
-                + OwnerRentProperty::whereNotNull('owner_id')
-                ->where('status', 'reserved')
-                ->count();
-
-            $availableCount = OwnerSaleProperty::whereNull('owner_id')
-                ->where('status', 'available')
-                ->count()
-                + OwnerRentProperty::whereNull('owner_id')
-                ->where('status', 'available')
-                ->count();
                 
-            $totalCount = OwnerSaleProperty::count() + OwnerRentProperty::count();
-            Log::info('Total properties counted: ' . $totalCount);
+           // $totalCount = OwnerSaleProperty::count() + OwnerRentProperty::count();
 
             // Fetch last 10 active owners
             $lasttenants = Tenant::where('status', 'active')
@@ -148,31 +132,43 @@ class TenantController extends Controller
                 });
             });
             Log::info('Fetching last 10 validated mandates.');
-            $lastContract = TenantContract::where('status', 'to_be_renewed')
+            $lastContractToBeRenewed = TenantContract::where('status', 'to_be_renewed')
                 ->orderBy('created_at', 'desc')
                 ->take(10)
                 ->get();
-
+            $lastContractToBeRenewed = TenantContract::where('status', 'Renewal')
+                ->orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
+            $tenantsBills = TenantBill::orderBy('created_at', 'desc')->get();
+            $tenantsPayments = TenantPayment::orderBy('created_at', 'desc')->get();
+            $tenantInvioce = TenantInvoice::orderBy('created_at', 'desc')->get();
             $totalTenants = Tenant::count();
             $totalContracts = TenantContract::count();
-            $totalReversals = OwnerReversalSaleProperty::count() + OwnerReversalRentalProperty::count();
-            $totalLocative = OwnerRentProperty::count() + OwnerARentalProperty::count();
-            $totalVente = OwnerSaleProperty::count();
-
+            $totalBills = TenantBill::count();
+            $totalInvoice = TenantInvoice::count();
+            $pendingInvoice = TenantInvoice::whereIn('status', ['waiting', 'pending', 'unpaid', 'in-progress'])->count();
+            $totalPayment= TenantPayment::count();
             Log::info('Owner Dashboard data fetched successfully.');
 
             return response()->json([
                 'total_tenants' => $totalTenants,
                 'total_contracts' => $totalContracts,
-                'total_reversals' => $totalReversals,
-                'total_locative' => $totalLocative,
-                'vente' => $totalVente,
-                'occupied' => $occupiedCount,
-                'reserved' => $reservedCount,
-                'available' => $availableCount,
+                'total_bills' => $totalBills,
+                'total_payments' => $totalPayment,
+                'total_invoice' => $totalInvoice,
+                'pending_invoice' => $pendingInvoice,
                 'last_tenants' => $lasttenants,
                 'last_unpaid_tenants' => $lastUnpaidtenants,
-                'last_to_be_renewed_contracts' => $lastContract,
+                'last_to_be_renewed_contracts' => $lastContractToBeRenewed,
+                'tenants_bills' => $tenantsBills,
+                'tenants_payments' => $tenantsPayments,
+                'tenant_invoice' => $tenantInvioce,
+                'pie_chart_data' => [
+                    $totalInvoice,
+                    $pendingInvoice,
+                    $totalPayment,
+                ]
             ]);
         } catch (Exception $e) {
             Log::error('Error in OwnerDashboard: ' . $e->getMessage());

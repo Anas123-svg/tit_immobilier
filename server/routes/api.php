@@ -175,7 +175,7 @@ Route::post('/tenants', [TenantController::class, 'store']);
 Route::put('/tenants/{id}', [TenantController ::class, 'update']);
 Route::get('/tenants/{id}', [TenantController::class, 'show']);
 Route::delete('/tenants/{id}', [TenantController::class, 'destroy']);
-
+Route::get('/dashboard/tenants', [TenantController::class, 'TenantDashboard']);
 
 //tenant contract routes
 Route::prefix('tenant-contract')->group(function() {
