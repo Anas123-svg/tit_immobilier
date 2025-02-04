@@ -46,7 +46,7 @@ const AdminPanel: React.FC = () => {
         <div className="flex-grow p-4 bg-gray-100 overflow-auto min-h-screen">
           <Routes>
             {/* Nested Settings Routes */}
-            <Route path="/tier/tanents/detail-page/:id" element={<TenantDetailPage/>} />
+            <Route path="/tier/tenants/detail-page/:id" element={<TenantDetailPage/>} />
             <Route path="/tier/owners/detail-page/:id" element={<OwnerDetailPage/>} />
             <Route path="/tier/clients/detail-page/:id" element={<ClientDetailPage/>} />
 

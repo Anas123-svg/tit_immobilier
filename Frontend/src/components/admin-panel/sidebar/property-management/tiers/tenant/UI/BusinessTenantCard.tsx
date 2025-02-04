@@ -77,7 +77,7 @@ const BusinessTenantCard: React.FC<BusinessTenantCardProps> = ({ tenant }) => {
       {/* Action Buttons */}
       <div className="flex justify-end space-x-4 mt-4">
         <button className="p-2 bg-gray-100 rounded-full shadow hover:bg-gray-200">
-                       <Link to={"/tier/tenants/detail-page"}>  <Eye size={25} className="text-gray-700" /></Link>
+                         <Link to={`/tier/tenants/detail-page/${tenant.id}`}>  <Eye size={25} className="text-gray-700" /></Link>
                        </button>
                        <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
                          <Edit size={25} className="text-blue-700" />
