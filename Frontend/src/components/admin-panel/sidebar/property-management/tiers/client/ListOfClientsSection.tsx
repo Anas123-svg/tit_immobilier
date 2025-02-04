@@ -79,7 +79,7 @@ const ListOfClientsSection: React.FC<ListOfClientsSectionProps> = () => {
           <p className="text-gray-500">No clients found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {clients?.map((client) => (
             <div key={client.id} className="relative p-6 bg-white border rounded-lg shadow-md">
               {/* Client Type and Status */}

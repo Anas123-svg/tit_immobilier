@@ -7,11 +7,12 @@ import { z } from "zod";
 import { Select, SelectItem, SelectTrigger, SelectValue,SelectContent} from "@/components/ui/select";
 import { SettingsHeader } from "@/components/admin-panel/sidebar/profile/Settings/settings/UI/SettingsHeader";
 import { Settings } from "lucide-react";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Define your validation schema using Zod
 const FormSchema = z.object({
   chef_commercial: z.string().nonempty("Chef commercial is required"),
-
+  user_id: z.number().min(0,"Non Negative")
 });
 
 const GeneralConfigurationForm = () => {
@@ -19,16 +20,15 @@ const GeneralConfigurationForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       chef_commercial: "John Doe",
-  
+      user_id:1
     },
   });
 
   const { handleSubmit, control, formState: { errors } } = methods;
 
-  const onSubmit = (data: any) => {
-    console.log(data); // handle the data submission
-  };
-
+ const apiUrl = import.meta.env.VITE_API_URL + '/api/crm-management/general-configuration';
+        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+      
   return (<div className="space-y-10">   <SettingsHeader
     icon={Settings}
     title="General Configuration"

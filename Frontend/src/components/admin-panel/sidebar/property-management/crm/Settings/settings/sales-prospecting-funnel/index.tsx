@@ -14,7 +14,7 @@ const FunnelFormSchema = z.object({
   stages: z.array(
     z.object({
     
-      number:z.number(),
+      number:z.number().optional(),
       stage: z.string().nonempty("Stage is required"),
       duration_of_treatment: z.number().min(1, "Duration must be at least 1 day"),
       commercial_actions: z.array(z.string()).min(1, "At least one action is required")

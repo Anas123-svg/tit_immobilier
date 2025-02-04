@@ -14,11 +14,11 @@ import { useForm, Controller, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FormField, FormControl, FormItem, FormMessage, FormLabel } from "@/components/ui/form"; // Assuming these components are from ShadCN
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Zod schema for validation
 const schema = z.object({
   label: z.string().min(1, "Label is required"), // Validation for the label
-  chef_commercial: z.string().min(1, "Chef Commercial is required"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -30,9 +30,9 @@ export function AddStepForm() {
 
   const { control, handleSubmit, formState: { errors } } = methods;
 
-  const onSubmit = (data: FormData) => {
-    console.log(data); // Handle form submission (e.g., API call or state update)
-  };
+ const apiUrl = import.meta.env.VITE_API_URL + '/api/crm-management/prospecting-stage'
+        const onSubmit = useFormSubmit<typeof schema>(apiUrl);  // Use custom hook
+      
 
   return (
     <Dialog>
