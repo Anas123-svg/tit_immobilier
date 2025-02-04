@@ -28,52 +28,67 @@ import {
 import { useParams } from "react-router-dom";
 import useFetchData from "@/hooks/useFetchData";
 
-interface TenantDetailPageProps {
-  referenceNo?: string;
-  fullName?: string;
-  type?: string;
-  email?: string;
-  phone?: string;
-  residence?: string;
-  postalCode?: string;
-  profession?: string;
-  birthDate?: string;
-  sharedAffinity?: string;
-  documentType?: string;
-  gender?: string;
-  maritalStatus?: string;
-  children?: number;
-  emergencyContactPerson?: string;
-  emergencyContactNumber?: string;
-  fileNotes?: string;
+interface Tenant {
+  id: number;
+  business_company_name: string;
+  business_taxpayer_account_number: string;
+  business_business_registration_number: string;
+  business_industry_sector: string;
+  business_office_phone_number: string;
+  business_whatsapp_contact: string;
+  business_email: string;
+  business_head_office: string;
+  business_mail_box: string;
+  business_capital: number;
+  business_manager_name: string;
+  business_manager_gender: string;
+  business_manager_contact: string;
+  business_manager_job_position: string;
+  business_manager_address: string;
+  business_manager_type_of_document: string;
+  business_manager_document_number: string;
+  business_manager_date_of_issue: string;
+  business_manager_expiry_date: string;
+  business_photo: string | null;
+  business_documents: string[];
+  private_name: string;
+  private_gender: string;
+  private_birth_date: string;
+  private_place_of_birth:string,
+  private_address: string;
+  private_nationality: string;
+  private_document_type: string;
+  private_document_number: string;
+  private_date_of_issue: string;
+  private_signatory_authority: string;
+  private_expiry_date: string;
+  private_taxpayer_account_number: string;
+  private_occupation: string;
+  private_contact: string;
+  private_whatsapp_contact: string;
+  private_email: string;
+  private_mail_box: string;
+  private_marital_status: string;
+  private_number_of_children: number;
+  private_emergency_contact_name: string;
+  private_emergency_contact: string;
+  private_emergency_contact_relation: string;
+  private_photo: string | null;
+  private_documents: string[];
+  is_business_tenant: boolean;
+  status: string;
+  payment_status: string;
 }
-
-const TenantDetailPage = ({
-  referenceNo = "ZA-6972-6414-01",
-  fullName = "Mr. Assemian N'Guessan Adolphe",
-  type = "INDIVIDUAL",
-  email = "someone@example.com",
-  phone = "0707787973",
-  residence = "1234 Residence St, City",
-  postalCode = "AB12345",
-  profession = "Engineer",
-  birthDate = "1985-06-15",
-  sharedAffinity = "Parents",
-  documentType = "CNI",
-  gender = "Male",
-  maritalStatus = "Single",
-  children = 0,
-  emergencyContactPerson = "John Doe",
-  emergencyContactNumber = "0701234567",
-  fileNotes = "Accepted formats and sizes: JPEG, JPG, PNG, PDF, DOCS, DOCX, etc.",
-}: TenantDetailPageProps) => {
+const TenantDetailPage = () => {
   const [activeTab, setActiveTab] = useState("personal");
   const [file, setFile] = useState<File | null>(null);
   const { id } = useParams();
 
 
-  const tenant =  useFetchData
 
+  const { data: tenant, loading, error } = useFetchData<Tenant>(
+    `${import.meta.env.VITE_API_URL}/api/tenants/${id}`
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -82,33 +97,13 @@ const TenantDetailPage = ({
       // You can also process the file here (e.g., upload it)
     }
   };
-  const personalDetailsProps = {
-    referenceNo,
-    fullName,
-    type,
-    email,
-    phone,
-    residence,
-    postalCode,
-    profession,
-    birthDate,
-    sharedAffinity,
-    documentType,
-    gender,
-    maritalStatus,
-    children,
-    emergencyContactPerson,
-    emergencyContactNumber,
-    fileNotes: "Accepted formats and sizes: JPEG, JPG, PNG, PDF, DOCS, DOCX, etc.",
-    onFileChange: handleFileChange,
-  };
 
   const tabs = [
     { 
       name: 'personal', 
       label: 'Personal Details', 
       icon: <User className="inline mr-2" />, 
-      component: <PersonalDetails {...personalDetailsProps} />
+      component: <PersonalDetails tenant={tenant??undefined} onFileChange={handleFileChange} />
     },
     { 
       name: 'documents', 
@@ -163,14 +158,14 @@ const TenantDetailPage = ({
         <div className="flex flex-col z-50 text-center items-center gap-6 p-4 rounded-t-md">
           <div className="relative p-2">
             <img
-              src="https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg"
+              src={(tenant?.is_business_tenant? tenant.business_photo:tenant?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
               alt="User Profile"
               className="w-24 h-24 rounded-full border-4"
             />
             <BadgeCheckIcon className="text-blue-500 absolute bottom-0 right-0" />
           </div>
           <div className="space-y-2 text-black">
-            <h2 className="text-lg">KONAN MINI REBECCA</h2>
+            <h2 className="text-lg"> {tenant?.is_business_tenant ? tenant?.business_company_name : tenant?.private_name}</h2>
             <p className="text-sm">PARTICULAR</p>
           </div>
         </div>
@@ -179,19 +174,19 @@ const TenantDetailPage = ({
           <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-2 gap-4   self-center h-2/3 p-0 sm:pt-16 bg-white rounded-b-md">
             <div className="flex items-center gap-2  ">
               <MapIcon size={20} />
-              <p className="text-sm">COCODY FAYA</p>
+              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_mail_box : tenant?.private_mail_box}</p>
             </div>
             <div className="flex items-center gap-2">
               <Phone size={20} />
-              <p className="text-sm">0710004867</p>
+              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_office_phone_number : tenant?.private_whatsapp_contact}</p>
             </div>
             <div className="flex items-center gap-2">
               <Mail size={20} />
-              <p className="text-sm">coconar@faya.com</p>
+              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_email : tenant?.private_email}</p>
             </div>
             <div className="flex items-center gap-2">
               <Briefcase size={20} />
-              <p className="text-sm">coconar@faya.com</p>
+              <p className="text-sm">{tenant?.business_email }</p>
             </div>
           </div>
 

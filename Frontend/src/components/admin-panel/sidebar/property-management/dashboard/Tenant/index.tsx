@@ -206,7 +206,7 @@ const TenantDashboard: React.FC = () => {
     if (tenant.is_business_tenant) {
       return {
         name: (
-          <Link to={`/tier/tanents/detail-page/${tenant.id}`}>  <div className="gap-5 flex items-center">
+          <Link to={`/tier/tenants/detail-page/${tenant.id}`}>  <div className="gap-5 flex items-center">
             <div className="">
               <User size={15} /> {tenant.business_company_name}
             </div>
@@ -220,7 +220,7 @@ const TenantDashboard: React.FC = () => {
     } else {
       return {
         name: (
-          <Link to={`/tier/tanents/detail-page/${tenant.id}`}>   <div className="gap-5 flex items-center">
+          <Link to={`/tier/tenants/detail-page/${tenant.id}`}>   <div className="gap-5 flex items-center">
             <div className="">
               <User size={15} /> {tenant.private_name}
             </div>
