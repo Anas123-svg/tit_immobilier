@@ -144,6 +144,8 @@ class TenantController extends Controller
             $tenantsPayments = TenantPayment::orderBy('created_at', 'desc')->get();
             $tenantInvioce = TenantInvoice::orderBy('created_at', 'desc')->get();
             $totalTenants = Tenant::count();
+            $activeContracts = TenantContract::where('status', 'active')->count();
+            $terminatedContracts = TenantContract::where('status', 'terminated')->count();
             $totalContracts = TenantContract::count();
             $totalBills = TenantBill::count();
             $totalInvoice = TenantInvoice::count();
@@ -158,6 +160,8 @@ class TenantController extends Controller
             return response()->json([
                 'total_tenants' => $totalTenants,
                 'total_contracts' => $totalContracts,
+                'active_contracts' => $activeContracts,
+                'terminated_contracts' => $terminatedContracts,
                 'total_bills' => $totalBills,
                 'total_payments' => $totalPayment,
                 'total_invoice' => $totalInvoice,
