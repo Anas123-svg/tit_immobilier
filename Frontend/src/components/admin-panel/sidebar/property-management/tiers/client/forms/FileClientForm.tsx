@@ -173,7 +173,7 @@ const FileClientForm = () => {
                   <FormItem>
                     <FormLabel>Opening Reason</FormLabel>
                     <FormControl>
-                      <Select {...field}>
+                      <Select onValueChange={field.onChange}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select Opening Reason" />
                         </SelectTrigger>
@@ -195,7 +195,7 @@ const FileClientForm = () => {
                   <FormItem>
                     <FormLabel>Modality</FormLabel>
                     <FormControl>
-                      <Select {...field}>
+                      <Select onValueChange={field.onChange}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select Modality" />
                         </SelectTrigger>
@@ -234,7 +234,7 @@ const FileClientForm = () => {
                   <FormItem>
                     <FormLabel>Digital Signature of File</FormLabel>
                     <FormControl>
-                      <Select {...field}>
+                      <Select onValueChange={field.onChange}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select" />
                         </SelectTrigger>
