@@ -174,7 +174,7 @@ const TenantDetailPage = () => {
           <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-2 gap-4   self-center h-2/3 p-0 sm:pt-16 bg-white rounded-b-md">
             <div className="flex items-center gap-2  ">
               <MapIcon size={20} />
-              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_mail_box : tenant?.private_mail_box}</p>
+              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_manager_address : tenant?.private_address}</p>
             </div>
             <div className="flex items-center gap-2">
               <Phone size={20} />

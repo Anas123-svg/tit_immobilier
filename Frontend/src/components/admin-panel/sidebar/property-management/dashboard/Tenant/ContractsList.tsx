@@ -1,3 +1,4 @@
+import EmptyState from "@/components/admin-panel/UI-components/EmptyState";
 import React, { useState } from "react";
 
 interface DynamicTableProps {
@@ -28,9 +29,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ title, data, itemsPerPage, 
 
   const headers = data.length > 0 ? Object.keys(data[0]) : [];
 
-  return (
-    <div className="p-4 bg-white rounded-md shadow overflow-auto">
-     <div className="w-fit"> <h3 className="text-lg font-bold mb-4">{title}</h3>
+  return (<div className="p-4 bg-white rounded-md shadow">
+         <h3 className="text-lg font-bold mb-4">{title}</h3>
+    { data.length > 0 ?   <div className="py-4 overflow-auto">
+
+     <div className="w-fit">
       <table className=" " style={{ borderSpacing: "0 10px" }}>
         <thead>
           <tr className={` ${headerColor} text-white ` }>
@@ -74,8 +77,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ title, data, itemsPerPage, 
           Next
         </button>
       </div>
+      
       </div>
-    </div>
+       </div>
+       :  
+<EmptyState message={title} />} 
+       </div>
   );
 };
 

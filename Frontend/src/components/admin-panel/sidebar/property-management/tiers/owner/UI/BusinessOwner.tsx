@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 // Define the interface for Business Owner
 interface BusinessOwner {
+    id:number
   business_company_name: string;
   business_taxpayer_identification_number: string;
   business_business_registration_number: string;
@@ -60,7 +61,7 @@ const BusinessOwnerCard: React.FC<{ owner: BusinessOwner }> = ({ owner }) => {
 
       <div className="flex justify-end space-x-4 mt-4">
       <button className="p-2 bg-gray-100 rounded-full shadow hover:bg-gray-200">
-                <Link to={"/tier/owners/detail-page"}>  <Eye size={25} className="text-gray-700" /></Link>
+                <Link to={`/tier/owners/detail-page/${owner.id}`}>  <Eye size={25} className="text-gray-700" /></Link>
                 </button>
                 <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
                   <Edit size={25} className="text-blue-700" />

@@ -7,6 +7,7 @@ import PrivateOwnerCard from "./UI/PrivateOwner";
 
 // Define the Owner Interface matching the backend model
 interface Owner {
+  id:number
   // Private Owner Fields
   private_pronouns: string;
   private_name: string;
