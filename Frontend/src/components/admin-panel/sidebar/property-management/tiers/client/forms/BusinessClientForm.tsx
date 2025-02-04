@@ -29,8 +29,13 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { Client } from "@/types/DataProps";
+import { useForceUpdate } from "framer-motion";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { Edit } from "lucide-react";
 
 const FormSchema = z.object({
+  id:z.number().min(0,"Must be positive"),
   business_company_name: z.string().nonempty({ message: "Company Name is required" }),
   business_taxpayer_identification_number: z.string().nonempty({ message: "Taxpayer Identification Number is required" }),
   business_business_registration_number: z.string().nonempty({ message: "Business Registration Number is required" }),
@@ -39,7 +44,7 @@ const FormSchema = z.object({
   business_whatsapp_contact: z.string().nonempty({ message: "Whatsapp Contact is required" }),
   business_email: z.string().email({ message: "Invalid email address" }).nonempty({ message: "Email is required" }),
   business_head_office: z.string().nonempty({ message: "Head Office is required" }),
-  business_po_box: z.string().nonempty({ message: "PO Box is required" }),
+  business_mail_box: z.string().nonempty({ message: "PO Box is required" }),
   business_capital: z.number().min(1, { message: "Capital is required" }),
   business_manager_pronouns_title: z.string().nonempty({ message: "Pronouns is required" }),
   business_manager_name: z.string().nonempty({ message: "Manager Name is required" }),
@@ -52,14 +57,16 @@ const FormSchema = z.object({
   business_manager_type_of_document: z.string().nonempty({ message: "Manager Document Type is required" }),
   business_manager_document_number: z.string().nonempty({ message: "Manager Document Number is required" }),
   business_manager_date_of_issue: z.string().nonempty({ message: "Manager Document Issue Date is required" }),
-  business_manager_authorizing_authority: z.string().nonempty({ message: "Manager Authorizing Authority is required" }),
+  business_manager_signatory_authority: z.string().nonempty({ message: "Manager Authorizing Authority is required" }),
   business_manager_expiry_date: z.string().nonempty({ message: "Manager Document Expiry Date is required" }),
   business_photo: z.string().optional(),
   business_documents: z.array(z.string()).optional(),
   is_business_client: z.boolean(),
 });
-
-const BusinessClientForm = () => {
+interface BusinessClientFormProps{
+  client?: Client
+}
+const BusinessClientForm:React.FC< BusinessClientFormProps> = ({client}) => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
@@ -69,41 +76,45 @@ const BusinessClientForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      business_company_name: "Doe Industries",
-      business_taxpayer_identification_number: "TIN123456789",
-      business_business_registration_number: "BRN987654321",
-      business_industry_sector: "Manufacturing",
-      business_office_phone_number: "+1234567890",
-      business_whatsapp_contact: "+1987654321",
-      business_email: "info@doeindustries.com",
-      business_head_office: "101 Industrial Way, Techville",
-      business_po_box: "PO Box 1010",
-      business_capital: 500000,
-      business_manager_pronouns_title: "Ms.",
-      business_manager_name: "Jane Doe",
-      business_manager_gender: "Female",
-      business_manager_contact: "+1234567890",
-      business_manager_date_of_birth: "1975-08-25",
-      business_manager_place_of_birth: "Techtown",
-      business_manager_address: "200 Executive Drive, Techville",
-      business_manager_job_position: "Chief Operating Officer",
-      business_manager_type_of_document: "Driver's License",
-      business_manager_document_number: "D123456789012",
-      business_manager_date_of_issue: "2015-03-01",
-      business_manager_authorizing_authority: "DMV Techville",
-      business_manager_expiry_date: "2025-03-01",
-      business_photo: "",
-      business_documents: [],
-      is_business_client: true,
+      id:client?.id,
+      business_company_name: client?.business_company_name,
+      business_taxpayer_identification_number: client?.business_taxpayer_identification_number,
+      business_business_registration_number: client?.business_business_registration_number,
+      business_industry_sector: client?.business_industry_sector,
+      business_office_phone_number: client?.business_office_phone_number,
+      business_whatsapp_contact: client?.business_whatsapp_contact,
+      business_email: client?.business_email,
+      business_head_office: client?.business_head_office,
+      business_mail_box: client?.business_mail_box,
+      business_capital: client?.business_capital,
+      business_manager_pronouns_title:client?.business_manager_pronouns_title,
+      business_manager_name: client?.business_manager_name,
+      business_manager_gender: client?.business_manager_gender,
+      business_manager_contact: client?.business_manager_contact,
+      business_manager_date_of_birth: client?.business_manager_date_of_birth,
+      business_manager_place_of_birth: client?.business_manager_place_of_birth,
+      business_manager_address: client?.business_manager_address,
+      business_manager_job_position: client?.business_manager_job_position,
+      business_manager_type_of_document: client?.business_manager_type_of_document,
+      business_manager_document_number:client?.business_manager_document_number,
+      business_manager_date_of_issue: client?.business_manager_date_of_issue,
+      business_manager_signatory_authority: client?.business_manager_signatory_authority,
+      business_manager_expiry_date: client?.business_manager_expiry_date,
+      business_photo:client?.business_photo ?? "",
+      business_documents: client?.business_documents,
+      is_business_client: client?.is_business_client,
     },
   });
-       const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
-        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-      
-    
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
+  const onSubmit = client
+    ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+    : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+
   return (
     <Dialog open={open} onOpenChange={openChange}>
-      <DialogTrigger>Business Client</DialogTrigger>
+    <DialogTrigger>{ client?    <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
+      <Edit size={25} className="text-blue-700" /></button>:`Business Client`}</DialogTrigger>
+
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
           Add a business Client
@@ -226,7 +237,7 @@ const BusinessClientForm = () => {
               />
               <FormField
                 control={form.control}
-                name="business_po_box"
+                name="business_mail_box"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>PO Box</FormLabel>
@@ -444,7 +455,7 @@ const BusinessClientForm = () => {
               />
               <FormField
                 control={form.control}
-                name="business_manager_authorizing_authority"
+                name="business_manager_signatory_authority"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Authorizing Authority</FormLabel>

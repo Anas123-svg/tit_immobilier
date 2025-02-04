@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -29,8 +30,12 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { Owner } from "@/types/DataProps";
+import { Edit } from "lucide-react";
 
 const FormSchema = z.object({
+  id:z.number(),
   business_company_name: z.string().nonempty({ message: "Company Name is required" }),
   business_taxpayer_identification_number: z.string().nonempty({ message: "Taxpayer Identification Number is required" }),
   business_business_registration_number: z.string().nonempty({ message: "Business Registration Number is required" }),
@@ -59,7 +64,10 @@ const FormSchema = z.object({
   is_business_owner: z.boolean(),
 });
 
-const BusinessOwnerForm = () => {
+interface BusinessOwnerFormProps{
+  owner?: Owner
+}
+const BusinessOwnerForm: React.FC<BusinessOwnerFormProps> = ({owner}) => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
@@ -69,45 +77,56 @@ const BusinessOwnerForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      business_company_name: "Doe Industries",
-      business_taxpayer_identification_number: "TIN123456789",
-      business_business_registration_number: "BRN987654321",
-      business_industry_sector: "Manufacturing",
-      business_office_phone_number: "+1234567890",
-      business_whatsapp_contact: "+1987654321",
-      business_email: "info@doeindustries.com",
-      business_head_office: "101 Industrial Way, Techville",
-      business_po_box: "PO Box 1010",
-      business_capital: 500000,
-      business_manager_pronouns_title: "Ms.",
-      business_manager_name: "Jane Doe",
-      business_manager_gender: "Female",
-      business_manager_contact: "+1234567890",
-      business_manager_date_of_birth: "1975-08-25",
-      business_manager_place_of_birth: "Techtown",
-      business_manager_address: "200 Executive Drive, Techville",
-      business_manager_job_position: "Chief Operating Officer",
-      business_manager_type_of_document: "Driver's License",
-      business_manager_document_number: "D123456789012",
-      business_manager_date_of_issue: "2015-03-01",
-      business_manager_authorizing_authority: "DMV Techville",
-      business_manager_expiry_date: "2025-03-01",
-      business_photo: "",
-      business_documents: [],
-      is_business_owner: true,
+  
+      business_company_name: owner?.business_company_name,
+      business_taxpayer_identification_number: owner?.business_taxpayer_identification_number,
+      business_business_registration_number: owner?.business_business_registration_number,
+      business_industry_sector: owner?.business_industry_sector,
+      business_office_phone_number: owner?.business_office_phone_number,
+      business_whatsapp_contact: owner?.business_whatsapp_contact,
+      business_email: owner?.business_email,
+      business_head_office: owner?.business_head_office,
+      business_po_box: owner?.business_po_box,
+      business_capital: owner?.business_capital,
+      business_manager_pronouns_title: owner?.business_manager_pronouns_title,
+      business_manager_name: owner?.business_manager_name,
+      business_manager_gender: owner?.business_manager_gender,
+      business_manager_contact: owner?.business_manager_contact,
+      business_manager_date_of_birth: owner?.business_manager_date_of_birth,
+      business_manager_place_of_birth: owner?.business_manager_place_of_birth,
+      business_manager_address: owner?.business_manager_address,
+      business_manager_job_position: owner?.business_manager_job_position,
+      business_manager_type_of_document: owner?.business_manager_type_of_document,
+      business_manager_document_number: owner?.business_manager_document_number,
+      business_manager_date_of_issue: owner?.business_manager_date_of_issue,
+      business_manager_authorizing_authority: owner?.business_manager_authorizing_authority,
+      business_manager_expiry_date: owner?.business_manager_expiry_date,
+      business_photo:owner?.business_photo|| "",
+      business_documents: owner?.business_documents||[],
+      is_business_owner: owner?.is_business_owner,
+      id:owner?.id,
+ 
     },
   });
        const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
-        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-      
-    
+     const onSubmit = owner
+       ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+       : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+   
   return (
     <Dialog open={open} onOpenChange={openChange}>
-      <DialogTrigger>Business Owner</DialogTrigger>
+           <DialogTrigger>{ owner?    <div className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
+      <Edit size={25} className="text-blue-700" /></div>:`Business Owner`}
+      </DialogTrigger>
+
+    
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
           Add a business owner
         </DialogTitle>
+        <DialogDescription>
+      This dialog allows you to add or edit details for a business owner.
+    </DialogDescription>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
@@ -244,7 +263,7 @@ const BusinessOwnerForm = () => {
                   <FormItem>
                     <FormLabel>Capital</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Capital" />
+                      <Input {...field}    value={field.value ?? ""}  onChange={(e) => field.onChange(Number(e.target.value))} type="number" placeholder="Capital" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -1,35 +1,13 @@
+import { Owner } from "@/types/DataProps";
 import { Edit, Eye, Printer } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import PrivateOwnerForm from "../forms/PrivateOwnerForm";
 
 // Define the interface for Private Owner
-interface PrivateOwner {
-  id:number,
-  private_name: string;
-  private_gender: string;
-  private_birth_date: string;
-  private_address: string;
-  private_nationality: string;
-  private_taxpayer_identification_number: string;
-  private_occupation: string;
-  private_contact: string;
-  private_whatsapp_contact: string;
-  private_email: string;
-  private_po_box: string;
-  private_marital_status: string;
-  private_spouses_name: string;
-  private_number_of_children: number;
-  private_employer_name: string;
-  private_bank_statement_rib: string;
-  private_emergency_contact_name: string;
-  private_emergency_contact: string;
-  private_emergency_contact_relation: string;
-  private_photo: string | null;
-  private_documents: string[];
-  status: string;
-}
 
-const PrivateOwnerCard: React.FC<{ owner: PrivateOwner }> = ({ owner }) => {
+
+const PrivateOwnerCard: React.FC<{ owner: Owner }> = ({ owner }) => {
   return (
     <div className="relative p-6 bg-white border rounded-lg shadow-md">
       <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">Individual</div>
@@ -58,9 +36,8 @@ const PrivateOwnerCard: React.FC<{ owner: PrivateOwner }> = ({ owner }) => {
                 <Link to={`/tier/owners/detail-page/${owner.id}`}>  <Eye size={25} className="text-gray-700" /></Link>
                             
                 </button>
-                <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
-                  <Edit size={25} className="text-blue-700" />
-                </button>
+            
+                <PrivateOwnerForm owner={owner}/>
                 <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
                   <Printer size={25} className="text-yellow-700" />
                 </button>
