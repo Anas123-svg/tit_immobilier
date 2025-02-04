@@ -148,6 +148,10 @@ class TenantController extends Controller
             $totalBills = TenantBill::count();
             $totalInvoice = TenantInvoice::count();
             $pendingInvoice = TenantInvoice::whereIn('status', ['waiting', 'pending', 'unpaid', 'in-progress'])->count();
+            $waitingInvoice = TenantInvoice::where('status', 'waiting')->count();
+            $sales = TenantInvoice::where('status', 'paid')->count();
+            $unpaidInvoice = TenantInvoice::where('status', 'unpaid')->count();
+            $inProgressInvoice = TenantInvoice::where('status', 'in-progress')->count();
             $totalPayment= TenantPayment::count();
             Log::info('Owner Dashboard data fetched successfully.');
 
@@ -164,6 +168,10 @@ class TenantController extends Controller
                 'tenants_bills' => $tenantsBills,
                 'tenants_payments' => $tenantsPayments,
                 'tenant_invoice' => $tenantInvioce,
+                'waiting_invoice' => $waitingInvoice,
+                'sales' => $sales,
+                'unpaid_invoice' => $unpaidInvoice,
+                'in_progress_invoice' => $inProgressInvoice,
                 'pie_chart_data' => [
                     $totalInvoice,
                     $pendingInvoice,
