@@ -136,9 +136,8 @@ class TenantController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->take(10)
                 ->get();
-            $lastContractToBeRenewed = TenantContract::where('status', 'Renewal')
+            $listActiveContracts = TenantContract::where('status', 'active')
                 ->orderBy('created_at', 'desc')
-                ->take(10)
                 ->get();
             $tenantsBills = TenantBill::orderBy('created_at', 'desc')->get();
             $tenantsPayments = TenantPayment::orderBy('created_at', 'desc')->get();
@@ -172,7 +171,8 @@ class TenantController extends Controller
                 'pending_invoice' => $pendingInvoice,
                 'last_tenants' => $lasttenants,
                 'last_unpaid_tenants' => $lastUnpaidtenants,
-                'last_to_be_renewed_contracts' => $lastContractToBeRenewed,
+                'list_to_be_renewed_contracts' => $lastContractToBeRenewed,
+                'list_active_contracts' => $listActiveContracts,
                 'tenants_bills' => $tenantsBills,
                 'tenants_payments' => $tenantsPayments,
                 'tenant_invoice' => $tenantInvioce,
