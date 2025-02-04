@@ -6,7 +6,7 @@ import { renewals } from "@/data/dummyData";
 import { tenantStats } from "@/data/dummyData";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import { FilterOption } from "@/types/DataProps";
-import { User, FileText, Briefcase, DollarSign } from "lucide-react";
+import { User, FileText, Briefcase, DollarSign, Phone } from "lucide-react";
 
 import StatisticCardsSection2 from "@/components/admin-panel/UI-components/StatisticCardsSection2";
 import ChartSection from "@/components/admin-panel/UI-components/ChartSection";
@@ -14,12 +14,27 @@ import { ChartData, ChartOptions } from "chart.js";
 import StatisticCardsSection4 from "@/components/admin-panel/UI-components/StatisticCardsSection4";
 import CircularDiagram from "@/components/admin-panel/UI-components/CircularDiagram";
 import StatisticCard4 from "@/components/admin-panel/UI-components/StatisticCard4";
-const stats = [
-  { name: "Tenant", value: 12, icon: User, color: "bg-red-500" },
-  { name: "Contract", value: 12, icon: FileText, color: "bg-blue-500" },
-  { name: "Bill", value: 96, icon: Briefcase, color: "bg-green-500" },
-  { name: "Payment", value: 18, icon: DollarSign, color: "bg-yellow-500" },
-];
+import useFetchData from "@/hooks/useFetchData";
+import StatisticCard2 from "@/components/admin-panel/UI-components/StatisticCard2";
+import DynamicTable from "@/components/admin-panel/UI-components/DynamicTable";
+import { Link } from "react-router-dom";
+
+
+interface Stats {
+  total_tenants: number;
+  total_contracts: number;
+  total_bills: number;
+  total_payments: number;
+  total_invoice: number;
+  pending_invoice:  number;
+  last_tenants: any[];
+  last_unpaid_tenants: any[];
+  last_to_be_renewed_contracts:any[];
+  tenants_bills:any[];
+  tenants_payments: any[];
+  tenant_invoice: any[];
+  pie_chart_data: any[];
+}
 
 const TenantDashboard: React.FC = () => {
   const breadcrumbs = [
@@ -68,6 +83,11 @@ const TenantDashboard: React.FC = () => {
   const handleFilterSubmit = () => {
     console.log("Filters submitted");
   };
+
+
+  const { data: stats, loading, error } = useFetchData<Stats>(
+    `${import.meta.env.VITE_API_URL}/api/dashboard/tenants`
+  );
   const data: ChartData<"bar"> = {
     labels: [
       "Jan 1 - Jan 5, 2025",
@@ -151,7 +171,7 @@ const TenantDashboard: React.FC = () => {
     labels: ["Outstanding", "Paid", "Total"],
     datasets: [
       {
-        data: [72, 22, 96],
+        data: stats?.pie_chart_data||[],
         backgroundColor: ["#F87171", "#34D399", "#3B82F6"],
       },
     ],
@@ -167,6 +187,59 @@ const TenantDashboard: React.FC = () => {
       },
     },
   };
+
+  const tenantStats = [
+    { name: "Invoice(s)", value: stats?.total_invoice, currency: "XOF", color: "bg-blue-500" },
+    { name: "Waiting(s)", value:stats?.pending_invoice, currency: "XOF", color: "bg-blue-400" },
+    { name: "Unpaid", value:stats?.total_invoice, currency: "XOF", color: "bg-red-500" },
+    { name: "In progress", value: stats?.total_invoice, currency: "XOF", color: "bg-yellow-500" },
+    { name: "Sales", value: stats?.total_payments, currency: "XOF", color: "bg-green-500" },
+  ];
+  const statisCardData = [
+    { name: "Tenant", value: stats?.total_tenants, icon: User, color: "bg-red-500" },
+    { name: "Contract", value:  stats?.total_contracts, icon: FileText, color: "bg-blue-500" },
+    { name: "Bill", value:  stats?.total_bills, icon: Briefcase, color: "bg-green-500" },
+    { name: "Payment", value:  stats?.total_payments, icon: DollarSign, color: "bg-yellow-500" },
+  ];
+
+  const unpaidTenantsData = stats?.last_unpaid_tenants.map(tenant => {
+    if (tenant.is_business_tenant) {
+      return {
+        name: (
+          <Link to={`/tier/tanents/detail-page/${tenant.id}`}>  <div className="gap-5 flex items-center">
+            <div className="">
+              <User size={15} /> {tenant.business_company_name}
+            </div>
+            <div className="">
+              <Phone size={15} /> {tenant.business_manager_contact}
+            </div>
+          </div> </Link>
+        ),
+        status: `${tenant.payment_status}`,
+      };
+    } else {
+      return {
+        name: (
+          <Link to={`/tier/tanents/detail-page/${tenant.id}`}>   <div className="gap-5 flex items-center">
+            <div className="">
+              <User size={15} /> {tenant.private_name}
+            </div>
+            <div className="">
+              <Phone size={15} /> {tenant.private_whatsapp_contact}
+            </div>
+          </div></Link>
+        ),
+        status: `${tenant.payment_status}`,
+      };
+    }
+  });
+
+  // Define columns for the table
+// Define columns for the table
+const columns = [
+  { label: "NAME", accessor: "name" }, // Tenant name or business name
+  { label: "Status", accessor: "status" }, // Unpaid status of the tenant
+];
   return (
     <div className="p-2 sm:p-6 bg-gray-100 min-h-screen space-y-10">
       {/* Header Section */}
@@ -178,19 +251,32 @@ const TenantDashboard: React.FC = () => {
         onFilterSubmit={handleFilterSubmit}
       />
       {/* Statistics Cards Section */}
-      {/* <StatisticCardsSection2 stats={stats} /> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {statisCardData.map((card,index) => (
+  <StatisticCard2
+    key={index} // Assuming `id` or any unique property is available to act as the key
+    name={card.name}
+    value={card?.value?? 0}
+    color={card.color}
+    icon={card.icon}
+  />
+))}
+
+      
+   
+    </div>
 
       {/* Contracts Lists */}
       <div className="grid lg:grid-cols-2 gap-4 mt-6">
         <ContractsList
-          title="Active Contracts"
-          data={renewals}
+          title="LIST OF LAST 10 ACTIVE CONTRACTS"
+          data={stats?.last_to_be_renewed_contracts||[]}
           headerColor="bg-red-500"
           itemsPerPage={5}
         />
         <ContractsList
-          title="Renewals"
-          data={renewals}
+          title="LIST OF THE NEXT 10 CONTRACTS TO BE RENEWED"
+          data={stats?.last_to_be_renewed_contracts||[]}
           headerColor="bg-yellow-500"
           itemsPerPage={5}
         />
@@ -205,7 +291,7 @@ const TenantDashboard: React.FC = () => {
                 <StatisticCard4
                   key={index}
                   name={tenantStat.name}
-                  value={tenantStat.value}
+                  value={tenantStat.value ?? 0}
                   currency={tenantStat.currency}
                   color={tenantStat.color}
                 />
@@ -214,7 +300,7 @@ const TenantDashboard: React.FC = () => {
               <StatisticCard4
                 key={index}
                 name={tenantStat.name}
-                value={tenantStat.value}
+                value={tenantStat.value??0}
                 currency={tenantStat.currency}
                 color={tenantStat.color}
               />
@@ -234,18 +320,26 @@ const TenantDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mt-6">
-        <ContractsList
-          title="Active Contracts"
-          data={renewals}
-          headerColor="bg-red-500"
-          itemsPerPage={5}
-        />
-        <ContractsList
-          title="Renewals"
-          data={renewals}
-          headerColor="bg-yellow-500"
-          itemsPerPage={5}
-        />
+
+      {/* Dynamic Table Component */}
+      <DynamicTable
+        columns={columns}
+        data={unpaidTenantsData??[]}
+        pageSize={5}
+        title="LIST OF TENANTS WITH AT LEAST ONE UNPAID PAYMENT"
+        addButton={true}
+        addBorder={true}
+       headerColor="green"
+      />
+    <DynamicTable
+        columns={[]}
+        data={[]}
+        pageSize={5}
+        title="LIST OF THE LAST 10 TERMINATED CONTRACTS"
+  
+        addBorder={true}
+       headerColor="blue"
+      />
       </div>
     </div>
   );

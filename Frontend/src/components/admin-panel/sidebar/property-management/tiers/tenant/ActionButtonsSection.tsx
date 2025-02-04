@@ -11,6 +11,8 @@ import PrivateTenantForm from "./forms/PrivateTenantForm";
 import BusinessTenantForm from "./forms/BusinessTenantForm";
 import ContractTenantForm from "./forms/ContractTenantForm";
 import ShortTermContractTenantForm from "./forms/ShortTermContractTenantForm";
+import RentBill from "./forms/RentBill";
+import PenaltyBills from "./forms/PenaltyBills";
 
 
 const TenantActionsSection: React.FC = () => {
@@ -38,7 +40,12 @@ const TenantActionsSection: React.FC = () => {
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
             <ShortTermContractTenantForm />
           </DropdownMenuItem>
-        
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <RentBill />
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <PenaltyBills />
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 

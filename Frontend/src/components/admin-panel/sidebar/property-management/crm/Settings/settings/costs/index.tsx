@@ -139,14 +139,14 @@ export function Costs() {
             {/* Rental pre-reservation fees */}
             {chargeRental && (
               <FormField control={control} name="rental_pre_reservation_fees" render={({ field }) => (
-                <FormItem>
+            <FormItem>
                   <FormLabel>Rental pre-reservation fees</FormLabel>
-                  <FormControl>
+              <FormControl>
                     <Input disabled={!editable}  type="number" placeholder="Enter Rental Fee" />
-                  </FormControl>
+              </FormControl>
                   <FormMessage>{errors.rental_pre_reservation_fees?.message}</FormMessage>
-                </FormItem>
-              )} />
+            </FormItem>
+          )} />
             )}
 
 </div>       {/* Submit Button */}
