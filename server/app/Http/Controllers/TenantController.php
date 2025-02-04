@@ -95,7 +95,7 @@ class TenantController extends Controller
             return response()->json($filteredtenant, 200);
         } catch (\Exception $e) {
             \Log::error('Error updating tenant: ' . $e->getMessage());
-            return response()->json([
+            return response()->json([///dd
                 'message' => 'Error updating tenant.',
                 'error' => $e->getMessage(),
             ], 500);
