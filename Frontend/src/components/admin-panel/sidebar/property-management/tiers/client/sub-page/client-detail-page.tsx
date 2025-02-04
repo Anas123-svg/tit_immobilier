@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import PersonalDetails from "./tabs/PersonalDetails";
-import Documents from "./tabs/Contract";
-import EmergencyContact from "./tabs/StateofPlay";
+import Documents from "./tabs/Case";
+import EmergencyContact from "./tabs/Mutations";
 import OtherInformation from "./tabs/OtherInformation";
-import StateofPlay from "./tabs/StateofPlay";
+import StateofPlay from "./tabs/Mutations";
 import Bills from "./tabs/Bills";
-import NoticeofExpiry from "./tabs/NoticeofExpiry";
+import NoticeofExpiry from "./tabs/Terminations";
 import Payments from "./tabs/Payments";
 import Tickets from "./tabs/Tickets";
 import {
@@ -25,10 +25,8 @@ import {
   BadgeCheckIcon,
   Briefcase,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
-import useFetchData from "@/hooks/useFetchData";
 
-interface TenantDetailPageProps {
+interface ClientDetailPageProps {
   referenceNo?: string;
   fullName?: string;
   type?: string;
@@ -48,7 +46,7 @@ interface TenantDetailPageProps {
   fileNotes?: string;
 }
 
-const TenantDetailPage = ({
+const ClientDetailPage = ({
   referenceNo = "ZA-6972-6414-01",
   fullName = "Mr. Assemian N'Guessan Adolphe",
   type = "INDIVIDUAL",
@@ -66,14 +64,9 @@ const TenantDetailPage = ({
   emergencyContactPerson = "John Doe",
   emergencyContactNumber = "0701234567",
   fileNotes = "Accepted formats and sizes: JPEG, JPG, PNG, PDF, DOCS, DOCX, etc.",
-}: TenantDetailPageProps) => {
+}: ClientDetailPageProps) => {
   const [activeTab, setActiveTab] = useState("personal");
   const [file, setFile] = useState<File | null>(null);
-  const { id } = useParams();
-
-
-  const tenant =  useFetchData
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -112,13 +105,13 @@ const TenantDetailPage = ({
     },
     { 
       name: 'documents', 
-      label: 'Contract', 
+      label: 'Case', 
       icon: <FileText className="inline mr-2" />, 
       component: <Documents />
     },
     { 
       name: 'emergency', 
-      label: 'State of Play', 
+      label: 'Mutations', 
       icon: <File className="inline mr-2" />, 
       component: <StateofPlay />
     },
@@ -130,7 +123,7 @@ const TenantDetailPage = ({
     },
     { 
       name: 'noticeofexpiry', 
-      label: 'Notice of Expiry', 
+      label: 'Terminations', 
       icon: <Clock className="inline mr-2" />, 
       component: <NoticeofExpiry />
     },
@@ -228,4 +221,4 @@ const TenantDetailPage = ({
   );
 };
 
-export default TenantDetailPage;
+export default ClientDetailPage;

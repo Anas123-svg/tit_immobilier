@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 interface DynamicTableProps {
   title: string;
-  data: Array<Record<string, any>>;
+  data: any[];
   itemsPerPage: number;
   headerColor:string
 }

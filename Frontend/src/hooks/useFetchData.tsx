@@ -11,16 +11,18 @@ const useFetchData = <T,>(url: string) => {
       try {
         setLoading(true);
         const response = await axios.get<T>(url);
+        console.log("API Response:", response.data); // Log the response data to the console
         setData(response.data);
-      } catch (err) {
+      } catch (err: any) {
         setError("Failed to fetch data.");
+        console.error("Error fetching data:", err); // Log any errors
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [url]);
 
   return { data, loading, error };
 };
