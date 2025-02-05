@@ -35,7 +35,7 @@ import { Owner } from "@/types/DataProps";
 import { Edit } from "lucide-react";
 
 const FormSchema = z.object({
-  id:z.number(),
+  id:z.number().optional(),
   business_company_name: z.string().nonempty({ message: "Company Name is required" }),
   business_taxpayer_identification_number: z.string().nonempty({ message: "Taxpayer Identification Number is required" }),
   business_business_registration_number: z.string().nonempty({ message: "Business Registration Number is required" }),
@@ -77,35 +77,64 @@ const BusinessOwnerForm: React.FC<BusinessOwnerFormProps> = ({owner}) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-  
-      business_company_name: owner?.business_company_name,
-      business_taxpayer_identification_number: owner?.business_taxpayer_identification_number,
-      business_business_registration_number: owner?.business_business_registration_number,
-      business_industry_sector: owner?.business_industry_sector,
-      business_office_phone_number: owner?.business_office_phone_number,
-      business_whatsapp_contact: owner?.business_whatsapp_contact,
-      business_email: owner?.business_email,
-      business_head_office: owner?.business_head_office,
-      business_po_box: owner?.business_po_box,
-      business_capital: owner?.business_capital,
-      business_manager_pronouns_title: owner?.business_manager_pronouns_title,
-      business_manager_name: owner?.business_manager_name,
-      business_manager_gender: owner?.business_manager_gender,
-      business_manager_contact: owner?.business_manager_contact,
-      business_manager_date_of_birth: owner?.business_manager_date_of_birth,
-      business_manager_place_of_birth: owner?.business_manager_place_of_birth,
-      business_manager_address: owner?.business_manager_address,
-      business_manager_job_position: owner?.business_manager_job_position,
-      business_manager_type_of_document: owner?.business_manager_type_of_document,
-      business_manager_document_number: owner?.business_manager_document_number,
-      business_manager_date_of_issue: owner?.business_manager_date_of_issue,
-      business_manager_authorizing_authority: owner?.business_manager_authorizing_authority,
-      business_manager_expiry_date: owner?.business_manager_expiry_date,
-      business_photo:owner?.business_photo|| "",
-      business_documents: owner?.business_documents||[],
-      is_business_owner: owner?.is_business_owner,
-      id:owner?.id,
  
+        // business_company_name: owner?.business_company_name || "Default Company",  // Default if owner company name is undefined
+        // business_taxpayer_identification_number: owner?.business_taxpayer_identification_number || "TAX123456789",  // Default if undefined
+        // business_business_registration_number: owner?.business_business_registration_number || "REG987654321",  // Default if undefined
+        // business_industry_sector: owner?.business_industry_sector || "Technology",  // Default if undefined
+        // business_office_phone_number: owner?.business_office_phone_number || "+1234567890",  // Default if undefined
+        // business_whatsapp_contact: owner?.business_whatsapp_contact || "+1987654321",  // Default if undefined
+        // business_email: owner?.business_email || "info@default.com",  // Default if undefined
+        // business_head_office: owner?.business_head_office || "123 Default St, City, Country",  // Default if undefined
+        // business_po_box: owner?.business_po_box || "PO Box 123",  // Default if undefined
+        // business_capital: owner?.business_capital || 100000,  // Default if undefined
+        // business_manager_pronouns_title: owner?.business_manager_pronouns_title || "Mr.",  // Default if undefined
+        // business_manager_name: owner?.business_manager_name || "John Doe",  // Default if undefined
+        // business_manager_gender: owner?.business_manager_gender || "Male",  // Default if undefined
+        // business_manager_contact: owner?.business_manager_contact || "+1122334455",  // Default if undefined
+        // business_manager_date_of_birth: owner?.business_manager_date_of_birth || "1980-01-01",  // Default if undefined
+        // business_manager_place_of_birth: owner?.business_manager_place_of_birth || "City, Country",  // Default if undefined
+        // business_manager_address: owner?.business_manager_address || "789 Manager Ave, City, Country",  // Default if undefined
+        // business_manager_job_position: owner?.business_manager_job_position || "CEO",  // Default if undefined
+        // business_manager_type_of_document: owner?.business_manager_type_of_document || "Passport",  // Default if undefined
+        // business_manager_document_number: owner?.business_manager_document_number || "P123456789",  // Default if undefined
+        // business_manager_date_of_issue: owner?.business_manager_date_of_issue || "2015-01-01",  // Default if undefined
+        // business_manager_authorizing_authority: owner?.business_manager_authorizing_authority || "Government",  // Default if undefined
+        // business_manager_expiry_date: owner?.business_manager_expiry_date || "2030-01-01",  // Default if undefined
+        // business_photo: owner?.business_photo || "https://default.com/photo.jpg",  // Default if undefined
+        // business_documents: owner?.business_documents || ["https://default.com/doc1.pdf", "https://default.com/doc2.pdf"],  // Default if undefined
+        // is_business_owner: owner?.is_business_owner || true,  // Default if undefined
+        // id: owner?.id ?? undefined,  // Default if undefined
+   
+        business_company_name: owner?.business_company_name ,  // Default if owner company name is undefined
+        business_taxpayer_identification_number: owner?.business_taxpayer_identification_number,  // Default if undefined
+        business_business_registration_number: owner?.business_business_registration_number ,  // Default if undefined
+        business_industry_sector: owner?.business_industry_sector,  // Default if undefined
+        business_office_phone_number: owner?.business_office_phone_number ,  // Default if undefined
+        business_whatsapp_contact: owner?.business_whatsapp_contact ,  // Default if undefined
+        business_email: owner?.business_email ,  // Default if undefined
+        business_head_office: owner?.business_head_office ,  // Default if undefined
+        business_po_box: owner?.business_po_box ,  // Default if undefined
+        business_capital: owner?.business_capital ,  // Default if undefined
+        business_manager_pronouns_title: owner?.business_manager_pronouns_title,  // Default if undefined
+        business_manager_name: owner?.business_manager_name,  // Default if undefined
+        business_manager_gender: owner?.business_manager_gender,  // Default if undefined
+        business_manager_contact: owner?.business_manager_contact ,  // Default if undefined
+        business_manager_date_of_birth: owner?.business_manager_date_of_birth ,  // Default if undefined
+        business_manager_place_of_birth: owner?.business_manager_place_of_birth ,  // Default if undefined
+        business_manager_address: owner?.business_manager_address ,  // Default if undefined
+        business_manager_job_position: owner?.business_manager_job_position ,  // Default if undefined
+        business_manager_type_of_document: owner?.business_manager_type_of_document,  // Default if undefined
+        business_manager_document_number: owner?.business_manager_document_number ,  // Default if undefined
+        business_manager_date_of_issue: owner?.business_manager_date_of_issue ,  // Default if undefined
+        business_manager_authorizing_authority: owner?.business_manager_authorizing_authority ,  // Default if undefined
+        business_manager_expiry_date: owner?.business_manager_expiry_date ,  // Default if undefined
+        business_photo: owner?.business_photo || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",  // Default if undefined
+        business_documents: owner?.business_documents || [],  // Default if undefined
+        is_business_owner: true,  // Default if undefined
+        id: owner?.id ?? undefined,  // Default if undefined
+   
+      
     },
   });
        const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';

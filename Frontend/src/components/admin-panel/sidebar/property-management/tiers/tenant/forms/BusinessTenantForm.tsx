@@ -59,7 +59,7 @@ const FormSchema = z.object({
   business_photo: z.string().optional(),
   business_documents: z.array(z.string()).optional(),
   is_business_tenant:z.boolean(),
-  id:z.number().min(0,"Must be positive"),
+  id:z.number().optional(),
 });
 interface BusinessTenantFormProps {
   tenant?: Tenant;
@@ -71,33 +71,64 @@ const BusinessTenantForm: React.FC<BusinessTenantFormProps> = ({ tenant }) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id: tenant?.id ?? 1,
-      business_company_name: tenant?.business_company_name || "ABC Enterprises",  // Default if tenant's company name is undefined
-      business_taxpayer_account_number: tenant?.business_taxpayer_account_number || "TAX12345678",  // Default if tenant's taxpayer account number is undefined
-      business_business_registration_number: tenant?.business_business_registration_number || "REG987654",  // Default if tenant's registration number is undefined
-      business_industry_sector: tenant?.business_industry_sector || "Technology",  // Default if tenant's industry sector is undefined
-      business_office_phone_number: tenant?.business_office_phone_number || "+1234567890",  // Default if tenant's office phone number is undefined
-      business_whatsapp_contact: tenant?.business_whatsapp_contact || "+1987654321",  // Default if tenant's WhatsApp contact is undefined
-      business_email: tenant?.business_email || "info@abc-enterprises.com",  // Default if tenant's email is undefined
-      business_head_office: tenant?.business_head_office || "123 Business Street, City, Country",  // Default if tenant's head office is undefined
-      business_mail_box: tenant?.business_mail_box || "PO Box 456",  // Default if tenant's mail box is undefined
-      business_capital: tenant?.business_capital ?? 500000,  // Default if tenant's capital is undefined
-      business_manager_pronouns_title: tenant?.business_manager_pronouns_title || "Mr.",  // Default if tenant's manager pronouns title is undefined
-      business_manager_name: tenant?.business_manager_name || "John Doe",  // Default if tenant's manager name is undefined
-      business_manager_gender: tenant?.business_manager_gender || "Male",  // Default if tenant's manager gender is undefined
-      business_manager_contact: tenant?.business_manager_contact || "+1122334455",  // Default if tenant's manager contact is undefined
-      business_manager_date_of_birth: tenant?.business_manager_date_of_birth || "1985-06-15",  // Default if tenant's manager DOB is undefined
-      business_manager_place_of_birth: tenant?.business_manager_place_of_birth || "City, Country",  // Default if tenant's manager place of birth is undefined
-      business_manager_address: tenant?.business_manager_address || "789 Manager Avenue, City, Country",  // Default if tenant's manager address is undefined
-      business_manager_job_position: tenant?.business_manager_job_position || "CEO",  // Default if tenant's manager job position is undefined
-      business_manager_type_of_document: tenant?.business_manager_type_of_document || "Passport",  // Default if tenant's manager document type is undefined
-      business_manager_document_number: tenant?.business_manager_document_number || "P123456789",  // Default if tenant's manager document number is undefined
-      business_manager_date_of_issue: tenant?.business_manager_date_of_issue || "2015-08-20",  // Default if tenant's manager document issue date is undefined
-      business_manager_authorizing_authority: tenant?.business_manager_authorizing_authority || "Govt. Agency",  // Default if tenant's manager authorizing authority is undefined
-      business_manager_expiry_date: tenant?.business_manager_expiry_date || "2030-08-20",  // Default if tenant's manager document expiry date is undefined
-      business_photo: tenant?.business_photo || "https://example.com/photo.jpg",  // Default if tenant's photo is undefined
-      business_documents: tenant?.business_documents || ["https://example.com/doc1.pdf", "https://example.com/doc2.pdf"],  // Default if tenant's documents are undefined
-      is_business_tenant: tenant?.is_business_tenant ?? true,  // Default if tenant's tenant status is undefined
+      // id: tenant?.id ?? 1,
+      // business_company_name: tenant?.business_company_name || "ABC Enterprises",  // Default if tenant's company name is undefined
+      // business_taxpayer_account_number: tenant?.business_taxpayer_account_number || "TAX12345678",  // Default if tenant's taxpayer account number is undefined
+      // business_business_registration_number: tenant?.business_business_registration_number || "REG987654",  // Default if tenant's registration number is undefined
+      // business_industry_sector: tenant?.business_industry_sector || "Technology",  // Default if tenant's industry sector is undefined
+      // business_office_phone_number: tenant?.business_office_phone_number || "+1234567890",  // Default if tenant's office phone number is undefined
+      // business_whatsapp_contact: tenant?.business_whatsapp_contact || "+1987654321",  // Default if tenant's WhatsApp contact is undefined
+      // business_email: tenant?.business_email || "info@abc-enterprises.com",  // Default if tenant's email is undefined
+      // business_head_office: tenant?.business_head_office || "123 Business Street, City, Country",  // Default if tenant's head office is undefined
+      // business_mail_box: tenant?.business_mail_box || "PO Box 456",  // Default if tenant's mail box is undefined
+      // business_capital: tenant?.business_capital ?? 500000,  // Default if tenant's capital is undefined
+      // business_manager_pronouns_title: tenant?.business_manager_pronouns_title || "Mr.",  // Default if tenant's manager pronouns title is undefined
+      // business_manager_name: tenant?.business_manager_name || "John Doe",  // Default if tenant's manager name is undefined
+      // business_manager_gender: tenant?.business_manager_gender || "Male",  // Default if tenant's manager gender is undefined
+      // business_manager_contact: tenant?.business_manager_contact || "+1122334455",  // Default if tenant's manager contact is undefined
+      // business_manager_date_of_birth: tenant?.business_manager_date_of_birth || "1985-06-15",  // Default if tenant's manager DOB is undefined
+      // business_manager_place_of_birth: tenant?.business_manager_place_of_birth || "City, Country",  // Default if tenant's manager place of birth is undefined
+      // business_manager_address: tenant?.business_manager_address || "789 Manager Avenue, City, Country",  // Default if tenant's manager address is undefined
+      // business_manager_job_position: tenant?.business_manager_job_position || "CEO",  // Default if tenant's manager job position is undefined
+      // business_manager_type_of_document: tenant?.business_manager_type_of_document || "Passport",  // Default if tenant's manager document type is undefined
+      // business_manager_document_number: tenant?.business_manager_document_number || "P123456789",  // Default if tenant's manager document number is undefined
+      // business_manager_date_of_issue: tenant?.business_manager_date_of_issue || "2015-08-20",  // Default if tenant's manager document issue date is undefined
+      // business_manager_authorizing_authority: tenant?.business_manager_authorizing_authority || "Govt. Agency",  // Default if tenant's manager authorizing authority is undefined
+      // business_manager_expiry_date: tenant?.business_manager_expiry_date || "2030-08-20",  // Default if tenant's manager document expiry date is undefined
+      // business_photo: tenant?.business_photo || "https://example.com/photo.jpg",  // Default if tenant's photo is undefined
+      // business_documents: tenant?.business_documents || ["https://example.com/doc1.pdf", "https://example.com/doc2.pdf"],  // Default if tenant's documents are undefined
+      // is_business_tenant: tenant?.is_business_tenant ?? true,  // Default if tenant's tenant status is undefined
+
+
+        id: tenant?.id ,
+      business_company_name: tenant?.business_company_name || "",  // Default if tenant's company name is undefined
+      business_taxpayer_account_number: tenant?.business_taxpayer_account_number || "",  // Default if tenant's taxpayer account number is undefined
+      business_business_registration_number: tenant?.business_business_registration_number || "",  // Default if tenant's registration number is undefined
+      business_industry_sector: tenant?.business_industry_sector || "",  // Default if tenant's industry sector is undefined
+      business_office_phone_number: tenant?.business_office_phone_number || "",  // Default if tenant's office phone number is undefined
+      business_whatsapp_contact: tenant?.business_whatsapp_contact || "",  // Default if tenant's WhatsApp contact is undefined
+      business_email: tenant?.business_email || "",  // Default if tenant's email is undefined
+      business_head_office: tenant?.business_head_office || "",  // Default if tenant's head office is undefined
+      business_mail_box: tenant?.business_mail_box || "",  // Default if tenant's mail box is undefined
+      business_capital: tenant?.business_capital ?? 0,  // Default if tenant's capital is undefined
+      business_manager_pronouns_title: tenant?.business_manager_pronouns_title || "",  // Default if tenant's manager pronouns title is undefined
+      business_manager_name: tenant?.business_manager_name || "",  // Default if tenant's manager name is undefined
+      business_manager_gender: tenant?.business_manager_gender || "",  // Default if tenant's manager gender is undefined
+      business_manager_contact: tenant?.business_manager_contact || "",  // Default if tenant's manager contact is undefined
+      business_manager_date_of_birth: tenant?.business_manager_date_of_birth || "",  // Default if tenant's manager DOB is undefined
+      business_manager_place_of_birth: tenant?.business_manager_place_of_birth || "",  // Default if tenant's manager place of birth is undefined
+      business_manager_address: tenant?.business_manager_address || "",  // Default if tenant's manager address is undefined
+      business_manager_job_position: tenant?.business_manager_job_position || "",  // Default if tenant's manager job position is undefined
+      business_manager_type_of_document: tenant?.business_manager_type_of_document || "",  // Default if tenant's manager document type is undefined
+      business_manager_document_number: tenant?.business_manager_document_number || "",  // Default if tenant's manager document number is undefined
+      business_manager_date_of_issue: tenant?.business_manager_date_of_issue || "",  // Default if tenant's manager document issue date is undefined
+      business_manager_authorizing_authority: tenant?.business_manager_authorizing_authority || "",  // Default if tenant's manager authorizing authority is undefined
+      business_manager_expiry_date: tenant?.business_manager_expiry_date || "",  // Default if tenant's manager document expiry date is undefined
+      business_photo: tenant?.business_photo || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",  // Default if tenant's photo is undefined
+      business_documents: tenant?.business_documents || [],  // Default if tenant's documents are undefined
+      is_business_tenant:  true,  // Default if tenant's tenant status is undefined
+      
+      
     }
   });
   

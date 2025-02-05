@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useFetchData = <T,>(url: string) => {
+const useFetchData = <T,>(url: string, reloadTrigger?: boolean) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +22,7 @@ const useFetchData = <T,>(url: string) => {
     };
 
     fetchData();
-  }, [url]);
+  }, [url, reloadTrigger]); // Reload when reloadTrigger changes
 
   return { data, loading, error };
 };
