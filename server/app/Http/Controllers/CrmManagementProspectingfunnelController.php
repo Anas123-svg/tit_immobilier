@@ -9,7 +9,7 @@ class CrmManagementProspectingfunnelController extends Controller
 {
     public function index()
     {
-        return response()->json(CrmManagementProspectingfunnel::all(), 200);
+        return response()->json(CrmManagementProspectingfunnel::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request) // Ensure correct namespace

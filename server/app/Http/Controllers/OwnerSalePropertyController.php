@@ -9,7 +9,7 @@ class OwnerSalePropertyController extends Controller
 {
     public function index()
     {
-        return response()->json(OwnerSaleProperty::all(), 200);
+        return response()->json(OwnerSaleProperty::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request)

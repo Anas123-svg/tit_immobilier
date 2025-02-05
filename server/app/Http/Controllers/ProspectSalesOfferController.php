@@ -9,7 +9,7 @@ class ProspectSalesOfferController extends Controller
 {
     public function index()
     {
-        return ProspectSalesOffer::all();
+        return ProspectSalesOffer::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

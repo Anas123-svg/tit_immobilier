@@ -9,7 +9,7 @@ class TenantInvoiceController extends Controller
 {
     public function index()
     {
-        return response()->json(TenantInvoice::all(), 200);
+        return response()->json(TenantInvoice::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request)

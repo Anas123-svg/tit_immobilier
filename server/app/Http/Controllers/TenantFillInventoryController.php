@@ -9,7 +9,7 @@ class TenantFillInventoryController extends Controller
 {
     public function index()
     {
-        return response()->json(TenantFillInventory::all(), 200);
+        return response()->json(TenantFillInventory::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request)

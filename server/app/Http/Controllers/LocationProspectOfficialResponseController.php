@@ -9,7 +9,7 @@ class LocationProspectOfficialResponseController extends Controller
 {
     public function index()
     {
-        return LocationProspectOfficialResponse::all();
+        return LocationProspectOfficialResponse::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

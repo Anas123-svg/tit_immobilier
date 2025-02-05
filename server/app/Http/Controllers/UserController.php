@@ -12,7 +12,7 @@ class UserController extends Controller
     // Fetch all users
     public function index()
     {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
     
         $usersWithPermissions = $users->map(function($user) {
             $permissionIds = is_array($user->permissions) ? $user->permissions : [];

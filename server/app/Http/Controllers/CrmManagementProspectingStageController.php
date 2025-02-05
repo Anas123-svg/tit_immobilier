@@ -9,7 +9,7 @@ class CrmManagementProspectingStageController extends Controller
 {
     public function index()
     {
-        return response()->json(CrmManagementProspectingStage::all(), 200);
+        return response()->json(CrmManagementProspectingStage::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request) // Ensure correct namespace

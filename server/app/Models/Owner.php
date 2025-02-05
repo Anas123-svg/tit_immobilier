@@ -18,6 +18,7 @@ class Owner extends Model
         // Private owner fields
         'private_pronouns',
         'private_name',
+        'surname',
         'private_gender',
         'private_birth_date',
         'private_place_of_birth',

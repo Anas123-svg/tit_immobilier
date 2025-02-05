@@ -10,7 +10,7 @@ class TenantBillController extends Controller
 {
     public function index()
     {
-        return response()->json(TenantBill::all(), 200);
+        return response()->json(TenantBill::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request)

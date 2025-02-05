@@ -9,7 +9,7 @@ class OwnerReversalSalePropertyController extends Controller
 {
     public function index()
     {
-        return OwnerReversalSaleProperty::all();
+        return OwnerReversalSaleProperty::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

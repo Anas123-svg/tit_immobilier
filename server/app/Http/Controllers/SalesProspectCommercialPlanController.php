@@ -9,7 +9,7 @@ class SalesProspectCommercialPlanController extends Controller
 {
     public function index()
     {
-        return SalesProspectCommercialPlan::all();
+        return SalesProspectCommercialPlan::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

@@ -29,7 +29,7 @@ class ServiceController extends Controller
     // Get all services
     public function index()
     {
-        $services = Service::all();
+        $services = Service::orderBy('created_at', 'desc')->get();
         return response()->json($services);
     }
 

@@ -9,7 +9,7 @@ class OwnerRentPropertyController extends Controller
 {
     public function index()
     {
-        return response()->json(OwnerRentProperty::all());
+        return response()->json(OwnerRentProperty::orderBy('created_at', 'desc')->get());
     }
 
     public function show($id)
