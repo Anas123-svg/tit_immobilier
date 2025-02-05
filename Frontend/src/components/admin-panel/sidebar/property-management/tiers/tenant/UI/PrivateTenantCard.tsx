@@ -36,9 +36,8 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
       className="relative p-6 bg-white border rounded-lg shadow-md"
     >
       {/* Tenant Type and Status */}
-      <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">
-        {"Individual"}
-      </div>
+      <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">Individual</div>
+     
       <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">
         {tenant.status}
       </div>
@@ -52,7 +51,7 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
             className="w-full h-full object-cover"
           />
         </div>
-        <h4 className="text-xl font-bold">{tenant.private_name}</h4>
+        <h4 className="text-xl font-bold">{tenant.private_name + ' '+ tenant.surname}</h4>
         <p className="text-sm text-gray-500">TIN: {tenant.private_taxpayer_account_number}</p>
         <p className="text-sm text-gray-500">Nationality: {tenant.private_nationality}</p>
         <p className="text-sm text-gray-500">Occupation: {tenant.private_occupation}</p>
@@ -94,7 +93,7 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete <span className="text-red-600">{tenant.private_name}</span> this tenant? This action cannot be undone.
+              Are you sure you want to delete <span className="text-red-600">{tenant.private_name + ' '+ tenant.surname}</span> this tenant? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

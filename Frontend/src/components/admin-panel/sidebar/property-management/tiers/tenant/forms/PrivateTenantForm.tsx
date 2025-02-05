@@ -38,6 +38,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 const FormSchema = z.object({
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
+  surname: z.string().nonempty({ message: "Surname is required" }),
   private_gender: z.string().nonempty({ message: "Gender is required" }),
   private_birth_date: z.string().nonempty({ message: "Birth date is required" }),
   private_place_of_birth: z.string().nonempty({ message: "Place of birth is required" }),
@@ -111,7 +112,8 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
       // is_business_tenant: tenant?.is_business_tenant ?? false,  // Default business tenant status if tenant's status is undefined
     
     id: tenant?.id ?? 1,
-    private_name: tenant?.private_name || "",  // Default full name if tenant's private name is undefined
+    private_name: tenant?.private_name || "",
+    surname: tenant?.surname || "",  // Default full name if tenant's private name is undefined
     private_gender: tenant?.private_gender || "",  // Default gender if tenant's private gender is undefined
     private_birth_date: tenant?.private_birth_date || "",  // Default birth date if tenant's private birth date is undefined
     private_place_of_birth: tenant?.private_place_of_birth || "",  // Default place of birth if tenant's place of birth is undefined
@@ -219,7 +221,19 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
         </FormItem>
       )}
     />
-
+    <FormField
+              control={form.control}
+              name="surname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Surname</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Surname" {...field} />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
     {/* Gender Field */}
     <FormField
       control={form.control}

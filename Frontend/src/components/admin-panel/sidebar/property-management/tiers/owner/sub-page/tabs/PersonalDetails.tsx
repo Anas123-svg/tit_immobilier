@@ -1,57 +1,7 @@
+import { Owner } from "@/types/DataProps";
 import React, { useRef } from "react";
 
-// Define the Owner Interface based on the provided model
-interface Owner {
-  id: number;
-  business_company_name: string;
-  business_taxpayer_account_number: string;
-  business_business_registration_number: string;
-  business_industry_sector: string;
-  business_office_phone_number: string;
-  business_whatsapp_contact: string;
-  business_email: string;
-  business_head_office: string;
-  business_mail_box: string;
-  business_capital: number;
-  business_manager_name: string;
-  business_manager_gender: string;
-  business_manager_contact: string;
-  business_manager_job_position: string;
-  business_manager_address: string;
-  business_manager_type_of_document: string;
-  business_manager_document_number: string;
-  business_manager_date_of_issue: string;
-  business_manager_expiry_date: string;
-  business_photo: string | null;
-  business_documents: string[];
-  private_name: string;
-  private_gender: string;
-  private_birth_date: string;
-  private_place_of_birth: string;
-  private_address: string;
-  private_nationality: string;
-  private_document_type: string;
-  private_document_number: string;
-  private_date_of_issue: string;
-  private_signatory_authority: string;
-  private_expiry_date: string;
-  private_taxpayer_account_number: string;
-  private_occupation: string;
-  private_contact: string;
-  private_whatsapp_contact: string;
-  private_email: string;
-  private_mail_box: string;
-  private_marital_status: string;
-  private_number_of_children: number;
-  private_emergency_contact_name: string;
-  private_emergency_contact: string;
-  private_emergency_contact_relation: string;
-  private_photo: string | null;
-  private_documents: string[];
-  is_business_owner: boolean;
-  status: string;
-  payment_status: string;
-}
+
 
 interface PersonalDetailsProps {
   owner?: Owner;
@@ -77,10 +27,16 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
       <div className="grid grid-cols-1 sm:text-start text-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
         {/* Conditional rendering based on owner type */}
         <div className="space-y-2 flex items-center text-sm gap-3">
-          <p className="font-semibold">Name and First Name:</p>
-          {owner?.is_business_owner ? owner?.business_company_name : owner?.private_name}
+          <p className="font-semibold">Name:</p>
+          {owner?.is_business_owner ? owner?.business_company_name :owner?.private_name} 
         </div>
-
+    {/* Conditional rendering based on owner type */}
+    {owner?.is_business_owner  &&
+     <div className="space-y-2 flex items-center text-sm gap-3">
+          <p className="font-semibold">Surname:</p>
+           owner?.surname??''
+        </div>
+    }
         <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Type:</p>
           {owner?.is_business_owner ? "Business" : "Individual"}
@@ -103,7 +59,7 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
 
         <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Postal Code:</p>
-          {owner?.is_business_owner ? owner?.business_mail_box : owner?.private_mail_box}
+          {owner?.is_business_owner ? owner?.business_mail_box : owner?.private_po_box}
         </div>
 
         {/* Profession */}

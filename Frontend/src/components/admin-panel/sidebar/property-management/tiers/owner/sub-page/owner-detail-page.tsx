@@ -40,60 +40,11 @@ import MakeWithdrawalOwnerForm from "./forms/MakeWithdrawalOwnerForm";
 import PullAccountStatementForm from "./forms/PullAccountStatementFormProps";
 import useFetchData from "@/hooks/useFetchData";
 import { useParams } from "react-router-dom";
+import { Owner } from "@/types/DataProps";
 
 
 // Define the Owner Interface based on the provided model
-interface Owner {
-  id: number;
-  business_company_name: string;
-  business_taxpayer_account_number: string;
-  business_business_registration_number: string;
-  business_industry_sector: string;
-  business_office_phone_number: string;
-  business_whatsapp_contact: string;
-  business_email: string;
-  business_head_office: string;
-  business_mail_box: string;
-  business_capital: number;
-  business_manager_name: string;
-  business_manager_gender: string;
-  business_manager_contact: string;
-  business_manager_job_position: string;
-  business_manager_address: string;
-  business_manager_type_of_document: string;
-  business_manager_document_number: string;
-  business_manager_date_of_issue: string;
-  business_manager_expiry_date: string;
-  business_photo: string | null;
-  business_documents: string[];
-  private_name: string;
-  private_gender: string;
-  private_birth_date: string;
-  private_place_of_birth: string;
-  private_address: string;
-  private_nationality: string;
-  private_document_type: string;
-  private_document_number: string;
-  private_date_of_issue: string;
-  private_signatory_authority: string;
-  private_expiry_date: string;
-  private_taxpayer_account_number: string;
-  private_occupation: string;
-  private_contact: string;
-  private_whatsapp_contact: string;
-  private_email: string;
-  private_mail_box: string;
-  private_marital_status: string;
-  private_number_of_children: number;
-  private_emergency_contact_name: string;
-  private_emergency_contact: string;
-  private_emergency_contact_relation: string;
-  private_photo: string | null;
-  private_documents: string[];
-  is_business_owner: boolean;
-  status: string;
-  payment_status: string;
-}
+
 const OwnerDetailPage = () => {
   const [activeTab, setActiveTab] = useState("wallet");
   const [file, setFile] = useState<File | null>(null);
@@ -208,7 +159,7 @@ const OwnerDetailPage = () => {
             <BadgeCheckIcon className="text-blue-500 absolute bottom-0 right-0" />
           </div>
           <div className="space-y-2 text-black">
-            <h2 className="text-lg">{owners?.is_business_owner ? owners?.business_company_name : owners?.private_name}</h2>
+            <h2 className="text-lg">{owners?.is_business_owner ? owners?.business_company_name : `${owners?.private_name??'' + owners?.surname??'' }`}</h2>
             <p className="text-sm">PARTICULAR</p>
           </div>
         </div>

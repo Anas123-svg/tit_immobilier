@@ -36,8 +36,8 @@ const BusinessTenantCard: React.FC<BusinessTenantCardProps> = ({ tenant }) => {
       className="relative p-6 bg-white border rounded-lg shadow-md"
     >
       {/* Tenant Type and Status */}
-      <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">
-        {tenant.is_business_tenant ? "Business" : "Individual"}
+      <div className="absolute top-2 left-2 bg-green-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">
+        Business
       </div>
       <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">
         {tenant.status}

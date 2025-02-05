@@ -38,6 +38,7 @@ const FormSchema = z.object({
   id:z.number(),
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
+  surname: z.string().nonempty({ message: "Surname is required" }),
   private_gender: z.string().nonempty({ message: "Gender is required" }),
   private_birth_date: z
     .string()
@@ -137,6 +138,7 @@ const handleConfirmSubmit = () => {
     defaultValues: {
       id:owner?.id,
       private_pronouns: owner?.private_pronouns,
+      surname: owner?.surname,
       private_name: owner?.private_name,
       private_gender: owner?.private_gender,
       private_birth_date: owner?.private_birth_date,
@@ -255,6 +257,19 @@ const handleConfirmSubmit = () => {
                   </FormItem>
                 )}
               />
+               <FormField
+              control={form.control}
+              name="surname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Surname</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Surname" {...field} />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
               <FormField
                 control={form.control}
                 name="private_birth_date"
@@ -501,7 +516,7 @@ const handleConfirmSubmit = () => {
                       <Input
                         type="number"
                         placeholder="Number of Children"
-                        {...field}
+                        {...field}  onChange={e => field.onChange(parseInt(e.target.value, 10))} 
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />

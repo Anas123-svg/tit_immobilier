@@ -32,7 +32,9 @@ const BusinessOwnerCard: React.FC<BusinessOwnerFormProps> = ({ owner }) => {
     
   return (
     <div key={owner.business_company_name} className="relative p-6 bg-white border rounded-lg shadow-md">
-      <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">Business</div>
+       <div className="absolute top-2 left-2 bg-green-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">
+        Business
+      </div>
       <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">{owner.status}</div>
 
       <div className="text-center mb-4">
@@ -40,7 +42,7 @@ const BusinessOwnerCard: React.FC<BusinessOwnerFormProps> = ({ owner }) => {
           <img src={owner.business_photo || "/default-avatar.png"} alt={owner.business_company_name} className="w-full h-full object-cover" />
         </div>
         <h4 className="text-xl font-bold">{owner.business_company_name}</h4>
-        <p className="text-sm text-gray-500">TIN: {owner.business_taxpayer_identification_number}</p>
+        <p className="text-sm text-gray-500">TIN: {owner.business_business_registration_number}</p>
         <p className="text-sm text-gray-500">Industry: {owner.business_industry_sector}</p>
         <p className="text-sm text-blue-600">Head Office: {owner.business_head_office}</p>
         <p className="text-sm text-green-600">Capital: ${owner.business_capital}</p>

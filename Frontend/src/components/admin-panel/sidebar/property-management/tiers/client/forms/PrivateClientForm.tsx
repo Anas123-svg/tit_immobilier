@@ -37,6 +37,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 const FormSchema = z.object({
   id:z.number(),
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
+  surname:z.string().nonempty({ message: "Surname is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
   private_gender: z.string().nonempty({ message: "Gender is required" }),
   private_birth_date: z
@@ -120,39 +121,68 @@ const handleConfirmSubmit = () => {
   setIsSubmitting(true);
   form.handleSubmit(onSubmit)(); // Submit the form
   setOpenDialog(false); // Close dialog after submission
+  setIsSubmitting(false);
 };
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id:client?.id,
-        private_pronouns: client?.private_pronouns,
-        private_name: client?.private_name,
-        private_gender: client?.private_gender,
-        private_birth_date: client?.private_birth_date,
-        private_place_of_birth: client?.private_place_of_birth,
-        private_address: client?.private_address, // Assuming fallback values if client is undefined
-        private_nationality: client?.private_nationality,
-        private_document_type: client?.private_document_type ,
-        private_document_number: client?.private_document_number ,
-        private_date_of_issue: client?.private_date_of_issue ,
-        private_signatory_authority: client?.private_signatory_authority,
-        private_expiry_date: client?.private_expiry_date ,
-        private_taxpayer_identification_number: client?.private_taxpayer_identification_number,
-        private_occupation: client?.private_occupation ,
-        private_contact: client?.private_contact ,
-        private_whatsapp_contact: client?.private_whatsapp_contact ,
-        private_email: client?.private_email ,
-        private_mail_box: client?.private_mail_box ,
-        private_marital_status: client?.private_marital_status ,
-        private_number_of_children: client?.private_number_of_children ,
-        private_emergency_contact_name: client?.private_emergency_contact_name ,
-        private_emergency_contact: client?.private_emergency_contact ,
-        private_emergency_contact_relation: client?.private_emergency_contact_relation ,
-        private_photo: client?.private_photo || "",
-        private_documents: client?.private_documents || [],
-        is_business_client: client?.is_business_client || false
-      
+      id: client?.id ?? 0, // Default to 0 if client id is missing
+      private_pronouns: client?.private_pronouns ?? "", // Default to empty string
+      private_name: client?.private_name ?? "", // Default to empty string
+      surname: client?.surname ?? "", // Default to empty string
+      private_gender: client?.private_gender ?? "", // Default to empty string
+      private_birth_date: client?.private_birth_date ?? "", // Default to empty string
+      private_place_of_birth: client?.private_place_of_birth ?? "", // Default to empty string
+      private_address: client?.private_address ?? "", // Default to empty string
+      private_nationality: client?.private_nationality ?? "", // Default to empty string
+      private_document_type: client?.private_document_type ?? "", // Default to empty string
+      private_document_number: client?.private_document_number ?? "", // Default to empty string
+      private_date_of_issue: client?.private_date_of_issue ?? "", // Default to empty string
+      private_signatory_authority: client?.private_signatory_authority ?? "", // Default to empty string
+      private_expiry_date: client?.private_expiry_date ?? "", // Default to empty string
+      private_taxpayer_identification_number: client?.private_taxpayer_identification_number ?? "", // Default to empty string
+      private_occupation: client?.private_occupation ?? "", // Default to empty string
+      private_contact: client?.private_contact ?? "", // Default to empty string
+      private_whatsapp_contact: client?.private_whatsapp_contact ?? "", // Default to empty string
+      private_email: client?.private_email ?? "", // Default to empty string
+      private_mail_box: client?.private_mail_box ?? "", // Default to empty string
+      private_marital_status: client?.private_marital_status ?? "", // Default to empty string
+      private_number_of_children: client?.private_number_of_children ?? 0, // Default to 0 if missing
+      private_emergency_contact_name: client?.private_emergency_contact_name ?? "", // Default to empty string
+      private_emergency_contact: client?.private_emergency_contact ?? "", // Default to empty string
+      private_emergency_contact_relation: client?.private_emergency_contact_relation ?? "", // Default to empty string
+      private_photo: client?.private_photo ?? "", // Default to empty string or default photo URL
+      private_documents: client?.private_documents ?? [], // Default to empty array
+      is_business_client: client?.is_business_client ?? false, 
+      // id: 0, // Dummy ID
+      // private_pronouns: "He/Him", // Dummy pronouns
+      // private_name: "John", // Dummy name
+      // surname: "Doe", // Dummy surname
+      // private_gender: "Male", // Dummy gender
+      // private_birth_date: "1990-01-01", // Dummy birth date
+      // private_place_of_birth: "New York", // Dummy place of birth
+      // private_address: "1234 Elm Street, NY", // Dummy address
+      // private_nationality: "American", // Dummy nationality
+      // private_document_type: "Passport", // Dummy document type
+      // private_document_number: "P123456789", // Dummy document number
+      // private_date_of_issue: "2015-06-01", // Dummy date of issue
+      // private_signatory_authority: "Government", // Dummy authority
+      // private_expiry_date: "2025-06-01", // Dummy expiry date
+      // private_taxpayer_identification_number: "123-45-6789", // Dummy TIN
+      // private_occupation: "Software Engineer", // Dummy occupation
+      // private_contact: "555-1234", // Dummy contact number
+      // private_whatsapp_contact: "+1-555-1234", // Dummy WhatsApp contact
+      // private_email: "john.doe@example.com", // Dummy email
+      // private_mail_box: "PO Box 1234", // Dummy mail box
+      // private_marital_status: "Single", // Dummy marital status
+      // private_number_of_children: 2, // Dummy number of children
+      // private_emergency_contact_name: "Jane Doe", // Dummy emergency contact name
+      // private_emergency_contact: "555-5678", // Dummy emergency contact number
+      // private_emergency_contact_relation: "Sister", // Dummy relationship
+      // private_photo: "https://example.com/photo.jpg", // Dummy photo URL
+      // private_documents: ["https://example.com/document1.pdf", "https://example.com/document2.pdf"], // Dummy documents
+      // is_business_client: false, // Dummy status for business client
     },
   });
 
@@ -241,7 +271,19 @@ const handleConfirmSubmit = () => {
                     <FormMessage className="text-xs" />
                   </FormItem>
                 )}
-              />
+              />  <FormField
+              control={form.control}
+              name="surname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Surname</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Surname" {...field} />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
               <FormField
                 control={form.control}
                 name="private_birth_date"
@@ -476,7 +518,8 @@ const handleConfirmSubmit = () => {
                       <Input
                         type="number"
                         placeholder="Number of Children"
-                        {...field}
+                       
+                        onChange={e => field.onChange(parseInt(e.target.value, 10))} 
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />

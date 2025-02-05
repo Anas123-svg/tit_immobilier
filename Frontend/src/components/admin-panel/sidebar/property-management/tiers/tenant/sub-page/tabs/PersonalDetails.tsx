@@ -1,57 +1,7 @@
+import { Tenant } from "@/types/DataProps";
 import React, { useRef } from "react";
 
-// Define Tenant Interface matching the model
-interface Tenant {
-  id: number;
-  business_company_name: string;
-  business_taxpayer_account_number: string;
-  business_business_registration_number: string;
-  business_industry_sector: string;
-  business_office_phone_number: string;
-  business_whatsapp_contact: string;
-  business_email: string;
-  business_head_office: string;
-  business_mail_box: string;
-  business_capital: number;
-  business_manager_name: string;
-  business_manager_gender: string;
-  business_manager_contact: string;
-  business_manager_job_position: string;
-  business_manager_address: string;
-  business_manager_type_of_document: string;
-  business_manager_document_number: string;
-  business_manager_date_of_issue: string;
-  business_manager_expiry_date: string;
-  business_photo: string | null;
-  business_documents: string[];
-  private_name: string;
-  private_gender: string;
-  private_birth_date: string;
-  private_place_of_birth: string;
-  private_address: string;
-  private_nationality: string;
-  private_document_type: string;
-  private_document_number: string;
-  private_date_of_issue: string;
-  private_signatory_authority: string;
-  private_expiry_date: string;
-  private_taxpayer_account_number: string;
-  private_occupation: string;
-  private_contact: string;
-  private_whatsapp_contact: string;
-  private_email: string;
-  private_mail_box: string;
-  private_marital_status: string;
-  private_number_of_children: number;
-  private_emergency_contact_name: string;
-  private_emergency_contact: string;
-  private_emergency_contact_relation: string;
-  private_photo: string | null;
-  private_documents: string[];
-  is_business_tenant: boolean;
-  status: string;
-  payment_status: string;
-}
+
 
 interface PersonalDetailsProps {
   tenant?: Tenant;
@@ -77,10 +27,13 @@ const PersonalDetails = ({ tenant, onFileChange }: PersonalDetailsProps) => {
       <div className="grid grid-cols-1 sm:text-start text-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
         {/* Conditional rendering based on tenant type */}
         <div className="">
-          <p className="font-semibold">Name and First Name:</p>
+          <p className="font-semibold">Name:</p>
           <p>{tenant?.is_business_tenant ? tenant?.business_company_name : tenant?.private_name}</p>
         </div>
-
+        {tenant?.is_business_tenant &&   <div className="">
+          <p className="font-semibold">Surame:</p>
+          <p>{tenant?.surname}</p>
+        </div>}
         <div>
           <p className="font-semibold">Type:</p>
           <p>{tenant?.is_business_tenant ? "Business" : "Individual"}</p>
