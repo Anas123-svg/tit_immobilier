@@ -24,7 +24,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
 
     try {
       // Make the POST request using axios
-      const response = await axios.post(import.meta.env.VITE_API_URL +"/api/users/login", {
+      const response = await axios.post(import.meta.env.VITE_API_URL +"/api/login", {
         userLogin: formData.userLogin,
         password: formData.password,
       });

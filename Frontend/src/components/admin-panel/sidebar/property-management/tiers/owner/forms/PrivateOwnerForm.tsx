@@ -29,8 +29,13 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { Owner } from "@/types/DataProps";
+import { Edit } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const FormSchema = z.object({
+  id:z.number(),
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
   private_gender: z.string().nonempty({ message: "Gender is required" }),
@@ -96,61 +101,91 @@ const FormSchema = z.object({
   private_documents: z.array(z.string()).optional(),
   is_business_owner: z.boolean(),
 });
-
-const PrivateOwnerForm = () => {
+interface PrivateOwnerFormProps{
+  owner?: Owner
+}
+const PrivateOwnerForm: React.FC<PrivateOwnerFormProps> = ({owner}) => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
     form.reset();
   };
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Open confirmation dialog
+ const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+// Close confirmation dialog
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
+// Handle confirm submit
+const handleConfirmSubmit = () => {
+  setIsSubmitting(true);
+  form.handleSubmit(onSubmit)(); // Submit the form
+  setOpen(false); // Close dialog after submission
+
+  setIsSubmitting(false);
+};
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      private_pronouns: "he/him",
-      private_name: "John Doe",
-      private_gender: "Male",
-      private_birth_date: "1980-01-01",
-      private_place_of_birth: "New York, USA",
-      private_address: "1234 Main St, New York, NY 10001",
-      private_nationality: "American",
-      private_document_type: "Passport",
-      private_document_number: "A12345678",
-      private_date_of_issue: "2015-01-01",
-      private_expiry_date: "2025-01-01",
-      private_taxpayer_identification_number: "123-45-6789",
-      private_occupation: "Software Engineer",
-      private_contact: "+1234567890",
-      private_whatsapp_contact: "+1234567890",
-      private_email: "johndoe@example.com",
-      private_po_box: "PO Box 10001",
-      private_marital_status: "Married",
-      private_spouses_name: "Jane Doe",
-      private_number_of_children: 2,
-      private_employer_name: "Tech Innovations Ltd",
-      private_bank_statement_rib: "12345678901234567890",
-      private_emergency_contact_name: "Mary Doe",
-      private_emergency_contact: "+10987654321",
-      private_emergency_contact_relation: "Sister",
-      private_photo: "",
-      private_documents: [],
+      id:owner?.id,
+      private_pronouns: owner?.private_pronouns,
+      private_name: owner?.private_name,
+      private_gender: owner?.private_gender,
+      private_birth_date: owner?.private_birth_date,
+      private_place_of_birth: owner?.private_place_of_birth,
+      private_address: owner?.private_address,
+      private_nationality: owner?.private_nationality,
+      private_document_type: owner?.private_document_type,
+      private_document_number: owner?.private_document_number,
+      private_date_of_issue: owner?.private_date_of_issue,
+      private_expiry_date: owner?.private_expiry_date,
+      private_taxpayer_identification_number: owner?.private_taxpayer_identification_number,
+      private_occupation: owner?.private_occupation,
+      private_contact: owner?.private_contact,
+      private_whatsapp_contact: owner?.private_whatsapp_contact,
+      private_email: owner?.private_email,
+      private_po_box: owner?.private_po_box,
+      private_marital_status: owner?.private_marital_status,
+      private_spouses_name: owner?.private_spouses_name,
+      private_number_of_children: owner?.private_number_of_children,
+      private_employer_name: owner?.private_employer_name,
+      private_bank_statement_rib: owner?.private_bank_statement_rib,
+      private_emergency_contact_name: owner?.private_emergency_contact_name,
+      private_emergency_contact: owner?.private_emergency_contact,
+      private_emergency_contact_relation: owner?.private_emergency_contact_relation,
+      private_photo: owner?.private_photo??"",
+      private_documents: owner?.private_documents,
       is_business_owner: false,
+      
     },
   });
 
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
-  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-
+  const onSubmit = owner
+       ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+       : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+   
 
   return (
     <Dialog open={open} onOpenChange={openChange}>
-      <DialogTrigger>Private Owner</DialogTrigger>
+         <DialogTrigger>{ owner?    <div className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
+      <Edit size={25} className="text-blue-700" /></div>:`Private Owner`}</DialogTrigger>
+
+    
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
           Add a private owner
         </DialogTitle>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleOpenDialog)}className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               PRIVATE OWNER DETAILS
             </h2>
@@ -575,9 +610,28 @@ const PrivateOwnerForm = () => {
                 addedFiles={form.watch("private_documents") || []}
               />
             </div>
-            <Button type="submit" className="w-full my-2 bg-primary">
-              Submit
-            </Button>
+            <Button type="submit" className="w-full mt-4 bg-primary">
+        Submit
+      </Button>
+
+      {/* Alert Dialog for Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-primary">Confirm Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to submit the form? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
           </form>
         </Form>
       </DialogContent>

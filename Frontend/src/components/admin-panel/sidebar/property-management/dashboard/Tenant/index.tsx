@@ -30,12 +30,18 @@ interface Stats {
   last_tenants: any[];
   last_unpaid_tenants: any[];
   last_to_be_renewed_contracts:any[];
+  list_active_contracts:any[];
+  list_terminated_contracts:any[];
   tenants_bills:any[];
   tenants_payments: any[];
   tenant_invoice: any[];
   pie_chart_data: any[];
-}
 
+  waiting_invoice: number;
+  sales: number;
+  unpaid_invoice: number;
+  in_progress_invoice: number;
+}
 const TenantDashboard: React.FC = () => {
   const breadcrumbs = [
     { name: "Dashboard", path: "/dashboard" },
@@ -190,10 +196,10 @@ const TenantDashboard: React.FC = () => {
 
   const tenantStats = [
     { name: "Invoice(s)", value: stats?.total_invoice, currency: "XOF", color: "bg-blue-500" },
-    { name: "Waiting(s)", value:stats?.pending_invoice, currency: "XOF", color: "bg-blue-400" },
-    { name: "Unpaid", value:stats?.total_invoice, currency: "XOF", color: "bg-red-500" },
-    { name: "In progress", value: stats?.total_invoice, currency: "XOF", color: "bg-yellow-500" },
-    { name: "Sales", value: stats?.total_payments, currency: "XOF", color: "bg-green-500" },
+    { name: "Waiting(s)", value:stats?.waiting_invoice, currency: "XOF", color: "bg-blue-400" },
+    { name: "Unpaid", value:stats?.unpaid_invoice, currency: "XOF", color: "bg-red-500" },
+    { name: "In progress", value: stats?.in_progress_invoice, currency: "XOF", color: "bg-yellow-500" },
+    { name: "Sales", value: stats?.sales, currency: "XOF", color: "bg-green-500" },
   ];
   const statisCardData = [
     { name: "Tenant", value: stats?.total_tenants, icon: User, color: "bg-red-500" },
@@ -270,7 +276,7 @@ const columns = [
       <div className="grid lg:grid-cols-2 gap-4 mt-6">
         <ContractsList
           title="LIST OF LAST 10 ACTIVE CONTRACTS"
-          data={stats?.last_to_be_renewed_contracts||[]}
+          data={stats?.list_active_contracts||[]}
           headerColor="bg-red-500"
           itemsPerPage={5}
         />

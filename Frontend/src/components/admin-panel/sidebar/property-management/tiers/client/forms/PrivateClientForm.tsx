@@ -29,8 +29,13 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { Client } from "@/types/DataProps";
+import { Edit } from "lucide-react";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const FormSchema = z.object({
+  id:z.number(),
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
   private_gender: z.string().nonempty({ message: "Gender is required" }),
@@ -67,7 +72,7 @@ const FormSchema = z.object({
     .string()
     .nonempty({ message: "Whatsapp contact is required" }),
   private_email: z.string().email({ message: "Invalid email address" }),
-  private_po_box: z.string().nonempty({ message: "PO box is required" }),
+  private_mail_box: z.string().nonempty({ message: "PO box is required" }),
   private_marital_status: z
     .string()
     .nonempty({ message: "Marital status is required" }),
@@ -83,64 +88,91 @@ const FormSchema = z.object({
   private_emergency_contact_relation: z
     .string()
     .nonempty({ message: "Emergency contact relation is required" }),
-    private_authorizing_authority: z.string().nonempty({ message: "Authorizing Authority is required" }),
+    private_signatory_authority: z.string().nonempty({ message: "Authorizing Authority is required" }),
   private_photo: z.string().optional(),
   private_documents: z.array(z.string()).optional(),
   is_business_client: z.boolean(),
 });
-
-const PrivateClientForm = () => {
+interface PrivateClientFormProps{
+  client?: Client
+}
+const PrivateClientForm :React.FC< PrivateClientFormProps> = ({client}) => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
     form.reset();
   };
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Open confirmation dialog
+ const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+// Close confirmation dialog
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
+// Handle confirm submit
+const handleConfirmSubmit = () => {
+  setIsSubmitting(true);
+  form.handleSubmit(onSubmit)(); // Submit the form
+  setOpenDialog(false); // Close dialog after submission
+};
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      private_pronouns: "he/him",
-      private_name: "John Doe",
-      private_gender: "Male",
-      private_birth_date: "1980-01-01",
-      private_place_of_birth: "New York, USA",
-      private_address: "1234 Main St, New York, NY 10001",
-      private_nationality: "American",
-      private_document_type: "Passport",
-      private_document_number: "A12345678",
-      private_date_of_issue: "2015-01-01",
-      private_authorizing_authority: "DMV Techville",
-      private_expiry_date: "2025-01-01",
-      private_taxpayer_identification_number: "123-45-6789",
-      private_occupation: "Software Engineer",
-      private_contact: "+1234567890",
-      private_whatsapp_contact: "+1234567890",
-      private_email: "johndoe@example.com",
-      private_po_box: "PO Box 10001",
-      private_marital_status: "Married",
-      private_number_of_children: 2,
-      private_emergency_contact_name: "Mary Doe",
-      private_emergency_contact: "+10987654321",
-      private_emergency_contact_relation: "Sister",
-      private_photo: "",
-      private_documents: [],
-      is_business_client: false,
+      id:client?.id,
+        private_pronouns: client?.private_pronouns,
+        private_name: client?.private_name,
+        private_gender: client?.private_gender,
+        private_birth_date: client?.private_birth_date,
+        private_place_of_birth: client?.private_place_of_birth,
+        private_address: client?.private_address, // Assuming fallback values if client is undefined
+        private_nationality: client?.private_nationality,
+        private_document_type: client?.private_document_type ,
+        private_document_number: client?.private_document_number ,
+        private_date_of_issue: client?.private_date_of_issue ,
+        private_signatory_authority: client?.private_signatory_authority,
+        private_expiry_date: client?.private_expiry_date ,
+        private_taxpayer_identification_number: client?.private_taxpayer_identification_number,
+        private_occupation: client?.private_occupation ,
+        private_contact: client?.private_contact ,
+        private_whatsapp_contact: client?.private_whatsapp_contact ,
+        private_email: client?.private_email ,
+        private_mail_box: client?.private_mail_box ,
+        private_marital_status: client?.private_marital_status ,
+        private_number_of_children: client?.private_number_of_children ,
+        private_emergency_contact_name: client?.private_emergency_contact_name ,
+        private_emergency_contact: client?.private_emergency_contact ,
+        private_emergency_contact_relation: client?.private_emergency_contact_relation ,
+        private_photo: client?.private_photo || "",
+        private_documents: client?.private_documents || [],
+        is_business_client: client?.is_business_client || false
+      
     },
   });
 
   const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
-  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-
-
+   const onSubmit = client
+     ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+     : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+ 
   return (
     <Dialog open={open} onOpenChange={openChange}>
-      <DialogTrigger>Private Client</DialogTrigger>
+ 
+      <DialogTrigger>{ client?    <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
+      <Edit size={25} className="text-blue-700" /></button>:`Private Client`}</DialogTrigger>
+
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
           Add a private Client
         </DialogTitle>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleOpenDialog)}className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               PRIVATE Client DETAILS
             </h2>
@@ -399,7 +431,7 @@ const PrivateClientForm = () => {
               />
               <FormField
                 control={form.control}
-                name="private_po_box"
+                name="private_mail_box"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>PO Box</FormLabel>
@@ -528,9 +560,28 @@ const PrivateClientForm = () => {
                 addedFiles={form.watch("private_documents") || []}
               />
             </div>
-            <Button type="submit" className="w-full my-2 bg-primary">
-              Submit
-            </Button>
+            <Button type="submit" className="w-full mt-4 bg-primary">
+        Submit
+      </Button>
+
+      {/* Alert Dialog for Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to submit the form? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
           </form>
         </Form>
       </DialogContent>

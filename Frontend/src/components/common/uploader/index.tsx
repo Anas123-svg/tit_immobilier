@@ -86,6 +86,9 @@ export default function FileUploader({
   };
 
   const getFileIcon = (url: string) => {
+    if (typeof url !== 'string') {
+      return "📁"; // Return a default icon if `url` is not a string
+    }
     const extension = url.split(".").pop()?.toLowerCase();
     console.log(extension);
     const iconMap: { [key: string]: string } = {
@@ -108,21 +111,22 @@ export default function FileUploader({
         XLM for a maximum size of 2MB
       </p>
       <div className="flex flex-wrap gap-4 mt-2">
-        {addedFiles.map((fileUrl) => (
-          <div
-            key={fileUrl}
-            className="relative flex items-center p-2 border rounded"
-          >
-            <span className="mr-2 text-2xl">{getFileIcon(fileUrl)}</span>
-            <button
-              type="button"
-              onClick={(ev) => removeFile(ev, fileUrl)}
-              className="ml-auto text-red-500 hover:text-red-700"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+      {addedFiles.map((fileUrl, index) => (
+  <div
+    key={fileUrl + index}  // Use a combination of the file URL and index to guarantee uniqueness
+    className="relative flex items-center p-2 border rounded"
+  >
+    <span className="mr-2 text-2xl">{getFileIcon(fileUrl)}</span>
+    <button
+      type="button"
+      onClick={(ev) => removeFile(ev, fileUrl)}
+      className="ml-auto text-red-500 hover:text-red-700"
+    >
+      Remove
+    </button>
+  </div>
+))}
+
         {addedFiles.length < maxFiles && (
           <label
             className={`text-gray-600 flex items-center justify-center border rounded p-2 cursor-pointer ${

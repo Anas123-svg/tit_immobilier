@@ -1,42 +1,35 @@
-import React from "react";
-import { Eye, Edit, Printer } from "lucide-react";
+import React, { useState } from "react";
+import { Eye, Edit, Printer, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
+import PrivateTenantForm from "../forms/PrivateTenantForm";
+import { Tenant } from "@/types/DataProps";
 
-// Define PrivateTenant Interface matching the backend model
-interface PrivateTenant {
-  id: number;
-  private_name: string;
-  private_gender: string;
-  private_birth_date: string;
-  private_place_of_birth: string;
-  private_address: string;
-  private_nationality: string;
-  private_document_type: string;
-  private_document_number: string;
-  private_date_of_issue: string;
-  private_signatory_authority: string;
-  private_expiry_date: string;
-  private_taxpayer_account_number: string;
-  private_occupation: string;
-  private_contact: string;
-  private_whatsapp_contact: string;
-  private_email: string;
-  private_mail_box: string;
-  private_marital_status: string;
-  private_number_of_children: number;
-  private_emergency_contact_name: string;
-  private_emergency_contact: string;
-  private_emergency_contact_relation: string;
-  private_photo: string | null;
-  private_documents: string[];
-  status: string;
-}
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useDeleteData } from "@/hooks/useDeleteData";
+
 
 interface PrivateTenantCardProps {
-  tenant: PrivateTenant;
+  tenant: Tenant;
 }
 
 const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
+   const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
+    const { onDelete, loading } = useDeleteData(); // Access both the onDelete function and loading state
+  
+    // Handle delete confirmation
+    const handleDeleteClick = () => {
+      setOpenDialog(true); // Show the confirmation dialog
+    };
+    const apiUrl = import.meta.env.VITE_API_URL + '/api/tenants';
+    const handleConfirmDelete = async () => {
+     await onDelete(apiUrl, tenant.id); // Call the delete function
+    loading?setOpenDialog(true):   setOpenDialog(false); // Close the dialog after confirming
+    };
+  
+    const handleCancelDelete = () => {
+      setOpenDialog(false); // Close the dialog without deleting
+    };
+  
   return (
     <div
       key={tenant.id}
@@ -82,12 +75,38 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
             <Eye size={25} className="text-gray-700" />
           </Link>
         </button>
-        <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
-          <Edit size={25} className="text-blue-700" />
-        </button>
+       <PrivateTenantForm tenant={tenant}/>
         <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
           <Printer size={25} className="text-yellow-700" />
         </button>
+        <button
+        className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
+        onClick={handleDeleteClick}
+     
+      >
+        <Trash size={25} className="text-red-700" />
+      </button>
+
+      {/* ShadCN AlertDialog for Delete Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete <span className="text-red-600">{tenant.private_name}</span> this tenant? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction className="bg-red-600 hover:bg-red-900" onClick={handleConfirmDelete}  disabled={loading}>
+            {loading ? 'Deleting...' : 'Confirm'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </div>
     </div>
   );

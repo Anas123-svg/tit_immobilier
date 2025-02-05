@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import BusinessClientForm from "./forms/BusinessClientForm";
 import PrivateClientForm from "./forms/PrivateClientForm";
+import FileClientForm from "./forms/FileClientForm";
 const ClientActionsSection: React.FC = () => {
   return (
     <div className="flex justify-end space-x-4 mb-6">
@@ -23,6 +24,9 @@ const ClientActionsSection: React.FC = () => {
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <PrivateClientForm/>
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+          <FileClientForm/>
           </DropdownMenuItem>
      
         </DropdownMenuContent>

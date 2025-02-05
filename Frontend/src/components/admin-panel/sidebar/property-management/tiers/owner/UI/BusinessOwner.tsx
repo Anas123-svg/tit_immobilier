@@ -1,39 +1,35 @@
-import { Edit, Eye, Printer } from "lucide-react";
-import React from "react";
+
+import { Owner } from "@/types/DataProps";
+import { Edit, Eye, Printer, Trash } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import BusinessOwnerForm from "../forms/BusinessOwnerForm";
+import { useDeleteData } from "@/hooks/useDeleteData";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 // Define the interface for Business Owner
-interface BusinessOwner {
-  business_company_name: string;
-  business_taxpayer_identification_number: string;
-  business_business_registration_number: string;
-  business_industry_sector: string;
-  business_office_phone_number: string;
-  business_whatsapp_contact: string;
-  business_email: string;
-  business_head_office: string;
-  business_po_box: string;
-  business_capital: number;
-  business_manager_pronouns_title: string;
-  business_manager_name: string;
-  business_manager_gender: string;
-  business_manager_contact: string;
-  business_manager_date_of_birth: string;
-  business_manager_place_of_birth: string;
-  business_manager_address: string;
-  business_manager_job_position: string;
-  business_manager_type_of_document: string;
-  business_manager_document_number: string;
-  business_manager_date_of_issue: string;
-  business_manager_authorizing_authority: string;
-  business_manager_expiry_date: string;
-  business_photo: string | null;
-  business_documents: string[];
-  is_business_owner: boolean;
-  status: string;
+interface BusinessOwnerFormProps{
+  owner: Owner
 }
 
-const BusinessOwnerCard: React.FC<{ owner: BusinessOwner }> = ({ owner }) => {
+const BusinessOwnerCard: React.FC<BusinessOwnerFormProps> = ({ owner }) => {
+     const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
+      const { onDelete, loading } = useDeleteData(); // Access both the onDelete function and loading state
+    
+      // Handle delete confirmation
+      const handleDeleteClick = () => {
+        setOpenDialog(true); // Show the confirmation dialog
+      };
+      const apiUrl = import.meta.env.VITE_API_URL + '/api/owners';
+      const handleConfirmDelete = async () => {
+       await onDelete(apiUrl, owner.id); // Call the delete function
+
+      };
+    
+      const handleCancelDelete = () => {
+        setOpenDialog(false); // Close the dialog without deleting
+      };
+    
   return (
     <div key={owner.business_company_name} className="relative p-6 bg-white border rounded-lg shadow-md">
       <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">Business</div>
@@ -60,14 +56,39 @@ const BusinessOwnerCard: React.FC<{ owner: BusinessOwner }> = ({ owner }) => {
 
       <div className="flex justify-end space-x-4 mt-4">
       <button className="p-2 bg-gray-100 rounded-full shadow hover:bg-gray-200">
-                <Link to={"/tier/owners/detail-page"}>  <Eye size={25} className="text-gray-700" /></Link>
+                <Link to={`/tier/owners/detail-page/${owner.id}`}>  <Eye size={25} className="text-gray-700" /></Link>
                 </button>
-                <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
-                  <Edit size={25} className="text-blue-700" />
-                </button>
+              <BusinessOwnerForm owner={owner}/>
                 <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
                   <Printer size={25} className="text-yellow-700" />
-                </button>
+                </button><button
+        className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
+        onClick={handleDeleteClick}
+     
+      >
+        <Trash size={25} className="text-red-700" />
+      </button>
+
+      {/* ShadCN AlertDialog for Delete Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete <span className="text-red-600">{owner.business_company_name}</span> this owner? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction className="bg-red-600 hover:bg-red-900" onClick={handleConfirmDelete}  disabled={loading}>
+            {loading ? 'Deleting...' : 'Confirm'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </div>
     </div>
   );
