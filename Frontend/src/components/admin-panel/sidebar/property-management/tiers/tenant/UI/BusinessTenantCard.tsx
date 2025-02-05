@@ -1,34 +1,10 @@
 import React from "react";
 import { Eye, Edit, Printer } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Tenant } from "@/types/DataProps";
+import BusinessTenantForm from "../forms/BusinessTenantForm";
 
-// Define Tenant Interface matching the backend model
-interface Tenant {
-  id: number;
-  business_company_name: string;
-  business_taxpayer_account_number: string;
-  business_business_registration_number: string;
-  business_industry_sector: string;
-  business_office_phone_number: string;
-  business_whatsapp_contact: string;
-  business_email: string;
-  business_head_office: string;
-  business_mail_box: string;
-  business_capital: number;
-  business_manager_name: string;
-  business_manager_gender: string;
-  business_manager_contact: string;
-  business_manager_job_position: string;
-  business_manager_address: string;
-  business_manager_type_of_document: string;
-  business_manager_document_number: string;
-  business_manager_date_of_issue: string;
-  business_manager_expiry_date: string;
-  business_photo: string | null;
-  business_documents: string[];
-  is_business_tenant: boolean;
-  status: string;
-}
+
 
 interface BusinessTenantCardProps {
   tenant: Tenant;
@@ -79,9 +55,7 @@ const BusinessTenantCard: React.FC<BusinessTenantCardProps> = ({ tenant }) => {
         <button className="p-2 bg-gray-100 rounded-full shadow hover:bg-gray-200">
                          <Link to={`/tier/tenants/detail-page/${tenant.id}`}>  <Eye size={25} className="text-gray-700" /></Link>
                        </button>
-                       <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
-                         <Edit size={25} className="text-blue-700" />
-                       </button>
+                     <BusinessTenantForm tenant={tenant}/>
                        <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
                          <Printer size={25} className="text-yellow-700" />
                        </button>

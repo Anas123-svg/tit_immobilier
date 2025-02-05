@@ -1,39 +1,13 @@
 import React from "react";
 import { Eye, Edit, Printer } from "lucide-react";
 import { Link } from "react-router-dom";
+import PrivateTenantForm from "../forms/PrivateTenantForm";
+import { Tenant } from "@/types/DataProps";
 
-// Define PrivateTenant Interface matching the backend model
-interface PrivateTenant {
-  id: number;
-  private_name: string;
-  private_gender: string;
-  private_birth_date: string;
-  private_place_of_birth: string;
-  private_address: string;
-  private_nationality: string;
-  private_document_type: string;
-  private_document_number: string;
-  private_date_of_issue: string;
-  private_signatory_authority: string;
-  private_expiry_date: string;
-  private_taxpayer_account_number: string;
-  private_occupation: string;
-  private_contact: string;
-  private_whatsapp_contact: string;
-  private_email: string;
-  private_mail_box: string;
-  private_marital_status: string;
-  private_number_of_children: number;
-  private_emergency_contact_name: string;
-  private_emergency_contact: string;
-  private_emergency_contact_relation: string;
-  private_photo: string | null;
-  private_documents: string[];
-  status: string;
-}
+
 
 interface PrivateTenantCardProps {
-  tenant: PrivateTenant;
+  tenant: Tenant;
 }
 
 const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
@@ -82,9 +56,7 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
             <Eye size={25} className="text-gray-700" />
           </Link>
         </button>
-        <button className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
-          <Edit size={25} className="text-blue-700" />
-        </button>
+       <PrivateTenantForm tenant={tenant}/>
         <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
           <Printer size={25} className="text-yellow-700" />
         </button>

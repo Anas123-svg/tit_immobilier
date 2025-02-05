@@ -30,6 +30,9 @@ import { Separator } from "@/components/ui/separator";
 import ProfilePicUploader from "@/components/common/profilePicUploader";
 import FileUploader from "@/components/common/uploader";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { Tenant } from "@/types/DataProps";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { Edit } from "lucide-react";
 
 const FormSchema = z.object({
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
@@ -57,10 +60,14 @@ const FormSchema = z.object({
   private_photo: z.string().optional(),
   private_documents: z.array(z.string()).optional(),
   private_mail_box: z.string().nonempty({ message: "mail box is required" }),
-  is_business_tenant:z.boolean()
+  is_business_tenant:z.boolean(),
+  id:z.number().min(0,"Must be positive"),
 });
+interface PrivateTenantFormProps {
+  tenant?: Tenant;
+}
 
-const PrivateTenantForm = () => {
+const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
@@ -70,47 +77,52 @@ const PrivateTenantForm = () => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     mode: 'onTouched',
-    defaultValues: {
-      private_name: "Jane Doe",  // Example full name
-      private_gender: "Female",  // Example gender
-      private_birth_date: "1990-05-15",  // Example birth date (YYYY-MM-DD)
-      private_place_of_birth: "New York, USA",  // Example place of birth
-      private_address: "123 Main Street, New York, USA",  // Example address
-      private_nationality: "American",  // Example nationality
-      private_document_type: "Passport",  // Example document type
-      private_document_number: "A12345678",  // Example document number
-      private_date_of_issue: "2015-06-20",  // Example date of issue
-      private_expiry_date: "2030-06-20",  // Example expiry date
-      private_taxpayer_account_number: "TAX987654321",  // Example taxpayer account number
-      private_occupation: "Software Engineer",  // Example occupation
-      private_contact: "+11234567890",  // Example phone number
-      private_whatsapp_contact: "+11234567890",  // Example WhatsApp contact
-      private_email: "jane.doe@example.com",  // Example email
-      private_signatory_authority: "Self",  // Example signatory authority
-      private_marital_status: "Married",  // Example marital status
-      private_number_of_children: 2,  // Example number of children
-      private_emergency_contact_name: "John Doe",  // Example emergency contact name
-      private_emergency_contact: "+19876543210",  // Example emergency contact number
-      private_emergency_contact_relation: "Spouse",  // Example relation
-      private_photo: "https://example.com/jane-doe.jpg",  // Example photo URL
-      private_pronouns: "She/Her",  // Example pronouns
-      private_mail_box: "PO Box 789",  // Example mail box
-      private_documents: [
+    defaultValues:   {
+      id: tenant?.id ?? 1,
+      private_name: tenant?.private_name || "Jane Doe",  // Default full name if tenant's private name is undefined
+      private_gender: tenant?.private_gender || "Female",  // Default gender if tenant's private gender is undefined
+      private_birth_date: tenant?.private_birth_date || "1990-05-15",  // Default birth date if tenant's private birth date is undefined
+      private_place_of_birth: tenant?.private_place_of_birth || "New York, USA",  // Default place of birth if tenant's place of birth is undefined
+      private_address: tenant?.private_address || "123 Main Street, New York, USA",  // Default address if tenant's private address is undefined
+      private_nationality: tenant?.private_nationality || "American",  // Default nationality if tenant's nationality is undefined
+      private_document_type: tenant?.private_document_type || "Passport",  // Default document type if tenant's document type is undefined
+      private_document_number: tenant?.private_document_number || "A12345678",  // Default document number if tenant's document number is undefined
+      private_date_of_issue: tenant?.private_date_of_issue || "2015-06-20",  // Default date of issue if tenant's document issue date is undefined
+      private_expiry_date: tenant?.private_expiry_date || "2030-06-20",  // Default expiry date if tenant's document expiry date is undefined
+      private_taxpayer_account_number: tenant?.private_taxpayer_account_number || "TAX987654321",  // Default taxpayer account number if tenant's account number is undefined
+      private_occupation: tenant?.private_occupation || "Software Engineer",  // Default occupation if tenant's occupation is undefined
+      private_contact: tenant?.private_contact || "+11234567890",  // Default phone number if tenant's contact is undefined
+      private_whatsapp_contact: tenant?.private_whatsapp_contact || "+11234567890",  // Default WhatsApp contact if tenant's contact is undefined
+      private_email: tenant?.private_email || "jane.doe@example.com",  // Default email if tenant's email is undefined
+      private_signatory_authority: tenant?.private_signatory_authority || "Self",  // Default signatory authority if tenant's authority is undefined
+      private_marital_status: tenant?.private_marital_status || "Married",  // Default marital status if tenant's marital status is undefined
+      private_number_of_children: tenant?.private_number_of_children ?? 2,  // Default number of children if tenant's number of children is undefined
+      private_emergency_contact_name: tenant?.private_emergency_contact_name || "John Doe",  // Default emergency contact name if tenant's name is undefined
+      private_emergency_contact: tenant?.private_emergency_contact || "+19876543210",  // Default emergency contact number if tenant's number is undefined
+      private_emergency_contact_relation: tenant?.private_emergency_contact_relation || "Spouse",  // Default emergency contact relation if tenant's relation is undefined
+      private_photo: tenant?.private_photo || "https://example.com/jane-doe.jpg",  // Default photo URL if tenant's photo is undefined
+      private_pronouns: tenant?.private_pronouns || "She/Her",  // Default pronouns if tenant's pronouns are undefined
+      private_mail_box: tenant?.private_mail_box || "PO Box 789",  // Default mail box if tenant's mail box is undefined
+      private_documents: tenant?.private_documents || [  // Default documents if tenant's documents are undefined
         "https://example.com/document1.pdf",
         "https://example.com/document2.pdf"
-      ],  // Example document URLs
-      is_business_tenant: false  // Example business tenant status
+      ],
+      is_business_tenant: tenant?.is_business_tenant ?? false,  // Default business tenant status if tenant's status is undefined
     }
     
   });
 
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenants';
-        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-      
+          const onSubmit = tenant
+             ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+             : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+         
 
   return (
     <Dialog open={open} onOpenChange={openChange}>
-      <DialogTrigger>Private Tenant</DialogTrigger>
+         <DialogTrigger>{ tenant?    <div className="p-2 bg-blue-100 rounded-full shadow hover:bg-blue-200">
+      <Edit size={25} className="text-blue-700" /></div>:`Private Tenant`}</DialogTrigger>
+
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
           Add a private Tenant

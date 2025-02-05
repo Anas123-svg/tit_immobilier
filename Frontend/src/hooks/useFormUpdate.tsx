@@ -1,4 +1,3 @@
-// src/hooks/useFormUpdate.ts
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { z, ZodTypeAny } from 'zod';
@@ -6,6 +5,13 @@ import { z, ZodTypeAny } from 'zod';
 export function useFormUpdate<T extends ZodTypeAny>(apiUrl: string) {
   const onUpdate = async (data: z.infer<T>) => {
     const { id, ...values } = data; // Extract the id and values
+
+    // Ensure data is the correct type for the API update
+    if (!id) {
+      toast.error('Missing ID for update');
+      return;
+    }
+
     try {
       const response = await axios.put(`${apiUrl}/${id}`, values);  // Use the id to update
       console.log('Update Success:', response.data);  // Logging the server response
