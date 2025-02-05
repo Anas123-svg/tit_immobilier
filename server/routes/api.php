@@ -35,8 +35,8 @@ use App\Http\Controllers\OwnerValidatorAssignmentController;
 use App\Http\Controllers\TenantShortTermContractController;
 use App\Http\Controllers\LocationProspectOfficialResponseController;
 
-Route::post('/users/login', [UserController::class, 'login']);
-Route::post('/users', [UserController::class, 'store']);
+Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::post('/users', [UserController::class, 'store'])->name('users');
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -55,6 +55,7 @@ Route::post('/owners', [OwnerController::class, 'store']);
 Route::put('/owners/{id}', [OwnerController::class, 'update']);
 Route::get('/owners/{id}', [OwnerController::class, 'show']);
 Route::delete('/owners/{id}', [OwnerController::class, 'destroy']);
+Route::get('/profile/owner/{id}', [OwnerController::class, 'getOwnerProperties']);
 
 
 //
@@ -176,6 +177,7 @@ Route::put('/tenants/{id}', [TenantController ::class, 'update']);
 Route::get('/tenants/{id}', [TenantController::class, 'show']);
 Route::delete('/tenants/{id}', [TenantController::class, 'destroy']);
 Route::get('/dashboard/tenants', [TenantController::class, 'TenantDashboard']);
+Route::get('/profile/tenant/{id}', [TenantController::class, 'getTenantProperties']);
 
 //tenant contract routes
 Route::prefix('tenant-contract')->group(function() {
@@ -332,6 +334,7 @@ Route::prefix('clients')->group(function() {
     Route::delete('{id}', [ClientController::class, 'destroy']); // Delete a clients
 });
 
+Route::get('profile/client/{id}', [ClientController::class, 'getClientProperties']); // Get all clients by owner
 
 Route::prefix('clients/file')->group(function() {
     Route::get('/', [ClientFileController::class, 'index']); // Get all clients file

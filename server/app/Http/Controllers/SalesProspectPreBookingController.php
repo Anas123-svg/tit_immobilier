@@ -9,7 +9,7 @@ class SalesProspectPreBookingController extends Controller
 {
     public function index()
     {
-        return SalesProspectPreBooking::all();
+        return SalesProspectPreBooking::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

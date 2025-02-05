@@ -9,7 +9,7 @@ class TenantShortTermContractController extends Controller
 {
     public function index()
     {
-        return response()->json(TenantShortTermContract::all(), 200);
+        return response()->json(TenantShortTermContract::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request)

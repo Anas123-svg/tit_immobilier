@@ -8,7 +8,7 @@ class SaleProspectController extends Controller
 {
     public function index()
     {
-        return SaleProspect::all();
+        return SaleProspect::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

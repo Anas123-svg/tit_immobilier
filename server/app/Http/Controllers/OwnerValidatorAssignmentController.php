@@ -9,7 +9,7 @@ class OwnerValidatorAssignmentController extends Controller
 {
     public function index()
     {
-        return OwnerValidatorAssignment::all();
+        return OwnerValidatorAssignment::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

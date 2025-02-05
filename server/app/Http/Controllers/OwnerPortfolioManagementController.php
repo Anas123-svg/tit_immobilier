@@ -9,7 +9,7 @@ class OwnerPortfolioManagementController extends Controller
 {
     public function index()
     {
-        return OwnerPortfolioManagement::all();
+        return OwnerPortfolioManagement::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

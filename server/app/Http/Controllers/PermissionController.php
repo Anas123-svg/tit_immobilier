@@ -23,7 +23,7 @@ class PermissionController extends Controller
     // Get all permissions
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::orderBy('created_at', 'desc')->get();
         return response()->json($permissions);
     }
 

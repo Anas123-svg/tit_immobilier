@@ -8,7 +8,7 @@ class ClientFileController extends Controller
 {
     public function index()
     {
-        return ClientFile::all();
+        return ClientFile::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

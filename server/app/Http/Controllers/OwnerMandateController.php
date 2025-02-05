@@ -10,7 +10,7 @@ class OwnerMandateController extends Controller
 {
     public function index()
     {
-        return OwnerMandate::all();
+        return OwnerMandate::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

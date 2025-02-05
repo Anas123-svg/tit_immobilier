@@ -21,7 +21,8 @@ class OwnerController extends Controller
     public function index()
     {
         try {
-            $owners = Owner::all()
+            $owners = Owner::orderBy('created_at', 'desc')
+                ->get()
                 ->map(function ($owner) {
                     return collect($owner->toArray())->filter(fn($value) => $value !== null);
                 });
@@ -195,6 +196,31 @@ class OwnerController extends Controller
             ], 500);
         }
     }
+
+
+    public function getOwnerProperties($ownerId)
+{
+    try {
+        $owner = Owner::find($ownerId);
+        $saleProperties = OwnerSaleProperty::where('owner_id', $ownerId)->get();
+        $rentProperties = OwnerRentProperty::where('owner_id', $ownerId)->get();
+        $mandate = OwnerMandate::where('owner_id', $ownerId)->get();
+
+        return response()->json([
+            'profile' => $owner,
+            'Good' => $saleProperties,
+            'Locative' => $rentProperties,
+            'Mandate' => $mandate,
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error('Error fetching owner properties: ' . $e->getMessage());
+
+        return response()->json([
+            'message' => 'Error fetching owner properties.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 
 
     

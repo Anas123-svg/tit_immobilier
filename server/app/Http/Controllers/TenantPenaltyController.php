@@ -9,7 +9,7 @@ class TenantPenaltyController extends Controller
 {
     public function index()
     {
-        return response()->json(TenantPenalty::all(), 200);
+        return response()->json(TenantPenalty::orderBy('created_at', 'desc')->get(), 200);
     }
 
     public function store(Request $request)

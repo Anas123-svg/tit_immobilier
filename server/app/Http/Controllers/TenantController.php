@@ -19,7 +19,8 @@ class TenantController extends Controller
     public function index()
     {
         try {
-            $tenant = Tenant::all()
+            $tenant = Tenant::orderBy('created_at', 'desc')
+                ->get()
                 ->map(function ($tenant) {
                     return collect($tenant->toArray())->filter(fn($value) => $value !== null);
                 });
@@ -204,5 +205,31 @@ class TenantController extends Controller
         return response()->json(['message' => ' tenant deleted successfully.']);
     }
 
+
+    public function getTenantProperties($ownerId)
+    {
+        try {
+            $owner = Tenant::find($ownerId);
+            $saleProperties = TenantBill::where('tenant_id', $ownerId)->get();
+            $rentProperties = TenantContract::where('tenant_id', $ownerId)->get();
+            $mandate = TenantPayment::where('tenant_id', $ownerId)->get();
+    
+            return response()->json([
+                'profile' => $owner,
+                'tenant_bill' => $saleProperties,
+                'tenant_contract' => $rentProperties,
+                'tenant_payment' => $mandate,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching owner properties: ' . $e->getMessage());
+    
+            return response()->json([
+                'message' => 'Error fetching owner properties.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+    
 
 }

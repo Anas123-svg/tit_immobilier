@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientFile;
 use Illuminate\Http\Request;
 use App\Models\Client;
+use Illuminate\Support\Facades\Log;
 
 class ClientController extends Controller
 {
     public function index()
     {
         try {
-            $owners = Client::all()
+            $owners = Client::orderBy('created_at', 'desc')
+                ->get()
                 ->map(function ($owner) {
                     return collect($owner->toArray())->filter(fn($value) => $value !== null);
                 });
@@ -100,5 +103,26 @@ class ClientController extends Controller
         $Owner->delete();
         return response()->json(['message' => ' Client deleted successfully.']);
     }
+
+
+    public function getClientProperties($ownerId)
+    {
+        try {
+            $owner = Client::find($ownerId);
+            $saleProperties = ClientFile::where('client_id', $ownerId)->get();    
+            return response()->json([
+                'profile' => $owner,
+                'case' => $saleProperties
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching owner properties: ' . $e->getMessage());
+    
+            return response()->json([
+                'message' => 'Error fetching owner properties.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
 
 }
