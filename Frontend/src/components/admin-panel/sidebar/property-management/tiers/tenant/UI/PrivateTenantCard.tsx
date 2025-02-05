@@ -94,7 +94,7 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete <span className="text-red-600">{tenant.business_company_name}</span> this tenant? This action cannot be undone.
+              Are you sure you want to delete <span className="text-red-600">{tenant.private_name}</span> this tenant? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

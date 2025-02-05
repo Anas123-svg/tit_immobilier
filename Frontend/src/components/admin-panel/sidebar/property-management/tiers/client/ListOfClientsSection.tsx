@@ -162,7 +162,7 @@ const ListOfClientsSection: React.FC<ListOfClientsSectionProps> = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete <span className="text-red-600">{client.is_business_client? client.business_company_name:client.private_name}</span> this owner? This action cannot be undone.
+              Are you sure you want to delete <span className="text-red-600">{client.is_business_client? client.business_company_name:client.private_name}</span> this client? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
