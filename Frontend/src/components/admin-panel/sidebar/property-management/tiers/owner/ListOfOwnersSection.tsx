@@ -34,7 +34,7 @@ const ListOfOwnersSection: React.FC = () => {
       {loading && <p className="text-center text-gray-500">Loading owners...</p>}
 
       {/* Error State */}
-      {error && <p className="text-center text-red-500">Error fetching data: {error}</p>}
+      {!Owners && error && <p className="text-center text-red-500">Error fetching data: {error}</p>}
 
       {/* Empty State */}
       {!loading && Owners?.length === 0 && (

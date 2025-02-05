@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Eye, Edit, Printer, RefreshCw } from "lucide-react";
+import { Eye, Edit, Printer, RefreshCw, Trash } from "lucide-react";
 import useFetchData from "@/hooks/useFetchData";
 import { Link } from "react-router-dom";
 import BusinessClientForm from "./forms/BusinessClientForm";
 import PrivateClientForm from "./forms/PrivateClientForm";
 import { Client } from "@/types/DataProps";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useDeleteData } from "@/hooks/useDeleteData";
 
 
 interface ListOfClientsSectionProps {
@@ -21,7 +23,21 @@ const ListOfClientsSection: React.FC<ListOfClientsSectionProps> = () => {
   const { data: clients, loading, error } = useFetchData<Client[]>(
     `${import.meta.env.VITE_API_URL}/api/clients`,reloadTrigger
   );
-
+  const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
+        const { onDelete,loading:deleteLoading } = useDeleteData(); // Access both the onDelete function and loading state
+        const [clientId, setClient] = useState<number>(0); // For confirmation dialog
+     
+        // Handle delete confirmation
+   
+        const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
+        const handleConfirmDelete = async () => {
+         await onDelete(apiUrl, clientId); // Call the delete function
+         deleteLoading?setOpenDialog(true):   setOpenDialog(false); // Close the dialog after confirming
+        };
+      
+        const handleCancelDelete = () => {
+          setOpenDialog(false); // Close the dialog without deleting
+        };
   return (
     <div className="p-4 bg-white shadow rounded-md">
        <div className="flex justify-between">   <h3 className="text-3xl text-center font-semibold mb-4">Client List</h3>
@@ -128,7 +144,37 @@ const ListOfClientsSection: React.FC<ListOfClientsSectionProps> = () => {
 >
   <Printer size={25} className="text-yellow-700" />
 </button>
+<button
+        className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
+        onClick={ () => {
+          setOpenDialog(true); // Show the confirmation dialog
+          setClient(client.id)
+        }}
+     
+      >
+        <Trash size={25} className="text-red-700" />
+      </button>
 
+      {/* ShadCN AlertDialog for Delete Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete <span className="text-red-600">{client.is_business_client? client.business_company_name:client.private_name}</span> this owner? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction className="bg-red-600 hover:bg-red-900" onClick={handleConfirmDelete}  disabled={loading}>
+            {loading ? 'Deleting...' : 'Confirm'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
               </div>
             </div>
           ))}

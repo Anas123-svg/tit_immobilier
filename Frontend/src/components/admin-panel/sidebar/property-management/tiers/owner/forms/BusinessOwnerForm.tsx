@@ -33,6 +33,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Owner } from "@/types/DataProps";
 import { Edit } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const FormSchema = z.object({
   id:z.number().optional(),
@@ -73,6 +74,27 @@ const BusinessOwnerForm: React.FC<BusinessOwnerFormProps> = ({owner}) => {
     setOpen(!open);
     form.reset();
   };
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Open confirmation dialog
+ const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+// Close confirmation dialog
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
+// Handle confirm submit
+const handleConfirmSubmit = () => {
+  setIsSubmitting(true);
+  form.handleSubmit(onSubmit)(); // Submit the form
+  setOpen(false); // Close dialog after submission
+
+  setIsSubmitting(false);
+};
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -86,7 +108,7 @@ const BusinessOwnerForm: React.FC<BusinessOwnerFormProps> = ({owner}) => {
         // business_whatsapp_contact: owner?.business_whatsapp_contact || "+1987654321",  // Default if undefined
         // business_email: owner?.business_email || "info@default.com",  // Default if undefined
         // business_head_office: owner?.business_head_office || "123 Default St, City, Country",  // Default if undefined
-        // business_po_box: owner?.business_po_box || "PO Box 123",  // Default if undefined
+        // // business_po_box: owner?.business_po_box || "PO Box 123",  // Default if undefined
         // business_capital: owner?.business_capital || 100000,  // Default if undefined
         // business_manager_pronouns_title: owner?.business_manager_pronouns_title || "Mr.",  // Default if undefined
         // business_manager_name: owner?.business_manager_name || "John Doe",  // Default if undefined
@@ -157,7 +179,7 @@ const BusinessOwnerForm: React.FC<BusinessOwnerFormProps> = ({owner}) => {
       This dialog allows you to add or edit details for a business owner.
     </DialogDescription>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleOpenDialog)}className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               COMPANY DETAILS
             </h2>
@@ -537,9 +559,28 @@ const BusinessOwnerForm: React.FC<BusinessOwnerFormProps> = ({owner}) => {
                 addedFiles={form.watch("business_documents") || []}
               />
             </div>
-            <Button type="submit" className="w-full my-2 bg-primary">
-              Submit
-            </Button>
+            <Button type="submit" className="w-full mt-4 bg-primary">
+        Submit
+      </Button>
+
+      {/* Alert Dialog for Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-primary">Confirm Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to submit the form? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
           </form>
         </Form>
       </DialogContent>

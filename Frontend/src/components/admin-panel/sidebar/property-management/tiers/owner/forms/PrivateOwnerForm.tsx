@@ -32,6 +32,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Owner } from "@/types/DataProps";
 import { Edit } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const FormSchema = z.object({
   id:z.number(),
@@ -109,6 +110,27 @@ const PrivateOwnerForm: React.FC<PrivateOwnerFormProps> = ({owner}) => {
     setOpen(!open);
     form.reset();
   };
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Open confirmation dialog
+ const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+// Close confirmation dialog
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
+// Handle confirm submit
+const handleConfirmSubmit = () => {
+  setIsSubmitting(true);
+  form.handleSubmit(onSubmit)(); // Submit the form
+  setOpen(false); // Close dialog after submission
+
+  setIsSubmitting(false);
+};
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -163,7 +185,7 @@ const PrivateOwnerForm: React.FC<PrivateOwnerFormProps> = ({owner}) => {
           Add a private owner
         </DialogTitle>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleOpenDialog)}className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               PRIVATE OWNER DETAILS
             </h2>
@@ -588,9 +610,28 @@ const PrivateOwnerForm: React.FC<PrivateOwnerFormProps> = ({owner}) => {
                 addedFiles={form.watch("private_documents") || []}
               />
             </div>
-            <Button type="submit" className="w-full my-2 bg-primary">
-              Submit
-            </Button>
+            <Button type="submit" className="w-full mt-4 bg-primary">
+        Submit
+      </Button>
+
+      {/* Alert Dialog for Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-primary">Confirm Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to submit the form? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
           </form>
         </Form>
       </DialogContent>

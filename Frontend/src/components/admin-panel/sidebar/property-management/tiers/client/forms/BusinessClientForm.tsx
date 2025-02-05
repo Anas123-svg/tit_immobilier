@@ -1,8 +1,9 @@
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger,DialogDescription
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,6 +34,7 @@ import { Client } from "@/types/DataProps";
 import { useForceUpdate } from "framer-motion";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Edit } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const FormSchema = z.object({
   id:z.number().min(0,"Must be positive"),
@@ -72,6 +74,26 @@ const BusinessClientForm:React.FC< BusinessClientFormProps> = ({client}) => {
     setOpen(!open);
     form.reset();
   };
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Open confirmation dialog
+ const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+// Close confirmation dialog
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
+// Handle confirm submit
+const handleConfirmSubmit = () => {
+  setIsSubmitting(true);
+  form.handleSubmit(onSubmit)(); // Submit the form
+  setOpenDialog(false); // Close dialog after submission
+};
+
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -120,7 +142,7 @@ const BusinessClientForm:React.FC< BusinessClientFormProps> = ({client}) => {
           Add a business Client
         </DialogTitle>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(handleOpenDialog)}className="space-y-6">
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               COMPANY DETAILS
             </h2>
@@ -255,7 +277,7 @@ const BusinessClientForm:React.FC< BusinessClientFormProps> = ({client}) => {
                   <FormItem>
                     <FormLabel>Capital</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Capital" />
+                    <Input {...field}    value={field.value ?? ""}  onChange={(e) => field.onChange(Number(e.target.value))} type="number" placeholder="Capital" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -500,9 +522,28 @@ const BusinessClientForm:React.FC< BusinessClientFormProps> = ({client}) => {
                 addedFiles={form.watch("business_documents") || []}
               />
             </div>
-            <Button type="submit" className="w-full my-2 bg-primary">
-              Submit
-            </Button>
+            <Button type="submit" className="w-full mt-4 bg-primary">
+        Submit
+      </Button>
+
+      {/* Alert Dialog for Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to submit the form? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
           </form>
         </Form>
       </DialogContent>

@@ -32,6 +32,8 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Tenant } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Edit } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+
 const FormSchema = z.object({
   business_company_name: z.string().min(1, "Company Name is required"),
   business_taxpayer_account_number: z.string().min(1, "Taxpayer Account Number is required"),
@@ -68,6 +70,28 @@ interface BusinessTenantFormProps {
 // Functional component for business tenant form
 const BusinessTenantForm: React.FC<BusinessTenantFormProps> = ({ tenant }) => {
   const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+ // Open confirmation dialog
+ const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+// Close confirmation dialog
+const handleCloseDialog = () => {
+  setOpenDialog(false);
+};
+
+// Handle confirm submit
+const handleConfirmSubmit = () => {
+  setIsSubmitting(true);
+  form.handleSubmit(onSubmit)(); // Submit the form
+  setOpen(false); // Close dialog after submission
+
+  setIsSubmitting(false);
+};
+  
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -147,7 +171,8 @@ const BusinessTenantForm: React.FC<BusinessTenantFormProps> = ({ tenant }) => {
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle>Add or Edit Business Tenant</DialogTitle>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleOpenDialog)}className="space-y-6">
+
           <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
   COMPANY DETAILS
 </h2>
@@ -509,9 +534,28 @@ MANAGER DETAILS
               />
             </div>
 
-            <Button type="submit" className="w-full my-2 bg-primary">
-              Submit
-            </Button>
+            <Button type="submit" className="w-full mt-4 bg-primary">
+        Submit
+      </Button>
+
+      {/* Alert Dialog for Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-primary">Confirm Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to submit the form? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCloseDialog}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit} disabled={isSubmitting}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
           </form>
         </Form>
       </DialogContent>
