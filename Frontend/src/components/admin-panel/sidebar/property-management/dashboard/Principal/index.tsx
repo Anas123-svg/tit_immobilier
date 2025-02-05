@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import StatisticCardsSection from "@/components/admin-panel/UI-components/StatisticCardsSection";
-import { principalStats, tenantData } from "@/data/dummyData";
+import { principalStats } from "@/data/dummyData";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
 import TopListSection from "./TopListSection";
 import { FilterOption } from "@/types/DataProps";
@@ -10,6 +10,36 @@ import {  User,Home, Ticket,Tag} from "lucide-react";
 import { StatisticCard5 } from "@/components/admin-panel/UI-components/StatisticCard5";
 import StatisticCardsSection5 from "@/components/admin-panel/UI-components/StatisticCardsSection5";
 
+export const tenantData = [
+  {
+    name: "ASSEMIAN N'GUESSAN ADOLPHE",
+    phone: "0707787973",
+    code: "ZA-6972-6414-01",
+    status: "Active",
+    pay: "OWE: 9,900,000 XOF",
+  },
+  {
+    name: "YAO N'GUESSAN ALAIN ROLAND",
+    phone: "0777120473",
+    code: "ZA-6972-2939-01",
+    status: "Active",
+    pay: "DUE: 0 XOF",
+  },
+  {
+    name: "KOUADIO JEAN MICHEL",
+    phone: "0778901234",
+    code: "ZA-6972-1293-01",
+    status: "Inactive",
+    pay: "OWE: 5,500,000 XOF",
+  },
+  {
+    name: "AHOUA MARIE LAURE",
+    phone: "0583920123",
+    code: "ZA-6972-9384-01",
+    status: "Active",
+    pay: "DUE: 0 XOF",
+  },
+];
 
 const Principal: React.FC = () => {
   // Filter options for the HeaderSection

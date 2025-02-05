@@ -14,7 +14,7 @@ import {
 import {
   StatCardProps,
   SummaryCardProps,
-  Mandate,
+
   Owner,
   Tenant,
   StatCard,
@@ -82,7 +82,7 @@ export const summaryCardsData = [
 
 // DummyData.ts
 
-export const activeOwners: Owner[] = [
+export const activeOwners = [
   {
     name: "Mrs. DIOMANDE AUDREY ASTOU",
     contact: "627745376 - INDIVIDUAL",
@@ -109,7 +109,7 @@ export const activeOwners: Owner[] = [
   },
 ];
 
-export const validatedMandates: Mandate[] = [
+export const validatedMandates= [
   {
     good: "DEMBELE BUILDING",
     surfaceArea: "0 m²",
@@ -233,82 +233,8 @@ export const dummyOwners = [
     imgUrl: "https://randomuser.me/api/portraits/men/4.jpg",
   },
 ];
-export const dummyTenants: Tenant[] = [
-  {
-    id: 1,
-    name: "ASSEMIAN N'GUESSAN ADOLPHE",
-    reference: "ZA-6972-6414-01",
-    contact: "0707787973",
-    contracts: "1",
-    address: "YAO FERNAND BUILDING - STUDIO No. A5",
-    homeStatus: "OWE: 9,900,000 XOF",
-    status: "Active",
-    imgUrl: "https://randomuser.me/api/portraits/men/1.jpg", // Example image URL
-  },
-  {
-    id: 2,
-    name: "YAO N'GUESSAN ALAIN ROLAND",
-    reference: "ZA-6972-2939-01",
-    contact: "0777120473",
-    contracts: "1",
-    address: "YAO FERNAND BUILDING - APARTMENT No. A7",
-    homeStatus: "DUE: 0 XOF",
-    status: "Active",
-    imgUrl: "https://randomuser.me/api/portraits/men/2.jpg",
-  },
-  {
-    id: 3,
-    name: "KOUADIO JEAN MICHEL",
-    reference: "ZA-6972-1293-01",
-    contact: "0778901234",
-    contracts: "2",
-    address: "ABIDJAN - COCODY",
-    homeStatus: "OWE: 5,500,000 XOF",
-    status: "Inactive",
-    imgUrl: "https://randomuser.me/api/portraits/men/3.jpg",
-  },
-  {
-    id: 4,
-    name: "AHOUA MARIE LAURE",
-    reference: "ZA-6972-9384-01",
-    contact: "0583920123",
-    contracts: "1",
-    address: "VILLA VERNE",
-    homeStatus: "DUE: 0 XOF",
-    status: "Active",
-    imgUrl: "https://randomuser.me/api/portraits/women/1.jpg",
-  },
-];
-export const tenantData = [
-  {
-    name: "ASSEMIAN N'GUESSAN ADOLPHE",
-    phone: "0707787973",
-    code: "ZA-6972-6414-01",
-    status: "Active",
-    pay: "OWE: 9,900,000 XOF",
-  },
-  {
-    name: "YAO N'GUESSAN ALAIN ROLAND",
-    phone: "0777120473",
-    code: "ZA-6972-2939-01",
-    status: "Active",
-    pay: "DUE: 0 XOF",
-  },
-  {
-    name: "KOUADIO JEAN MICHEL",
-    phone: "0778901234",
-    code: "ZA-6972-1293-01",
-    status: "Inactive",
-    pay: "OWE: 5,500,000 XOF",
-  },
-  {
-    name: "AHOUA MARIE LAURE",
-    phone: "0583920123",
-    code: "ZA-6972-9384-01",
-    status: "Active",
-    pay: "DUE: 0 XOF",
-  },
-];
+
+
 
 export const renewals: Contract[] = [
   {

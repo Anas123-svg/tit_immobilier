@@ -1,7 +1,5 @@
 // ValidatedMandatesList.tsx
 import React from "react";
-import { Mandate } from "@/types/DataProps";
-
 const ValidatedMandatesList = ({ mandates }: any) => {
   return (
     <div className="p-4 bg-white shadow rounded-md overflow-auto">

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import InformationBannerSection from "./InfoMessageSection";
 import ListOfTenantsSection from "./ListOfTenantsSection";
-import { dummyTenants } from "@/data/dummyData"; // Importing dummy data
 import ActionButtonsSection from "./ActionButtonsSection";
 import { FilterOption } from "@/types/DataProps"; // Assuming this type is defined in your project
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";
