@@ -30,7 +30,7 @@ const PersonalDetails = ({ tenant, onFileChange }: PersonalDetailsProps) => {
           <p className="font-semibold">Name:</p>
           <p>{tenant?.is_business_tenant ? tenant?.business_company_name : tenant?.private_name}</p>
         </div>
-        {tenant?.is_business_tenant &&   <div className="">
+        {!tenant?.is_business_tenant &&   <div className="">
           <p className="font-semibold">Surame:</p>
           <p>{tenant?.surname}</p>
         </div>}
@@ -68,15 +68,15 @@ const PersonalDetails = ({ tenant, onFileChange }: PersonalDetailsProps) => {
         {/* Date of Birth */}
         <div>
           <p className="font-semibold">Date of Birth:</p>
-          <p>{tenant?.is_business_tenant ? "N/A" : tenant?.private_birth_date}</p>
+          <p>{tenant?.is_business_tenant ? tenant?.business_manager_date_of_birth : tenant?.private_birth_date}</p>
         </div>
 
         {/* Shared Affinity */}
-        <div>
+        {!tenant?.is_business_tenant &&  <div>
           <p className="font-semibold">Shared Affinity:</p>
-          <p>{tenant?.is_business_tenant ? "N/A" : tenant?.private_nationality}</p>
+          <p>{tenant?.private_nationality}</p>
         </div>
-
+}
         {/* Type of Document */}
         <div>
           <p className="font-semibold">Type of Document:</p>
@@ -90,27 +90,27 @@ const PersonalDetails = ({ tenant, onFileChange }: PersonalDetailsProps) => {
         </div>
 
         {/* Marital Status */}
-        <div>
+        {!tenant?.is_business_tenant  &&  <div>
           <p className="font-semibold">Marital Status:</p>
-          <p>{tenant?.is_business_tenant ? "N/A" : tenant?.private_marital_status}</p>
+          <p>{ tenant?.private_marital_status}</p>
         </div>
-
+        }
         {/* Number of Children */}
-        <div>
+        {!tenant?.is_business_tenant && <div>
           <p className="font-semibold">Number of Children:</p>
-          <p>{tenant?.is_business_tenant ? "N/A" : tenant?.private_number_of_children}</p>
+          <p>{ tenant?.private_number_of_children}</p>
         </div>
-
+        }
         {/* Emergency Contact Person */}
         <div>
           <p className="font-semibold">Emergency Contact Person:</p>
-          <p>{tenant?.is_business_tenant ? "N/A" : tenant?.private_emergency_contact_name}</p>
+          <p>{tenant?.is_business_tenant ? tenant?.business_manager_name : tenant?.private_emergency_contact_name}</p>
         </div>
 
         {/* Emergency Contact Number */}
         <div>
           <p className="font-semibold">Emergency Contact Number:</p>
-          <p>{tenant?.is_business_tenant ? "N/A" : tenant?.private_emergency_contact}</p>
+          <p>{tenant?.is_business_tenant ?tenant?.business_manager_contact : tenant?.private_emergency_contact}</p>
         </div>
       </div>
 

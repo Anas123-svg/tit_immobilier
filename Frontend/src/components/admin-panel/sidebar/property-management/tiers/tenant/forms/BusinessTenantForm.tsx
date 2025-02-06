@@ -294,19 +294,19 @@ const handleConfirmSubmit = () => {
       </FormItem>
     )}
   />
-  <FormField
-    control={form.control}
-    name="business_capital"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Capital</FormLabel>
-        <FormControl>
-          <Input type="number" {...field} placeholder="Capital" />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+   <FormField
+                control={form.control}
+                name="business_capital"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Capital</FormLabel>
+                    <FormControl>
+                    <Input {...field}    value={field.value ?? ""}  onChange={(e) => field.onChange(Number(e.target.value))} type="number" placeholder="Capital" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 </div>   <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
 MANAGER DETAILS
 </h2>

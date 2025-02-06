@@ -28,8 +28,9 @@ const PrivateOwnerCard: React.FC<{ owner: Owner }> = ({ owner }) => {
         };
   return (
     <div className="relative p-6 bg-white border rounded-lg shadow-md">
-      <div className="absolute top-2 left-2 bg-gray-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">Individual</div>
-      <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">{owner.status}</div>
+          <div className="absolute top-2 left-2 bg-yellow-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">
+     Individual
+      </div>  <div className="absolute top-2 right-2 bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">{owner.status}</div>
 
       <div className="text-center mb-4">
         <div className="w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden">

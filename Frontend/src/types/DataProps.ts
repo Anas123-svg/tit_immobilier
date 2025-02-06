@@ -130,7 +130,7 @@ export interface Client {
 
 // Define the Owner Interface based on the provided model
 export interface Owner {
-  id?:number
+  id:number
   // Private owner fields
   private_pronouns?: string;
   private_name?: string;
