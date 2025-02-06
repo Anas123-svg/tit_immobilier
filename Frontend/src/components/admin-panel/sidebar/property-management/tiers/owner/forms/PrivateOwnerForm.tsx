@@ -33,13 +33,13 @@ import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Owner } from "@/types/DataProps";
 import { Edit } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
-  id:z.number(),
+  id:z.number().optional(),
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
   surname: z.string().nonempty({ message: "Surname is required" }),
-  private_gender: z.string().nonempty({ message: "Gender is required" }),
+  private_gender: z.string(),
   private_birth_date: z
     .string()
     .nonempty({ message: "Birth date is required" }),
@@ -163,10 +163,42 @@ const handleConfirmSubmit = () => {
       private_emergency_contact_name: owner?.private_emergency_contact_name,
       private_emergency_contact: owner?.private_emergency_contact,
       private_emergency_contact_relation: owner?.private_emergency_contact_relation,
-      private_photo: owner?.private_photo??"",
+      private_photo: owner?.private_photo??pfp,
       private_documents: owner?.private_documents,
       is_business_owner: false,
-      
+
+
+
+      // id: owner?.id,  // Dummy ID
+      // private_pronouns: owner?.private_pronouns ?? "He/Him",
+      // surname: owner?.surname ?? "Doe",
+      // private_name: owner?.private_name ?? "John",
+      // private_gender: owner?.private_gender ?? "Male",
+      // private_birth_date: owner?.private_birth_date ?? "1990-01-01",  // Format: YYYY-MM-DD
+      // private_place_of_birth: owner?.private_place_of_birth ?? "New York",
+      // private_address: owner?.private_address ?? "123 Main St, Apt 4B, New York, NY 10001",
+      // private_nationality: owner?.private_nationality ?? "American",
+      // private_document_type: owner?.private_document_type ?? "Passport",
+      // private_document_number: owner?.private_document_number ?? "X12345678",
+      // private_date_of_issue: owner?.private_date_of_issue ?? "2015-05-01",
+      // private_expiry_date: owner?.private_expiry_date ?? "2025-05-01",
+      // private_taxpayer_identification_number: owner?.private_taxpayer_identification_number ?? "123-45-6789",
+      // private_occupation: owner?.private_occupation ?? "Software Engineer",
+      // private_contact: owner?.private_contact ?? "123-456-7890",
+      // private_whatsapp_contact: owner?.private_whatsapp_contact ?? "123-456-7890",
+      // private_email: owner?.private_email ?? "johndoe@example.com",
+      // private_po_box: owner?.private_po_box ?? "PO Box 1234",
+      // private_marital_status: owner?.private_marital_status ?? "Single",
+      // private_spouses_name: owner?.private_spouses_name ?? "",
+      // private_number_of_children: owner?.private_number_of_children ?? 0,
+      // private_employer_name: owner?.private_employer_name ?? "Tech Solutions Inc.",
+      // private_bank_statement_rib: owner?.private_bank_statement_rib ?? "XYZ123456789",
+      // private_emergency_contact_name: owner?.private_emergency_contact_name ?? "Jane Doe",
+      // private_emergency_contact: owner?.private_emergency_contact ?? "098-765-4321",
+      // private_emergency_contact_relation: owner?.private_emergency_contact_relation ?? "Sister",
+      // private_photo: owner?.private_photo ?? "https://via.placeholder.com/150",  // Dummy image URL
+      // private_documents: owner?.private_documents ?? ["https://via.placeholder.com/150"],  // Array of dummy document URLs
+      // is_business_owner: false,
     },
   });
 
@@ -199,22 +231,21 @@ const handleConfirmSubmit = () => {
                   <FormItem>
                     <FormLabel>Pronouns</FormLabel>
                     <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        switch (value) {
-                          case "he/him":
-                            form.setValue("private_gender", "Male");
-                            break;
-                          case "she/her":
-                            form.setValue("private_gender", "Female");
-                            break;
-                          case "they/them":
-                            form.setValue("private_gender", "Non-binary");
-                            break;
-                          default:
-                            form.setValue("private_gender", "");
-                        }
-                      }}
+                   onValueChange={(value) => {
+                    field.onChange(value);
+                    switch (value) {
+                      case "he/him":
+                        form.setValue("private_gender", "Male");
+                        break;
+                      case "she/her":
+                        form.setValue("private_gender", "Female");
+                        break;
+                      case "they/them":
+                        form.setValue("private_gender", "Non-binary");
+                        break;
+                      default:
+                        form.setValue("private_gender", "");
+                    }}}
                     >
                       <FormControl>
                         <SelectTrigger>

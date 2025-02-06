@@ -33,7 +33,7 @@ import { Tenant } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Edit } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   business_company_name: z.string().min(1, "Company Name is required"),
   business_taxpayer_account_number: z.string().min(1, "Taxpayer Account Number is required"),
@@ -148,7 +148,7 @@ const handleConfirmSubmit = () => {
       business_manager_date_of_issue: tenant?.business_manager_date_of_issue || "",  // Default if tenant's manager document issue date is undefined
       business_manager_authorizing_authority: tenant?.business_manager_authorizing_authority || "",  // Default if tenant's manager authorizing authority is undefined
       business_manager_expiry_date: tenant?.business_manager_expiry_date || "",  // Default if tenant's manager document expiry date is undefined
-      business_photo: tenant?.business_photo || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",  // Default if tenant's photo is undefined
+      business_photo: tenant?.business_photo || pfp,  // Default if tenant's photo is undefined
       business_documents: tenant?.business_documents || [],  // Default if tenant's documents are undefined
       is_business_tenant:  true,  // Default if tenant's tenant status is undefined
       

@@ -27,6 +27,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import pfp from "@/assets/avatar-default.png"
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
@@ -37,7 +38,7 @@ import { Edit } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const FormSchema = z.object({
-  id:z.number().min(0,"Must be positive"),
+  id:z.number().optional(),
   business_company_name: z.string().nonempty({ message: "Company Name is required" }),
   business_taxpayer_identification_number: z.string().nonempty({ message: "Taxpayer Identification Number is required" }),
   business_business_registration_number: z.string().nonempty({ message: "Business Registration Number is required" }),
@@ -122,7 +123,7 @@ const handleConfirmSubmit = () => {
       business_manager_date_of_issue: client?.business_manager_date_of_issue,
       business_manager_signatory_authority: client?.business_manager_signatory_authority,
       business_manager_expiry_date: client?.business_manager_expiry_date,
-      business_photo:client?.business_photo ?? "",
+      business_photo:client?.business_photo ?? pfp,
       business_documents: client?.business_documents,
       is_business_client: client?.is_business_client,
     },

@@ -34,7 +34,7 @@ import { Tenant } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Edit } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
@@ -63,7 +63,7 @@ const FormSchema = z.object({
   private_documents: z.array(z.string()).optional(),
   private_mail_box: z.string().nonempty({ message: "mail box is required" }),
   is_business_tenant:z.boolean(),
-  id:z.number().min(0,"Must be positive"),
+  id:z.number().optional(),
 });
 interface PrivateTenantFormProps {
   tenant?: Tenant;
@@ -111,7 +111,7 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
       // ],
       // is_business_tenant: tenant?.is_business_tenant ?? false,  // Default business tenant status if tenant's status is undefined
     
-    id: tenant?.id ?? 1,
+    id: tenant?.id ,
     private_name: tenant?.private_name || "",
     surname: tenant?.surname || "",  // Default full name if tenant's private name is undefined
     private_gender: tenant?.private_gender || "",  // Default gender if tenant's private gender is undefined
@@ -134,7 +134,7 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
     private_emergency_contact_name: tenant?.private_emergency_contact_name || "",  // Default emergency contact name if tenant's name is undefined
     private_emergency_contact: tenant?.private_emergency_contact || "",  // Default emergency contact number if tenant's number is undefined
     private_emergency_contact_relation: tenant?.private_emergency_contact_relation || "",  // Default emergency contact relation if tenant's relation is undefined
-    private_photo: tenant?.private_photo || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",  // Default photo URL if tenant's photo is undefined
+    private_photo: tenant?.private_photo || pfp,  // Default photo URL if tenant's photo is undefined
     private_pronouns: tenant?.private_pronouns || "",  // Default pronouns if tenant's pronouns are undefined
     private_mail_box: tenant?.private_mail_box || "",  // Default mail box if tenant's mail box is undefined
     private_documents: tenant?.private_documents || [ ],

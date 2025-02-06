@@ -34,7 +34,7 @@ import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { Owner } from "@/types/DataProps";
 import { Edit } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   id:z.number().optional(),
   business_company_name: z.string().nonempty({ message: "Company Name is required" }),
@@ -151,10 +151,10 @@ const handleConfirmSubmit = () => {
         business_manager_date_of_issue: owner?.business_manager_date_of_issue ,  // Default if undefined
         business_manager_authorizing_authority: owner?.business_manager_authorizing_authority ,  // Default if undefined
         business_manager_expiry_date: owner?.business_manager_expiry_date ,  // Default if undefined
-        business_photo: owner?.business_photo || "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png",  // Default if undefined
+        business_photo: owner?.business_photo || pfp,  // Default if undefined
         business_documents: owner?.business_documents || [],  // Default if undefined
         is_business_owner: true,  // Default if undefined
-        id: owner?.id ?? undefined,  // Default if undefined
+        id: owner?.id ,  // Default if undefined
    
       
     },

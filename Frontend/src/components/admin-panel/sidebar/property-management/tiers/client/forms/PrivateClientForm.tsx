@@ -33,9 +33,9 @@ import { Client } from "@/types/DataProps";
 import { Edit } from "lucide-react";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
-  id:z.number(),
+  id:z.number().optional(),
   private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
   surname:z.string().nonempty({ message: "Surname is required" }),
   private_name: z.string().nonempty({ message: "Name is required" }),
@@ -127,7 +127,7 @@ const handleConfirmSubmit = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id: client?.id ?? 0, // Default to 0 if client id is missing
+      id: client?.id, // Default to 0 if client id is missing
       private_pronouns: client?.private_pronouns ?? "", // Default to empty string
       private_name: client?.private_name ?? "", // Default to empty string
       surname: client?.surname ?? "", // Default to empty string
@@ -152,7 +152,7 @@ const handleConfirmSubmit = () => {
       private_emergency_contact_name: client?.private_emergency_contact_name ?? "", // Default to empty string
       private_emergency_contact: client?.private_emergency_contact ?? "", // Default to empty string
       private_emergency_contact_relation: client?.private_emergency_contact_relation ?? "", // Default to empty string
-      private_photo: client?.private_photo ?? "", // Default to empty string or default photo URL
+      private_photo: client?.private_photo ??pfp, // Default to empty string or default photo URL
       private_documents: client?.private_documents ?? [], // Default to empty array
       is_business_client: client?.is_business_client ?? false, 
       // id: 0, // Dummy ID

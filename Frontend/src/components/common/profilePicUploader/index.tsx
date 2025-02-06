@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import imageCompression from "browser-image-compression";
-
+import pfp from "@/assets/avatar-default.png"
 const CLOUDINARY_UPLOAD_PRESET = "tit-immobilier";
 const CLOUDINARY_CLOUD_NAME = "dewqsghdi";
 const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
@@ -78,7 +78,7 @@ export default function ProfilePicUploader({
       <div className="relative w-32 h-32 mb-4">
         <img
           className="w-full h-full object-cover rounded-full border-4 border-gray-300"
-          src={profilePic || "/default-avatar.jpg"} // Fallback image if no profile pic is selected
+          src={profilePic || pfp} // Fallback image if no profile pic is selected
           alt="Profile"
         />
 
