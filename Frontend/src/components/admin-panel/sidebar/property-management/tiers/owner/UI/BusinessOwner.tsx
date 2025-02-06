@@ -6,6 +6,10 @@ import { Link } from "react-router-dom";
 import BusinessOwnerForm from "../forms/BusinessOwnerForm";
 import { useDeleteData } from "@/hooks/useDeleteData";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import ReactPDF from '@react-pdf/renderer';
+import { AssessmentPDF } from '@/components/common/assessmentPDF'; // Assuming you have this component
+import { OwnerPdf } from "@/types/DataProps";
+import { OwnerPdfComponent } from "@/components/common/assessmentPDF/OwnerPdf";
 
 // Define the interface for Business Owner
 interface BusinessOwnerFormProps{
@@ -29,7 +33,22 @@ const BusinessOwnerCard: React.FC<BusinessOwnerFormProps> = ({ owner }) => {
       const handleCancelDelete = () => {
         setOpenDialog(false); // Close the dialog without deleting
       };
-    
+       const sampleAssessment: OwnerPdf = {
+        owner:owner,
+        template:{
+          Reference:"Asdasd",
+          id:1,
+          name: 'Building Inspection',
+          description: 'A detailed inspection of the building',
+          fields: [],
+          tables: [],
+        },
+        };
+     // Function to trigger the print dialog after generating the PDF
+     const handlePrint = () => {
+      ReactPDF.render(<OwnerPdfComponent ownerPdf={sampleAssessment} />, '/tmp/assessment.pdf');
+     
+    };
   return (
     <div key={owner.business_company_name} className="relative p-6 bg-white border rounded-lg shadow-md">
        <div className="absolute top-2 left-2 bg-green-300 text-xs px-2 py-1 rounded-full uppercase font-semibold">
@@ -61,9 +80,21 @@ const BusinessOwnerCard: React.FC<BusinessOwnerFormProps> = ({ owner }) => {
                 <Link to={`/tier/owners/detail-page/${owner.id}`}>  <Eye size={25} className="text-gray-700" /></Link>
                 </button>
               <BusinessOwnerForm owner={owner}/>
-                <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
-                  <Printer size={25} className="text-yellow-700" />
-                </button><button
+                  <ReactPDF.PDFDownloadLink
+                        document={<OwnerPdfComponent ownerPdf={sampleAssessment} />}
+                        fileName="assessment_report.pdf"
+                      >
+                        {({ loading }) =>
+                          loading ? "Preparing PDF..." : (
+                            <button
+                              className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+                              onClick={handlePrint} // Prints the PDF after download
+                            >
+                              <Printer size={25} className="text-yellow-700" />
+                            </button>
+                          )
+                        }
+                      </ReactPDF.PDFDownloadLink><button
         className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
         onClick={handleDeleteClick}
      

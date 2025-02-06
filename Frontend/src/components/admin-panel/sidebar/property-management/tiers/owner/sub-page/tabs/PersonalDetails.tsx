@@ -59,7 +59,7 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
 
         <div className="space-y-2 flex items-center text-sm gap-3">
           <p className="font-semibold">Postal Code:</p>
-          {owner?.is_business_owner ? owner?.business_mail_box : owner?.private_po_box}
+          {owner?.is_business_owner ? owner?.business_po_box : owner?.private_po_box}
         </div>
 
         {/* Profession */}

@@ -21,6 +21,7 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@react-google-maps/api": "^2.20.5",
+    "@react-pdf/renderer": "^4.2.1",
     "@tinymce/tinymce-react": "^5.1.1",
     "@types/react-select": "^5.0.0",
     "axios": "^1.7.9",
