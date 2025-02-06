@@ -20,7 +20,7 @@ interface DynamicTableProps {
   headerColor?:string// Custom component for the Add button
 }
 
-const DynamicTable: React.FC<DynamicTableProps> = ({ columns, data, pageSize, title="",addButton=true,addBorder=true,AddButton,headerColor="slate" }) => {
+const DynamicTable: React.FC<DynamicTableProps> = ({ columns, data, pageSize, title="",addButton=true,addBorder=true,AddButton,headerColor="gray" }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(data.length / pageSize);
 
@@ -36,9 +36,9 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ columns, data, pageSize, ti
 
 
     <div className=" p-4 rounded-lg  shadow-lg border-2 bg-gray-50">
-      <div className={`flex justify-between items-center mb-4 ${addBorder?"border-b-2":""}  pb-5 `}>
-        <h1 className="text-xl font-semibold text-gray-700  capitalize">{title}</h1>
-       {addButton && AddButton
+      <div className={`flex justify-between items-center mb-4 ${addBorder?"border-b-2 pb-5":""}   `}>
+      { title && <h1 className="text-xl font-semibold text-gray-700  capitalize">{title}</h1>
+       }{addButton && AddButton
 }</div>
       <div className=" overflow-auto">
         {columns.length > 0 ? <table className=" min-w-[600px] lg:w-full    text-sm text-left text-gray-500 border border-gray-300">

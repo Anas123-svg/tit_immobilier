@@ -1,5 +1,6 @@
 import React from 'react';
 import { Eye, Edit, Printer } from 'lucide-react'; // Import icons from Lucide
+import { Link } from 'react-router-dom';
 
 interface GoodCardProps {
   buildingName: string;
@@ -62,9 +63,9 @@ const GoodCard = ({
 
       {/* Actions (View, Edit, Print) */}
       <div className="flex justify-center space-x-4 mt-4">
-  <button className="p-2 bg-blue-500 text-white hover:bg-blue-700 rounded-lg">
+ <Link to={"/property"}> <button className="p-2 bg-blue-500 text-white hover:bg-blue-700 rounded-lg">
     <Eye size={20} />
-  </button>
+  </button> </Link>
   <button className="p-2 bg-yellow-500 text-white hover:bg-yellow-700 rounded-lg">
     <Edit size={20} />
   </button>
