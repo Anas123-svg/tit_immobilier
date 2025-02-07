@@ -365,3 +365,227 @@ export interface User {
   permissions: string[]; // Assuming permissions is an array of strings
   documents: string[]; // Assuming documents is an array of strings (file paths, etc.)
 }
+
+
+
+
+
+interface CaseDetails {
+  industry: string;
+  company_size: string;
+}
+
+interface AdditionalOptions {
+  priority: string;
+  follow_up_date: string;
+}
+
+interface Document {
+  type: string;
+  url: string;
+}
+
+export interface Case {
+  id: number;
+  client_id: number;
+  customer_name: string;
+  legal_status: string;
+  contact: string;
+  email: string;
+  opening_date: string;
+  opening_reason: string;
+  business_manager: string;
+  digital_signature_of_file: string;
+  details: CaseDetails;
+  additional_options: AdditionalOptions;
+  documents: Document[];
+  created_at: string;
+  updated_at: string;
+  modality: string | null;
+  opening_fee: string;
+  advance_amount: string;
+}
+
+export interface ClientProfile {
+  profile: Client,
+  case:Case[]
+  }
+  
+
+
+
+
+
+
+   export interface Good {
+      id: number;
+      owner_id: number;
+      owner: string;
+      property_name: string;
+      type_of_property: string;
+      number_of_floors: number;
+      area: number;
+      market_value: string;
+      island: string;
+      batch: string;
+      cie_identifier_number: string;
+      sodeci_identifier_number: string;
+      boundary_marking_done: string;
+      domain_type: string;
+      has_title_deed: string;
+      serviced: string;
+      approved: string;
+      description: string;
+      city: string;
+      municipality: string;
+      neighborhood: string;
+      longitude: number;
+      latitude: number;
+      height: number;
+      altitude: number;
+      number_of_parking_spaces: number;
+      number_of_levels: number;
+      garden: string;
+      pool: string;
+      on_the_corner: string;
+      near_water: string;
+      feet_in_water: string;
+      distance_from_water: number;
+      on_main_road: string;
+      distance_from_road: number;
+      dry_land: string;
+      low_depth: string;
+      school_nearby: string;
+      market_nearby: string;
+      assigned_agents: string[];
+      photo: string | null;
+      documents: any[];  // Adjust type based on the document structure if known
+      created_at: string;
+      updated_at: string;
+      status: string;
+    }
+    
+
+  
+    export  interface Locative {
+      id: number;
+      owner_id: number;
+      owner: string;
+      property_name: string;
+      type_of_property: string;
+      number_of_floors: number;
+      number_of_rentals: number;
+      type_of_numbering: string;
+      area_m2: string;
+      market_value: string;
+      island: string;
+      batch: string;
+      block: string;
+      cie_identifier_number: string;
+      sodeci_identifier_number: string;
+      description: string;
+      city: string;
+      municipality: string;
+      neighborhood: string;
+      longitude: string;
+      latitude: string;
+      height: number;
+      altitude: number;
+      on_the_corner: string;
+      near_water: string;
+      feet_in_the_water: string | null;
+      distance_from_water: string;
+      on_the_main_road: string | null;
+      distance_from_road: string;
+      dry_land: string;
+      low_depth: string;
+      school_nearby: string;
+      market_nearby: string;
+      assigned_agents: string[];
+      photo: string | null;
+      documents: any[];  // Adjust type based on document structure if known
+      level: number;
+      door_number: string;
+      rental_type: string;
+      rent: number;
+      charges: number;
+      room: number;
+      area: number;
+      created_at: string;
+      updated_at: string;
+      status: string;
+    }
+    
+  
+ export interface OwnerProfile {
+    profile: Owner
+    Good: Good[];          // Adjust type based on the expected structure of Good
+    Locative: Locative[];      // Adjust type based on the expected structure of Locative
+    Mandate: any[];   // Adjust type based on the expected structure of Mandate
+  }
+  
+
+  export interface TenantBill {
+    id: number;
+    tenant_id: number;
+    contract_id: number;
+    month: string; // Format: "YYYY-MM"
+    rent: string; // Assuming rent is represented as a string
+    charge: string; // Assuming charge is represented as a string
+    total: string; // Assuming total is represented as a string
+    created_at: string; // ISO 8601 format datetime string
+    updated_at: string; // ISO 8601 format datetime string
+  }
+  export interface TenantContract {
+    id: number;
+    owner_id: number | null; // 'null' is possible, otherwise use 'number'
+    tenant_id: number;
+    concerned: string; // The subject of the contract (e.g., maintenance agreement)
+    location: string; // The address of the property
+    cost_of_rent: string; // Rent amount, represented as a string (can change to 'number' if needed)
+    contract_type: string; // Type of contract (e.g., residential)
+    date_of_signature: string; // Date when the contract was signed (ISO 8601 format)
+    entry_date: string; // Date when the tenant moves in (ISO 8601 format)
+    end_date: string; // Date when the contract ends (ISO 8601 format)
+    number_of_months_of_deposit: number; // Number of months for the deposit
+    deposit_amount: string; // Deposit amount, represented as a string
+    caution_to_be_paid: string; // "Yes" or "No"
+    number_of_months_in_advance: number; // Number of months rent to be paid in advance
+    advance_amount: string; // Advance amount, represented as a string
+    penalty_for_delay: number; // Penalty rate for delayed payment
+    payment_limit: string; // Payment due date each month
+    tacit_renewal: string; // "Yes" or "No" indicating tacit renewal
+    Frequency: string; // Payment frequency (e.g., "Monthly")
+    digital_signature_of_the_contract: string; // Path to the digital signature file
+    due_date: string; // Due date for the current payment (ISO 8601 format)
+    created_at: string; // Date the contract was created (ISO 8601 format)
+    updated_at: string; // Date the contract was last updated (ISO 8601 format)
+    status: string; // The status of the contract (e.g., "active")
+  }
+  
+  export interface TenantPayment {
+    id: number;
+    tenant_id: number;
+    contract_id: number;
+    type_payment: string; // Type of payment (e.g., "Rent Payment")
+    Treasury: string; // The treasury source (e.g., "Bank")
+    payment_method: string; // Method used for payment (e.g., "Bank Transfer")
+    payment_date: string; // Payment date (ISO 8601 format)
+    done_by: string; // The person who made the payment
+    other_name: string; // Other relevant name (e.g., co-signatory)
+    phone_no: string; // Contact phone number
+    Transaction_details: string; // Description of the transaction
+    amount: string; // Amount paid, represented as a string
+    documents: string[] | null; // Any associated documents (can be a path or null)
+    created_at: string; // Date when the payment was created (ISO 8601 format)
+    updated_at: string; // Date when the payment was last updated (ISO 8601 format)
+  }
+  
+  export interface TenantProfile {
+    profile:Tenant; // 'profile' could be an object or null, adjust as needed
+    tenant_bill: TenantBill[];   // Array of tenant bills, adjust type as needed
+    tenant_contract: TenantContract[]; // Array of tenant contracts, adjust type as needed
+    tenant_payment: TenantPayment[];  // Array of tenant payments, adjust type as needed
+  }
+  
+

@@ -40,7 +40,7 @@ import MakeWithdrawalOwnerForm from "./forms/MakeWithdrawalOwnerForm";
 import PullAccountStatementForm from "./forms/PullAccountStatementFormProps";
 import useFetchData from "@/hooks/useFetchData";
 import { useParams } from "react-router-dom";
-import { Owner } from "@/types/DataProps";
+import { Owner, OwnerProfile } from "@/types/DataProps";
 
 
 // Define the Owner Interface based on the provided model
@@ -57,8 +57,8 @@ const OwnerDetailPage = () => {
     }
   };
   const {id} = useParams()
-    const { data: owners, loading, error } = useFetchData<Owner>(
-    `${import.meta.env.VITE_API_URL}/api/owners/${id}`
+    const { data: owners, loading, error } = useFetchData<OwnerProfile>(
+    `${import.meta.env.VITE_API_URL}/api/profile/owner/${id}`
   );
 
   const tabs = [
@@ -72,19 +72,19 @@ const OwnerDetailPage = () => {
       name: 'profile', 
       label: 'Profile', 
       icon: <User className="inline mr-2" />, 
-      component: <ProfileComponent owner={owners||undefined} onFileChange={handleFileChange}/>
+      component: <ProfileComponent owner={owners?.profile||undefined} onFileChange={handleFileChange}/>
     },
     { 
       name: 'good', 
       label: 'GOOD', 
       icon: <FileText className="inline mr-2" />, 
-      component: <GoodComponent />
+      component: <GoodComponent goods={owners?.Good}/>
     },
     { 
       name: 'locative', 
       label: 'Locative', 
       icon: <Home className="inline mr-2" />, 
-      component: <LocativeComponent />
+      component: <LocativeComponent locatives={owners?.Locative} />
     },
     { 
       name: 'mandate', 
@@ -152,14 +152,14 @@ const OwnerDetailPage = () => {
         <div className="flex flex-col z-50 text-center items-center gap-6 p-4 rounded-t-md">
           <div className="relative p-2">
             <img
-               src={(owners?.is_business_owner? owners.business_photo:owners?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
+               src={(owners?.profile?.is_business_owner? owners?.profile.business_photo:owners?.profile?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
                alt="User Profile"
               className="w-24 h-24 rounded-full border-4"
             />
             <BadgeCheckIcon className="text-blue-500 absolute bottom-0 right-0" />
           </div>
           <div className="space-y-2 text-black">
-            <h2 className="text-lg">{owners?.is_business_owner ? owners?.business_company_name : `${owners?.private_name??'' + owners?.surname??'' }`}</h2>
+            <h2 className="text-lg">{owners?.profile?.is_business_owner ? owners?.profile?.business_company_name : `${owners?.profile?.private_name??'' + owners?.profile?.surname??'' }`}</h2>
             <p className="text-sm">PARTICULAR</p>
           </div>
         </div>
@@ -168,19 +168,19 @@ const OwnerDetailPage = () => {
           <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-2 gap-4   self-center h-2/3 p-0 sm:pt-16 bg-white rounded-b-md">
                     <div className="flex items-center gap-2  ">
                       <MapIcon size={20} />
-                      <p className="text-sm">{owners?.is_business_owner ? owners?.business_manager_address : owners?.private_address}</p>
+                      <p className="text-sm">{owners?.profile?.is_business_owner ? owners?.profile?.business_manager_address : owners?.profile?.private_address}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone size={20} />
-                      <p className="text-sm">{owners?.is_business_owner ? owners?.business_office_phone_number : owners?.private_whatsapp_contact}</p>
+                      <p className="text-sm">{owners?.profile?.is_business_owner ? owners?.profile?.business_office_phone_number : owners?.profile?.private_whatsapp_contact}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Mail size={20} />
-                      <p className="text-sm">{owners?.is_business_owner ? owners?.business_email : owners?.private_email}</p>
+                      <p className="text-sm">{owners?.profile?.is_business_owner ? owners?.profile?.business_email : owners?.profile?.private_email}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Briefcase size={20} />
-                      <p className="text-sm">{owners?.business_email }</p>
+                      <p className="text-sm">{owners?.profile?.business_email }</p>
                     </div>
                   </div>
 

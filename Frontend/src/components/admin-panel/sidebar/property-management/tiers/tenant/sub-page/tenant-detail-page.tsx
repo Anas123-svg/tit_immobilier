@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import useFetchData from "@/hooks/useFetchData";
-import { Tenant } from "@/types/DataProps";
+import { Tenant, TenantProfile } from "@/types/DataProps";
 
 
 const TenantDetailPage = () => {
@@ -37,8 +37,8 @@ const TenantDetailPage = () => {
 
 
 
-  const { data: tenant, loading, error } = useFetchData<Tenant>(
-    `${import.meta.env.VITE_API_URL}/api/tenants/${id}`
+  const { data: tenant, loading, error } = useFetchData<TenantProfile>(
+    `${import.meta.env.VITE_API_URL}/api/profile/tenant/${id}`
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,13 +54,13 @@ const TenantDetailPage = () => {
       name: 'personal', 
       label: 'Personal Details', 
       icon: <User className="inline mr-2" />, 
-      component: <PersonalDetails tenant={tenant??undefined} onFileChange={handleFileChange} />
+      component: <PersonalDetails tenant={tenant?.profile??undefined} onFileChange={handleFileChange} />
     },
     { 
       name: 'documents', 
       label: 'Contract', 
       icon: <FileText className="inline mr-2" />, 
-      component: <Documents />
+      component: <Documents tenant_cases={tenant?.tenant_contract}  />
     },
     { 
       name: 'emergency', 
@@ -72,7 +72,7 @@ const TenantDetailPage = () => {
       name: 'bills', 
       label: 'Bills', 
       icon: <File className="inline mr-2" />, 
-      component: <Bills />
+      component: <Bills tenant_bills={tenant?.tenant_bill}/>
     },
     { 
       name: 'noticeofexpiry', 
@@ -84,7 +84,7 @@ const TenantDetailPage = () => {
       name: 'payments', 
       label: 'Payments', 
       icon: <CreditCard className="inline mr-2" />, 
-      component: <Payments />
+      component: <Payments tenant_payments={tenant?.tenant_payment}/>
     },
     { 
       name: 'tickets', 
@@ -109,14 +109,14 @@ const TenantDetailPage = () => {
         <div className="flex flex-col z-50 text-center items-center gap-6 p-4 rounded-t-md">
           <div className="relative p-2">
             <img
-              src={(tenant?.is_business_tenant? tenant.business_photo:tenant?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
+              src={(tenant?.profile?.is_business_tenant? tenant?.profile.business_photo:tenant?.profile?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
               alt="User Profile"
               className="w-24 h-24 rounded-full border-4"
             />
             <BadgeCheckIcon className="text-blue-500 absolute bottom-0 right-0" />
           </div>
           <div className="space-y-2 text-black">
-            <h2 className="text-lg"> {tenant?.is_business_tenant ? tenant?.business_company_name : tenant?.private_name}</h2>
+            <h2 className="text-lg"> {tenant?.profile?.is_business_tenant ? tenant?.profile?.business_company_name : tenant?.profile?.private_name}</h2>
             <p className="text-sm">PARTICULAR</p>
           </div>
         </div>
@@ -125,19 +125,19 @@ const TenantDetailPage = () => {
           <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-2 gap-4   self-center h-2/3 p-0 sm:pt-16 bg-white rounded-b-md">
             <div className="flex items-center gap-2  ">
               <MapIcon size={20} />
-              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_manager_address : tenant?.private_address}</p>
+              <p className="text-sm">{tenant?.profile?.is_business_tenant ? tenant?.profile?.business_manager_address : tenant?.profile?.private_address}</p>
             </div>
             <div className="flex items-center gap-2">
               <Phone size={20} />
-              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_office_phone_number : tenant?.private_whatsapp_contact}</p>
+              <p className="text-sm">{tenant?.profile?.is_business_tenant ? tenant?.profile?.business_office_phone_number : tenant?.profile?.private_whatsapp_contact}</p>
             </div>
             <div className="flex items-center gap-2">
               <Mail size={20} />
-              <p className="text-sm">{tenant?.is_business_tenant ? tenant?.business_email : tenant?.private_email}</p>
+              <p className="text-sm">{tenant?.profile?.is_business_tenant ? tenant?.profile?.business_email : tenant?.profile?.private_email}</p>
             </div>
             <div className="flex items-center gap-2">
               <Briefcase size={20} />
-              <p className="text-sm">{tenant?.business_email }</p>
+              <p className="text-sm">{tenant?.profile?.business_email }</p>
             </div>
           </div>
 

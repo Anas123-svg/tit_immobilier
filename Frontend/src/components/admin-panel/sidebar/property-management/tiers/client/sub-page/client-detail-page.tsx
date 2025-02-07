@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import useFetchData from "@/hooks/useFetchData";
 import { useParams } from "react-router-dom";
-import { Client } from "@/types/DataProps";
+import { Client, ClientProfile } from "@/types/DataProps";
 
 
 
@@ -43,21 +43,21 @@ const ClientDetailPage = () => {
     }
   };
 const {id} = useParams()
-  const { data: client, loading, error } = useFetchData<Client>(
-    `${import.meta.env.VITE_API_URL}/api/clients/${id}`
+  const { data: client, loading, error } = useFetchData<ClientProfile>(
+    `${import.meta.env.VITE_API_URL}/api/profile/client/${id}`
   );
   const tabs = [
     { 
       name: 'personal', 
       label: 'Personal Details', 
       icon: <User className="inline mr-2" />, 
-      component: <PersonalDetails client={client??undefined} onFileChange={handleFileChange} />
+      component: <PersonalDetails client={client?.profile??undefined} onFileChange={handleFileChange} />
     },
     { 
       name: 'documents', 
       label: 'Case', 
       icon: <FileText className="inline mr-2" />, 
-      component: <Documents />
+      component: <Documents clientcase={client?.case}/>
     },
     { 
       name: 'emergency', 
@@ -106,14 +106,14 @@ const {id} = useParams()
             <div className="flex flex-col z-50 text-center items-center gap-6 p-4 rounded-t-md">
               <div className="relative p-2">
                 <img
-                  src={(client?.is_business_client? client.business_photo:client?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
+                  src={(client?.profile?.is_business_client? client?.profile?.business_photo:client?.profile?.private_photo) || `https://png.pngtree.com/png-clipart/20200224/original/pngtree-cartoon-color-simple-male-avatar-png-image_5230557.jpg`}
                   alt="User Profile"
                   className="w-24 h-24 rounded-full border-4"
                 />
                 <BadgeCheckIcon className="text-blue-500 absolute bottom-0 right-0" />
               </div>
               <div className="space-y-2 text-black">
-                <h2 className="text-lg"> {client?.is_business_client ? client?.business_company_name :  `${client?.private_name+' '+client?.surname}`}</h2>
+                <h2 className="text-lg"> {client?.profile?.is_business_client ? client?.profile?.business_company_name :  `${client?.profile?.private_name+' '+client?.profile?.surname}`}</h2>
                 <p className="text-sm">PARTICULAR</p>
               </div>
             </div>
@@ -122,19 +122,19 @@ const {id} = useParams()
               <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-2 gap-4   self-center h-2/3 p-0 sm:pt-16 bg-white rounded-b-md">
                 <div className="flex items-center gap-2  ">
                   <MapIcon size={20} />
-                  <p className="text-sm">{client?.is_business_client ? client?.business_manager_address : client?.private_address}</p>
+                  <p className="text-sm">{client?.profile?.is_business_client ? client?.profile?.business_manager_address : client?.profile?.private_address}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone size={20} />
-                  <p className="text-sm">{client?.is_business_client ? client?.business_office_phone_number : client?.private_whatsapp_contact}</p>
+                  <p className="text-sm">{client?.profile?.is_business_client ? client?.profile?.business_office_phone_number : client?.profile?.private_whatsapp_contact}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail size={20} />
-                  <p className="text-sm">{client?.is_business_client ? client?.business_email : client?.private_email}</p>
+                  <p className="text-sm">{client?.profile?.is_business_client ? client?.profile?.business_email : client?.profile?.private_email}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Briefcase size={20} />
-                  <p className="text-sm">{client?.business_email }</p>
+                  <p className="text-sm">{client?.profile?.business_email }</p>
                 </div>
               </div>
     

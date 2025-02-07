@@ -1,7 +1,7 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
-import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
+import { FilterOption, TenantPayment } from '@/types/DataProps';
+import { Download, Edit, Edit2, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
@@ -49,54 +49,54 @@ import React, { useState } from 'react';
       }
   
   ];
-    const data = [
-    {
-      locative: "YAO FERNAND BUILDING - APARTMENT N°A7",
-      type: "HABITATION",
-      period: "Due date in 730 days",
-      state: "ACTIVE",
-      createIt: "January 9, 2025 at 9:27:20 AM",
-      depositAmount: "300,000 XOF",
-      paid: "300,000 XOF",
-      remaining: "0 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
-            <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-green-500 text-white hover:bg-green-600">
-            <Upload size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
-            <Download size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-        </>
-      ),
-    },
-    // Add more rows as necessary
-  ];
+
   // Define the columns for the table
   const columns = [
-    { label: "Locative", accessor: "locative" },
-    { label: "Type", accessor: "type" },
-    { label: "Period", accessor: "period" },
-    { label: "State", accessor: "state" },
-    { label: "Create It", accessor: "createIt" },
-    { label: "Deposit Amount", accessor: "depositAmount" },
-    { label: "Paid", accessor: "paid" },
-    { label: "Remaining", accessor: "remaining" },
-    {
-      label: "Action",
-      accessor: "action", // Render action buttons
-    },
+    { label: "ID", accessor: "id" },
+    { label: "Tenant ID", accessor: "tenant_id" },
+    { label: "Contract ID", accessor: "contract_id" },
+    { label: "Type of Payment", accessor: "type_payment" },
+    { label: "Treasury", accessor: "Treasury" },
+    { label: "Payment Method", accessor: "payment_method" },
+    { label: "Payment Date", accessor: "payment_date" },
+    { label: "Done By", accessor: "done_by" },
+    { label: "Other Name", accessor: "other_name" },
+    { label: "Phone Number", accessor: "phone_no" },
+    { label: "Transaction Details", accessor: "Transaction_details" },
+    { label: "Amount", accessor: "amount" },
+    { label: "Documents", accessor: "documents" },
+    { label: "Created At", accessor: "created_at" },
+    { label: "Updated At", accessor: "updated_at" },
+    { label: "Action", accessor: "action" },
+    
   ];
-const Payments = () => {
+  
+      interface PaymentsProps{
+        tenant_payments ?: TenantPayment[]
+      }
+const Payments : React.FC<PaymentsProps> =({tenant_payments}) => {
+  console.log(tenant_payments)
+  const data = tenant_payments?.map((tp) => {
+    return {
+      id: tp?.id,
+      tenant_id: tp?.tenant_id,
+      contract_id: tp?.contract_id,
+      type_payment: tp?.type_payment,
+      Treasury: tp?.Treasury,
+      payment_method: tp?.payment_method,
+      payment_date: tp?.payment_date,
+      done_by: tp?.done_by,
+      other_name: tp?.other_name,
+      phone_no: tp?.phone_no,
+      Transaction_details: tp?.Transaction_details,
+      amount: tp?.amount,
+      documents: tp?.documents ? `Transaction ID: ${tp?.documents[0]??""}, Status: ${tp?.documents[1]}` : 'No documents',
+      created_at: tp?.created_at,
+      updated_at: tp?.updated_at,
+    };
+  }) ?? [];
+  
+   
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",

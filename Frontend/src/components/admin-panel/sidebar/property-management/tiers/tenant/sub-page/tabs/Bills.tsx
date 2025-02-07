@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, TenantBill } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -83,20 +83,41 @@ import React, { useState } from 'react';
   ];
   // Define the columns for the table
   const columns = [
-    { label: "Locative", accessor: "locative" },
-    { label: "Type", accessor: "type" },
-    { label: "Period", accessor: "period" },
-    { label: "State", accessor: "state" },
-    { label: "Create It", accessor: "createIt" },
-    { label: "Deposit Amount", accessor: "depositAmount" },
-    { label: "Paid", accessor: "paid" },
-    { label: "Remaining", accessor: "remaining" },
-    {
-      label: "Action",
-      accessor: "action", // Render action buttons
-    },
+    { label: "ID", accessor: "id" },
+    { label: "Tenant ID", accessor: "tenant_id" },
+    { label: "Contract ID", accessor: "contract_id" },
+    { label: "Month", accessor: "month" },
+    { label: "Rent", accessor: "rent" },
+    { label: "Charge", accessor: "charge" },
+    { label: "Total", accessor: "total" },
+    { label: "Created At", accessor: "created_at" },
+    { label: "Updated At", accessor: "updated_at" },
   ];
-const Bills = () => {
+  
+    interface BillsProps{
+      tenant_bills ?: TenantBill[]
+    }
+const Bills: React.FC<BillsProps> = ({tenant_bills}) => {
+
+  const data = tenant_bills?.map((tb)=>{
+   return {
+      id: tb.id,
+      tenant_id: tb.tenant_id,
+      contract_id:  tb.contract_id,
+      month:  tb.month,
+      rent:  tb.rent,
+      charge:  tb.charge,
+      total: tb.total,
+      created_at: tb.created_at,
+      updated_at:  tb.updated_at,
+    }
+
+  })??[]
+    
+  
+    // Add more rows as needed
+ 
+  
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",

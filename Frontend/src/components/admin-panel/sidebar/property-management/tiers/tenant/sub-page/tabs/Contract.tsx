@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, TenantBill, TenantContract } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -49,16 +49,35 @@ import React, { useState } from 'react';
       }
   
   ];
-    const data = [
+
+  // Define the columns for the table
+  const columns = [
+    { label: "Locative", accessor: "locative" },
+    { label: "Type", accessor: "type" },
+    { label: "Period", accessor: "period" },
+    { label: "State", accessor: "state" },
+    { label: "Create It", accessor: "createIt" },
+    { label: "Deposit Amount", accessor: "depositAmount" },
+    { label: "Paid", accessor: "paid" },
     {
-      locative: "YAO FERNAND BUILDING - APARTMENT N°A7",
-      type: "HABITATION",
-      period: "Due date in 730 days",
-      state: "ACTIVE",
-      createIt: "January 9, 2025 at 9:27:20 AM",
-      depositAmount: "300,000 XOF",
-      paid: "300,000 XOF",
-      remaining: "0 XOF",
+      label: "Action",
+      accessor: "action", // Render action buttons
+    },
+  ];
+  interface DocumentProps{
+    tenant_cases ?: TenantContract[]
+  }
+const Documents :React.FC<DocumentProps>= ({tenant_cases}) => {
+
+  const data = tenant_cases?.map((tc)=>{
+ return   {
+      locative: tc.location,
+      type: tc.contract_type,
+      period: tc.entry_date,
+      state: tc.status,
+      createIt: tc.created_at,
+      depositAmount: tc.deposit_amount+ " XOF",
+      paid: tc.advance_amount+ " XOF",
       action: (
         <>
           <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
@@ -77,26 +96,11 @@ import React, { useState } from 'react';
             <Trash2 size={18} />
           </button>
         </>
-      ),
-    },
-    // Add more rows as necessary
-  ];
-  // Define the columns for the table
-  const columns = [
-    { label: "Locative", accessor: "locative" },
-    { label: "Type", accessor: "type" },
-    { label: "Period", accessor: "period" },
-    { label: "State", accessor: "state" },
-    { label: "Create It", accessor: "createIt" },
-    { label: "Deposit Amount", accessor: "depositAmount" },
-    { label: "Paid", accessor: "paid" },
-    { label: "Remaining", accessor: "remaining" },
-    {
-      label: "Action",
-      accessor: "action", // Render action buttons
-    },
-  ];
-const Documents = () => {
+      )
+    }
+ 
+  })??["Asdad"]
+
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",

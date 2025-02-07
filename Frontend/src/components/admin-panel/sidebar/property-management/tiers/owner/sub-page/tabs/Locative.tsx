@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, Locative } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -44,63 +44,69 @@ import React, { useState } from 'react';
       }
   
   ];
-  const data = [
-    {
-      locative: (
-        <div className="flex items-center">
-          <img
-            src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
-            alt="Building"
-            className="w-16 h-16 object-cover rounded-md mr-4"
-          />
-          YAO FERNAND BUILDING - APARTMENT N°A7
-        </div>
-      ),
-      occupant: "My mother is Lydia Carmen",
-      state: (
-        <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
-          BUSY
-        </span>
-      ),
-      createIt: "January 8, 2025 at 4:55:28 AM",
-      noRent: "88,000 XOF",
-    
-    },
-    {
-      locative: (
-        <div className="flex items-center">
-          <img
-            src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
-            alt="Building"
-            className="w-16 h-16 object-cover rounded-md mr-4"
-          />
-          DEMEBLE BUILDING - APARTMENT N°B3
-        </div>
-      ),
-      occupant: "No Occupants",
-      state: (
-        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs">
-          AVAILABLE
-        </span>
-      ),
-      createIt: "January 8, 2025 at 4:55:28 AM",
-      noRent: "175,000 XOF",
-   
-    },
-    // Add more rows as necessary
-  ];
-  const replicatedData = Array(4).fill(data).flat();
+  
+
   const columns = [
     { label: "Good", accessor: "locative" }, // This will represent the building name and image
     { label: "Occupant", accessor: "occupant" },
     { label: "State", accessor: "state" },
     { label: "Create It", accessor: "createIt" },
-    { label: "No Rent", accessor: "noRent" },
+    { label: "Rent", accessor: "noRent" },
 
   ];
   
+interface LocativeComponentProps{
+  locatives?:Locative[]
+}
+const LocativeComponent:React.FC<LocativeComponentProps> = ({locatives}) => {
 
-const LocativeComponent = () => {
+  const data = locatives?.map((locative)=>{
+   return {
+        locative: (
+          <div className="flex items-center">
+            <img
+              src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
+              alt="Building"
+              className="w-16 h-16 object-cover rounded-md mr-4"
+            />
+            {locative.property_name} - {locative.type_of_property} {locative.sodeci_identifier_number}
+          </div>
+        ),
+        occupant: locative.owner,
+        state: (
+          <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
+       {locative.status}
+          </span>
+        ),
+        createIt: locative.created_at,
+        noRent: locative.rent+ " XOF",
+      
+      }
+  })??[]
+    //
+    // {
+    //   locative: (
+    //     <div className="flex items-center">
+    //       <img
+    //         src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
+    //         alt="Building"
+    //         className="w-16 h-16 object-cover rounded-md mr-4"
+    //       />
+    //       DEMEBLE BUILDING - APARTMENT N°B3
+    //     </div>
+    //   ),
+    //   occupant: "No Occupants",
+    //   state: (
+    //     <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+    //       AVAILABLE
+    //     </span>
+    //   ),
+    //   createIt: "January 8, 2025 at 4:55:28 AM",
+    //   noRent: "175,000 XOF",
+   
+    // },
+ 
+  
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",
@@ -130,7 +136,7 @@ const LocativeComponent = () => {
       />
         <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable title="LIST OF RENTAL PROPERTIES" columns={columns} data={replicatedData} pageSize={5} addButton={false} />
+      <DynamicTable title="LIST OF RENTAL PROPERTIES" columns={columns} data={data} pageSize={5} addButton={false} />
     </div>
     </div>
   );

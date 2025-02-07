@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, Good } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import GoodCard from './GoodCard';
@@ -78,45 +78,7 @@ import GoodCard from './GoodCard';
     // Add more rows as necessary
   ];
 
-  // Dummy data for properties
-const propertyData = [
-  {
-    buildingName: 'DEMEBLE BUILDING',
-    location: 'ANGRE - COCODY - ABIDJAN',
-    status: 'For rent',
-    occupiedValue: '150,000 XOF',
-    availableValue: '250,000 XOF',
-    reservedValue: '100,000 XOF',
-    referenceNo: 'ZA-6972-9648-01',
-  },
-  {
-    buildingName: 'BONDI BUILDING',
-    location: 'ABIDJAN - RIVIERA',
-    status: 'Sold',
-    occupiedValue: '300,000 XOF',
-    availableValue: '500,000 XOF',
-    reservedValue: '200,000 XOF',
-    referenceNo: 'ZA-6972-9648-02',
-  },
-  {
-    buildingName: 'ROSE BUILDING',
-    location: 'YOPALOGO - ABIDJAN',
-    status: 'For rent',
-    occupiedValue: '120,000 XOF',
-    availableValue: '220,000 XOF',
-    reservedValue: '150,000 XOF',
-    referenceNo: 'ZA-6972-9648-03',
-  },
-  {
-    buildingName: 'DEMEBLE BUILDING',
-    location: 'ANGRE - COCODY - ABIDJAN',
-    status: 'For rent',
-    occupiedValue: '150,000 XOF',
-    availableValue: '250,000 XOF',
-    reservedValue: '100,000 XOF',
-    referenceNo: 'ZA-6972-9648-01',
-  },
-];
+
   // Define the columns for the table
   const columns = [
     { label: "Locative", accessor: "locative" },
@@ -132,7 +94,12 @@ const propertyData = [
       accessor: "action", // Render action buttons
     },
   ];
-const GoodComponent = () => {
+
+
+  interface GoodProps{
+    goods?:  Good[]
+  }
+const GoodComponent: React.FC<GoodProps> = ({goods}) => {
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",
@@ -165,16 +132,10 @@ const GoodComponent = () => {
      {/* Filters or other components can be added here */}
      <div className="space-y-5 gap-5 grid grid-cols-3">
         {/* Render each property using the GoodCard component */}
-        {propertyData.map((property, index) => (
+        {goods?.map((property, index) => (
           <GoodCard
             key={index}
-            buildingName={property.buildingName}
-            location={property.location}
-            status={property.status}
-            occupiedValue={property.occupiedValue}
-            availableValue={property.availableValue}
-            reservedValue={property.reservedValue}
-            referenceNo={property.referenceNo}
+  good={property}
           />
         ))}
       </div></div>
