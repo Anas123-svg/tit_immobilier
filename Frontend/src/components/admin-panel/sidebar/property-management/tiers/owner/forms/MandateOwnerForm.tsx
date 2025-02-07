@@ -26,6 +26,7 @@ import {
     SelectValue,
   } from "@/components/ui/select";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
   const FormSchema = z.object({
     owner_id: z.number().min(1, "Owner ID is required"),
     type_of_mandate: z.string().nonempty("Type of Mandate is required"),
@@ -50,22 +51,26 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       defaultValues: {
-        owner_id: 1,
-        type_of_mandate: "Exclusive",
+        // owner_id: 1,
+        // type_of_mandate: "Exclusive",
+        // owner_name: "John Doe",
+        // very_concerned: true,
+        // type_of_property: "Apartment",
+        // neighborhood: "Downtown",
+        // tax_payable: 150,
+        // billing_type: "Monthly",
+        // commission: 10,
+        // deduct_commission: true,
+        // vat_on_commission: true,
+        // date_of_signature: "2025-01-01",
+        // debut_date: "2025-01-01",
+        // end_date: "2025-12-31",
+        // digital_signature_of_the_mandate: "digital_signature.jpg",
+        // tacit_renewal: true,
+
+
         owner_name: "John Doe",
-        very_concerned: true,
-        type_of_property: "Apartment",
-        neighborhood: "Downtown",
-        tax_payable: 150,
-        billing_type: "Monthly",
-        commission: 10,
-        deduct_commission: true,
-        vat_on_commission: true,
-        date_of_signature: "2025-01-01",
-        debut_date: "2025-01-01",
-        end_date: "2025-12-31",
-        digital_signature_of_the_mandate: "digital_signature.jpg",
-        tacit_renewal: true,
+       
       },
     });
   
@@ -107,7 +112,8 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
       </FormItem>
     )}
   />
-  <FormField
+  <OwnerCombobox name="owner_id" control={form.control}/>
+  {/* <FormField
     control={form.control}
     name="owner_name"
     render={({ field }) => (
@@ -119,7 +125,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
         <FormMessage />
       </FormItem>
     )}
-  />
+  /> */}
   <FormField
     control={form.control}
     name="very_concerned"
@@ -167,7 +173,31 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 </h2>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   
-  {/* Tax Payable Field */}
+ 
+
+  {/* Billing Type Field */}
+  <FormField
+    control={form.control}
+    name="billing_type"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Billing Type *</FormLabel>
+        <Select value={field.value} onValueChange={field.onChange}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Billing Type" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="Fixed Amount">FIXED AMOUNT</SelectItem>
+            <SelectItem value="Payment Percentage">PAYMENT PERCENTAGE</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+ {/* Tax Payable Field */}
   <FormField
     control={form.control}
     name="tax_payable"
@@ -192,30 +222,6 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
       </FormItem>
     )}
   />
-
-  {/* Billing Type Field */}
-  <FormField
-    control={form.control}
-    name="billing_type"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Billing Type *</FormLabel>
-        <Select value={field.value} onValueChange={field.onChange}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Billing Type" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="Fixed Amount">FIXED AMOUNT</SelectItem>
-            <SelectItem value="Payment Percentage">PAYMENT PERCENTAGE</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-
   {/* Commission Field */}
   <FormField
     control={form.control}

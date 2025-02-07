@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 
 // Define validation schema
 const FormSchema = z.object({
@@ -35,12 +36,18 @@ const ReversalPropertyForRentalOwnerForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_id: 1,
-      good: "Apartment 101",
-      filter_by: "City",
-      date_debut: "2025-01-01",
-      end_date: "2025-12-31",
-      comments: "Rental reversal initiated.",
+   
+      // good: "Apartment 101",
+      // filter_by: "City",
+      // date_debut: "2025-01-01",
+      // end_date: "2025-12-31",
+      // comments: "Rental reversal initiated.",
+          
+      good: "",
+      filter_by: "",
+      date_debut: "",
+      end_date: "",
+      comments: "",
     },
   });
   
@@ -61,19 +68,8 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-reversal-rental-proper
               PROPERTY DETAILS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="owner_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Owner ID</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} placeholder="Enter Owner ID" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+             
+              <OwnerCombobox name="owner_id" control={form.control}/>
               <FormField
                 control={form.control}
                 name="good"

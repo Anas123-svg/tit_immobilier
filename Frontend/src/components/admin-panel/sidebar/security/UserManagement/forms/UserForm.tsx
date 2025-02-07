@@ -93,11 +93,9 @@ const UserForm = () => {
       photo: "",
       permissions: ["permission1"], // Default permission
       documents: [],
-    
+      
     },
   });
- 
-
    const apiUrl = import.meta.env.VITE_API_URL + '/api/users';
           const onSubmit = useFormSubmit<typeof UserFormSchema>(apiUrl);  // Use custom hook
         

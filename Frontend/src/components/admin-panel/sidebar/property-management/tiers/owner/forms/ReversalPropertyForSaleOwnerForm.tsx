@@ -20,12 +20,15 @@ import {
 import { useState } from "react";
 import axios from 'axios';
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
+import { ClientCombobox } from "@/components/admin-panel/UI-components/Combobox/ClientCombobox";
 const FormSchema = z.object({
-  owner_id: z.number().min(1, "Owner ID is required"),
-  property_type: z.string().nonempty("Property Type is required"),
-  owner_name: z.string().nonempty("Owner Name is required"),
-  client: z.string().nonempty("Client Name is required"),
-  case: z.string().nonempty("Case is required"),
+  owner_id: z.number().optional(),
+  property_type: z.string().optional(),
+  owner_name: z.string().optional(),
+  client: z.string().optional(),
+  client_id: z.number().optional(),
+  case: z.string().optional(),
 });
 
 const ReversalPropertyForSaleOwnerForm = () => {
@@ -33,22 +36,22 @@ const ReversalPropertyForSaleOwnerForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_id: 1,
-      property_type: "Commercial",
-      owner_name: "John Doe",
-      client: "Jane Smith",
-      case: "Reversal Case 123",
+  
+      property_type: "Property for Sale",
+      owner_name: "asd",
+      client: "4",
+      case: " ",
     },
   });
 
 
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-reversal-sale-property';  // Adjust URL as necessary
-  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl,form.reset);  // Use custom hook
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Reversal Property for Sale</DialogTrigger>
-      <DialogContent className="w-full max-w-[95vw] lg:max-w-[800px] h-auto max-h-[95vh] overflow-y-auto p-6">
+      <DialogContent className="w-full max-w-[95vw] lg:max-w-[1000px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">
         Add a Reversal Property for Sale
         </DialogTitle>
@@ -59,7 +62,7 @@ const ReversalPropertyForSaleOwnerForm = () => {
               PROPERTY DETAILS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        
+
               <FormField
                 control={form.control}
                 name="property_type"
@@ -67,38 +70,16 @@ const ReversalPropertyForSaleOwnerForm = () => {
                   <FormItem>
                     <FormLabel>Property Type</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter Property Type" />
+                      <Input {...field}  placeholder="Enter Property Type" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="owner_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Owner Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Enter Owner Name" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="client"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Client</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Enter Client Name" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <OwnerCombobox name="owner_id" control={form.control}/>
+
+          <ClientCombobox name="client_id" control={form.control}/>
+             
               <FormField
                 control={form.control}
                 name="case"
@@ -106,7 +87,7 @@ const ReversalPropertyForSaleOwnerForm = () => {
                   <FormItem>
                     <FormLabel>Case</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter Case Details" />
+                      <Input {...field}  placeholder="" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

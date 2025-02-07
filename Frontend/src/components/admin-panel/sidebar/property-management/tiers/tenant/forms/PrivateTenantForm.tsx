@@ -78,7 +78,6 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
-    mode: 'onTouched',
     defaultValues:   {
       // id: tenant?.id ?? 1,
       // private_name: tenant?.private_name || "Jane Doe",  // Default full name if tenant's private name is undefined

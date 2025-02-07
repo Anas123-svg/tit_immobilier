@@ -20,6 +20,10 @@ import {
   import { useState } from "react";
   import Selection from "@/components/common";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
+import useFetchData from "@/hooks/useFetchData";
+import { User } from "@/types/DataProps";
+import useFetchAuthData from "@/hooks/useFetchAuthData";
   
   // Define validation schema
   const FormSchema = z.object({
@@ -29,20 +33,24 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
     users: z.array(z.string()).optional(),
   });
   
-  const availableUsers = ["User1", "User2", "User3", "User4"]; // Example user list
   
   const ManagmentFormOwner = () => {
     const [open, setOpen] = useState(false);
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       defaultValues: {
-        owner_id: 1,
         owner_name: "John Doe",
         property_concerned: "Luxury Villa",
-        users: ["User1", "User2"], // Pre-selected users
+        users: [], // Pre-selected users
       },
     });
   
+    const { data, loading, error } = useFetchAuthData<User[]>(
+      `${import.meta.env.VITE_API_URL}/api/users`
+    );
+    const availableUsers = data?.map((user)=>{
+      return user?.name 
+    })||["heleloo"]
         const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-portfolio-management ';
         const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
       
@@ -62,19 +70,9 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
              
-                <FormField
-                  control={form.control}
-                  name="owner_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Owner Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Enter Owner Name" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+
+             <OwnerCombobox name="owner_id" control={form.control}/>
+              
                 <FormField
                   control={form.control}
                   name="property_concerned"

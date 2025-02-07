@@ -28,24 +28,24 @@ const TenantActionsSection: React.FC = () => {
           Add
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+         
             <PrivateTenantForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+    
+         
             <BusinessTenantForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+    
+         
             <ContractTenantForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+    
+         
             <ShortTermContractTenantForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+    
+         
             <RentBill />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+    
+         
             <PenaltyBills />
-          </DropdownMenuItem>
+    
         </DropdownMenuContent>
       </DropdownMenu>
 

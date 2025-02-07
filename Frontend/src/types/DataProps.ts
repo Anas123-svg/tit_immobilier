@@ -349,3 +349,19 @@ export type ClientPdf = {
   created_at?: string;
   updated_at?: string;
 };
+
+
+
+export interface User {
+  name: string;
+  email: string;
+  password: string;
+  Gender: string;
+  userLogin: string;
+  service: string;
+  contact: string;
+  pronouns: string;
+  photo: string | null;  // Assuming photo can be a URL string or null
+  permissions: string[]; // Assuming permissions is an array of strings
+  documents: string[]; // Assuming documents is an array of strings (file paths, etc.)
+}

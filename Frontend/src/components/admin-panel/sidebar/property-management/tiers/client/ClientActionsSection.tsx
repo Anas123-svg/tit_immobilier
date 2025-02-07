@@ -19,15 +19,15 @@ const ClientActionsSection: React.FC = () => {
           Add
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+       
           <BusinessClientForm/>
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+        
+       
           <PrivateClientForm/>
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+        
+       
           <FileClientForm/>
-          </DropdownMenuItem>
+        
      
         </DropdownMenuContent>
       </DropdownMenu>

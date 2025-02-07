@@ -27,6 +27,8 @@ import {
   import { useState } from "react";
   import Selection from "@/components/common";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import useFetchData from "@/hooks/useFetchData";
+import { Owner } from "@/types/DataProps";
   
   // Define validation schema
   const FormSchema = z.object({
@@ -40,12 +42,20 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       defaultValues: {
-        type_of_selection: "Manual",
-        users: ["Validator1", "Validator2"],
-        owners: ["Owner1", "Owner2"],
+        type_of_selection: "",
+        users: [],
+        owners: ["Owner1"],
       },
     });
-  
+    const { data, loading, error } = useFetchData<Owner[]>(
+      `${import.meta.env.VITE_API_URL}/api/get-all-owners`
+    )
+    const validators: string[] = data?.map((owner) => {
+      return owner.is_business_owner 
+        ? owner.business_company_name || ""  // Default to empty string if undefined
+        : owner.private_name || "";           // Default to empty string if undefined
+    }) || ["", ""];  // Default array in case data is empty or undefined
+    
   const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-validator-assignment";
     const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
   
@@ -93,7 +103,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
                 ASSIGN VALIDATORS
               </h2>
               <Selection
-                list={["Validator1", "Validator2", "Validator3"]}
+                list={validators}
                 selectedList={form.watch("users") || []}
                 onChange={(selected) => {
                   form.setValue("users", selected);

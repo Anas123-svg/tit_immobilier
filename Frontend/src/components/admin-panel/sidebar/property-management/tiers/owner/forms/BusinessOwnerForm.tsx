@@ -213,6 +213,7 @@ const handleConfirmSubmit = () => {
                   </FormItem>
                 )}
               />
+               
               <FormField
                 control={form.control}
                 name="business_business_registration_number"

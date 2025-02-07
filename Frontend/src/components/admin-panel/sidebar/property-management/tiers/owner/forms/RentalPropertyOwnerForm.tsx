@@ -30,10 +30,11 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 
 // Define validation schema
 const FormSchema = z.object({
-  owner_id:z.number().min(1, "Numerotation is required"),
+  owner_id:z.number().optional(),
   owner_name: z.string().nonempty("Owner Name is required"),
   very_concerned: z.boolean(),
   type_of_property: z.string().nonempty("Type of Property is required"),
@@ -55,21 +56,20 @@ const RentalPropertyOwnerForm = () => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_id:1,
       owner_name: "John Doe",
-      very_concerned: true,
-      type_of_property: "Apartment",
-      numerotation: 101,
-      total: 10,
-      door_no: "101A",
-      type_of_rental: "Residential",
-      floor: 2,
-      number_of_rooms: 3,
-      surface: 120.5,
-      rent_amount: 1500,
-      amount_of_charges: 200,
-      profile_photo: "example_profile.jpg",  // Assume you have a default or placeholder image
-      documents: ["lease_agreement.pdf", "inspection_report.pdf"],
+      very_concerned: false,
+      type_of_property: "",
+      numerotation: 0,
+      total: 0,
+      door_no: "",
+      type_of_rental: "",
+      floor: 0,
+      number_of_rooms: 0,
+      surface: 0,
+      rent_amount: 0,
+      amount_of_charges: 0,
+      profile_photo: "",  // Assume you have a default or placeholder image
+      documents: [],
     },
   });
 
@@ -91,20 +91,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
 </h2>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
   
-  {/* Owner Field */}
-  <FormField 
-    control={form.control} 
-    name="owner_name" 
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Owner *</FormLabel>
-        <FormControl>
-          <Input {...field} placeholder="Select an Owner" />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )} 
-  />
+ <OwnerCombobox name="owner_id" control={form.control}/>
 
   {/* Very Concerned Field */}
   <FormField 
@@ -152,7 +139,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
       <FormItem>
         <FormLabel>Numerotation</FormLabel>
         <FormControl>
-          <Input type="number" {...field} placeholder="Numerotation" />
+          <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} placeholder="Numerotation" />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -172,7 +159,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
     <FormItem>
       <FormLabel>TOTAL *</FormLabel>
       <FormControl>
-        <Input type="number" {...field} placeholder="Total" />
+        <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} placeholder="Total" />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -214,7 +201,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
     <FormItem>
       <FormLabel>Which Floor? *</FormLabel>
       <FormControl>
-        <Input type="number" {...field} placeholder="Floor" />
+        <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value))}  placeholder="Floor" />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -225,7 +212,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
     <FormItem>
       <FormLabel>Number of Rooms *</FormLabel>
       <FormControl>
-        <Input type="number" {...field} placeholder="Rooms" />
+        <Input type="number"{...field} onChange={e => field.onChange(parseInt(e.target.value, 10))}  placeholder="Rooms" />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -236,7 +223,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
     <FormItem>
       <FormLabel>Surface</FormLabel>
       <FormControl>
-        <Input type="number" {...field} placeholder="Surface in sqm" />
+        <Input type="number" {...field}  onChange={e => field.onChange(parseInt(e.target.value, 10))} placeholder="Surface in sqm" />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -247,7 +234,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
     <FormItem>
       <FormLabel>Rent Amount *</FormLabel>
       <FormControl>
-        <Input type="number" {...field} placeholder="Rent Amount" />
+        <Input type="number" {...field}   onChange={e => field.onChange(parseInt(e.target.value, 10))} placeholder="Rent Amount" />
       </FormControl>
       <FormMessage />
     </FormItem>
@@ -258,7 +245,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-a-rental-property";
     <FormItem>
       <FormLabel>Amount of Charges *</FormLabel>
       <FormControl>
-        <Input type="number" {...field} placeholder="Charges" />
+        <Input type="number" {...field}  onChange={e => field.onChange(parseInt(e.target.value, 10))} placeholder="Charges" />
       </FormControl>
       <FormMessage />
     </FormItem>
