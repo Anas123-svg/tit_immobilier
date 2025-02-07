@@ -26,38 +26,17 @@ const OwnerActionsSection: React.FC = () => {
           <Plus size={16} className="mr-2" />
           Add
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <PrivateOwnerForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <BusinessOwnerForm />
-          </DropdownMenuItem>
-       
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <PropertyForRentOwnerForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <PropertyForSaleOwnerForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <ReversalPropertyForSaleOwnerForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <ReversalPropertyForRentalOwnerForm />
-          </DropdownMenuItem><DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <ManagmentFormOwner />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <MandateOwnerForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <ValidatorsOwnerForm />
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <RentalPropertyOwnerForm />
-          </DropdownMenuItem>
-        
+        <DropdownMenuContent className="flex flex-col gap-2 p-2 items-start">
+          <PrivateOwnerForm />
+          <BusinessOwnerForm />
+          <PropertyForRentOwnerForm />
+          <PropertyForSaleOwnerForm />
+          <ReversalPropertyForSaleOwnerForm />
+          <ReversalPropertyForRentalOwnerForm />
+          <ManagmentFormOwner />
+          <MandateOwnerForm />
+          <ValidatorsOwnerForm />
+          <RentalPropertyOwnerForm />
         </DropdownMenuContent>
       </DropdownMenu>
 
