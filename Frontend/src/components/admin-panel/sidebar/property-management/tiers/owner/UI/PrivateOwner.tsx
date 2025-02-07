@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import PrivateOwnerForm from "../forms/PrivateOwnerForm";
 import { useDeleteData } from "@/hooks/useDeleteData";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import { OwnerPdfComponent } from "@/components/common/assessmentPDF/OwnerPdf";
+import ReactPDF from "@react-pdf/renderer";
 // Define the interface for Private Owner
 
 
@@ -57,9 +58,19 @@ const PrivateOwnerCard: React.FC<{ owner: Owner }> = ({ owner }) => {
                 </button>
             
                 <PrivateOwnerForm owner={owner}/>
-                <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
-                  <Printer size={25} className="text-yellow-700" />
-                </button>  <button
+                     <ReactPDF.PDFDownloadLink
+                       document={<OwnerPdfComponent owner={owner} />}
+                       fileName={`${owner.private_name}.pdf`}
+                       className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+                     >
+                       {({ loading }) =>
+                         loading ? (
+                           "Preparing PDF..."
+                         ) : (
+                           <Printer size={25} className="text-yellow-700" />
+                         )
+                       }
+                     </ReactPDF.PDFDownloadLink>  <button
         className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
         onClick={handleDeleteClick}
      

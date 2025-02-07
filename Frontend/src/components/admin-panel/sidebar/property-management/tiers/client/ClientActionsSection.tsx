@@ -18,8 +18,8 @@ const ClientActionsSection: React.FC = () => {
           <Plus size={16} className="mr-2" />
           Add
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-       
+         <DropdownMenuContent className="flex flex-col text-start gap-1 justify-start items-start p-3">
+          
           <BusinessClientForm/>
         
        

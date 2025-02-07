@@ -6,8 +6,10 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { useState } from "react";
 import { useDeleteData } from "@/hooks/useDeleteData"; // Adjust path as needed
 import PrivateClientForm from "../forms/PrivateClientForm";
-
-const PrivateClientCard = ({ client }: { client: any }) => {
+import { ClientPdfComponent } from "@/components/common/assessmentPDF/ClientPdf";
+import { Client } from "@/types/DataProps";
+import ReactPDF from '@react-pdf/renderer';
+const PrivateClientCard = ({ client }: { client: Client }) => {
   const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
   const [clientId, setClientId] = useState<number>(0); // To store the client ID for deletion
   const { onDelete, loading: deleteLoading } = useDeleteData();
@@ -66,9 +68,20 @@ const PrivateClientCard = ({ client }: { client: any }) => {
 
         <PrivateClientForm client={client} />
 
-        <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200" onClick={() => window.print()}>
-          <Printer size={25} className="text-yellow-700" />
-        </button>
+      <ReactPDF.PDFDownloadLink
+                                   document={<ClientPdfComponent client={client} />}
+                                   fileName={`${client.private_name}.pdf`}
+                                   className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+                                 >
+                                   {({ loading }) =>
+                                     loading ? (
+                                       "Preparing PDF..."
+                                     ) : (
+                                       <Printer size={25} className="text-yellow-700" />
+                                     )
+                                   }
+                                 </ReactPDF.PDFDownloadLink>
+     
 
         <button className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200" onClick={handleDeleteClick}>
           <Trash size={25} className="text-red-700" />

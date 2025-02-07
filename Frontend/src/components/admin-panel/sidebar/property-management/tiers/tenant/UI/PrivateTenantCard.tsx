@@ -3,9 +3,10 @@ import { Eye, Edit, Printer, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 import PrivateTenantForm from "../forms/PrivateTenantForm";
 import { Tenant } from "@/types/DataProps";
-
+import ReactPDF from "@react-pdf/renderer"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useDeleteData } from "@/hooks/useDeleteData";
+import { TenantPdfComponent } from "@/components/common/assessmentPDF/TenantPdf";
 
 
 interface PrivateTenantCardProps {
@@ -76,9 +77,19 @@ const PrivateTenantCard: React.FC<PrivateTenantCardProps> = ({ tenant }) => {
           </Link>
         </button>
        <PrivateTenantForm tenant={tenant}/>
-        <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
-          <Printer size={25} className="text-yellow-700" />
-        </button>
+      <ReactPDF.PDFDownloadLink
+                                                 document={<TenantPdfComponent tenant={tenant} />}
+                                                 fileName={`${tenant.private_name}.pdf`}
+                                                 className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+                                               >
+                                                 {({ loading }) =>
+                                                   loading ? (
+                                                     "Preparing PDF..."
+                                                   ) : (
+                                                     <Printer size={25} className="text-yellow-700" />
+                                                   )
+                                                 }
+                                               </ReactPDF.PDFDownloadLink>
         <button
         className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
         onClick={handleDeleteClick}

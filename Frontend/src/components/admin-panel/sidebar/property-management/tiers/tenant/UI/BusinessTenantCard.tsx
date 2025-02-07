@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import { Tenant } from "@/types/DataProps";
 import BusinessTenantForm from "../forms/BusinessTenantForm";
 import { useDeleteData } from "@/hooks/useDeleteData";
-
+import  ReactPDF  from "@react-pdf/renderer";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { TenantPdfComponent } from "@/components/common/assessmentPDF/TenantPdf";
 
 
 interface BusinessTenantCardProps {
@@ -77,9 +78,19 @@ const BusinessTenantCard: React.FC<BusinessTenantCardProps> = ({ tenant }) => {
                      <BusinessTenantForm tenant={tenant}/>
                          {/* Delete Tenant Button */}
      
-                       <button className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200">
-                         <Printer size={25} className="text-yellow-700" />
-                       </button>
+                     <ReactPDF.PDFDownloadLink
+                                               document={<TenantPdfComponent tenant={tenant} />}
+                                               fileName={`${tenant.business_company_name}.pdf`}
+                                               className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+                                             >
+                                               {({ loading }) =>
+                                                 loading ? (
+                                                   "Preparing PDF..."
+                                                 ) : (
+                                                   <Printer size={25} className="text-yellow-700" />
+                                                 )
+                                               }
+                                             </ReactPDF.PDFDownloadLink>
                        <button
         className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
         onClick={handleDeleteClick}

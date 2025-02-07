@@ -28,9 +28,9 @@ import {
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
   const FormSchema = z.object({
-    owner_id: z.number().min(1, "Owner ID is required"),
+    owner_id: z.number().optional(),
     type_of_mandate: z.string().nonempty("Type of Mandate is required"),
-    owner_name: z.string().nonempty("Owner Name is required"),
+    owner_name: z.string().optional(),
     very_concerned: z.boolean(),
     type_of_property: z.string().nonempty("Type of Property is required"),
     neighborhood: z.string().nonempty("Neighborhood is required"),
@@ -55,8 +55,8 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
         // type_of_mandate: "Exclusive",
         // owner_name: "John Doe",
         // very_concerned: true,
-        // type_of_property: "Apartment",
-        // neighborhood: "Downtown",
+        type_of_property: "Apartment",
+        neighborhood: "Downtown",
         // tax_payable: 150,
         // billing_type: "Monthly",
         // commission: 10,
@@ -133,7 +133,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
       <FormItem>
         <FormLabel>Very Concerned *</FormLabel>
         <FormControl>
-          <Select onValueChange={field.onChange}>
+        <Select onValueChange={(value) => form.setValue('very_concerned', value === 'yes')}>
             <SelectTrigger>
               <SelectValue placeholder="Select a property" />
             </SelectTrigger>
@@ -149,18 +149,32 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
   /> 
   
   
+  <FormField
+    control={form.control}
+    name="type_of_property"
+    render={({ field }) => (
     <FormItem>
     <FormLabel>Type of Property</FormLabel>
     <FormControl>
-      <Input placeholder="Type of property" disabled className="bg-gray-200" />
+      <Input placeholder="Type of property"  className="bg-gray-200" />
     </FormControl>
   </FormItem>
+    )}
+  /> 
+    
+    <FormField
+    control={form.control}
+    name="neighborhood"
+    render={({ field }) => (
   <FormItem>
     <FormLabel>Neighborhood</FormLabel>
     <FormControl>
-      <Input placeholder="Neighborhood" disabled className="bg-gray-200" />
+      <Input placeholder="Neighborhood"  className="bg-gray-200" />
     </FormControl>
   </FormItem>
+
+)}
+/> 
 </div>
 
 
@@ -204,20 +218,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     render={({ field }) => (
       <FormItem>
         <FormLabel>Tax Payable *</FormLabel>
-        <Select
-        value={field.value ? String(field.value) : ""}
-        onValueChange={field.onChange}
-      >
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Tax Payable" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="Owner">Owner</SelectItem>
-            <SelectItem value="Tenant">Tenant</SelectItem>
-          </SelectContent>
-        </Select>
+      <Input placeholder="0" {...field}  onChange={(e)=>field.onChange(parseInt(e.target.value))}/>
         <FormMessage />
       </FormItem>
     )}
@@ -230,7 +231,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
       <FormItem>
         <FormLabel>Commission (%) *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} placeholder="Enter Commission %" />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Commission %" />
         </FormControl>
         <FormMessage />
       </FormItem>
@@ -244,10 +245,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     render={({ field }) => (
       <FormItem>
         <FormLabel>Deduct Commission? *</FormLabel>
-        <Select
-        value={field.value ? String(field.value) : ""}
-        onValueChange={field.onChange}
-      >
+        <Select onValueChange={(value) => form.setValue('deduct_commission', value === 'yes')}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select Deduct Option" />
@@ -269,19 +267,15 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
   render={({ field }) => (
     <FormItem className="col-span-2">
       <FormLabel>VAT on Commission? *</FormLabel>
-      <Select
-        value={field.value ? String(field.value) : ""}
-        onValueChange={field.onChange}
-      >
+      <Select onValueChange={(value) => form.setValue('vat_on_commission', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select VAT on Commission" />
           </SelectTrigger>
         </FormControl>
         <SelectContent>
-          <SelectItem value="No Over Commission">NO OVER COMMISSION</SelectItem>
-          <SelectItem value="Deduct at Agency">DEDUCT AT AGENCY</SelectItem>
-          <SelectItem value="Deduct from Owner">DEDUCT FROM OWNER</SelectItem>
+          <SelectItem value="Yes">Yes</SelectItem>
+          <SelectItem value="No">No</SelectItem>
         </SelectContent>
       </Select>
       <FormMessage />
@@ -373,7 +367,8 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     render={({ field }) => (
       <FormItem>
         <FormLabel>Tacit Renewal? *</FormLabel>
-        <Select onValueChange={field.onChange}>
+        <Select onValueChange={(value) => form.setValue('tacit_renewal', value === 'yes')}>
+      
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select" />
