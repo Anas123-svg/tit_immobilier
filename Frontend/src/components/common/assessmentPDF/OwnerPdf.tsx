@@ -7,179 +7,182 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-import logo from "@/assets/logo.jpg";
-import { Assessment, OwnerPdf } from "@/types/DataProps";
-import pfp from "@/assets/avatar-default.png"
+import { Owner } from "@/types/DataProps";
+import pfp from "@/assets/avatar-default.png";
+
+interface Props {
+  owner: Owner;
+}
+
 const styles = StyleSheet.create({
   page: {
     padding: 40,
+    fontSize: 12,
     fontFamily: "Helvetica",
-  },
-  logoContainer: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  logo: {
-    width: 120,
-    marginBottom: 16,
+    color: "#333",
+    backgroundColor: "#f9f9f9",
   },
   header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#2a3d66",
-    borderBottom: "2px solid #d9d9d9",
-    paddingBottom: 4,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
   },
-  subHeader: {
-    fontSize: 14,
-    color: "#555",
-    marginBottom: 16,
+  logo: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#2c3e50",
   },
   section: {
-    marginBottom: 24,
-    padding: 12,
-    backgroundColor: "#fff",
-    borderRadius: 6,
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: "#2a3d66",
-    paddingBottom: 4,
-    borderBottom: "2px solid #d9d9d9",
-  },
-  flaggedSectionHeader: {
-    color: "#d9534f", // Deep red for flagged items
-  },
-  fieldContainer: {
-    fontSize: 12,
-    color: "#444",
-    lineHeight: 1.5,
-    marginBottom: 8,
-  },
-  flaggedFieldContainer: {
-    color: "#d9534f", // Deep red text for flagged fields
-  },
-  fieldLabel: {
-    fontWeight: "bold",
-    color: "#333",
-  },
-  tableContainer: {
-    borderTop: "1px solid #e3e3e3",
-    marginTop: 16,
-  },
-  tableHeader: {
-    flexDirection: "row",
-    backgroundColor: "#2a3d66",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  tableHeaderText: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#fff",
-    width: "25%",
-    textAlign: "center",
-  },
-  tableRow: {
-    flexDirection: "row",
-    borderBottom: "1px solid #ddd",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    backgroundColor: "#f7f9fc",
-  },
-  tableRowAlternate: {
-    backgroundColor: "#e8f0f9",
-  },
-  tableCell: {
-    fontSize: 10,
-    color: "#333",
-    width: "25%",
-    textAlign: "center",
-  },
-  rowTitle: {
-    fontSize: 10,
-    fontWeight: "bold",
-    color: "#2a3d66",
-    width: "25%",
-    paddingRight: 6,
-  },
-  imageGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    marginTop: 12,
-  },
-  image: {
-    width: "48%",
-    height: 120,
+    backgroundColor: "#ffffff",
     borderRadius: 8,
-    marginVertical: 4,
+    padding: 15,
+    marginBottom: 15,
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
   },
-  feedbackSection: {
-    marginTop: 20,
-    paddingTop: 16,
-    borderTop: "1px solid #d9d9d9",
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#34495e",
+    borderBottom: "1px solid #ddd",
+    paddingBottom: 5,
   },
-  feedbackText: {
-    fontSize: 12,
-    color: "#333",
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  label: {
+    fontWeight: "bold",
+    color: "#2c3e50",
+  },
+  photoBox: {
+    width: 100,
+    height: 100,
+    border: "1px solid #ccc",
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  photo: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  textGroup: {
+    marginBottom: 8,
+  },
+  textItem: {
     lineHeight: 1.5,
   },
 });
 
-export const OwnerPdfComponent = ({ ownerPdf }: { ownerPdf: OwnerPdf }) => {
-    const { owner, template } = ownerPdf;
-  
-    return (
-      <Document>
-        <Page style={styles.page}>
-          {/* Owner Name */}
-          <Text style={styles.header}>{owner.private_name || "Owner Details"}</Text>
-  
-          {/* Template Fields */}
-          <View style={styles.section}>
-            <Text style={styles.sectionHeader}>Template Fields</Text>
-            {template.fields.map((field, idx) => (
-              <Text key={idx} style={styles.fieldContainer}>
-                <Text style={styles.fieldLabel}>{field.label}: </Text>
-                {Array.isArray(field.value) ? field.value.join(", ") : field.value || "N/A"}
-              </Text>
-            ))}
-          </View>
-  
-          {/* Template Tables */}
-          {template.tables.map((table, idx) => (
-            <View key={idx} style={styles.section}>
-              <Text style={styles.sectionHeader}>{table.table_name}</Text>
-              {/* Table Columns */}
-              <View style={styles.tableContainer}>
-                <View style={styles.tableHeader}>
-                  {table.table_data.columns.map((col, colIndex) => (
-                    <Text key={colIndex} style={styles.tableHeaderText}>
-                      {col}
-                    </Text>
-                  ))}
-                </View>
-                {/* Table Rows */}
-                {Object.entries(table.table_data.rows).map(([rowKey, rowVal], rowIndex) => (
-                  <View key={rowIndex} style={styles.tableRow}>
-                    <Text style={styles.rowTitle}>{rowKey}</Text>
-                    {Object.values(rowVal).map((cell, cellIndex) => (
-                      <Text key={cellIndex} style={styles.tableCell}>
-                        {cell}
-                      </Text>
-                    ))}
-                  </View>
-                ))}
-              </View>
-            </View>
-          ))}
-        </Page>
-      </Document>
-    );
-  };
-  
+const renderField = (label: string, value?: string | number) =>
+  value ? (
+    <View style={styles.textGroup}>
+      <Text style={styles.label}>{label}: </Text>
+      <Text style={styles.textItem}>{value}</Text>
+    </View>
+  ) : null;
+
+export const OwnerPdfComponent = ({ owner }: Props) => (
+  <Document>
+    <Page style={styles.page}>
+      <View style={styles.header}>
+        <Image
+          src={
+            owner.is_business_owner
+              ? owner.business_photo
+              : owner.private_photo || pfp
+          }
+          style={styles.logo}
+        />
+        <Text style={styles.title}>OWNER INFORMATION</Text>
+      </View>
+
+      {/* Identification Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>I - OWNER IDENTIFICATION</Text>
+        {owner.is_business_owner ? (
+          <>
+            {renderField("Company Name", owner.business_company_name)}
+            {renderField("Manager Name", owner.business_manager_name)}
+            {renderField("Gender", owner.business_manager_gender)}
+            {renderField("Date of Birth", owner.business_manager_date_of_birth)}
+            {renderField(
+              "Place of Birth",
+              owner.business_manager_place_of_birth
+            )}
+            {renderField(
+              "Document Number",
+              owner.business_manager_document_number
+            )}
+            {renderField("Expiry Date", owner.business_manager_expiry_date)}
+            {renderField("Job Position", owner.business_manager_job_position)}
+          </>
+        ) : (
+          <>
+            {renderField("Name", `${owner.private_name} ${owner.surname}`)}
+            {renderField("Gender", owner.private_gender)}
+            {renderField("Date of Birth", owner.private_birth_date)}
+            {renderField("Place of Birth", owner.private_place_of_birth)}
+            {renderField("Nationality", owner.private_nationality)}
+            {renderField("Document Type", owner.private_document_type)}
+            {renderField("Document Number", owner.private_document_number)}
+            {renderField("Expiry Date", owner.private_expiry_date)}
+            {renderField("Occupation", owner.private_occupation)}
+          </>
+        )}
+      </View>
+
+      {/* Contact Information Section */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>II - CONTACT INFORMATION</Text>
+        {owner.is_business_owner ? (
+          <>
+            {renderField("Office Phone", owner.business_office_phone_number)}
+            {renderField("WhatsApp Contact", owner.business_whatsapp_contact)}
+            {renderField("Email", owner.business_email)}
+            {renderField("Head Office Address", owner.business_head_office)}
+          </>
+        ) : (
+          <>
+            {renderField("Contact Number", owner.private_contact)}
+            {renderField("WhatsApp", owner.private_whatsapp_contact)}
+            {renderField("Email", owner.private_email)}
+            {renderField("PO Box", owner.private_po_box)}
+            {renderField("Marital Status", owner.private_marital_status)}
+            {renderField("Spouse's Name", owner.private_spouses_name)}
+          </>
+        )}
+      </View>
+
+      {/* Emergency Contact Section */}
+      {!owner.is_business_owner && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            III - EMERGENCY CONTACT INFORMATION
+          </Text>
+          {renderField("Contact Name", owner.private_emergency_contact_name)}
+          {renderField("Contact Number", owner.private_emergency_contact)}
+          {renderField(
+            "Relationship",
+            owner.private_emergency_contact_relation
+          )}
+        </View>
+      )}
+    </Page>
+  </Document>
+);
