@@ -22,7 +22,7 @@ class OwnerPortfolioManagementController extends Controller
         try {
             $validatedData = $request->validate([
                 'owner_id' => 'required|exists:owners,id',
-                'owner_name' => 'required|string|max:255',
+                'owner_name' => 'nullab|string|max:255',
                 'property_concerned' => 'required|string|max:255',
                 'users' => 'nullable|array',
             ]);

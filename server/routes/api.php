@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/logout', [UserController::class, 'logout']);
 });
 
-// Owner routes
+// Owner routes getOwnerSaleProperties
 Route::get('/dashboard/owners', [OwnerController::class, 'OwnerDashboard']);
 Route::get('/get-all-owners', [OwnerController::class, 'index']);
 Route::post('/owners', [OwnerController::class, 'store']);
@@ -56,7 +56,8 @@ Route::put('/owners/{id}', [OwnerController::class, 'update']);
 Route::get('/owners/{id}', [OwnerController::class, 'show']);
 Route::delete('/owners/{id}', [OwnerController::class, 'destroy']);
 Route::get('/profile/owner/{id}', [OwnerController::class, 'getOwnerProperties']);
-
+Route::get('/sale/properties/owner/{id}', [OwnerController::class, 'getOwnerSaleProperties']);
+Route::get('/rent/properties/owner/{id}', [OwnerController::class, 'getOwnerRentProperties']);
 
 //
 

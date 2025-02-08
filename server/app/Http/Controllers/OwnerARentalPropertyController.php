@@ -10,7 +10,7 @@ class OwnerARentalPropertyController extends Controller
 {
     public function index()
     {
-        return OwnerARentalProperty::all();
+        return OwnerARentalProperty::orderBy('created_at', 'desc')->get();
     }
 
     public function show($id)

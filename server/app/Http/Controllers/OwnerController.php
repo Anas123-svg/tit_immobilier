@@ -222,6 +222,41 @@ class OwnerController extends Controller
     }
 }
 
+public function getOwnerSaleProperties($ownerId)
+{
+    try {
+        $saleProperties = OwnerSaleProperty::where('owner_id', $ownerId)->get();
+
+        return response()->json([
+            'sale_properties' => $saleProperties,
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error('Error fetching owner sale properties: ' . $e->getMessage());
+
+        return response()->json([
+            'message' => 'Error fetching owner sale properties.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
+public function getOwnerRentProperties($ownerId)
+{
+    try {
+        $saleProperties = OwnerRentProperty::where('owner_id', $ownerId)->get();
+
+        return response()->json([
+            'sale_properties' => $saleProperties,
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error('Error fetching owner sale properties: ' . $e->getMessage());
+
+        return response()->json([
+            'message' => 'Error fetching owner sale properties.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 
     
 
