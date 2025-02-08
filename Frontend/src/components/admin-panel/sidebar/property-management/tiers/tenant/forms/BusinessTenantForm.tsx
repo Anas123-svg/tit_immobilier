@@ -301,7 +301,7 @@ const handleConfirmSubmit = () => {
                   <FormItem>
                     <FormLabel>Capital</FormLabel>
                     <FormControl>
-                    <Input {...field}    value={field.value ?? ""}  onChange={(e) => field.onChange(Number(e.target.value))} type="number" placeholder="Capital" />
+                    <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Capital" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

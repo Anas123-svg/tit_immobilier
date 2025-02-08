@@ -29,6 +29,8 @@ import {
   import { useState } from "react";
   import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
@@ -61,26 +63,25 @@ const FormSchema = z.object({
 const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-       owner_id: 1001,  // Example owner ID
-      tenant_id: 2001,  // Example tenant ID
-      concerned: 'Property Lease Agreement',  // Example for concerned field
-      location: '1234 Main St, Anytown, USA',  // Example location
-      cost_of_rent: 1200.00,  // Example rent cost per month
-      contract_type: 'Lease',  // Example contract type
-      date_of_signature: '2025-01-01',  // Example date of signature
-      entry_date: '2025-01-15',  // Example entry date
-      end_date: '2030-01-15',  // Example end date
-      number_of_months_of_deposit: 2,  // Example for months of deposit
-      deposit_amount: 2400.00,  // Example deposit amount
-      caution_to_be_paid: 'Yes',  // Example caution to be paid
-      number_of_months_in_advance: 1,  // Example months in advance
-      advance_amount: 1200.00,  // Example advance payment amount
-      penalty_for_delay: 50.00,  // Example penalty for delay in payment
-      payment_limit: '5th of each month',  // Example payment limit
-      tacit_renewal: 'Yes',  // Example for tacit renewal
-      frequency: 'Monthly',  // Payment frequency
-      digital_signature_of_the_contract: 'Signed by digital certificate',  // Example digital signature status
-      due_date: '2025-02-05',  // Example due date for the next payment
+
+      // concerned: 'Property Lease Agreement',  // Example for concerned field
+      // location: '1234 Main St, Anytown, USA',  // Example location
+      // cost_of_rent: 1200.00,  // Example rent cost per month
+      // contract_type: 'Lease',  // Example contract type
+      // date_of_signature: '2025-01-01',  // Example date of signature
+      // entry_date: '2025-01-15',  // Example entry date
+      // end_date: '2030-01-15',  // Example end date
+      // number_of_months_of_deposit: 2,  // Example for months of deposit
+      // deposit_amount: 2400.00,  // Example deposit amount
+      // caution_to_be_paid: 'Yes',  // Example caution to be paid
+      // number_of_months_in_advance: 1,  // Example months in advance
+      // advance_amount: 1200.00,  // Example advance payment amount
+      // penalty_for_delay: 50.00,  // Example penalty for delay in payment
+      // payment_limit: '5th of each month',  // Example payment limit
+      // tacit_renewal: 'Yes',  // Example for tacit renewal
+      // frequency: 'Monthly',  // Payment frequency
+      // digital_signature_of_the_contract: 'Signed by digital certificate',  // Example digital signature status
+      // due_date: '2025-02-05',  // Example due date for the next payment
     }
   });
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
@@ -101,50 +102,10 @@ const form = useForm<z.infer<typeof FormSchema>>({
 </h2>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
   {/* Tenant Field */}
-  <FormField
-    control={form.control}
-    name="tenant_id"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Tenant *</FormLabel>
-        <Select onValueChange={(value) => field.onChange(Number(value))}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a tenant" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value={"1"}>Tenant 1</SelectItem>
-            <SelectItem value={"2"}>Tenant 2</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage className="text-xs" />
-      </FormItem>
-    )}
-  />
 
-  {/* Owner Field */}
-  <FormField
-    control={form.control}
-    name="owner_id"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Owner *</FormLabel>
-        <Select onValueChange={(value) => field.onChange(Number(value))}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select an Owner" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="1">Owner 1</SelectItem>
-            <SelectItem value="2">Owner 2</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage className="text-xs" />
-      </FormItem>
-    )}
-  />
+  <TenantCombobox name="tenant_id" control={form.control}/>
+ <OwnerCombobox name="owner_id" control={form.control}/>
+
 
   {/* Concerned Property Field */}
   <FormField
@@ -200,7 +161,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Cost of Rent</FormLabel>
         <FormControl>
-          <Input {...field} type="number" placeholder="Enter Rent Amount" disabled />
+          <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Rent Amount" />
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -289,7 +250,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Number of Months of Deposit *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))}/>
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -304,7 +265,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Deposit Amount *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -342,7 +303,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Number of Months in Advance *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -357,7 +318,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Advance Amount *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -372,7 +333,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Penalty for Delay % *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>

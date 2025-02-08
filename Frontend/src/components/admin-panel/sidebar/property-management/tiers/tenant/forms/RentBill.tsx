@@ -9,6 +9,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
+import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
+import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobox/ContractCombobox";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 
 // Define validation schema
 const RentFormSchema = z.object({
@@ -30,23 +33,11 @@ const RentBill = () => {
     resolver: zodResolver(RentFormSchema),
   });
 
-  const onSubmit = async (data: RentFormData) => {
-    const rentData = {
-      tenant_id: data.tenant_id,
-      contract_id: data.contract_id,
-      rent: data.rent,
-      charge: data.charge,
-      total: data.total,
-      month: data.month,
-    };
 
-    try {
-      const response = await axios.post("http://localhost:8000/api/tenant-bill", rentData);
-      console.log("Rent Bill Added: ", response.data);
-    } catch (err) {
-      console.error("Error submitting rent bill:", err);
-    }
-  };
+  
+      const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-bill';
+            const onSubmit = useFormSubmit<typeof RentFormSchema>(apiUrl);  // Use custom hook
+          
 const Contract = form.watch("contract_id")
 console.log(Contract)
   return (
@@ -61,46 +52,12 @@ console.log(Contract)
 </h2>
 <div className="grid grid-cols-2 gap-5">
             {/* Tenant Field */}
-            <FormField control={form.control} name="tenant_id" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tenant *</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Tenant" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="Tenant1">Tenant1</SelectItem>
-                        <SelectItem value="Tenant2">Tenant2</SelectItem>
-                        <SelectItem value="Tenant3">Tenant3</SelectItem>
-                      </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
 
-            {/* Contract Field */}
-            <FormField control={form.control} name="contract_id" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contract *</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Contract" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {contracts.map((contract) => (
-                        <SelectItem key={contract.id} value={contract.name}>
-                          {contract.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
+            <TenantCombobox name="tenant_id" control={form.control}/>
+      
+     <ContractCombobox name="contract_id" control={form.control} formState={form.formState}/>
+                  
+   
 </div>
   {  Contract !==undefined
  &&
@@ -109,7 +66,7 @@ console.log(Contract)
               <FormItem>
                 <FormLabel>Rent</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" placeholder="Enter Rent" />
+                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Rent" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -120,7 +77,7 @@ console.log(Contract)
               <FormItem>
                 <FormLabel>Charge</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" placeholder="Enter Charge" />
+                  <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))}  type="number" placeholder="Enter Charge" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -131,7 +88,7 @@ console.log(Contract)
               <FormItem>
                 <FormLabel>Total</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" placeholder="Enter Total" />
+                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Total" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

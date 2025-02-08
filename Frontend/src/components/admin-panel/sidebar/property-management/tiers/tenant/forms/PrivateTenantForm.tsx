@@ -488,7 +488,7 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
   render={({ field }) => (
     <FormItem>
       <FormLabel>Number of Children</FormLabel>
-      <Input type="number" {...field} placeholder="Enter Number of Children" />
+      <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Number of Children" />
       <FormMessage className="text-xs" />
     </FormItem>
   )}

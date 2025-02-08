@@ -125,7 +125,7 @@ const handleConfirmSubmit = () => {
       business_manager_expiry_date: client?.business_manager_expiry_date,
       business_photo:client?.business_photo ?? pfp,
       business_documents: client?.business_documents,
-      is_business_client: client?.is_business_client,
+      is_business_client: true,
     },
   });
   const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
@@ -278,7 +278,7 @@ const handleConfirmSubmit = () => {
                   <FormItem>
                     <FormLabel>Capital</FormLabel>
                     <FormControl>
-                    <Input {...field}    value={field.value ?? ""}  onChange={(e) => field.onChange(Number(e.target.value))} type="number" placeholder="Capital" />
+                    <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Capital" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

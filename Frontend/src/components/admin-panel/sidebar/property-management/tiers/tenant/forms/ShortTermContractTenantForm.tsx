@@ -27,6 +27,8 @@ import {
 import { useState } from "react";
 import InvoiceOptionsForm from "./InvoiceOptionsForm";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 
 // Define validation schema
 const FormSchema = z.object({
@@ -51,17 +53,7 @@ const ShortTermContractTenantForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_id: 1,
-      tenant_id: 2,
-      concerned: "Short-term rental for event",
-      location: "456 Elm Street, Cityville",
-      billing_type: "Hourly",
-      booking_date: "2025-02-01",
-      entry_date: "2025-02-02",
-      end_date: "2025-02-03",
-      due_date: "2025-02-01",
-      number_of_hours: 3,
-      rental_amount: 1500,
+
     },
   });
 
@@ -81,35 +73,11 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
               SHORT-TERM CONTRACT DETAILS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Tenant Field */}
-              <FormField
-                control={form.control}
-                name="tenant_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tenant *</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Select a tenant" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Owner Field */}
-              <FormField
-                control={form.control}
-                name="owner_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Owner *</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Select an Owner" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+           
+             <TenantCombobox name="tenant_id" control={form.control}/>
+            <OwnerCombobox name="owner_id" control={form.control}/>
+           
+           
 
               {/* Concerned Property Field */}
               <FormField
@@ -240,7 +208,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
                   <FormItem>
                     <FormLabel>Number of Hours</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} placeholder="0" />
+                      <Input type="number"  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -255,7 +223,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
                   <FormItem>
                     <FormLabel>Rental Amount</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} placeholder="0" />
+                      <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

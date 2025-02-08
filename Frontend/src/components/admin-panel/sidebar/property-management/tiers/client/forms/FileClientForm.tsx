@@ -31,9 +31,10 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Separator } from "@/components/ui/separator";
 import useFetchData from "@/hooks/useFetchData";
 import { Client } from "@/types/DataProps";
+import { ClientCombobox } from "@/components/admin-panel/UI-components/Combobox/ClientCombobox";
 // Define the schema for File Client form validation using Zod
 const FormSchema = z.object({
-  client_id: z.string().nonempty({ message: "Client ID is required" }),
+  client_id: z.number(),
   legal_status: z.string().nonempty({ message: "Legal Status is required" }),
   contact: z.string().nonempty({ message: "Contact is required" }),
   email: z.string().email({ message: "Invalid email address" }).nonempty({ message: "Email is required" }),
@@ -58,21 +59,21 @@ const FileClientForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-        client_id: "1", // Sample Client ID (can be dynamically loaded based on your data)
-        legal_status: "Registered", // Example Legal Status
-        contact: "+1234567890", // Example contact number
-        email: "john.doe@example.com", // Example email address
-        opening_date: "2024-02-01", // Example opening date (you can adjust as per requirement)
-        opening_reason: "Purchase from an owner", // Example reason
-        modality: "CASH", // Default Modality (can be dynamically adjusted based on your options)
-        opening_fee: 100, // Example Opening Fee
-        advance_amount: 500, // Example Advance Amount
-        business_manager: "Jane Smith", // Example Business Manager name
-        digital_signature_of_file: "NON", // Default Digital Signature status
-        documents: [
-          "https://example.com/docs/contract.pdf", // Example document URL
-          "https://example.com/docs/passport.pdf", // Example document URL
-        ], // Sample documents array
+      
+        // legal_status: "Registered", // Example Legal Status
+        // contact: "+1234567890", // Example contact number
+        // email: "john.doe@example.com", // Example email address
+        // opening_date: "2024-02-01", // Example opening date (you can adjust as per requirement)
+        // opening_reason: "Purchase from an owner", // Example reason
+        // modality: "CASH", // Default Modality (can be dynamically adjusted based on your options)
+        // opening_fee: 100, // Example Opening Fee
+        // advance_amount: 500, // Example Advance Amount
+        // business_manager: "Jane Smith", // Example Business Manager name
+        // digital_signature_of_file: "NON", // Default Digital Signature status
+        // documents: [
+        //   "https://example.com/docs/contract.pdf", // Example document URL
+        //   "https://example.com/docs/passport.pdf", // Example document URL
+        // ], // Sample documents array
       }
       
 
@@ -94,19 +95,10 @@ const FileClientForm = () => {
               CLIENT DETAILS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <FormField
-                control={form.control}
-                name="client_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Client ID</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Client ID" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                   <ClientCombobox name="client_id" control={form.control}/>
+                                
+                          
+    
               <FormField
                 control={form.control}
                 name="legal_status"
@@ -204,6 +196,32 @@ const FileClientForm = () => {
                           <SelectItem value="credit">Credit</SelectItem>
                         </SelectContent>
                       </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="opening_fee"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Opening Fee</FormLabel>
+                    <FormControl>
+                    <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="0" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="advance_amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Advance Amount</FormLabel>
+                    <FormControl>
+                    <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

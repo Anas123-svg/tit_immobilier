@@ -154,7 +154,7 @@ const handleConfirmSubmit = () => {
       private_emergency_contact_relation: client?.private_emergency_contact_relation ?? "", // Default to empty string
       private_photo: client?.private_photo ??pfp, // Default to empty string or default photo URL
       private_documents: client?.private_documents ?? [], // Default to empty array
-      is_business_client: client?.is_business_client ?? false, 
+      is_business_client:  false, 
       // id: 0, // Dummy ID
       // private_pronouns: "He/Him", // Dummy pronouns
       // private_name: "John", // Dummy name
@@ -389,6 +389,17 @@ const handleConfirmSubmit = () => {
                     <FormMessage className="text-xs" />
                   </FormItem>
                 )}
+              /> {/* Signatory Authority Field */}
+              <FormField
+                  control={form.control}
+                  name="private_signatory_authority"
+                  render={({ field }) => (
+                      <FormItem>
+                          <FormLabel>Signatory Authority</FormLabel>
+                          <Input {...field} placeholder="Enter Signatory Authority" />
+                          <FormMessage className="text-xs" />
+                      </FormItem>
+                  )}
               />
               <FormField
                 control={form.control}
@@ -518,8 +529,7 @@ const handleConfirmSubmit = () => {
                       <Input
                         type="number"
                         placeholder="Number of Children"
-                       
-                        onChange={e => field.onChange(parseInt(e.target.value, 10))} 
+                        {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />

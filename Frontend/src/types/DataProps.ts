@@ -50,15 +50,31 @@ export interface CircularDiagramProps {
 
 
 
-export interface Contract {
-  reference: string;
-  tenant: string;
-  location: string;
-  contractStartDate:string
-  contractEndDate:string
-  amount:string
-}
-
+  export interface Contract {
+    id: number; // Unique identifier for the contract
+    owner_id: number; // The ID of the contract's owner
+    tenant_id: number; // The ID of the tenant associated with the contract
+    concerned: string; // The concerned party (e.g., "Tenant", "Owner", etc.)
+    location: string; // The location associated with the contract
+    cost_of_rent: number; // The cost of rent in the contract
+    contract_type: string; // The type of the contract (e.g., "Lease", "Rent Agreement")
+    date_of_signature: string; // Date when the contract was signed (ISO string)
+    entry_date: string; // The entry date into the contract (ISO string)
+    end_date: string; // The end date of the contract (ISO string)
+    number_of_months_of_deposit: number; // Number of months for the deposit
+    deposit_amount: number; // The deposit amount
+    caution_to_be_paid: number; // The caution amount to be paid
+    number_of_months_in_advance: number; // The number of months paid in advance
+    advance_amount: number; // The amount paid in advance
+    penalty_for_delay: number; // Penalty amount for delay in payments
+    payment_limit: string; // Payment limit (e.g., "Monthly", "Quarterly")
+    tacit_renewal: boolean; // Whether the contract has tacit renewal
+    frequency: string; // Payment frequency (e.g., "Monthly", "Annually")
+    digital_signature_of_the_contract: boolean; // Whether the contract has a digital signature
+    due_date: string; // The due date for payments (ISO string)
+    status: string; // Current status of the contract (e.g., "Active", "Expired")
+  }
+  
 
 export interface TreasuryItem {
   id: string;
