@@ -29,13 +29,15 @@ import InvoiceOptionsForm from "./InvoiceOptionsForm";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
+import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
+import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
 
 // Define validation schema
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
   tenant_id: z.number().min(1, "Tenant ID is required"),
-  concerned: z.string().nonempty("Property selection is required"),
-  location: z.string().nonempty("Location selection is required"),
+  concerned: z.number(),
+  location: z.number(),
   billing_type: z.string().nonempty("Billing Type is required"),
   booking_date: z.string().nonempty("Booking Date is required"),
   entry_date: z.string().nonempty("Entry Date is required"),
@@ -59,7 +61,9 @@ const ShortTermContractTenantForm = () => {
 
 const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract ";
   const onSubmit =  useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+  const Ownerid = form.watch("owner_id")
 
+  
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -79,43 +83,10 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
            
            
 
-              {/* Concerned Property Field */}
-              <FormField
-                control={form.control}
-                name="concerned"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Very Concerned *</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Select a property" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Locative Field */}
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Locative *</FormLabel>
-                    <Select onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select the rental" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Apartment">Apartment</SelectItem>
-                        <SelectItem value="Office">Office</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <OwnerSalePropertyCombobox name="concerned" control={form.control} id={Ownerid} formState={form.formState}/>
+              <OwnerRentPropertyCombobox name="location" control={form.control} id={Ownerid} formState={form.formState}/>
+              
+              
 
               {/* Billing Type Field */}
               <FormField

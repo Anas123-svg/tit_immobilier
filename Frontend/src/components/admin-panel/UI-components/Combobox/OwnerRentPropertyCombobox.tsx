@@ -9,21 +9,21 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { Controller } from "react-hook-form"
 import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
-interface OwnerSalePropertyComboboxProps {
+interface OwnerRentPropertyComboboxProps {
   name: string
   control: any
   formState?: any
   id?:number
 }
 
-export function OwnerSalePropertyCombobox({ name, control, formState,id }: OwnerSalePropertyComboboxProps) {
-  const { data: properties, loading, error } = useFetchData<OwnerProperties>(`${import.meta.env.VITE_API_URL}/api/sale/properties/owner/${id?id:''}`)
+export function OwnerRentPropertyCombobox({ name, control, formState,id }: OwnerRentPropertyComboboxProps) {
+  const { data: properties, loading, error } = useFetchData<OwnerProperties>(`${import.meta.env.VITE_API_URL}/api/rent/properties/owner/${id?id:''}`)
 
   if (loading) return <div>Loading...</div>
 
   return (
     <FormItem className="flex flex-col justify-between gap-2 ">
-      <FormLabel>Owner Sale Properties *</FormLabel>
+      <FormLabel>Owner Rent Properties *</FormLabel>
       <Controller
         name={name}
         control={control}

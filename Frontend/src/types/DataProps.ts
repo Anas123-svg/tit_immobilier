@@ -652,3 +652,8 @@ export interface ClientProfile {
     status: string; // Current status of the property (e.g., "For Sale", "Sold", etc.)
   }
   
+
+  export interface OwnerProperties{
+    sale_properties : OwnerSaleProperty[]
+
+  }
