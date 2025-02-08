@@ -31,6 +31,7 @@ import {
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
+import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
@@ -86,7 +87,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
   });
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
         const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-      
+   const Ownerid = form.watch("owner_id")
 
   
   
@@ -103,10 +104,10 @@ const form = useForm<z.infer<typeof FormSchema>>({
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
   {/* Tenant Field */}
 
-  <TenantCombobox name="tenant_id" control={form.control}/>
+  <TenantCombobox name="tenant_id" control={form.control} formState={form.formState}/>
  <OwnerCombobox name="owner_id" control={form.control}/>
 
-
+<OwnerSalePropertyCombobox name="concerned" control={form.control} id={Ownerid} formState={form.formState}/>
   {/* Concerned Property Field */}
   <FormField
     control={form.control}

@@ -1,7 +1,6 @@
 import React from "react";
 import ContractsList from "./ContractsList";
 
-import { renewals } from "@/data/dummyData";
 
 import { tenantStats } from "@/data/dummyData";
 import HeaderSection from "@/components/admin-panel/UI-components/HeaderSection";

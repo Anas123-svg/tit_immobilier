@@ -605,3 +605,50 @@ export interface ClientProfile {
   }
   
 
+
+  export interface OwnerSaleProperty {
+    id: number; // Unique identifier for the property
+    owner_id: number; // ID of the owner
+    owner: string; // Name of the owner
+    property_name: string; // Name of the property
+    type_of_property: string; // Type of the property (e.g., House, Villa, etc.)
+    number_of_floors: number; // Number of floors in the property
+    area: string; // Area of the property (e.g., "500 sqm")
+    market_value: number; // Market value of the property
+    island: boolean; // Whether the property is on an island
+    batch: string; // Batch identifier for the property
+    cie_identifier_number: string; // CIE identifier number
+    sodeci_identifier_number: string; // SODECI identifier number
+    boundary_marking_done: boolean; // Whether the boundary marking is done
+    domain_type: string; // Type of domain (e.g., Residential, Commercial)
+    has_title_deed: boolean; // Whether the property has a title deed
+    serviced: boolean; // Whether the property is serviced
+    approved: boolean; // Whether the property is approved
+    description: string; // Description of the property
+    city: string; // City where the property is located
+    municipality: string; // Municipality where the property is located
+    neighborhood: string; // Neighborhood name
+    longitude: string; // Longitude coordinate
+    latitude: string; // Latitude coordinate
+    height: number; // Height of the property
+    altitude: number; // Altitude of the property
+    number_of_parking_spaces: number; // Number of parking spaces available
+    number_of_levels: number; // Number of levels in the property
+    garden: boolean; // Whether the property has a garden
+    pool: boolean; // Whether the property has a pool
+    on_the_corner: boolean; // Whether the property is on a corner
+    near_water: boolean; // Whether the property is near water
+    feet_in_water: boolean; // Whether the property is feet in water
+    distance_from_water: number; // Distance from the water in meters
+    on_main_road: boolean; // Whether the property is on the main road
+    distance_from_road: number; // Distance from the road in meters
+    dry_land: boolean; // Whether the property is on dry land
+    low_depth: boolean; // Whether the property has low depth
+    school_nearby: boolean; // Whether a school is nearby
+    market_nearby: boolean; // Whether a market is nearby
+    assigned_agents: string[]; // List of assigned agents (could be an array of agent IDs or names)
+    photo: string; // URL to the photo of the property
+    documents: string[]; // List of document URLs for the property
+    status: string; // Current status of the property (e.g., "For Sale", "Sold", etc.)
+  }
+  
