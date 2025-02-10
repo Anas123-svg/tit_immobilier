@@ -16,6 +16,8 @@ use App\Http\Controllers\TenantFillInventoryController;
 use App\Http\Controllers\TenantInvoiceController;
 use App\Http\Controllers\TenantPaymentController;
 use App\Http\Controllers\TenantPenaltyController;
+use App\Http\Controllers\TreasuryController;
+use App\Http\Controllers\TreasurySupplyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -345,4 +347,23 @@ Route::prefix('clients/file')->group(function() {
     Route::delete('{id}', [ClientFileController::class, 'destroy']); // Delete a clients file
 });
 
+
+
+
+//Treasury
+Route::prefix('treasury/add')->group(function() {
+    Route::get('/', [TreasuryController::class, 'index']); // Get all Treasury 
+    Route::get('{id}', [TreasuryController::class, 'show']); // Get a single Treasury
+    Route::post('/', [TreasuryController::class, 'store']); // Create a new Treasury
+    Route::put('{id}', [TreasuryController::class, 'update']); // Update a Treasury
+    Route::delete('{id}', [TreasuryController::class, 'destroy']); // Delete a Treasury
+});
+
+Route::prefix('treasury/supply')->group(function() {
+    Route::get('/', [TreasurySupplyController::class, 'index']); // Get all Treasury supply
+    Route::get('{id}', [TreasurySupplyController::class, 'show']); // Get a single Treasury supply
+    Route::post('/', [TreasurySupplyController::class, 'store']); // Create a new Treasury supply
+    Route::put('{id}', [TreasurySupplyController::class, 'update']); // Update a Treasury supply
+    Route::delete('{id}', [TreasurySupplyController::class, 'destroy']); // Delete a Treasury supply
+});
 
