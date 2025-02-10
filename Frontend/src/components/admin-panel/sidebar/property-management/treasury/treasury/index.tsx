@@ -7,11 +7,6 @@ import { FilterOption } from "@/types/DataProps";
 const TreasuryComponent: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
 
-  const actions = [
-    { name: "Treasury", onClick: () => console.log("Treasury"), className: "bg-blue-500" },
-    { name: "Supply", onClick: () => console.log("Supply"), className: "bg-green-500" },
-    { name: "Account Statement", onClick: () => console.log("Account Statement"), className: "bg-yellow-500" },
-  ];
 
   const tools = [
     { name: "Print", onClick: () => console.log("Print") },
@@ -89,7 +84,7 @@ const TreasuryComponent: React.FC = () => {
       />
 
       {/* Treasury Actions */}
-      <TreasuryActions actions={actions} tools={tools} />
+      <TreasuryActions tools={tools} />
 
       {/* Data Display */}
       {data.length === 0 ? (

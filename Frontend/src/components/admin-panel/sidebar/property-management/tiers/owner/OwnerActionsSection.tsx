@@ -17,6 +17,8 @@ import MandateOwnerForm from "./forms/MandateOwnerForm";
 import RentalPropertyOwnerForm from "./forms/RentalPropertyOwnerForm";
 import PropertyForRentOwnerForm from "./forms/PropertyForRentOwnerForm";
 import ValidatorsOwnerForm from "./forms/ValidatorsOwnerForm";
+import RenewMandateOwnerForm from "./forms/RenewMandateOwnerForm";
+import TerminateMandateOwnerForm from "./forms/TerminateMandateOwnerForm";
 
 const OwnerActionsSection: React.FC = () => {
   return (
@@ -35,6 +37,9 @@ const OwnerActionsSection: React.FC = () => {
           <ReversalPropertyForRentalOwnerForm />
           <ManagmentFormOwner />
           <MandateOwnerForm />
+      
+          <RenewMandateOwnerForm/>
+          <TerminateMandateOwnerForm/>
           <ValidatorsOwnerForm />
           <RentalPropertyOwnerForm />
         </DropdownMenuContent>

@@ -1,22 +1,30 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import AddTreasuryForm from "./forms/AddTreasuryForm";
+import SupplyTreasuryForm from "./forms/SupplyTreasuryForm";
 
 interface TreasuryActionsProps {
-  actions: { name: string; onClick: () => void; className: string }[];
+ 
   tools: { name: string; onClick: () => void }[];
 }
 
-const TreasuryActions: React.FC<TreasuryActionsProps> = ({ actions, tools }) => {
+const TreasuryActions: React.FC<TreasuryActionsProps> = ({  tools }) => {
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
   const toggleToolsDropdown = () => {
     setIsToolsOpen(!isToolsOpen);
   };
-
+ const actions = [
+  
+  
+    { name: "Account Statement", onClick: () => console.log("Account Statement"), className: "bg-yellow-500" },
+  ];
   return (
     <div className="flex flex-col gap-5 sm:flex-row  justify-between lg:items-center ">
     {/* Main Actions */}
     <div className="flex gap-5 flex-wrap">
+      <AddTreasuryForm/>
+      <SupplyTreasuryForm/>
         {actions.map((action, index) => (
           <button
             key={index}

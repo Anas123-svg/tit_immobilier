@@ -657,3 +657,18 @@ export interface ClientProfile {
     sale_properties : OwnerSaleProperty[]
 
   }
+
+  // src/types/DataProps.ts
+
+export interface Treasury {
+  id: number;
+  label: string;
+  cash_type: string;
+  account_no: string;
+  minimum_threshold: number;
+  maximum_threshold: number;
+  manager_id: number;
+  validator_assignment: number[]; // assuming an array of manager IDs for validator assignment
+  comment: string;
+  // Add any other properties as required
+}

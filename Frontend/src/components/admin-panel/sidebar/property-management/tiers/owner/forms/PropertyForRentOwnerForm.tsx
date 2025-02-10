@@ -38,14 +38,14 @@ import { Owner } from "@/types/DataProps";
 // **Define validation schema**
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
-  owner: z.string().optional(),
   property_name: z.string().nonempty("Property Name is required"),
   type_of_property: z.string().nonempty("Type of Property is required"),
-  number_of_floors: z.number().min(1, "Number of Floors is required"),
+  number_of_floors: z.number().optional(),
   number_of_rentals: z.number().min(1, "Number of Rentals is required"),
   type_of_numbering: z.string().nonempty("Type of Numbering is required"),
   area_m2: z.number().min(1, "Area in m² is required"),
   market_value: z.number().min(1, "Market Value is required"),
+  other_type: z.string().optional(),
   island: z.string().nonempty("Island name is required"),
   batch: z.string().nonempty("Batch is required"),
   block: z.string().nonempty("Block is required"),
@@ -89,7 +89,7 @@ const PropertyForRentOwnerForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       // owner_id:1,
-      owner: "Jane Smith",
+    
       // property_name: "Oceanview Apartments",
       // type_of_property: "Commercial",
       // number_of_floors: 5,
@@ -188,7 +188,7 @@ const PropertyForRentOwnerForm = () => {
       : owner.private_name || "";           // Default to empty string if undefined
   }) || ["", ""];  // Default array in case data is empty or undefined
   
-  
+  const TypeofProperty = form.watch("type_of_property")
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-properties';
   const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl,form.reset);  // Use custom hook
  const nearWater = form.watch("near_water")
@@ -217,27 +217,43 @@ const PropertyForRentOwnerForm = () => {
     </FormItem>
   )} />
 
-  {/* Type of Property Field */}
-  <FormField control={form.control} name="type_of_property" render={({ field }) => (
+ {/* Type of Property Field */}
+<FormField control={form.control} name="type_of_property" render={({ field }) => (
+  <FormItem>
+    <FormLabel>Type of Property *</FormLabel>
+    <Select onValueChange={field.onChange}>
+      <FormControl>
+        <SelectTrigger>
+          <SelectValue placeholder="Select property type" />
+        </SelectTrigger>
+      </FormControl>
+      <SelectContent>
+        <SelectItem value="BUILDING">BUILDING</SelectItem>
+        <SelectItem value="RESIDENCE">RESIDENCE</SelectItem>
+        <SelectItem value="VILLA BASSE">VILLA BASSE</SelectItem>
+        <SelectItem value="APARTMENT">APARTMENT</SelectItem>
+        <SelectItem value="COMMON COURSE">COMMON COURSE</SelectItem>
+        <SelectItem value="TERRAIN">TERRAIN</SelectItem>
+        <SelectItem value="VILLA">VILLA</SelectItem>
+        <SelectItem value="VIRTUAL DOMICILATION">VIRTUAL DOMICILATION</SelectItem>
+        <SelectItem value="ENTREPRENEUR">ENTREPRENEUR</SelectItem>
+        <SelectItem value="COMMERCIAL SPACE">COMMERCIAL SPACE</SelectItem>
+        <SelectItem value="OTHERS">OTHERS</SelectItem>
+      </SelectContent>
+    </Select>
+    <FormMessage />
+  </FormItem>
+)} />
+ {/* Property Name Field */} 
+ {TypeofProperty === "OTHERS" && <FormField control={form.control} name="other_type" render={({ field }) => (
     <FormItem>
-      <FormLabel>Type of Property *</FormLabel>
-      <Select onValueChange={field.onChange}>
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder="Select property type" />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          <SelectItem value="Commercial">Commercial</SelectItem>
-          <SelectItem value="Residential">Residential</SelectItem>
-        </SelectContent>
-      </Select>
+      <FormLabel>Other Type *</FormLabel>
+      <FormControl><Input {...field} placeholder="Name of the Other Type " /></FormControl>
       <FormMessage />
     </FormItem>
-  )} />
-
+  )} />}
   {/* Number of Floors Field */}
-  <FormField control={form.control} name="number_of_floors" render={({ field }) => (
+ {TypeofProperty === "BUILDING" && <FormField control={form.control} name="number_of_floors" render={({ field }) => (
     <FormItem>
       <FormLabel>Number of Floors *</FormLabel>
       <FormControl><Input type="number" placeholder="0" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10))} 
@@ -245,7 +261,7 @@ const PropertyForRentOwnerForm = () => {
       <FormMessage />
     </FormItem>
   )} />
-
+}
   {/* Number of Rentals Field */}
   <FormField control={form.control} name="number_of_rentals" render={({ field }) => (
     <FormItem>
