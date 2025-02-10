@@ -32,13 +32,14 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
+import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
     owner_id: z.number().min(1, { message: "Owner ID must be greater than 0" }),
     tenant_id: z.number().min(1, { message: "Tenant ID must be greater than 0" }),
-    concerned: z.string().min(1, { message: "Concerned field cannot be empty" }),
-    location: z.string().min(1, { message: "Location cannot be empty" }),
+    concerned: z.number().min(1, { message: "Concerned field cannot be empty" }),
+    location: z.number().min(1, { message: "Location cannot be empty" }),
     cost_of_rent: z.number().min(0.01, { message: "Cost of rent must be a positive number" }),
     contract_type: z.string().min(1, { message: "Contract type is required" }),
     date_of_signature: z.string().min(1, { message: "Date of signature is required" }).regex(/^\d{4}-\d{2}-\d{2}$/, "Date format is invalid (YYYY-MM-DD)"),
@@ -108,51 +109,10 @@ const form = useForm<z.infer<typeof FormSchema>>({
  <OwnerCombobox name="owner_id" control={form.control}/>
 
 <OwnerSalePropertyCombobox name="concerned" control={form.control} id={Ownerid} formState={form.formState}/>
-  {/* Concerned Property Field */}
-  <FormField
-    control={form.control}
-    name="concerned"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Very concerned *</FormLabel>
-        <Select onValueChange={field.onChange}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a property" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="property_1">Property 1</SelectItem>
-            <SelectItem value="property_2">Property 2</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage className="text-xs" />
-      </FormItem>
-    )}
-  />
+<OwnerRentPropertyCombobox name="location" control={form.control} id={Ownerid} formState={form.formState}/>
 
-  {/* Locative Field */}
-  <FormField
-    control={form.control}
-    name="location"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Locative *</FormLabel>
-        <Select onValueChange={field.onChange}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select the rental" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="rental_1">Rental 1</SelectItem>
-            <SelectItem value="rental_2">Rental 2</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage className="text-xs" />
-      </FormItem>
-    )}
-  />
+
+
 
   {/* Cost of Rent Field */}
   <FormField
