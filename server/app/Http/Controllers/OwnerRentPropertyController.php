@@ -58,9 +58,6 @@ class OwnerRentPropertyController extends Controller
             'level' => 'nullable|integer',
             'details' => 'nullable|array',
         ]);
-        try{
-
-        }
         $property = OwnerRentProperty::create($data);
 
         return response()->json($property, 201);
