@@ -155,7 +155,12 @@ export function OfferSalesForm() {
   const handleStepChange = (step: number) => {
     setActiveStep(step);
   };
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
 
+  // Function to handle location change from the map
+  const handleLocationChange = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+  };
   const TypeofOffer = form.watch("prospect_sales_type_of_offer");
   return (
     <Dialog>
@@ -525,11 +530,7 @@ export function OfferSalesForm() {
                                 <FormItem>
                                   <FormLabel>Longitude</FormLabel>
                                   <FormControl>
-                                    <Input
-                                      {...field}
-                                      type="number"
-                                      placeholder="Longitude"
-                                    />
+                                  <Input type="number"  {...field} value={location?.lng} onChange={e => field.onChange(parseFloat(e.target.value))} placeholder="Longitude" />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -544,11 +545,7 @@ export function OfferSalesForm() {
                                 <FormItem>
                                   <FormLabel>Latitude</FormLabel>
                                   <FormControl>
-                                    <Input
-                                      {...field}
-                                      type="number"
-                                      placeholder="Latitude"
-                                    />
+                                  <Input type="number" placeholder="0" {...field}  value={location?.lat} onChange={e => field.onChange(parseFloat(e.target.value))} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -556,7 +553,7 @@ export function OfferSalesForm() {
                             />
                           </div>
                         </div>
-                        <MapComponent />
+                        <MapComponent onLocationChange={handleLocationChange} />
                         <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               PHOTO AND DOCUMENTS
             </h2>

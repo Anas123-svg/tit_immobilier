@@ -15,7 +15,7 @@ interface TreasuryComboboxProps {
 }
 
 export function TreasuryCombobox({ name, control }: TreasuryComboboxProps) {
-  const { data: treasuries, loading, error } = useFetchData<Treasury[]>(`${import.meta.env.VITE_API_URL}/api/treasuries`)
+  const { data: treasuries, loading, error } = useFetchData<Treasury[]>(`${import.meta.env.VITE_API_URL}/api/treasury/add`)
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error fetching treasuries: {error}</div>

@@ -6,7 +6,7 @@ import {
   } from "@/components/ui/dialog";
   import { Input } from "@/components/ui/input";
   import { zodResolver } from "@hookform/resolvers/zod";
-  import { useForm } from "react-hook-form";
+  import { Controller, useForm } from "react-hook-form";
   import { boolean, z } from "zod";
   import { Button } from "@/components/ui/button";
   import {
@@ -27,14 +27,17 @@ import {
   } from "@/components/ui/select";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
+import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
+import useFetchData from "@/hooks/useFetchData";
+import { OwnerSaleProperty } from "@/types/DataProps";
   const FormSchema = z.object({
     owner_id: z.number().optional(),
     type_of_mandate: z.string().nonempty("Type of Mandate is required"),
     owner_name: z.string().optional(),
-    very_concerned: z.boolean(),
-    type_of_property: z.string().nonempty("Type of Property is required"),
-    neighborhood: z.string().nonempty("Neighborhood is required"),
-    tax_payable: z.number().min(0, "Tax Payable is required"),
+    very_concerned: z.number(),
+    type_of_property: z.string().optional(),
+    neighborhood: z.string().optional(),
+    tax_payable: z.string().optional(),
     billing_type: z.string().nonempty("Billing Type is required"),
     commission: z.number().min(0, "Commission is required"),
     deduct_commission: z.boolean(),
@@ -42,7 +45,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     date_of_signature: z.string().nonempty("Date of Signature is required"),
     debut_date: z.string().nonempty("Start Date is required"),
     end_date: z.string().nonempty("End Date is required"),
-    digital_signature_of_the_mandate: z.string().optional(),
+    digital_signature_of_the_mandate: z.boolean().optional(),
     tacit_renewal: z.boolean(),
   });
   
@@ -54,19 +57,18 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
         // owner_id: 1,
         // type_of_mandate: "Exclusive",
         // owner_name: "John Doe",
-        // very_concerned: true,
-        type_of_property: "Apartment",
-        neighborhood: "Downtown",
+        type_of_property: "",
+        neighborhood: "",
         // tax_payable: 150,
         // billing_type: "Monthly",
         // commission: 10,
-        // deduct_commission: true,
-        // vat_on_commission: true,
+        deduct_commission: false,
+        vat_on_commission: false,
         // date_of_signature: "2025-01-01",
         // debut_date: "2025-01-01",
         // end_date: "2025-12-31",
-        // digital_signature_of_the_mandate: "digital_signature.jpg",
-        // tacit_renewal: true,
+        digital_signature_of_the_mandate: false,
+        tacit_renewal: false,
 
 
         owner_name: "John Doe",
@@ -77,8 +79,16 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
    
      const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
      const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-   
-  
+    const OwnerId = form.watch("owner_id")
+  const SaleProperty = form.watch("very_concerned")
+    const BillingType = form.watch("billing_type")
+    const MandateType = form.watch("type_of_mandate")
+
+
+
+  const { data, loading, error } = useFetchData<OwnerSaleProperty>(
+    `${import.meta.env.VITE_API_URL}/api/owner-sale-properties/${SaleProperty}`
+  );
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger>Add a Mandate</DialogTrigger>
@@ -103,8 +113,8 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
               <SelectValue placeholder="Select a Mandate Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Exclusive">Exclusive</SelectItem>
-              <SelectItem value="Non-Exclusive">Non-Exclusive</SelectItem>
+              <SelectItem value="Sale">Sale</SelectItem>
+              <SelectItem value="Location">Location</SelectItem>
             </SelectContent>
           </Select>
         </FormControl>
@@ -126,55 +136,62 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
       </FormItem>
     )}
   /> */}
-  <FormField
-    control={form.control}
-    name="very_concerned"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Very Concerned *</FormLabel>
-        <FormControl>
-        <Select onValueChange={(value) => form.setValue('very_concerned', value === 'yes')}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a property" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="yes">Yes</SelectItem>
-              <SelectItem value="no">No</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  /> 
-  
+
+  <OwnerSalePropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/>
+ 
   
   <FormField
-    control={form.control}
-    name="type_of_property"
-    render={({ field }) => (
+  control={form.control}
+  name="type_of_property"
+  render={({ field }) => (
     <FormItem>
-    <FormLabel>Type of Property</FormLabel>
-    <FormControl>
-      <Input placeholder="Type of property"  className="bg-gray-200" />
-    </FormControl>
-  </FormItem>
-    )}
-  /> 
+      <FormLabel>Type of Property</FormLabel>
+      <FormControl defaultValue={data?.type_of_property}>
+        <Input
+          {...field}
+          placeholder="Type of property"
+          defaultValue={data?.type_of_property || field.value} // Fallback to 'Default Value' if the data is undefined
+          value={data?.type_of_property || field.value}
+       
+          className="bg-gray-200"
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
     
     <FormField
-    control={form.control}
-    name="neighborhood"
-    render={({ field }) => (
-  <FormItem>
-    <FormLabel>Neighborhood</FormLabel>
-    <FormControl>
-      <Input placeholder="Neighborhood"  className="bg-gray-200" />
-    </FormControl>
-  </FormItem>
-
-)}
-/> 
+  control={form.control}
+  name="neighborhood"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Neighborhood</FormLabel>
+      <FormControl>
+        {/* Ensure loading state is handled */}
+        {loading ? (
+          <p>Loading...</p> // Show loading text or a spinner while data is being fetched
+        ) : (
+          <Controller
+            name="neighborhood"
+            control={form.control}
+            defaultValue={data?.neighborhood || ''} // Set default value if data exists, else empty string
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Neighborhood"
+                defaultValue={data?.neighborhood ||field.value} // This sets the default value when the data is available
+                value={data?.neighborhood ||field.value} // This sets the default value when the data is available
+                
+                className="bg-gray-200"
+              />
+            )}
+          />
+        )}
+      </FormControl>
+    </FormItem>
+  )}
+/>
 </div>
 
 
@@ -187,8 +204,30 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
 </h2>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   
+{ MandateType === "Location" &&
  
-
+ <FormField
+    control={form.control}
+    name="tax_payable"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Tax Payable *</FormLabel>
+        <Select value={field.value} onValueChange={field.onChange}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Tax Payable" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="Owner">Owner</SelectItem>
+            <SelectItem value="Agency">Agency</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+  }
   {/* Billing Type Field */}
   <FormField
     control={form.control}
@@ -211,28 +250,18 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
       </FormItem>
     )}
   />
- {/* Tax Payable Field */}
-  <FormField
-    control={form.control}
-    name="tax_payable"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Tax Payable *</FormLabel>
-      <Input placeholder="0" {...field}  onChange={(e)=>field.onChange(parseInt(e.target.value))}/>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+
   {/* Commission Field */}
   <FormField
     control={form.control}
     name="commission"
     render={({ field }) => (
       <FormItem>
-        <FormLabel>Commission (%) *</FormLabel>
+        <FormLabel>  Commission {BillingType==="Fixed Amount" ?`(XOF)` :(`%`)} *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Commission %" />
-        </FormControl>
+         {BillingType==="Fixed Amount" ?<Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Commission (XOF)" />
+         : <Input type="number" {...field} onChange={(e)=>field.onChange(parseFloat(e.target.value))} placeholder="Enter Commission %" />
+    }</FormControl>
         <FormMessage />
       </FormItem>
     )}
@@ -245,7 +274,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     render={({ field }) => (
       <FormItem>
         <FormLabel>Deduct Commission? *</FormLabel>
-        <Select onValueChange={(value) => form.setValue('deduct_commission', value === 'yes')}>
+        <Select onValueChange={(value) => form.setValue('deduct_commission', value === 'Yes')}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select Deduct Option" />
@@ -267,7 +296,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
   render={({ field }) => (
     <FormItem className="col-span-2">
       <FormLabel>VAT on Commission? *</FormLabel>
-      <Select onValueChange={(value) => form.setValue('vat_on_commission', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('vat_on_commission', value === 'Yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select VAT on Commission" />
@@ -344,7 +373,8 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     render={({ field }) => (
       <FormItem className="col-span-2">
         <FormLabel>Digital Signature of the Mandate? *</FormLabel>
-        <Select onValueChange={field.onChange}>
+        <Select onValueChange={(value) => form.setValue('digital_signature_of_the_mandate', value === 'Yes')}>
+      
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select" />
@@ -367,7 +397,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
     render={({ field }) => (
       <FormItem>
         <FormLabel>Tacit Renewal? *</FormLabel>
-        <Select onValueChange={(value) => form.setValue('tacit_renewal', value === 'yes')}>
+        <Select onValueChange={(value) => form.setValue('tacit_renewal', value === 'Yes')}>
       
           <FormControl>
             <SelectTrigger>

@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import Uploader from "@/components/common/uploader";
@@ -34,10 +34,19 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "../../../../../UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
 import { Owner } from "@/types/DataProps";
-
+import Stepper from "@/components/admin-panel/UI-components/Stepper";
+const locativeSchema = z.object({
+  door_number: z.string().nonempty("Door Number is required"),
+  rental_type: z.string().nonempty("Rental Type is required"),
+  rent: z.number().min(1, "Rent is required"),
+  charges: z.number().min(0, "Charges are required"),
+  room: z.number().min(1, "Number of Rooms is required"),
+  area: z.number().min(1, "Area is required"),
+});
 // **Define validation schema**
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
+  owner: z.string().optional(),
   property_name: z.string().nonempty("Property Name is required"),
   type_of_property: z.string().nonempty("Type of Property is required"),
   number_of_floors: z.number().optional(),
@@ -49,41 +58,36 @@ const FormSchema = z.object({
   island: z.string().nonempty("Island name is required"),
   batch: z.string().nonempty("Batch is required"),
   block: z.string().nonempty("Block is required"),
-  cie_identifier_number: z.string().optional(),
-  sodeci_identifier_number: z.string().optional(),
+  cie_identifier_number: z.string(),
+  sodeci_identifier_number: z.string(),
   description: z.string().nonempty("Description is required"),
   city: z.string().nonempty("City is required"),
   municipality: z.string().nonempty("Municipality is required"),
   neighborhood: z.string().nonempty("Neighborhood is required"),
-  longitude: z.number(),
-  latitude: z.number(),
-  height: z.number(),
-  altitude: z.number(),
-  on_the_corner: z.string(),
-  near_water: z.string(),
-  feet_in_water: z.boolean(),
+  longitude: z.number().optional(),
+  latitude: z.number().optional(),
+  height: z.number().optional(),
+  altitude: z.number().optional(),
+  on_the_corner: z.string().optional(),
+  near_water: z.string().optional(),
+  feet_in_water: z.boolean().optional(),
   distance_from_water: z.string().optional(),
-  on_main_road: z.boolean(),
+  on_main_road: z.boolean().optional(),
   distance_from_road: z.string().optional(),
-  dry_land: z.string(),
-  low_depth: z.string(),
-  school_nearby: z.string(),
-  market_nearby: z.string(),
+  dry_land: z.string().optional(),
+  low_depth: z.string().optional(),
+  school_nearby: z.string().optional(),
+  market_nearby: z.string().optional(),
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(
    z.string()
   ).optional(),
-  level: z.number().min(1, "Level is required"),
-  door_number: z.string().nonempty("Door Number is required"),
-  rental_type: z.string().nonempty("Rental Type is required"),
-  rent: z.number().min(1, "Rent is required"),
-  charges: z.number().min(0, "Charges are required"),
-  room: z.number().min(1, "Number of Rooms is required"),
-  area: z.number().min(1, "Area is required"),
+  locatives: z.array(locativeSchema).optional(), // Array of locatives
 });
 
 const PropertyForRentOwnerForm = () => {
+  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for locatives
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -125,16 +129,10 @@ const PropertyForRentOwnerForm = () => {
       // documents: [
   
       // ],
-      level: 3,
-      door_number: "3B",
-      rental_type: "Long-term",
-      rent: 2500,
-      charges: 300,
-      room: 12,
-      area: 150.5,
 
+  
       // owner_id:0,
-      // owner: "",
+      owner: "sample",
       // property_name: "",
       // type_of_property: "",
       // number_of_floors: 0,
@@ -153,18 +151,18 @@ const PropertyForRentOwnerForm = () => {
       // neighborhood: "",
       // longitude: "",
       // latitude: "",
-      // height: 0,
-      // altitude: 0,
-      // on_the_corner: "",
-      // near_water: "",
-      // feet_in_water: false,
-      // distance_from_water: "",
-      // on_main_road: false,
-      // distance_from_road: "",
-      // dry_land: "",
-      // low_depth: "",
-      // school_nearby: "",
-      // market_nearby: "",
+      height: 0,
+      altitude: 0,
+      on_the_corner: "",
+      near_water: "",
+      feet_in_water: false,
+      distance_from_water: "",
+      on_main_road: false,
+      distance_from_road: "",
+      dry_land: "",
+      low_depth: "",
+      school_nearby: "",
+      market_nearby: "",
       // assigned_agents: [],
       // photo: "",
       // documents: [],
@@ -177,7 +175,12 @@ const PropertyForRentOwnerForm = () => {
       // area: 0
     },
   });
+       
+  const [activeStep, setActiveStep] = useState(0);
 
+  const handleStepChange = (step: number) => {
+    setActiveStep(step);
+  };
   
   const { data: data, loading, error } = useFetchData<Owner[]>(
     `${import.meta.env.VITE_API_URL}/api/get-all-owners`
@@ -187,20 +190,43 @@ const PropertyForRentOwnerForm = () => {
       ? owner.business_company_name || ""  // Default to empty string if undefined
       : owner.private_name || "";           // Default to empty string if undefined
   }) || ["", ""];  // Default array in case data is empty or undefined
+   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   
+    // Function to handle location change from the map
+    const handleLocationChange = (lat: number, lng: number) => {
+      setLocation({ lat, lng });
+    };
   const TypeofProperty = form.watch("type_of_property")
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-properties';
   const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl,form.reset);  // Use custom hook
  const nearWater = form.watch("near_water")
  const nearRoad = form.watch("on_main_road")
+ const handleAddLocative = () => {
+  setLocatives([...locativesstate, { door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]);
+};
+
+const handleRemoveLocative = (index: number) => {
+  const updatedLocatives = locativesstate.filter((_, i) => i !== index);
+  setLocatives(updatedLocatives);
+};
+
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Property for Rent</DialogTrigger>
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[1000px] h-auto max-h-[95vh] overflow-y-auto p-6">
-        <DialogTitle className="text-lg md:text-xl">Property for Rent</DialogTitle>
+        <DialogTitle className="text-lg md:text-xl">Add a Property for Rent</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+          <Stepper
+                  activeStep={activeStep}
+                  onStepChange={handleStepChange}
+                  stepsTitle={["Property For Rent", "Locative"]}
+                > 
+                
+                <div className="space-y-6"> 
+                  
+                  
+                  <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
   PROPERTY DETAILS
 </h2>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -396,7 +422,7 @@ const PropertyForRentOwnerForm = () => {
   <FormField  control={form.control} name="longitude" render={({ field }) => (
     <FormItem>
       <FormLabel>Longitude</FormLabel>
-      <FormControl><Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} placeholder="Longitude" /></FormControl>
+      <FormControl><Input type="number"  {...field} value={location?.lng} onChange={e => field.onChange(parseFloat(e.target.value))} placeholder="Longitude" /></FormControl>
       <FormMessage />
     </FormItem>
   )} />
@@ -404,7 +430,7 @@ const PropertyForRentOwnerForm = () => {
   <FormField control={form.control} name="latitude" render={({ field }) => (
     <FormItem>
       <FormLabel>Latitude</FormLabel>
-      <FormControl><Input type="number" placeholder="0" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
+      <FormControl><Input type="number" placeholder="0" {...field}  value={location?.lat} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
       <FormMessage />
     </FormItem>
   )} />
@@ -426,7 +452,7 @@ const PropertyForRentOwnerForm = () => {
       <FormMessage />
     </FormItem>
   )} />
-  <div className="col-span-4 "><MapComponent/></div>
+  <div className="col-span-4 ">   <MapComponent onLocationChange={handleLocationChange} /></div>
 </div>
 
 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
@@ -630,11 +656,112 @@ const PropertyForRentOwnerForm = () => {
                            addedFiles={form.watch("documents") || []}
                          />
                        </div>
+                       </div> 
+                       <div className="space-y-6">       <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+                       DETAILS CONCERNING THE RENTAL OF THE PROPERTY
+</h2>
 
+<div className="flex flex-col space-y-5 ">
+{locativesstate.map((_, index) => (
+  <div key={index} className="grid-cols-7 gap-5 grid">
+    {/* Door Number Field */}
+    <FormField control={form.control} name={`locatives.${index}.door_number`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Door No *</FormLabel>
+        <FormControl><Input {...field} placeholder="e.g. 213" /></FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
 
+    {/* Rental Type Field */}
+    <FormField control={form.control} name={`locatives.${index}.rental_type`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Rental Type *</FormLabel>
+        <Select {...field} onValueChange={field.onChange}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select property type" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="APARTMENT">APARTMENT</SelectItem>
+            <SelectItem value="STUDIO">STUDIO</SelectItem>
+            <SelectItem value="VILLA">VILLA</SelectItem>
+            <SelectItem value="HOUSE">HOUSE</SelectItem>
+            <SelectItem value="COMMERCIAL">COMMERCIAL</SelectItem>
+            <SelectItem value="OTHERS">OTHERS</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Rent Field */}
+    <FormField control={form.control} name={`locatives.${index}.rent`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Rent *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Charges Field */}
+    <FormField control={form.control} name={`locatives.${index}.charges`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Charges *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Number of Rooms Field */}
+    <FormField control={form.control} name={`locatives.${index}.room`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>No. Rooms *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Area Field */}
+    <FormField control={form.control} name={`locatives.${index}.area`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Area *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Remove Button */}
+    <button type="button" className="bg-red-500 w-fit self-end text-white px-4 py-2 rounded-md" onClick={() => handleRemoveLocative(index)}>
+      Remove
+    </button>
+  </div>
+))}
+
+      {/* Button to Add New Locative */}
+      <button type="button" className="bg-secondary w-fit self-end text-white px-4 py-2 rounded-md" onClick={handleAddLocative}>
+        Add
+      </button>
+
+        
+        
+        </div>
+        
+        </div>
+                       </Stepper>
             <Button type="submit" className="w-full my-2 bg-primary">
               Submit
             </Button>
+          
           </form>
         </Form>
       </DialogContent>

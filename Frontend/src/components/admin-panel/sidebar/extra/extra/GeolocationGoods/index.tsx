@@ -46,6 +46,13 @@ const advancefilters : FilterOption[] = [   {
     console.log("Filters submitted");
   };
 
+
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Function to handle location change from the map
+  const handleLocationChange = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+  };
   return (
     <div className="p-2 sm:p-6 space-y-10 bg-gray-100 min-h-screen">
       {/* Header Section */}
@@ -62,7 +69,7 @@ const advancefilters : FilterOption[] = [   {
 
       {/* Map Section */}
       <div className="w-full mt-6">
-        <MapComponent /> {/* This is where the map will be rendered */}
+      <MapComponent onLocationChange={handleLocationChange} /> {/* This is where the map will be rendered */}
       </div>
     </div>
   );

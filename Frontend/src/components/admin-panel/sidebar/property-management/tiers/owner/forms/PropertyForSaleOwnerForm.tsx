@@ -59,24 +59,24 @@ const FormSchema = z.object({
   city: z.string().nonempty("City is required"),
   municipality: z.string().nonempty("Municipality is required"),
   neighborhood: z.string().nonempty("Neighborhood is required"),
-  longitude: z.number(),
-  latitude: z.number(),
-  height: z.number(),
-  altitude: z.number(),
-  number_of_parking_spaces: z.number().min(0),
-  number_of_levels: z.number().min(0),
-  garden: z.boolean(),
-  pool: z.boolean(),
-  on_the_corner: z.boolean(),
-  near_water: z.boolean(),
-  feet_in_water: z.boolean(),
+  longitude: z.number().optional(),
+  latitude: z.number().optional(),
+  height: z.number().optional(),
+  altitude: z.number().optional(),
+  number_of_parking_spaces: z.number().optional(),
+  number_of_levels: z.number().optional(),
+  garden: z.boolean().optional(),
+  pool: z.boolean().optional(),
+  on_the_corner: z.boolean().optional(),
+  near_water: z.boolean().optional(),
+  feet_in_water: z.boolean().optional(),
   distance_from_water: z.string().optional(),
-  on_main_road: z.boolean(),
+  on_main_road: z.boolean().optional(),
   distance_from_road: z.string().optional(),
-  dry_land: z.boolean(),
-  low_depth: z.boolean(),
-  school_nearby: z.boolean(),
-  market_nearby: z.boolean(),
+  dry_land: z.boolean().optional(),
+  low_depth: z.boolean().optional(),
+  school_nearby: z.boolean().optional(),
+  market_nearby: z.boolean().optional(),
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(z.string()).optional(),
@@ -87,8 +87,8 @@ const PropertyForSaleOwnerForm = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_id: 3,
-      // owner: "John Doe",
+  
+      owner: "John Doe",
       // property_name: "Seaside Villa",
       // type_of_property: "Residential",
       // number_of_floors: 3,
@@ -132,7 +132,7 @@ const PropertyForSaleOwnerForm = () => {
       // ],
      
       
-        owner: "asd",
+      
         // property_name: "",
         // type_of_property: "",
         // number_of_floors: 0,
@@ -155,20 +155,20 @@ const PropertyForSaleOwnerForm = () => {
         // latitude: 0,
         // height: 0,
         // altitude: 0,
-        // number_of_parking_spaces: 0,
-        // number_of_levels: 0,
-        // garden: false,
-        // pool: false,
-        // on_the_corner: false,
-        // near_water: false,
-        // feet_in_water: false,
-        // distance_from_water: "0",
-        // on_main_road: false,
-        // distance_from_road: "0",
-        // dry_land: false,
-        // low_depth: false,
-        // school_nearby: false,
-        // market_nearby: false,
+        number_of_parking_spaces: 0,
+        number_of_levels: 0,
+        garden: false,
+        pool: false,
+        on_the_corner: false,
+        near_water: false,
+        feet_in_water: false,
+        distance_from_water: "0",
+        on_main_road: false,
+        distance_from_road: "0",
+        dry_land: false,
+        low_depth: false,
+        school_nearby: false,
+        market_nearby: false,
         // assigned_agents: [],
         // photo: "",
         // documents: []
@@ -189,6 +189,12 @@ const PropertyForSaleOwnerForm = () => {
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-sale-properties';
   const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl,form.reset);  // Use custom hook
 
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Function to handle location change from the map
+  const handleLocationChange = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+  };
   const nearWater = form.watch("near_water")
   const nearRoad = form.watch("on_main_road")
   return (
@@ -413,10 +419,11 @@ const PropertyForSaleOwnerForm = () => {
     </FormItem>
   )} />
 
-  <FormField  control={form.control} name="longitude" render={({ field }) => (
+
+<FormField  control={form.control} name="longitude" render={({ field }) => (
     <FormItem>
       <FormLabel>Longitude</FormLabel>
-      <FormControl><Input type="number" placeholder="0" {...field} onChange={e => field.onChange(parseFloat(e.target.value))}/></FormControl>
+      <FormControl><Input type="number"  {...field} value={location?.lng} onChange={e => field.onChange(parseFloat(e.target.value))} placeholder="Longitude" /></FormControl>
       <FormMessage />
     </FormItem>
   )} />
@@ -424,10 +431,11 @@ const PropertyForSaleOwnerForm = () => {
   <FormField control={form.control} name="latitude" render={({ field }) => (
     <FormItem>
       <FormLabel>Latitude</FormLabel>
-      <FormControl><Input type="number" placeholder="0" {...field} onChange={e => field.onChange(parseFloat(e.target.value))}/></FormControl>
+      <FormControl><Input type="number" placeholder="0" {...field}  value={location?.lat} onChange={e => field.onChange(parseFloat(e.target.value))} /></FormControl>
       <FormMessage />
     </FormItem>
   )} />
+
 
   <FormField control={form.control} name="height" render={({ field }) => (
     <FormItem>
@@ -444,7 +452,8 @@ const PropertyForSaleOwnerForm = () => {
       <FormMessage />
     </FormItem>
   )} />
-  <div className="col-span-4 "><MapComponent/></div>
+  <div className="col-span-4 ">
+  <MapComponent onLocationChange={handleLocationChange} /></div>
 </div>
 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
   ADDITIONAL DETAILS

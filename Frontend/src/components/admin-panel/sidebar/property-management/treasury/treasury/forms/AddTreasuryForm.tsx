@@ -22,7 +22,7 @@ const FormSchema = z.object({
   manager_id: z.number(),
   cash_type: z.string().nonempty({ message: "Cash Type is required" }),
   label: z.string().nonempty({ message: "Label is required" }),
-  account_no: z.string().nonempty({ message: "Account Number is required" }),
+  account_no: z.string().optional(),
   minimum_threshold: z.number().min(1, { message: "Minimum Threshold is required" }),
   maximum_threshold: z.number().min(1, { message: "Maximum Threshold is required" }),
   comment: z.string().optional(),
