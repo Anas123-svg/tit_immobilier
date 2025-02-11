@@ -48,17 +48,13 @@ class OwnerRentProperty extends Model
         'photo',
         'documents',
         'level',
-        'door_number',
-        'rental_type',
-        'rent',
-        'charges',
-        'room',
-        'area',
-        'status'
+        'status',
+        'details'
     ];
 
     protected $casts = [
         'assigned_agents' => 'array',
         'documents' => 'array',
+        'details'=>'array'
     ];
 }

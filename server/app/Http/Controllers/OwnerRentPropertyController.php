@@ -56,13 +56,11 @@ class OwnerRentPropertyController extends Controller
             'photo' => 'nullable|string',
             'documents' => 'nullable|array',
             'level' => 'nullable|integer',
-            'door_number' => 'nullable|string',
-            'rental_type' => 'required|string',
-            'rent' => 'required|integer',
-            'charges' => 'nullable|integer',
-            'room' => 'nullable|integer',
-            'area' => 'nullable|numeric',
+            'details' => 'nullable|array',
         ]);
+        try{
+
+        }
         $property = OwnerRentProperty::create($data);
 
         return response()->json($property, 201);
