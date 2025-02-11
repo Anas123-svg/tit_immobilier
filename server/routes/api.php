@@ -130,6 +130,7 @@ Route::prefix('owner-mandate')->group(function() {
     Route::post('/', [OwnerMandateController::class, 'store']); // Create a new owner-sale-properties
     Route::put('{id}', [OwnerMandateController::class, 'update']); // Update a owner-sale-properties
     Route::delete('{id}', [OwnerMandateController::class, 'destroy']); // Delete a owner-sale-properties
+    Route::get('by-owner-id/{owner_id}', [OwnerMandateController::class, 'getMandatesByOwner']);
 });
 
 

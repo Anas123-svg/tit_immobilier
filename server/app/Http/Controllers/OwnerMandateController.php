@@ -79,4 +79,22 @@ class OwnerMandateController extends Controller
         $ownerMandate->delete();
         return response()->json(['message' => 'Deleted successfully']);
     }
+
+
+    public function getMandatesByOwner($owner_id)
+{
+    $mandates = OwnerMandate::where('owner_id', $owner_id)->orderBy('created_at', 'desc')->get();
+
+    if ($mandates->isEmpty()) {
+        return response()->json([
+            'message' => 'No mandates found for this owner.'
+        ], 404);
+    }
+
+    return response()->json([
+        'message' => 'Mandates retrieved successfully.',
+        'data' => $mandates
+    ], 200);
+}
+
 }
