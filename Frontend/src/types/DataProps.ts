@@ -672,3 +672,31 @@ export interface Treasury {
   comment: string;
   // Add any other properties as required
 }
+
+
+export interface Mandate {
+  id: number
+  owner_id: number
+  type_of_mandate: string
+  owner_name: string
+  very_concerned: boolean
+  type_of_property: string
+  neighborhood: string
+  tax_payable: boolean
+  billing_type: string
+  commission: number
+  deduct_commission: boolean
+  vat_on_commission: boolean
+  date_of_signature: string
+  debut_date: string
+  end_date: string
+  digital_signature_of_the_mandate: string
+  tacit_renewal: boolean
+  status: string
+}
+
+
+export interface OwnerMandate{
+  message: String
+  data:Mandate[]
+}

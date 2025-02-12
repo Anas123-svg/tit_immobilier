@@ -17,7 +17,7 @@ import {
     FormLabel,
     FormMessage,
   } from "@/components/ui/form";
-  import { useState } from "react";
+  import { useEffect, useState } from "react";
   import {
     Select,
     SelectContent,
@@ -59,7 +59,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
         // owner_name: "John Doe",
         type_of_property: "",
         neighborhood: "",
-        // tax_payable: 150,
+        tax_payable: "Owner",
         // billing_type: "Monthly",
         // commission: 10,
         deduct_commission: false,
@@ -139,59 +139,67 @@ import { OwnerSaleProperty } from "@/types/DataProps";
 
   <OwnerSalePropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/>
  
-  
   <FormField
   control={form.control}
   name="type_of_property"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Type of Property</FormLabel>
-      <FormControl defaultValue={data?.type_of_property}>
-        <Input
-          {...field}
-          placeholder="Type of property"
-          defaultValue={data?.type_of_property || field.value} // Fallback to 'Default Value' if the data is undefined
-          value={data?.type_of_property || field.value}
-       
-          className="bg-gray-200"
-        />
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
+  render={({ field }) => {
+    // Update field value when data is fetched
+    useEffect(() => {
+      if (data?.type_of_property) {
+        field.onChange(data.type_of_property); // Update form field with fetched data
+      }
+    }, [data, field]); // Dependency array ensures effect runs when data changes
+
+    if (loading) return <div>Loading...</div>;
+   
+    return (
+      <FormItem>
+        <FormLabel>Type of Property</FormLabel>
+        <FormControl>
+          <Input
+            {...field}
+            placeholder="Type of property"
+            value={field.value || data?.type_of_property || ''} // Ensure correct value is used
+            className="bg-gray-200"
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    );
+  }}
 />
-    
-    <FormField
+
+
+<FormField
   control={form.control}
   name="neighborhood"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Neighborhood</FormLabel>
-      <FormControl>
-        {/* Ensure loading state is handled */}
-        {loading ? (
-          <p>Loading...</p> // Show loading text or a spinner while data is being fetched
-        ) : (
-          <Controller
-            name="neighborhood"
-            control={form.control}
-            defaultValue={data?.neighborhood || ''} // Set default value if data exists, else empty string
-            render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="Neighborhood"
-                defaultValue={data?.neighborhood ||field.value} // This sets the default value when the data is available
-                value={data?.neighborhood ||field.value} // This sets the default value when the data is available
-                
-                className="bg-gray-200"
-              />
-            )}
+  render={({ field }) => {
+    // Sync the fetched data with the form field
+    useEffect(() => {
+      if (data?.neighborhood) {
+        field.onChange(data.neighborhood); // Update the field value with the fetched data
+      }
+    }, [data, field]); // This will run when 'data' or 'field' changes
+
+    if (loading) return <p>Loading...</p>; // Show loading text or spinner while data is being fetched
+  
+    return (
+      <FormItem>
+        <FormLabel>Neighborhood</FormLabel>
+        <FormControl>
+          <Input
+            {...field}
+            placeholder="Neighborhood"
+            value={field.value || data?.neighborhood || ''} // Use field value, or fetched data, or fallback to empty string
+            className="bg-gray-200"
           />
-        )}
-      </FormControl>
-    </FormItem>
-  )}
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    );
+  }}
 />
+
 </div>
 
 

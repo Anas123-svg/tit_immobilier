@@ -17,7 +17,7 @@ import {
     FormLabel,
     FormMessage,
   } from "@/components/ui/form";
-  import { useState } from "react";
+  import { useEffect, useState } from "react";
   import {
     Select,
     SelectContent,
@@ -27,15 +27,25 @@ import {
   } from "@/components/ui/select";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
+import { OwnerMandatesCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerMandatesCombobox";
+import { Mandate } from "@/types/DataProps";
+import useFetchData from "@/hooks/useFetchData";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"), // Ensure that owner_id is a positive number
-  type_of_mandate: z.string().min(1, "Type of Mandate is required"), // Ensure type_of_mandate is not empty
+  type_of_mandate: z.string().optional(), // Ensure type_of_mandate is not empty
   debut_dates: z.string().min(1, "Debut Dates are required"), // Ensure debut dates are provided
   end_date: z.string().min(1, "End Date is required"), // Ensure end date is provided
   commission: z.number().min(0, "Commission must be a positive number"), // Ensure commission is a positive number
   tax_on_charge: z.number().min(0, "Tax on charge must be a positive number"), // Ensure tax is a positive number
-  deduct_commission: z.string().min(1, "Deduct commission option is required"), // Ensure deduct commission is selected
+  deduct_commission: z.string().min(1, "Deduct commission option is required"),// Ensure type_of_mandate is not empty
+  get_debut_dates: z.string().optional(),
+  get_end_date: z.string().optional(), // Ensure end date is provided
+  get_commission: z.number().optional(), // Ensure commission is a positive number
+  get_tax_on_charge: z.number().optional(), // Ensure tax is a positive number
+  get_deduct_commission: z.string().optional(),  // Ensure deduct commission is selected
   date_of_operation:z.string().min(1, "Deduct commission option is required"), // Ensure deduct commission is selected
+  mandate_for_property:z.number(),
   billing_type:z.string().min(1, "Deduct commission option is required"),
 });
   
@@ -43,14 +53,20 @@ const FormSchema = z.object({
     const [open, setOpen] = useState(false);
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
-   
-    });
-  
+      defaultValues:{
+
+        type_of_mandate:"Location"
+      }
+    });  const MandateType = form.watch("mandate_for_property")
+    const { data:mandate, loading, error } = useFetchData<Mandate>(
+      `${import.meta.env.VITE_API_URL}/api/owner-mandate/${MandateType}`
+    );
    
      const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
-     const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-   
+     const onSubmit = useFormUpdate<typeof FormSchema>(apiUrl,mandate?.id);  // Use custom hook
+    const OwnerId = form.watch("owner_id")
   
+   
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger>Renew a Mandate</DialogTrigger>
@@ -64,116 +80,145 @@ DETAILS ABOUT THE PROPERTY
 </h2>
 <div className="grid grid-cols-2 gap-5">
   <OwnerCombobox name="owner_id" control={form.control}/>
-
-  <FormField
-    control={form.control}
-    name="type_of_mandate"
-    render={({ field }) => (
-      <FormItem>
-        <FormLabel>Type of Mandate *</FormLabel>
-        <FormControl>
-          <Select onValueChange={field.onChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a Mandate Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Exclusive">Exclusive</SelectItem>
-              <SelectItem value="Non-Exclusive">Non-Exclusive</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+  
+<OwnerMandatesCombobox name="mandate_for_property" control={form.control} formState={form.formState} id={OwnerId}/>
 </div>
+{MandateType &&
+<div className="space-y-6">
 <h2 className="bg-orange-500 text-white text-center p-2 text-sm md:text-base">
 DETAILS ABOUT THE PROPERTY
 </h2>
 <div className="grid grid-cols-3 gap-5">
   {/* Type of Mandate Field */}
-  <FormField control={form.control} name="type_of_mandate" render={({ field }) => (
-    <FormItem>
-      <FormLabel>Type of Mandate</FormLabel>
-      <Select onValueChange={field.onChange}>
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder="Select mandate type" />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          <SelectItem value="LOCATION">LOCATION</SelectItem>
-          <SelectItem value="SALE">SALE</SelectItem>
-          {/* Add other mandate types as needed */}
-        </SelectContent>
-      </Select>
-      <FormMessage />
-    </FormItem>
-  )} />
+  <FormField
+  control={form.control}
+  name="type_of_mandate"
+  render={({ field }) => {
+    // Use useEffect to update the field value when mandate data changes
+    useEffect(() => {
+      if (mandate?.type_of_mandate) {
+        field.onChange(mandate.type_of_mandate); // Update the form field value with the fetched mandate data
+      }
+    }, [mandate, field]); // Dependencies: effect runs when mandate or field changes
 
-  {/* Debut Dates Field */}
-  <FormField control={form.control} name="debut_dates" render={({ field }) => (
+    return (
+      <FormItem>
+        <FormLabel>Type of Mandate</FormLabel>
+        <Input
+          type="text"
+          disabled // Keep the input disabled as per your requirement
+          {...field} // Spread the React Hook Form field props
+          value={field.value || mandate?.type_of_mandate || ''} // Use form value or fetched mandate value
+          className="bg-gray-200"
+        />
+        <FormMessage />
+      </FormItem>
+    );
+  }}
+/>
+
+
+{/* Debut Dates Field */}
+<FormField
+  control={form.control}
+  name="get_debut_dates"
+  render={({ field }) => (
     <FormItem>
       <FormLabel>Debut Dates</FormLabel>
       <FormControl>
-        <Input {...field} type="date" placeholder="Select debut date" />
+        <Input
+          {...field}
+          disabled
+            className="bg-gray-200"
+          type="date"
+          placeholder="Select debut date"
+          defaultValue={mandate?.debut_date || ''} // Default to fetched debut date or empty string
+        />
       </FormControl>
       <FormMessage />
     </FormItem>
-  )} />
+  )}
+/>
 
-  {/* End Date Field */}
-  <FormField control={form.control} name="end_date" render={({ field }) => (
+{/* End Date Field */}
+<FormField
+  control={form.control}
+  name="get_end_date"
+  render={({ field }) => (
     <FormItem>
       <FormLabel>End Date</FormLabel>
       <FormControl>
-        <Input {...field} type="date" placeholder="Select end date" />
+        <Input
+          {...field}
+          type="date"
+          disabled  className="bg-gray-200"
+          placeholder="Select end date"
+          defaultValue={mandate?.end_date || ''} // Default to fetched end date or empty string
+        />
       </FormControl>
       <FormMessage />
     </FormItem>
-  )} />
+  )}
+/>
 
-
-  <FormField control={form.control} name="commission" render={({ field }) => (
+{/* Commission Field */}
+<FormField
+  control={form.control}
+  name="get_commission"
+  render={({ field }) => (
     <FormItem>
       <FormLabel>Commission (%)</FormLabel>
       <FormControl>
-        <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))}  type="number" placeholder="Enter commission" />
+      <Input
+          {...field}
+          disabled  className="bg-gray-200"
+          placeholder="Enter tax charge"
+          defaultValue={mandate?.commission || ''} // Default to fetched tax or empty string
+        />
       </FormControl>
       <FormMessage />
     </FormItem>
-  )} />
+  )}
+/>
 
-  {/* Tax on Charge Field */}
-  <FormField control={form.control} name="tax_on_charge" render={({ field }) => (
+{/* Tax on Charge Field */}
+<FormField
+  control={form.control}
+  name="get_tax_on_charge"
+  render={({ field }) => (
     <FormItem>
       <FormLabel>Tax on Charge</FormLabel>
       <FormControl>
-        <Input {...field} placeholder="Enter tax charge" />
+        <Input
+          {...field}
+          disabled  className="bg-gray-200"
+          placeholder="Enter tax charge"
+          defaultValue={mandate?.commission || ''} // Default to fetched tax or empty string
+        />
       </FormControl>
       <FormMessage />
     </FormItem>
-  )} />
+  )}
+/>
 
-  {/* Deduct Commission Field */}
-  <FormField control={form.control} name="deduct_commission" render={({ field }) => (
+{/* Deduct Commission Field */}
+<FormField
+  control={form.control}
+  name="get_deduct_commission"
+  render={({ field }) => (
     <FormItem>
       <FormLabel>Deduct Commission</FormLabel>
-      <Select onValueChange={field.onChange}>
-        <FormControl>
-          <SelectTrigger>
-            <SelectValue placeholder="Select deduction" />
-          </SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          <SelectItem value="LOYERS">LOYERS</SelectItem>
-          <SelectItem value="OTHERS">OTHERS</SelectItem>
-          {/* Add more deduction options as needed */}
-        </SelectContent>
-      </Select>
+      <Input
+          {...field}
+          disabled  className="bg-gray-200"
+          placeholder="Enter tax charge"
+          value={mandate?.deduct_commission &&"LOYERS" || field.value || ''} // Default to fetched tax or empty string
+        />
       <FormMessage />
     </FormItem>
-  )} />
+  )}
+/>
+
 </div>
 <h2 className="bg-orange-500 text-white text-center p-2 text-sm md:text-base">
 RENEWAL DETAILS
@@ -279,8 +324,8 @@ RENEWAL DETAILS
     </FormItem>
   )} />
 </div>
-
-              <Button type="submit" className="w-full my-2 bg-primary">
+</div>
+        }      <Button type="submit" className="w-full my-2 bg-primary">
                 Submit
               </Button>
             </form>
