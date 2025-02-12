@@ -537,7 +537,7 @@ export interface ClientProfile {
     profile: Owner
     Good: Good[];          // Adjust type based on the expected structure of Good
     Locative: Locative[];      // Adjust type based on the expected structure of Locative
-    Mandate: any[];   // Adjust type based on the expected structure of Mandate
+    Mandate: Mandate[];   // Adjust type based on the expected structure of Mandate
   }
   
 
@@ -693,6 +693,7 @@ export interface Mandate {
   digital_signature_of_the_mandate: string
   tacit_renewal: boolean
   status: string
+  created_at:string
 }
 
 

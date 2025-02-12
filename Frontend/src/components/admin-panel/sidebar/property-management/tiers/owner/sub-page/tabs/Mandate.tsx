@@ -1,8 +1,9 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, Mandate, OwnerMandate } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
+import { number, string } from 'zod';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -46,105 +47,7 @@ import React, { useState } from 'react';
   ];
  
 
-  const data = [
-    {
-      select: (
-        <input type="checkbox" className="form-checkbox" />
-      ),
-      locative: (
-        <div className="flex items-center">
-          <img
-            src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
-            alt="Building"
-            className="w-16 h-16 object-cover rounded-md mr-4"
-          />
-          DEMEBLE BUILDING <br />
-          <span className="text-xs text-gray-500">Surface area: 0 m²</span>
-          <br />
-          <span className="text-xs text-gray-500">Owner: DEMBELE BASSERIBA</span>
-        </div>
-      ),
-      type: "Location",
-      commission: "12%",
-      amount: "180,120 XOF",
-      state: (
-        <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs">
-          VALID
-        </span>
-      ),
-      createIt: "January 8, 2025 at 5:14:40 AM",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
-            <Download size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      select: (
-        <input type="checkbox" className="form-checkbox" />
-      ),
-      locative: (
-        <div className="flex items-center">
-          <img
-            src="https://app.zenapi.immo/assets/images/house-default.png"
-            alt="Building"
-            className="w-16 h-16 object-cover rounded-md mr-4"
-          />
-          DEMEBLE BUILDING - APARTMENT N°A3 <br />
-          <span className="text-xs text-gray-500">Surface area: 50 m²</span>
-          <br />
-          <span className="text-xs text-gray-500">Owner: DEMBELE BASSERIBA</span>
-        </div>
-      ),
-      type: "Rent",
-      commission: "8%",
-      amount: "250,000 XOF",
-      state: (
-        <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
-          BUSY
-        </span>
-      ),
-      createIt: "January 8, 2025 at 5:30:00 AM",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
-            <Download size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-        </>
-      ),
-    },
-  // Total Row (Adding a total row to the bottom)
-  {
-    select: null,
-    locative: "TOTAL",
-    type: null,
-    commission: null,
-    amount: "430,120 XOF", // Sum of amounts
-    state: null,
-    createIt: null,
-    action: null,
-  },
-  ];
+  
   
   // Define the columns for the table
   const columns = [
@@ -157,7 +60,10 @@ import React, { useState } from 'react';
     { label: "Create It", accessor: "createIt" },
     { label: "Action", accessor: "action" }, // Action buttons for each row
   ];
-const MandateComponent = () => {
+  interface MandateComponentProps{
+    mandates?:Mandate[]
+  }
+const MandateComponent:React.FC<MandateComponentProps> = ({mandates}) => {
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",
@@ -171,12 +77,73 @@ const MandateComponent = () => {
       [name]: value,
     }));
   };
-
+  let total =0
   // Handle filter submission
   const handleFilterSubmit = () => {
     console.log("Filters submitted:", filterValues);
     // Add logic to filter data or make API calls based on filterValues
   };
+  let data = mandates?.map((mandate)=>{
+
+   total += mandate.commission*100
+return   {
+  select: (
+    <input type="checkbox" className="form-checkbox" />
+  ),
+  locative: (
+    <div className="flex items-center">
+      <img
+        src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
+        alt="Building"
+        className="w-16 h-16 object-cover rounded-md mr-4"
+      />
+    <div className=""> {mandate.neighborhood} <br />
+      <span className="text-xs text-gray-500">{mandate.type_of_property}</span>
+      <br />
+      <span className="text-xs text-gray-500">Owner id:{mandate.owner_id}</span>
+    </div>
+    </div> 
+  ),
+  type: mandate.type_of_mandate,
+  commission: mandate.commission+"%",
+  amount: <p className=''>{mandate.commission*100} XOF</p> ,
+  state: (
+    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+      {mandate.status}
+    </span>
+  ),
+  createIt: mandate.created_at,
+  action: (
+    <>
+      <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+        <Eye size={18} />
+      </button>
+      <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+        <Edit size={18} />
+      </button>
+      <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
+        <Download size={18} />
+      </button>
+      <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+        <Trash2 size={18} />
+      </button>
+    </>
+  ),
+}
+  })??[]
+  
+// Push the total object at the end of the data
+data.push({
+  select: <></>,
+  locative: <p className=' text-lg font-bold'> TOTAL</p>,
+  type: "",
+  commission: "",
+  amount: <p className='text-green-500 font-bold text-lg'> {total} XOF</p>, // Format the total amount
+  state: <></>,
+  createIt: "",
+  action: <></>,
+});
+
   return (
     <div className='space-y-5'>
        <HeaderSection

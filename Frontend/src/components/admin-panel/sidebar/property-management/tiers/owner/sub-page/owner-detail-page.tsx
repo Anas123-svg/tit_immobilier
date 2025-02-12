@@ -90,7 +90,7 @@ const OwnerDetailPage = () => {
       name: 'mandate', 
       label: 'Mandate', 
       icon: <FileText className="inline mr-2" />, 
-      component: <MandateComponent />
+      component: <MandateComponent mandates={owners?.Mandate} />
     },
     { 
       name: 'reversal', 
