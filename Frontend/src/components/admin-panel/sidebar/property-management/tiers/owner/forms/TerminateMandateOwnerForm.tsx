@@ -82,7 +82,8 @@ DETAILS ABOUT THE PROPERTY
   
     <OwnerMandatesCombobox name="mandate_for_property" control={form.control} id={OwnerId} formState={form.formState} />
 </div>
-
+{MandateType&&
+<div className="">
 <h2 className="bg-orange-500 text-white text-center p-2 text-sm md:text-base">
   DETAILS ABOUT THE PROPERTY
 </h2>
@@ -151,7 +152,7 @@ DETAILS ABOUT THE PROPERTY
   </div>
 )} />
 
-<FormField control={form.control} name="get_commission" render={({ field }) => (
+{/* <FormField control={form.control} name="get_commission" render={({ field }) => (
   <div className="flex flex-col">
     <label className="text-sm text-gray-600">Commission Amount</label>
     <FormControl>
@@ -165,7 +166,7 @@ DETAILS ABOUT THE PROPERTY
     </FormControl>
     <FormMessage />
   </div>
-)} />
+)} /> */}
 
 <FormField control={form.control} name="neighborhood" render={({ field }) => (
   <div className="flex flex-col">
@@ -183,8 +184,8 @@ DETAILS ABOUT THE PROPERTY
   </div>
 )} />
 
-</div>
-
+</div></div>
+}
               <Button type="submit" className="w-full my-2 bg-primary">
                 Submit
               </Button>
