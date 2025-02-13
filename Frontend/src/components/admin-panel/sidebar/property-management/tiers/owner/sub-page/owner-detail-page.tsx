@@ -3,7 +3,7 @@ import WalletComponent from './tabs/Wallet'; // Import your components
 import ProfileComponent from './tabs/PersonalDetails';
 import GoodComponent from './tabs/Good';
 import LocativeComponent from './tabs/Locative';
-import MandateComponent from './tabs/Mandate';
+import MandateComponent from './tabs/Mandate/Mandate';
 import ReversalComponent from './tabs/Reversal';
 import TicketComponent from './tabs/Ticket';
 import WalletWithdrawalComponent from './tabs/WalletWithdrawal';
@@ -48,7 +48,12 @@ import { Owner, OwnerProfile } from "@/types/DataProps";
 const OwnerDetailPage = () => {
   const [activeTab, setActiveTab] = useState("wallet");
   const [file, setFile] = useState<File | null>(null);
-
+ const [reloadTrigger, setReloadTrigger] = useState<boolean>(false);
+  // Function to handle reload button click
+  const handleReload = () => {
+    console.log("sadad")
+    setReloadTrigger((prev) => !prev); // Toggle the reloadTrigger to trigger re-fetch
+  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -58,7 +63,7 @@ const OwnerDetailPage = () => {
   };
   const {id} = useParams()
     const { data: owners, loading, error } = useFetchData<OwnerProfile>(
-    `${import.meta.env.VITE_API_URL}/api/profile/owner/${id}`
+    `${import.meta.env.VITE_API_URL}/api/profile/owner/${id}`,reloadTrigger
   );
 
   const tabs = [
@@ -90,7 +95,7 @@ const OwnerDetailPage = () => {
       name: 'mandate', 
       label: 'Mandate', 
       icon: <FileText className="inline mr-2" />, 
-      component: <MandateComponent mandates={owners?.Mandate} />
+      component: <MandateComponent mandates={owners?.Mandate} handleReload={handleReload} />
     },
     { 
       name: 'reversal', 

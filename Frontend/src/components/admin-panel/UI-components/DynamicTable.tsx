@@ -36,7 +36,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ columns, data, pageSize, ti
 
 
     <div className=" p-4 rounded-lg  shadow-lg border-2 bg-gray-50">
-      <div className={`flex justify-between items-center mb-4 ${addBorder?"border-b-2 pb-5":""}   `}>
+      <div className={`flex ${title? `justify-between `:"justify-end"} items-center mb-4 ${addBorder?"border-b-2 pb-5":""}   `}>
       { title && <h1 className="text-xl font-semibold text-gray-700  capitalize">{title}</h1>
        }{addButton && AddButton
 }</div>

@@ -1,9 +1,12 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { FilterOption, Mandate, OwnerMandate } from '@/types/DataProps';
-import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
-import React, { useState } from 'react';
+import { Download, Edit, Eye, RefreshCcw, Trash2, Upload } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { number, string } from 'zod';
+import MandateDialog from './MandateDialog';
+import DeleteMandateDialog from './DeleteMandateDialog';
+import { Button } from '@/components/ui/button';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -48,7 +51,6 @@ import { number, string } from 'zod';
  
 
   
-  
   // Define the columns for the table
   const columns = [
     { label: "Select", accessor: "select" }, // Checkbox for row selection
@@ -62,9 +64,17 @@ import { number, string } from 'zod';
   ];
   interface MandateComponentProps{
     mandates?:Mandate[]
+    handleReload: (e: React.MouseEvent<HTMLButtonElement>) => void
+
   }
-const MandateComponent:React.FC<MandateComponentProps> = ({mandates}) => {
+const MandateComponent:React.FC<MandateComponentProps> = ({mandates,handleReload}) => {
   // State to manage filters
+
+  useEffect(()=>{
+
+
+  },[handleReload]);
+    
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",
       startDate: "",
@@ -115,18 +125,14 @@ return   {
   createIt: mandate.created_at,
   action: (
     <>
-      <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-        <Eye size={18} />
-      </button>
+    <MandateDialog mandate={mandate}/>
       <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
         <Edit size={18} />
       </button>
       <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
         <Download size={18} />
       </button>
-      <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-        <Trash2 size={18} />
-      </button>
+     <DeleteMandateDialog  mandateId={mandate.id}/>
     </>
   ),
 }
@@ -154,7 +160,7 @@ data.push({
       />
         <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable  columns={columns} data={data} pageSize={5} addButton={false} />
+      <DynamicTable  columns={columns} data={data} pageSize={5} addButton={true} AddButton={<button onClick={handleReload} className='bg-green-500 px-5 py-2 text-white self-end'><RefreshCcw/></button>}/>
     </div>
     </div>
   );
