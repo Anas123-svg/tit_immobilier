@@ -12,6 +12,7 @@ import OwnerDetailPage from "@/components/admin-panel/sidebar/property-managemen
 import CRMSettingsComponent from "@/components/admin-panel/sidebar/property-management/crm/Settings";
 import ClientDetailPage from "@/components/admin-panel/sidebar/property-management/tiers/client/sub-page/client-detail-page";
 import {PropertyDetailPage} from "@/components/admin-panel/sidebar/property-management/tiers/owner/sub-page/pages/property-detail-page";
+import TreasuryDetailPage from "@/components/admin-panel/sidebar/property-management/treasury/treasury/sub-page/treasury-detail-page";
 
 // Recursive function to flatten all routes, including sub-options
 const flattenRoutes = (options: SidebarOption[]): SidebarOption[] => {
@@ -51,6 +52,7 @@ const AdminPanel: React.FC = () => {
             <Route path="/tier/owners/detail-page/:id" element={<OwnerDetailPage/>} />
             <Route path="/tier/clients/detail-page/:id" element={<ClientDetailPage/>} />
             <Route path="/property" element={<PropertyDetailPage/>} />
+            <Route path="/treasury/treasury/:id" element={<TreasuryDetailPage/>} />
 
             <Route path="/settings/*" element={<SettingsComponent />} />
             <Route path="/crm/setting/*" element={<CRMSettingsComponent />} />

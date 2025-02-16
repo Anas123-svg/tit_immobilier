@@ -19,7 +19,6 @@ import {
   Tenant,
   StatCard,
   Contract,
-  TreasuryItem,
 } from "@/types/DataProps"; // Assuming these types are defined in your project
 
 // Statistics cards data for Management Portfolio
@@ -243,42 +242,4 @@ export const tenantStats = [
   { name: "Unpaid", value: 72, currency: "XOF", color: "bg-red-500" },
   { name: "In progress", value: 0, currency: "XOF", color: "bg-yellow-500" },
   { name: "Sales", value: 22, currency: "XOF", color: "bg-green-500" },
-];
-
-export const dummyTreasuryData: TreasuryItem[] = [
-  {
-    id: "1",
-    type: "BANK",
-    title: "CHECK CASH",
-    manager: "Manager",
-    company: "New IT Company",
-  },
-  {
-    id: "2",
-    type: "BOX",
-    title: "MOBILE MONEY",
-    manager: "Manager",
-    company: "New IT Company",
-  },
-  {
-    id: "3",
-    type: "BANK",
-    title: "TRANSFER CASH",
-    manager: "Manager",
-    company: "New IT Company",
-  },
-  {
-    id: "4",
-    type: "BOX",
-    title: "DEPOT OF WARRANTY",
-    manager: "Manager",
-    company: "New IT Company",
-  },
-  {
-    id: "5",
-    type: "BOX",
-    title: "Cash Box",
-    manager: "Manager",
-    company: "New IT Company",
-  },
 ];

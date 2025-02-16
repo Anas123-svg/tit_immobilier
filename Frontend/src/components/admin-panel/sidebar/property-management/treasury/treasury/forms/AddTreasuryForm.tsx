@@ -16,8 +16,10 @@ import {
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner } from "@/types/DataProps";
+import { Owner, Treasury } from "@/types/DataProps";
 import Selection from "@/components/common";
+import { Edit } from "lucide-react";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
 const FormSchema = z.object({
   manager_id: z.number(),
   cash_type: z.string().nonempty({ message: "Cash Type is required" }),
@@ -29,11 +31,24 @@ const FormSchema = z.object({
   validator_assignment:  z.array(z.string()).min(1, "At least one owner must be selected"),
 });
 
-const AddTreasuryForm: React.FC = () => {
+interface AddTreasuryFormProps {
+  treasury?: Treasury;
+}
+
+const AddTreasuryForm: React.FC<AddTreasuryFormProps> = ({treasury}) => {
   
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-   
+   defaultValues:{
+    manager_id:   treasury?.manager_id,
+  cash_type:  treasury?.cash_type,
+  label:  treasury?.label,
+  account_no:  treasury?.account_no,
+  minimum_threshold:   treasury?.minimum_threshold,
+  maximum_threshold:   treasury?.maximum_threshold,
+  comment:   treasury?.comment,
+  validator_assignment:    treasury?.validator_assignment??[],
+   }
   });   
   
   
@@ -48,13 +63,23 @@ const AddTreasuryForm: React.FC = () => {
   }) || ["", ""];  // Default array in case data is empty or undefined
   
  const apiUrl = import.meta.env.VITE_API_URL + '/api/treasury/add';
-     const onSubmit =  useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
- 
+  const onSubmit = treasury
+         ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+         : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+     
   const [open, setOpen] = useState(false);
 
     const CashType = form.watch("cash_type")
   return (   <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-    <DialogTrigger className="px-4 py-2 text-white rounded-md bg-red-500"> Add Treasry</DialogTrigger>
+    <DialogTrigger className={`px-4 py-2 text-white rounded-md ${!treasury &&"bg-red-500"}`}> {treasury ?
+     <button
+     className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+    
+   >
+     <Edit size={16} />
+     Edit
+   </button>
+    :"Add Treasury"} </DialogTrigger>
 
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">

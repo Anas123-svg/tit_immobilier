@@ -76,13 +76,6 @@ export interface CircularDiagramProps {
   }
   
 
-export interface TreasuryItem {
-  id: string;
-  type: "BANK" | "BOX";
-  title: string;
-  manager: string;
-  company: string;
-}
 
 
 
@@ -668,7 +661,7 @@ export interface Treasury {
   minimum_threshold: number;
   maximum_threshold: number;
   manager_id: number;
-  validator_assignment: number[]; // assuming an array of manager IDs for validator assignment
+  validator_assignment: string[]; // assuming an array of manager IDs for validator assignment
   comment: string;
   // Add any other properties as required
 }
@@ -701,3 +694,6 @@ export interface OwnerMandate{
   message: String
   data:Mandate[]
 }
+
+
+
