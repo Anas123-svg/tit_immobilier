@@ -37,11 +37,20 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
 import { Owner } from "@/types/DataProps";
+import Stepper from "@/components/admin-panel/UI-components/Stepper";
 // Define validation schema
+const locativeSchema = z.object({
+  door_number: z.string().optional(),
+  rental_type: z.string().optional(),
+  rent: z.number().optional(),
+  charges: z.number().optional(),
+  room: z.number().optional(),
+  area: z.number().optional(),
+});
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
   owner: z.string().optional(),
-  property_name: z.string().optional(),
+  property_name: z.string(),
   type_of_property: z.string().optional(),
   number_of_floors: z.number().optional(),
   area: z.number().optional(),
@@ -78,6 +87,8 @@ const FormSchema = z.object({
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(z.string()).optional(),
+     locatives: z.array(locativeSchema).optional(), // Array of locatives
+   
 });
 
 const PropertyForSaleOwnerForm = () => {
@@ -174,7 +185,13 @@ const PropertyForSaleOwnerForm = () => {
       
     },
   });
+  const [activeStep, setActiveStep] = useState(0);
+  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for locatives
  
+  const handleStepChange = (step: number) => {
+    setActiveStep(step);
+  };
+  
   const { data: data, loading, error } = useFetchData<Owner[]>(
     `${import.meta.env.VITE_API_URL}/api/get-all-owners`
   )
@@ -195,6 +212,16 @@ const PropertyForSaleOwnerForm = () => {
   };
   const nearWater = form.watch("near_water")
   const nearRoad = form.watch("on_main_road")
+
+
+  const handleAddLocative = () => {
+   setLocatives([...locativesstate, { door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]);
+ };
+ 
+ const handleRemoveLocative = (index: number) => {
+   const updatedLocatives = locativesstate.filter((_, i) => i !== index);
+   setLocatives(updatedLocatives);
+ };
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Property for Sale</DialogTrigger>
@@ -202,7 +229,12 @@ const PropertyForSaleOwnerForm = () => {
         <DialogTitle className="text-lg md:text-xl">Property for Sale</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-       {/* Property Details */}
+          <Stepper
+                  activeStep={activeStep}
+                  onStepChange={handleStepChange}
+                  stepsTitle={["Property For Rent", "Locative"]}
+                > 
+  <div className="space-y-6">    {/* Property Details */}
 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
   PROPERTY DETAILS
 </h2>
@@ -702,7 +734,108 @@ const PropertyForSaleOwnerForm = () => {
                            addedFiles={form.watch("documents") || []}
                          />
                        </div>
+                       </div>
+                       <div className="space-y-6">       <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+                       DETAILS CONCERNING THE RENTAL OF THE PROPERTY
+</h2>
 
+<div className="flex flex-col space-y-5 ">
+{locativesstate.map((_, index) => (
+  <div key={index} className="grid-cols-7 gap-5 grid">
+    {/* Door Number Field */}
+    <FormField control={form.control} name={`locatives.${index}.door_number`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Door No *</FormLabel>
+        <FormControl><Input {...field} placeholder="e.g. 213" /></FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Rental Type Field */}
+    <FormField control={form.control} name={`locatives.${index}.rental_type`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Rental Type *</FormLabel>
+        <Select {...field} onValueChange={field.onChange}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select property type" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="APARTMENT">APARTMENT</SelectItem>
+            <SelectItem value="STUDIO">STUDIO</SelectItem>
+            <SelectItem value="VILLA">VILLA</SelectItem>
+            <SelectItem value="HOUSE">HOUSE</SelectItem>
+            <SelectItem value="COMMERCIAL">COMMERCIAL</SelectItem>
+            <SelectItem value="OTHERS">OTHERS</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Rent Field */}
+    <FormField control={form.control} name={`locatives.${index}.rent`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Rent *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Charges Field */}
+    <FormField control={form.control} name={`locatives.${index}.charges`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Charges *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Number of Rooms Field */}
+    <FormField control={form.control} name={`locatives.${index}.room`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>No. Rooms *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Area Field */}
+    <FormField control={form.control} name={`locatives.${index}.area`} render={({ field }) => (
+      <FormItem>
+        <FormLabel>Area *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )} />
+
+    {/* Remove Button */}
+    <button type="button" className="bg-red-500 w-fit self-end text-white px-4 py-2 rounded-md" onClick={() => handleRemoveLocative(index)}>
+      Remove
+    </button>
+  </div>
+))}
+
+      {/* Button to Add New Locative */}
+      <button type="button" className="bg-secondary w-fit self-end text-white px-4 py-2 rounded-md" onClick={handleAddLocative}>
+        Add
+      </button>
+
+        
+        
+        </div>
+        
+        </div>
+                       </Stepper>
             <Button type="submit" className="w-full my-2 bg-primary">
               Submit
             </Button>

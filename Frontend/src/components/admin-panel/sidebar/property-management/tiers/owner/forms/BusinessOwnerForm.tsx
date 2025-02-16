@@ -37,7 +37,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   id:z.number().optional(),
-  business_company_name: z.string().optional(),
+  business_company_name: z.string(),
   business_taxpayer_identification_number: z.string().optional(),
   business_business_registration_number: z.string().optional(),
   business_industry_sector: z.string().optional(),
@@ -48,7 +48,7 @@ const FormSchema = z.object({
   business_po_box: z.string().optional(),
   business_capital: z.number().optional(),
   business_manager_pronouns_title: z.string().optional(),
-  business_manager_name: z.string().optional(),
+  business_manager_name: z.string(),
   business_manager_gender: z.string().optional(),
   business_manager_contact: z.string().optional(),
   business_manager_date_of_birth: z.string().optional(),

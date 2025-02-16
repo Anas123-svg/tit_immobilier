@@ -37,8 +37,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   private_pronouns: z.string().optional(),
-  private_name: z.string().optional(),
-  surname: z.string().optional(),
+  private_name: z.string(),
+  surname: z.string(),
   private_gender: z.string().optional(),
   private_birth_date: z.string().optional(),
   private_place_of_birth: z.string().optional(),

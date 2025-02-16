@@ -47,7 +47,7 @@ const locativeSchema = z.object({
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
   owner: z.string().optional(),
-  property_name: z.string().optional(),
+  property_name: z.string(),
   type_of_property: z.string().optional(),
   number_of_floors: z.number().optional(),
   number_of_rentals: z.number().optional(),
