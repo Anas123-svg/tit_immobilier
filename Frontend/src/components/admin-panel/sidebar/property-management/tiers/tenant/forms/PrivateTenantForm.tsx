@@ -56,7 +56,7 @@ const FormSchema = z.object({
   private_signatory_authority: z.string().optional(),
   private_marital_status: z.string().optional(),
   private_number_of_children: z.number().optional(),
-  private_emergency_contact_name: z.string().optional(),
+  private_emergency_contact_name: z.string(),
   private_emergency_contact: z.string().optional(),
   private_emergency_contact_relation: z.string().optional(),
   private_photo: z.string().optional(),
