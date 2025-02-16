@@ -43,7 +43,7 @@ const FormSchema = z.object({
   owner: z.string().optional(),
   property_name: z.string().nonempty("Property Name is required"),
   type_of_property: z.string().nonempty("Type of Property is required"),
-  number_of_floors: z.number().min(1, "Number of Floors is required"),
+  number_of_floors: z.number().optional(),
   area: z.number().min(1, "Area is required"),
   market_value: z.number().min(1, "Market Value is required"),
   // island: z.string().nonempty("Island name is required"),
