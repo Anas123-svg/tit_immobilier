@@ -14,9 +14,9 @@ import { z } from "zod";
 
 // Define schema for form validation using Zod
 const FormSchema = z.object({
-  very_concerned: z.string().nonempty("Property is required"),
-  date_debut: z.string().nonempty("Date debut is required"),
-  date_end: z.string().nonempty("End date is required"),
+  very_concerned: z.string().optional(),
+  date_debut: z.string().optional(),
+  date_end: z.string().optional(),
 });
 
 interface PullAccountStatementFormProps {

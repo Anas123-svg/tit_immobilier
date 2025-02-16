@@ -36,16 +36,15 @@ import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-component
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
   tenant_id: z.number().min(1, "Tenant ID is required"),
-  concerned: z.number(),
-  location: z.number(),
-  billing_type: z.string().nonempty("Billing Type is required"),
-  booking_date: z.string().nonempty("Booking Date is required"),
-  entry_date: z.string().nonempty("Entry Date is required"),
-  end_date: z.string().nonempty("End Date is required"),
-  due_date: z.string().nonempty("Due Date is required"),
-  number_of_hours: z.number().min(0, "Number of Hours must be non-negative"),
-  rental_amount: z.number().min(0, "Rental Amount must be non-negative"),
-  
+  concerned: z.number().optional(),
+  location: z.number().optional(),
+  billing_type: z.string().optional(),
+  booking_date: z.string().optional(),
+  entry_date: z.string().optional(),
+  end_date: z.string().optional(),
+  due_date: z.string().optional(),
+  number_of_hours: z.number().optional(),
+  rental_amount: z.number().optional(),
 });
 
 const ShortTermContractTenantForm = () => {

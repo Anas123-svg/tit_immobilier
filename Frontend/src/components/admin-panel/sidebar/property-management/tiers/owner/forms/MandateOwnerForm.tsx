@@ -31,22 +31,22 @@ import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-component
 import useFetchData from "@/hooks/useFetchData";
 import { OwnerSaleProperty } from "@/types/DataProps";
   const FormSchema = z.object({
-    owner_id: z.number().optional(),
-    type_of_mandate: z.string().nonempty("Type of Mandate is required"),
+    owner_id: z.number(),
+    type_of_mandate: z.string().optional(),
     owner_name: z.string().optional(),
-    very_concerned: z.number(),
+    very_concerned: z.number().optional(),
     type_of_property: z.string().optional(),
     neighborhood: z.string().optional(),
     tax_payable: z.string().optional(),
-    billing_type: z.string().nonempty("Billing Type is required"),
-    commission: z.number().min(0, "Commission is required"),
-    deduct_commission: z.boolean(),
-    vat_on_commission: z.boolean(),
-    date_of_signature: z.string().nonempty("Date of Signature is required"),
-    debut_date: z.string().nonempty("Start Date is required"),
-    end_date: z.string().nonempty("End Date is required"),
+    billing_type: z.string().optional(),
+    commission: z.number().optional(),
+    deduct_commission: z.boolean().optional(),
+    vat_on_commission: z.boolean().optional(),
+    date_of_signature: z.string().optional(),
+    debut_date: z.string().optional(),
+    end_date: z.string().optional(),
     digital_signature_of_the_mandate: z.boolean().optional(),
-    tacit_renewal: z.boolean(),
+    tacit_renewal: z.boolean().optional(),
   });
   
   const MandateOwnerForm = () => {

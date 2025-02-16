@@ -28,8 +28,8 @@ import useFetchAuthData from "@/hooks/useFetchAuthData";
   // Define validation schema
   const FormSchema = z.object({
     owner_id: z.number().min(1, "Owner ID is required"),
-    owner_name: z.string().nonempty("Owner Name is required"),
-    property_concerned: z.string().nonempty("Property Concerned is required"),
+    owner_name: z.string().optional(),
+  property_concerned: z.string().optional(),
     users: z.array(z.string()).optional(),
   });
   

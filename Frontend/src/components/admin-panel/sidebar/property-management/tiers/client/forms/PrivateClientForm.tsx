@@ -36,60 +36,30 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   id:z.number().optional(),
-  private_pronouns: z.string().nonempty({ message: "Pronouns is required" }),
-  surname:z.string().nonempty({ message: "Surname is required" }),
-  private_name: z.string().nonempty({ message: "Name is required" }),
-  private_gender: z.string().nonempty({ message: "Gender is required" }),
-  private_birth_date: z
-    .string()
-    .nonempty({ message: "Birth date is required" }),
-  private_place_of_birth: z
-    .string()
-    .nonempty({ message: "Place of birth is required" }),
-  private_address: z.string().nonempty({ message: "Address is required" }),
-  private_nationality: z
-    .string()
-    .nonempty({ message: "Nationality is required" }),
-  private_document_type: z
-    .string()
-    .nonempty({ message: "Document type is required" }),
-  private_document_number: z
-    .string()
-    .nonempty({ message: "Document number is required" }),
-  private_date_of_issue: z
-    .string()
-    .nonempty({ message: "Date of issue is required" }),
-  private_expiry_date: z
-    .string()
-    .nonempty({ message: "Expiry date is required" }),
-  private_taxpayer_identification_number: z
-    .string()
-    .nonempty({ message: "Taxpayer identification number is required" }),
-  private_occupation: z
-    .string()
-    .nonempty({ message: "Occupation is required" }),
-  private_contact: z.string().nonempty({ message: "Contact is required" }),
-  private_whatsapp_contact: z
-    .string()
-    .nonempty({ message: "Whatsapp contact is required" }),
-  private_email: z.string().email({ message: "Invalid email address" }),
-  private_mail_box: z.string().nonempty({ message: "PO box is required" }),
-  private_marital_status: z
-    .string()
-    .nonempty({ message: "Marital status is required" }),
-  private_number_of_children: z
-    .number()
-    .min(0, { message: "Number of children is required" }),
-  private_emergency_contact_name: z
-    .string()
-    .nonempty({ message: "Emergency contact name is required" }),
-  private_emergency_contact: z
-    .string()
-    .nonempty({ message: "Emergency contact is required" }),
-  private_emergency_contact_relation: z
-    .string()
-    .nonempty({ message: "Emergency contact relation is required" }),
-    private_signatory_authority: z.string().nonempty({ message: "Authorizing Authority is required" }),
+  private_pronouns: z.string().optional(),
+  surname: z.string().optional(),
+  private_name: z.string().optional(),
+  private_gender: z.string().optional(),
+  private_birth_date: z.string().optional(),
+  private_place_of_birth: z.string().optional(),
+  private_address: z.string().optional(),
+  private_nationality: z.string().optional(),
+  private_document_type: z.string().optional(),
+  private_document_number: z.string().optional(),
+  private_date_of_issue: z.string().optional(),
+  private_expiry_date: z.string().optional(),
+  private_taxpayer_identification_number: z.string().optional(),
+  private_occupation: z.string().optional(),
+  private_contact: z.string().optional(),
+  private_whatsapp_contact: z.string().optional(),
+  private_email: z.string().email({ message: "Invalid email address" }).optional(),
+  private_mail_box: z.string().optional(),
+  private_marital_status: z.string().optional(),
+  private_number_of_children: z.number().optional(),
+  private_emergency_contact_name: z.string().optional(),
+  private_emergency_contact: z.string().optional(),
+  private_emergency_contact_relation: z.string().optional(),
+  private_signatory_authority: z.string().optional(),
   private_photo: z.string().optional(),
   private_documents: z.array(z.string()).optional(),
   is_business_client: z.boolean(),

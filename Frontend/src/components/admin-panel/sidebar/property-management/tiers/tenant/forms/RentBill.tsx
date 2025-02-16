@@ -17,10 +17,10 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 const RentFormSchema = z.object({
   tenant_id: z.number().min(1, "Tenant ID is required"),
   contract_id: z.number().min(1, "Contract ID is required"),
-  rent: z.number().min(0, "Rent must be non-negative"),
-  charge: z.number().min(0, "Charge must be non-negative"),
-  total: z.number().min(0, "Total must be non-negative"),
-  month: z.string().nonempty("Month is required"),
+  rent: z.number().optional(),
+  charge: z.number().optional(),
+  total: z.number().optional(),
+  month: z.string().optional(),
 });
 
 type RentFormData = z.infer<typeof RentFormSchema>;

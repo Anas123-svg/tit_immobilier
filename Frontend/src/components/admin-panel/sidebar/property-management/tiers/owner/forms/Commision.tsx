@@ -15,13 +15,13 @@ import {
     FormMessage,
   } from "@/components/ui/form";
 const FormSchema = z.object({
-  commission_type: z.string().min(1, "Commission type is required"),
+  commission_type: z.string().optional(),
   owner: z.string().optional(),
-  goods: z.string().min(1, "Goods is required"),
-  start_date: z.date(),
-  end_date: z.date(),
-  commission_percentage: z.number().min(0, "Commission percentage is required"),
-  tax_on_charge: z.number().min(0, "Tax on charge is required"),
+  goods: z.string().optional(),
+  start_date: z.date().optional(),
+  end_date: z.date().optional(),
+  commission_percentage: z.number().optional(),
+  tax_on_charge: z.number().optional(),
 });
 
 export function CommissionForm() {

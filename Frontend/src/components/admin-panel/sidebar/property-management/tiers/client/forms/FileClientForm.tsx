@@ -35,16 +35,16 @@ import { ClientCombobox } from "@/components/admin-panel/UI-components/Combobox/
 // Define the schema for File Client form validation using Zod
 const FormSchema = z.object({
   client_id: z.number(),
-  legal_status: z.string().nonempty({ message: "Legal Status is required" }),
-  contact: z.string().nonempty({ message: "Contact is required" }),
-  email: z.string().email({ message: "Invalid email address" }).nonempty({ message: "Email is required" }),
-  opening_date: z.string().nonempty({ message: "Opening Date is required" }),
-  opening_reason: z.string().nonempty({ message: "Opening Reason is required" }),
-  modality: z.string().nonempty({ message: "Modality is required" }),
-  opening_fee: z.number().min(0, { message: "Opening Fee is required" }),
-  advance_amount: z.number().min(0, { message: "Advance Amount is required" }),
-  business_manager: z.string().nonempty({ message: "Business Manager is required" }),
-  digital_signature_of_file: z.string().nonempty({ message: "Digital signature is required" }),
+  legal_status: z.string().optional(),
+  contact: z.string().optional(),
+  email: z.string().email({ message: "Invalid email address" }).optional(),
+  opening_date: z.string().optional(),
+  opening_reason: z.string().optional(),
+  modality: z.string().optional(),
+  opening_fee: z.number().optional(),
+  advance_amount: z.number().optional(),
+  business_manager: z.string().optional(),
+  digital_signature_of_file: z.string().optional(),
   documents: z.array(z.string()).optional(),
   // Include any additional fields as needed
 });

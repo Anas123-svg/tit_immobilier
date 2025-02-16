@@ -32,7 +32,7 @@ import { Owner } from "@/types/DataProps";
   
   // Define validation schema
   const FormSchema = z.object({
-    type_of_selection: z.string().nonempty("Selection Type is required"),
+    type_of_selection: z.string().optional(),
     users: z.array(z.string()).min(1, "At least one validator must be selected"),
     owners: z.array(z.string()).min(1, "At least one owner must be selected"),
   });

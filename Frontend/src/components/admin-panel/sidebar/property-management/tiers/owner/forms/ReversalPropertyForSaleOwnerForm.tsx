@@ -23,7 +23,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { ClientCombobox } from "@/components/admin-panel/UI-components/Combobox/ClientCombobox";
 const FormSchema = z.object({
-  owner_id: z.number().optional(),
+  owner_id: z.number(),
   property_type: z.string().optional(),
   owner_name: z.string().optional(),
   client: z.string().optional(),
@@ -37,10 +37,7 @@ const ReversalPropertyForSaleOwnerForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
   
-      property_type: "Property for Sale",
-      owner_name: "asd",
-      client: "4",
-      case: " ",
+
     },
   });
 

@@ -34,19 +34,19 @@ import { useFormUpdate } from "@/hooks/useFormUpdate";
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"), // Ensure that owner_id is a positive number
   type_of_mandate: z.string().optional(), // Ensure type_of_mandate is not empty
-  debut_dates: z.string().min(1, "Debut Dates are required"), // Ensure debut dates are provided
-  end_date: z.string().min(1, "End Date is required"), // Ensure end date is provided
-  commission: z.number().min(0, "Commission must be a positive number"), // Ensure commission is a positive number
-  tax_on_charge: z.number().min(0, "Tax on charge must be a positive number"), // Ensure tax is a positive number
-  deduct_commission: z.string().min(1, "Deduct commission option is required"),// Ensure type_of_mandate is not empty
+  debut_dates: z.string().optional(), // Ensure debut dates are provided
+  end_date: z.string().optional(), // Ensure end date is provided
+  commission: z.number().optional(), // Ensure commission is a positive number
+  tax_on_charge: z.number().optional(), // Ensure tax is a positive number
+  deduct_commission: z.string().optional(), // Ensure type_of_mandate is not empty
   get_debut_dates: z.string().optional(),
   get_end_date: z.string().optional(), // Ensure end date is provided
   get_commission: z.number().optional(), // Ensure commission is a positive number
   get_tax_on_charge: z.number().optional(), // Ensure tax is a positive number
-  get_deduct_commission: z.string().optional(),  // Ensure deduct commission is selected
-  date_of_operation:z.string().min(1, "Deduct commission option is required"), // Ensure deduct commission is selected
-  mandate_for_property:z.number(),
-  billing_type:z.string().min(1, "Deduct commission option is required"),
+  get_deduct_commission: z.string().optional(), // Ensure deduct commission is selected
+  date_of_operation: z.string().optional(), // Ensure date_of_operation is provided
+  mandate_for_property: z.number().optional(), // Ensure mandate_for_property is provided
+  billing_type: z.string().optional(), // Ensure billing_type is provided
 });
   
   const RenewMandateOwnerForm = () => {

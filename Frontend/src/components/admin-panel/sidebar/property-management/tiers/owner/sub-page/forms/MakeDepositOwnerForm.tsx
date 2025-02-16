@@ -14,13 +14,13 @@ import { z } from "zod";
 
 // Define form schema using Zod for validation
 const FormSchema = z.object({
-  owner_name: z.string().nonempty("Owner is required"),
-  date_of_operation: z.string().nonempty("Date is required"),
-  amount: z.number().min(1, "Amount is required"),
-  property: z.string().nonempty("Property is required"),
-  treasury: z.string().nonempty("Treasury is required"),
-  payment_method: z.string().nonempty("Payment method is required"),
-  done_by: z.string().nonempty("Done by is required"),
+  owner_name: z.string().optional(),
+  date_of_operation: z.string().optional(),
+  amount: z.number().optional(),
+  property: z.string().optional(),
+  treasury: z.string().optional(),
+  payment_method: z.string().optional(),
+  done_by: z.string().optional(),
   additional_documents: z.string().optional(),
 });
 

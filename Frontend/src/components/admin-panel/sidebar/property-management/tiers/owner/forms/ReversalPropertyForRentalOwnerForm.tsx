@@ -24,11 +24,11 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
 // Define validation schema
 const FormSchema = z.object({
   owner_id: z.number().min(1, "Owner ID is required"),
-  good: z.string().nonempty("Property Name is required"),
-  filter_by: z.string().nonempty("Filter By is required"),
-  date_debut: z.string().nonempty("Start Date is required"),
-  end_date: z.string().nonempty("End Date is required"),
-  comments: z.string().nonempty("Comments are required"),
+  good: z.string().optional(),
+  filter_by: z.string().optional(),
+  date_debut: z.string().optional(),
+  end_date: z.string().optional(),
+  comments: z.string().optional(),
 });
 
 const ReversalPropertyForRentalOwnerForm = () => {
