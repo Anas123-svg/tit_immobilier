@@ -33,7 +33,7 @@ import Selection from "@/components/common";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "../../../../../UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner } from "@/types/DataProps";
+import { Owner, User } from "@/types/DataProps";
 import Stepper from "@/components/admin-panel/UI-components/Stepper";
 import useFetchAuthData from "@/hooks/useFetchAuthData";
 const locativeSchema = z.object({
