@@ -1,6 +1,10 @@
 import { Owner } from "@/types/DataProps";
 import React, { useRef } from "react";
+import BusinessOwnerForm from "../../forms/BusinessOwnerForm";
 
+import ReactPDF from "@react-pdf/renderer";
+import { OwnerPdfComponent } from "@/components/common/assessmentPDF/OwnerPdf";
+import { Printer } from "lucide-react";
 
 
 interface PersonalDetailsProps {
@@ -140,8 +144,20 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
 
       {/* Buttons */}
       <div className="flex justify-end space-x-4 mt-6">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Modify</button>
-        <button className="px-4 py-2 bg-gray-500 text-white rounded-md">Print</button>
+      <BusinessOwnerForm owner={owner} />
+      <ReactPDF.PDFDownloadLink
+          document={<OwnerPdfComponent owner={owner} />}
+          fileName={`${owner?.business_manager_name}.pdf`}
+          className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+        >
+          {({ loading }) =>
+            loading ? (
+              "Preparing PDF..."
+            ) : (
+              <Printer size={25} className="text-yellow-700" />
+            )
+          }
+        </ReactPDF.PDFDownloadLink>
       </div>
     </div>
   );

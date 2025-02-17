@@ -11,7 +11,7 @@ import { Owner } from "@/types/DataProps";
 import pfp from "@/assets/avatar-default.png";
 
 interface Props {
-  owner: Owner;
+  owner?: Owner;
 }
 
 const styles = StyleSheet.create({
@@ -103,9 +103,9 @@ export const OwnerPdfComponent = ({ owner }: Props) => (
       <View style={styles.header}>
         <Image
           src={
-            owner.is_business_owner
-              ? owner.business_photo
-              : owner.private_photo || pfp
+            owner?.is_business_owner
+              ? owner?.business_photo
+              : owner?.private_photo || pfp
           }
           style={styles.logo}
         />
@@ -115,34 +115,34 @@ export const OwnerPdfComponent = ({ owner }: Props) => (
       {/* Identification Section */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>I - OWNER IDENTIFICATION</Text>
-        {owner.is_business_owner ? (
+        {owner?.is_business_owner ? (
           <>
-            {renderField("Company Name", owner.business_company_name)}
-            {renderField("Manager Name", owner.business_manager_name)}
-            {renderField("Gender", owner.business_manager_gender)}
-            {renderField("Date of Birth", owner.business_manager_date_of_birth)}
+            {renderField("Company Name", owner?.business_company_name)}
+            {renderField("Manager Name", owner?.business_manager_name)}
+            {renderField("Gender", owner?.business_manager_gender)}
+            {renderField("Date of Birth", owner?.business_manager_date_of_birth)}
             {renderField(
               "Place of Birth",
-              owner.business_manager_place_of_birth
+              owner?.business_manager_place_of_birth
             )}
             {renderField(
               "Document Number",
-              owner.business_manager_document_number
+              owner?.business_manager_document_number
             )}
-            {renderField("Expiry Date", owner.business_manager_expiry_date)}
-            {renderField("Job Position", owner.business_manager_job_position)}
+            {renderField("Expiry Date", owner?.business_manager_expiry_date)}
+            {renderField("Job Position", owner?.business_manager_job_position)}
           </>
         ) : (
           <>
-            {renderField("Name", `${owner.private_name} ${owner.surname}`)}
-            {renderField("Gender", owner.private_gender)}
-            {renderField("Date of Birth", owner.private_birth_date)}
-            {renderField("Place of Birth", owner.private_place_of_birth)}
-            {renderField("Nationality", owner.private_nationality)}
-            {renderField("Document Type", owner.private_document_type)}
-            {renderField("Document Number", owner.private_document_number)}
-            {renderField("Expiry Date", owner.private_expiry_date)}
-            {renderField("Occupation", owner.private_occupation)}
+            {renderField("Name", `${owner?.private_name} ${owner?.surname}`)}
+            {renderField("Gender", owner?.private_gender)}
+            {renderField("Date of Birth", owner?.private_birth_date)}
+            {renderField("Place of Birth", owner?.private_place_of_birth)}
+            {renderField("Nationality", owner?.private_nationality)}
+            {renderField("Document Type", owner?.private_document_type)}
+            {renderField("Document Number", owner?.private_document_number)}
+            {renderField("Expiry Date", owner?.private_expiry_date)}
+            {renderField("Occupation", owner?.private_occupation)}
           </>
         )}
       </View>
@@ -150,36 +150,36 @@ export const OwnerPdfComponent = ({ owner }: Props) => (
       {/* Contact Information Section */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>II - CONTACT INFORMATION</Text>
-        {owner.is_business_owner ? (
+        {owner?.is_business_owner ? (
           <>
-            {renderField("Office Phone", owner.business_office_phone_number)}
-            {renderField("WhatsApp Contact", owner.business_whatsapp_contact)}
-            {renderField("Email", owner.business_email)}
-            {renderField("Head Office Address", owner.business_head_office)}
+            {renderField("Office Phone", owner?.business_office_phone_number)}
+            {renderField("WhatsApp Contact", owner?.business_whatsapp_contact)}
+            {renderField("Email", owner?.business_email)}
+            {renderField("Head Office Address", owner?.business_head_office)}
           </>
         ) : (
           <>
-            {renderField("Contact Number", owner.private_contact)}
-            {renderField("WhatsApp", owner.private_whatsapp_contact)}
-            {renderField("Email", owner.private_email)}
-            {renderField("PO Box", owner.private_po_box)}
-            {renderField("Marital Status", owner.private_marital_status)}
-            {renderField("Spouse's Name", owner.private_spouses_name)}
+            {renderField("Contact Number", owner?.private_contact)}
+            {renderField("WhatsApp", owner?.private_whatsapp_contact)}
+            {renderField("Email", owner?.private_email)}
+            {renderField("PO Box", owner?.private_po_box)}
+            {renderField("Marital Status", owner?.private_marital_status)}
+            {renderField("Spouse's Name", owner?.private_spouses_name)}
           </>
         )}
       </View>
 
       {/* Emergency Contact Section */}
-      {!owner.is_business_owner && (
+      {!owner?.is_business_owner && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>
             III - EMERGENCY CONTACT INFORMATION
           </Text>
-          {renderField("Contact Name", owner.private_emergency_contact_name)}
-          {renderField("Contact Number", owner.private_emergency_contact)}
+          {renderField("Contact Name", owner?.private_emergency_contact_name)}
+          {renderField("Contact Number", owner?.private_emergency_contact)}
           {renderField(
             "Relationship",
-            owner.private_emergency_contact_relation
+            owner?.private_emergency_contact_relation
           )}
         </View>
       )}

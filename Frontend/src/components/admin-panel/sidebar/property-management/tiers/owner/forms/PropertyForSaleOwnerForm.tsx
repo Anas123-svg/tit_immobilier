@@ -36,8 +36,9 @@ import 'react-toastify/dist/ReactToastify.css';  // Import toastify CSS
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner } from "@/types/DataProps";
+import { Owner, User } from "@/types/DataProps";
 import Stepper from "@/components/admin-panel/UI-components/Stepper";
+import useFetchAuthData from "@/hooks/useFetchAuthData";
 // Define validation schema
 const locativeSchema = z.object({
   door_number: z.string().optional(),
@@ -192,13 +193,12 @@ const PropertyForSaleOwnerForm = () => {
     setActiveStep(step);
   };
   
-  const { data: data, loading, error } = useFetchData<Owner[]>(
-    `${import.meta.env.VITE_API_URL}/api/get-all-owners`
+  const { data: data, loading, error } = useFetchAuthData<User[]>(
+    `${import.meta.env.VITE_API_URL}/api/users`
   )
-  const agents: string[] = data?.map((owner) => {
-    return owner.is_business_owner 
-      ? owner.business_company_name || ""  // Default to empty string if undefined
-      : owner.private_name || "";           // Default to empty string if undefined
+  const agents: string[] = data?.map((user) => {
+    return user.name 
+    
   }) || ["", ""];  // Default array in case data is empty or undefined
   
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-sale-properties';

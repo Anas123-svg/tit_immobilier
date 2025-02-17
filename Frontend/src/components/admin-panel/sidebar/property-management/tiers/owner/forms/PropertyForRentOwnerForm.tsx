@@ -35,6 +35,7 @@ import { OwnerCombobox } from "../../../../../UI-components/Combobox/OwnerCombob
 import useFetchData from "@/hooks/useFetchData";
 import { Owner } from "@/types/DataProps";
 import Stepper from "@/components/admin-panel/UI-components/Stepper";
+import useFetchAuthData from "@/hooks/useFetchAuthData";
 const locativeSchema = z.object({
   door_number: z.string().optional(),
   rental_type: z.string().optional(),
@@ -182,14 +183,14 @@ const PropertyForRentOwnerForm = () => {
     setActiveStep(step);
   };
   
-  const { data: data, loading, error } = useFetchData<Owner[]>(
-    `${import.meta.env.VITE_API_URL}/api/get-all-owners`
+  const { data: data, loading, error } = useFetchAuthData<User[]>(
+    `${import.meta.env.VITE_API_URL}/api/users`
   )
-  const agents: string[] = data?.map((owner) => {
-    return owner.is_business_owner 
-      ? owner.business_company_name || ""  // Default to empty string if undefined
-      : owner.private_name || "";           // Default to empty string if undefined
+  const agents: string[] = data?.map((user) => {
+    return user.name 
+    
   }) || ["", ""];  // Default array in case data is empty or undefined
+   // Default array in case data is empty or undefined
    const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   
     // Function to handle location change from the map
