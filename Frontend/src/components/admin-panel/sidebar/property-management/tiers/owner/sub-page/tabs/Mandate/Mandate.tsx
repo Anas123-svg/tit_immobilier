@@ -15,12 +15,8 @@ import { Button } from '@/components/ui/button';
         label: "Type",
         name: "type",
         options: [
-          "ALL",
-          "OWNER",
-          "LOCATION",
-          "REAL ESTATE PROGRAM",
-          "SUBDIVISION PROJECT",
-          "CRM"
+          "Mandate",
+     
         ]
       },
       {

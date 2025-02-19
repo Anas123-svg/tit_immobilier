@@ -12,12 +12,8 @@ import StatisticCardsLayout from './StatisticCardsLayout';
         label: "Type",
         name: "type",
         options: [
-          "ALL",
-          "OWNER",
-          "LOCATION",
-          "REAL ESTATE PROGRAM",
-          "SUBDIVISION PROJECT",
-          "CRM"
+          "Withdrawals",
+      
         ]
       },
       {

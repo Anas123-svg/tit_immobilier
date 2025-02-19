@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption, Locative } from '@/types/DataProps';
+import { FilterOption, Good, Locative } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -47,7 +47,7 @@ import React, { useState } from 'react';
   
 
   const columns = [
-    { label: "Good", accessor: "locative" }, // This will represent the building name and image
+    { label: "Good", accessor: "good" }, // This will represent the building name and image
     { label: "Occupant", accessor: "occupant" },
     { label: "State", accessor: "state" },
     { label: "Create It", accessor: "createIt" },
@@ -56,36 +56,36 @@ import React, { useState } from 'react';
   ];
   
 interface LocativeComponentProps{
-  locatives?:Locative[]
+  goods?:Good[]
 }
-const LocativeComponent:React.FC<LocativeComponentProps> = ({locatives}) => {
-
-  const data = locatives?.map((locative)=>{
+const LocativeComponent:React.FC<LocativeComponentProps> = ({goods}) => {
+ 
+  const data = goods?.map((good)=>{
    return {
-        locative: (
+    good: (
           <div className="flex items-center">
             <img
               src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL
               alt="Building"
               className="w-16 h-16 object-cover rounded-md mr-4"
             />
-            {locative.property_name} - {locative.type_of_property} {locative.sodeci_identifier_number}
+            {good.property_name} - {good.type_of_property} {good.sodeci_identifier_number}
           </div>
         ),
-        occupant: locative.owner,
+        occupant: good.owner,
         state: (
           <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
-       {locative.status}
+       {good.status}
           </span>
         ),
-        createIt: locative.created_at,
-        noRent: locative.rent+ " XOF",
+        createIt: good.created_at,
+        noRent:  " XOF",
       
       }
   })??[]
     //
     // {
-    //   locative: (
+    //   good: (
     //     <div className="flex items-center">
     //       <img
     //         src="https://app.zenapi.immo/assets/images/house-default.png" // Image URL

@@ -84,11 +84,11 @@ const FormSchema = z.object({
   documents: z.array(
    z.string()
   ).optional(),
-  locatives: z.array(locativeSchema).optional(), // Array of locatives
+  details: z.array(locativeSchema).optional(), // Array of details
 });
 
 const PropertyForRentOwnerForm = () => {
-  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for locatives
+  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for details
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -666,7 +666,7 @@ const handleRemoveLocative = (index: number) => {
 {locativesstate.map((_, index) => (
   <div key={index} className="grid-cols-7 gap-5 grid">
     {/* Door Number Field */}
-    <FormField control={form.control} name={`locatives.${index}.door_number`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.door_number`} render={({ field }) => (
       <FormItem>
         <FormLabel>Door No *</FormLabel>
         <FormControl><Input {...field} placeholder="e.g. 213" /></FormControl>
@@ -675,7 +675,7 @@ const handleRemoveLocative = (index: number) => {
     )} />
 
     {/* Rental Type Field */}
-    <FormField control={form.control} name={`locatives.${index}.rental_type`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.rental_type`} render={({ field }) => (
       <FormItem>
         <FormLabel>Rental Type *</FormLabel>
         <Select {...field} onValueChange={field.onChange}>
@@ -698,7 +698,7 @@ const handleRemoveLocative = (index: number) => {
     )} />
 
     {/* Rent Field */}
-    <FormField control={form.control} name={`locatives.${index}.rent`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.rent`} render={({ field }) => (
       <FormItem>
         <FormLabel>Rent *</FormLabel>
         <FormControl>
@@ -709,7 +709,7 @@ const handleRemoveLocative = (index: number) => {
     )} />
 
     {/* Charges Field */}
-    <FormField control={form.control} name={`locatives.${index}.charges`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.charges`} render={({ field }) => (
       <FormItem>
         <FormLabel>Charges *</FormLabel>
         <FormControl>
@@ -720,7 +720,7 @@ const handleRemoveLocative = (index: number) => {
     )} />
 
     {/* Number of Rooms Field */}
-    <FormField control={form.control} name={`locatives.${index}.room`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.room`} render={({ field }) => (
       <FormItem>
         <FormLabel>No. Rooms *</FormLabel>
         <FormControl>
@@ -731,7 +731,7 @@ const handleRemoveLocative = (index: number) => {
     )} />
 
     {/* Area Field */}
-    <FormField control={form.control} name={`locatives.${index}.area`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.area`} render={({ field }) => (
       <FormItem>
         <FormLabel>Area *</FormLabel>
         <FormControl>

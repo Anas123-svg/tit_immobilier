@@ -85,12 +85,12 @@ const OwnerDetailPage = () => {
       icon: <FileText className="inline mr-2" />, 
       component: <GoodComponent goods={owners?.Good}/>
     },
-    { 
-      name: 'locative', 
-      label: 'Locative', 
-      icon: <Home className="inline mr-2" />, 
-      component: <LocativeComponent locatives={owners?.Locative} />
-    },
+    // { 
+    //   name: 'locative', 
+    //   label: 'Locative', 
+    //   icon: <Home className="inline mr-2" />, 
+    //   component: <LocativeComponent locatives={owners?.Locative } />
+    // },
     { 
       name: 'mandate', 
       label: 'Mandate', 

@@ -472,64 +472,16 @@ export interface ClientProfile {
       created_at: string;
       updated_at: string;
       status: string;
+      details:Locative[]
     }
     
 
-  
-    export  interface Locative {
-      id: number;
-      owner_id: number;
-      owner: string;
-      property_name: string;
-      type_of_property: string;
-      number_of_floors: number;
-      number_of_rentals: number;
-      type_of_numbering: string;
-      area_m2: string;
-      market_value: string;
-      island: string;
-      batch: string;
-      block: string;
-      cie_identifier_number: string;
-      sodeci_identifier_number: string;
-      description: string;
-      city: string;
-      municipality: string;
-      neighborhood: string;
-      longitude: string;
-      latitude: string;
-      height: number;
-      altitude: number;
-      on_the_corner: string;
-      near_water: string;
-      feet_in_the_water: string | null;
-      distance_from_water: string;
-      on_the_main_road: string | null;
-      distance_from_road: string;
-      dry_land: string;
-      low_depth: string;
-      school_nearby: string;
-      market_nearby: string;
-      assigned_agents: string[];
-      photo: string | null;
-      documents: any[];  // Adjust type based on document structure if known
-      level: number;
-      door_number: string;
-      rental_type: string;
-      rent: number;
-      charges: number;
-      room: number;
-      area: number;
-      created_at: string;
-      updated_at: string;
-      status: string;
-    }
-    
+ 
   
  export interface OwnerProfile {
     profile: Owner
     Good: Good[];          // Adjust type based on the expected structure of Good
-    Locative: Locative[];      // Adjust type based on the expected structure of Locative
+    Locative: Good[];      // Adjust type based on the expected structure of Locative
     Mandate: Mandate[];   // Adjust type based on the expected structure of Mandate
   }
   
@@ -697,4 +649,14 @@ export interface OwnerMandate{
 }
 
 
+
+
+export interface Locative {
+  door_number?: string;
+  rental_type?: string;
+  rent?: number;
+  charges?: number;
+  room?: number;
+  area?: number;
+}
 

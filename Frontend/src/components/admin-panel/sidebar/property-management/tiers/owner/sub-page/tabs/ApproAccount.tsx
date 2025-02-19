@@ -11,12 +11,8 @@ import React, { useState } from 'react';
         label: "Type",
         name: "type",
         options: [
-          "ALL",
-          "OWNER",
-          "LOCATION",
-          "REAL ESTATE PROGRAM",
-          "SUBDIVISION PROJECT",
-          "CRM"
+          "Depot",
+       
         ]
       },
       {
