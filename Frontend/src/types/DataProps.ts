@@ -678,6 +678,7 @@ export interface Mandate {
   tax_payable: boolean
   billing_type: string
   commission: number
+  commission_percentage:number
   deduct_commission: boolean
   vat_on_commission: boolean
   date_of_signature: string

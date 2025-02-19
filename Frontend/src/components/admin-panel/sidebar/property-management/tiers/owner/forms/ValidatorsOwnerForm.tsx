@@ -28,7 +28,8 @@ import {
   import Selection from "@/components/common";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner } from "@/types/DataProps";
+import { Owner, User } from "@/types/DataProps";
+import useFetchAuthData from "@/hooks/useFetchAuthData";
   
   // Define validation schema
   const FormSchema = z.object({
@@ -47,15 +48,12 @@ import { Owner } from "@/types/DataProps";
         owners: ["Owner1"],
       },
     });
-    const { data, loading, error } = useFetchData<Owner[]>(
-      `${import.meta.env.VITE_API_URL}/api/get-all-owners`
-    )
-    const validators: string[] = data?.map((owner) => {
-      return owner.is_business_owner 
-        ? owner.business_company_name || ""  // Default to empty string if undefined
-        : owner.private_name || "";           // Default to empty string if undefined
-    }) || ["", ""];  // Default array in case data is empty or undefined
-    
+    const { data, loading, error } = useFetchAuthData<User[]>(
+      `${import.meta.env.VITE_API_URL}/api/users`
+    );
+    const availableUsers = data?.map((user)=>{
+      return user?.name 
+    })||["heleloo"]
   const apiUrl = import.meta.env.VITE_API_URL + "/api/owner-validator-assignment";
     const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
   
@@ -103,7 +101,7 @@ import { Owner } from "@/types/DataProps";
                 ASSIGN VALIDATORS
               </h2>
               <Selection
-                list={validators}
+                list={availableUsers}
                 selectedList={form.watch("users") || []}
                 onChange={(selected) => {
                   form.setValue("users", selected);

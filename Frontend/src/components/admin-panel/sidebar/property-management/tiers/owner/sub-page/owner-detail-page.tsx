@@ -190,7 +190,7 @@ const OwnerDetailPage = () => {
                   </div>
 
           <div className="  text-green-500 text-center font-semibold ">
-            <p className="text-lg">Sold: 585,000 XOF</p>
+            <p className="text-lg">Sold: 0 XOF</p>
           </div>
         </div>
       </div>

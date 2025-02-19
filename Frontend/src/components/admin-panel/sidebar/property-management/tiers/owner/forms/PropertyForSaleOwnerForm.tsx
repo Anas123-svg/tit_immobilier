@@ -98,7 +98,7 @@ const PropertyForSaleOwnerForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
   
-      owner: "John Doe",
+      owner: "",
       // property_name: "Seaside Villa",
       // type_of_property: "Residential",
       // number_of_floors: 3,

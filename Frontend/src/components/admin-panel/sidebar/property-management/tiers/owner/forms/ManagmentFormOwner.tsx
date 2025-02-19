@@ -39,7 +39,7 @@ import useFetchAuthData from "@/hooks/useFetchAuthData";
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       defaultValues: {
-        owner_name: "John Doe",
+        owner_name: "",
         property_concerned: "Luxury Villa",
         users: [], // Pre-selected users
       },

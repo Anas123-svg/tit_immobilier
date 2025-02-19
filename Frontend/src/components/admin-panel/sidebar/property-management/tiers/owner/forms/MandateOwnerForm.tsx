@@ -40,6 +40,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
     tax_payable: z.string().optional(),
     billing_type: z.string().optional(),
     commission: z.number().optional(),
+    commission_percentage: z.number().optional(),
     deduct_commission: z.boolean().optional(),
     vat_on_commission: z.boolean().optional(),
     date_of_signature: z.string().optional(),
@@ -71,7 +72,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
         tacit_renewal: false,
 
 
-        owner_name: "John Doe",
+        owner_name: "",
        
       },
     });
@@ -260,21 +261,35 @@ import { OwnerSaleProperty } from "@/types/DataProps";
   />
 
   {/* Commission Field */}
-  <FormField
+  {BillingType==="Fixed Amount" ? <FormField
     control={form.control}
     name="commission"
     render={({ field }) => (
       <FormItem>
-        <FormLabel>  Commission {BillingType==="Fixed Amount" ?`(XOF)` :(`%`)} *</FormLabel>
+        <FormLabel>  Commission `(XOF)` *</FormLabel>
         <FormControl>
-         {BillingType==="Fixed Amount" ?<Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Commission (XOF)" />
-         : <Input type="number" {...field} onChange={(e)=>field.onChange(parseFloat(e.target.value))} placeholder="Enter Commission %" />
-    }</FormControl>
+       <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Commission (XOF)" />
+        
+    </FormControl>
         <FormMessage />
       </FormItem>
     )}
   />
-
+:
+<FormField
+    control={form.control}
+    name="commission_percentage"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>  Commission % *</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseFloat(e.target.value))} placeholder="Enter Commission %" />
+    </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+  }
   {/* Deduct Commission Field */}
   <FormField
     control={form.control}

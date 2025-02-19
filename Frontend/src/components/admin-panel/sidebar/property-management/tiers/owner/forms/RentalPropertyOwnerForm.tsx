@@ -56,7 +56,7 @@ const RentalPropertyOwnerForm = () => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      owner_name: "John Doe",
+      owner_name: "",
       very_concerned: false,
       type_of_property: "",
       numerotation: 0,

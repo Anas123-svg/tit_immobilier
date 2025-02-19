@@ -1,11 +1,24 @@
 import { Owner } from "@/types/DataProps";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import BusinessOwnerForm from "../../forms/BusinessOwnerForm";
 
 import ReactPDF from "@react-pdf/renderer";
 import { OwnerPdfComponent } from "@/components/common/assessmentPDF/OwnerPdf";
-import { Printer } from "lucide-react";
-
+import { Eye, Printer, Trash } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useDeleteData } from "@/hooks/useDeleteData";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import PrivateOwnerForm from "../../forms/PrivateOwnerForm";
 
 interface PersonalDetailsProps {
   owner?: Owner;
@@ -19,6 +32,22 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
   const handleFileClick = () => {
     fileInputRef.current?.click();
   };
+
+   const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
+    const { onDelete, loading } = useDeleteData(); // Access both the onDelete function and loading state
+  
+    // Handle delete confirmation
+    const handleDeleteClick = () => {
+      setOpenDialog(true); // Show the confirmation dialog
+    };
+    const apiUrl = import.meta.env.VITE_API_URL + "/api/owners";
+    const handleConfirmDelete = async () => {
+      await onDelete(apiUrl, owner?.id ||0); // Call the delete function
+    };
+  
+    const handleCancelDelete = () => {
+      setOpenDialog(false); // Close the dialog without deleting
+    };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md space-y-6">
@@ -143,11 +172,14 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
       </div>
 
       {/* Buttons */}
-      <div className="flex justify-end space-x-4 mt-6">
-      <BusinessOwnerForm owner={owner} />
-      <ReactPDF.PDFDownloadLink
+      <div className="flex justify-end space-x-4 mt-4">
+    
+      {
+        owner?.is_business_owner?<BusinessOwnerForm owner={owner} />:<PrivateOwnerForm owner={owner} />
+      }  
+        <ReactPDF.PDFDownloadLink
           document={<OwnerPdfComponent owner={owner} />}
-          fileName={`${owner?.business_manager_name}.pdf`}
+          fileName={`${ owner?.is_business_owner?owner?.business_manager_name:owner?.private_name}.pdf`}
           className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
         >
           {({ loading }) =>
@@ -158,6 +190,41 @@ const PersonalDetails = ({ owner, onFileChange }: PersonalDetailsProps) => {
             )
           }
         </ReactPDF.PDFDownloadLink>
+        <button
+          className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
+          onClick={handleDeleteClick}
+        >
+          <Trash size={25} className="text-red-700" />
+        </button>
+
+        {/* ShadCN AlertDialog for Delete Confirmation */}
+        <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+          <AlertDialogTrigger asChild />
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete{" "}
+                <span className="text-red-600">
+                  {owner?.is_business_owner? owner?.business_company_name:owner?.private_name}
+                </span>{" "}
+                this owner? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleCancelDelete}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-red-600 hover:bg-red-900"
+                onClick={handleConfirmDelete}
+                disabled={loading}
+              >
+                {loading ? "Deleting..." : "Confirm"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

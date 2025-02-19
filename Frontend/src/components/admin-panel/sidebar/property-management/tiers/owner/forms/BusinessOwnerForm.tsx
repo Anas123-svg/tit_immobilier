@@ -128,34 +128,34 @@ const handleConfirmSubmit = () => {
         // is_business_owner: owner?.is_business_owner || true,  // Default if undefined
         // id: owner?.id ?? undefined,  // Default if undefined
    
-        business_company_name: owner?.business_company_name ,  // Default if owner company name is undefined
-        business_taxpayer_identification_number: owner?.business_taxpayer_identification_number,  // Default if undefined
-        business_business_registration_number: owner?.business_business_registration_number ,  // Default if undefined
-        business_industry_sector: owner?.business_industry_sector,  // Default if undefined
-        business_office_phone_number: owner?.business_office_phone_number ,  // Default if undefined
-        business_whatsapp_contact: owner?.business_whatsapp_contact ,  // Default if undefined
-        business_email: owner?.business_email ,  // Default if undefined
-        business_head_office: owner?.business_head_office ,  // Default if undefined
-        business_po_box: owner?.business_po_box ,  // Default if undefined
-        business_capital: owner?.business_capital ,  // Default if undefined
-        business_manager_pronouns_title: owner?.business_manager_pronouns_title,  // Default if undefined
-        business_manager_name: owner?.business_manager_name,  // Default if undefined
-        business_manager_gender: owner?.business_manager_gender,  // Default if undefined
-        business_manager_contact: owner?.business_manager_contact ,  // Default if undefined
-        business_manager_date_of_birth: owner?.business_manager_date_of_birth ,  // Default if undefined
-        business_manager_place_of_birth: owner?.business_manager_place_of_birth ,  // Default if undefined
-        business_manager_address: owner?.business_manager_address ,  // Default if undefined
-        business_manager_job_position: owner?.business_manager_job_position ,  // Default if undefined
-        business_manager_type_of_document: owner?.business_manager_type_of_document,  // Default if undefined
-        business_manager_document_number: owner?.business_manager_document_number ,  // Default if undefined
-        business_manager_date_of_issue: owner?.business_manager_date_of_issue ,  // Default if undefined
-        business_manager_authorizing_authority: owner?.business_manager_authorizing_authority ,  // Default if undefined
-        business_manager_expiry_date: owner?.business_manager_expiry_date ,  // Default if undefined
-        business_photo: owner?.business_photo || pfp,  // Default if undefined
-        business_documents: owner?.business_documents || [],  // Default if undefined
+        business_company_name: owner?.business_company_name ?? "",  // Default if owner company name is undefined
+        business_taxpayer_identification_number: owner?.business_taxpayer_identification_number ?? "",  // Default if undefined
+        business_business_registration_number: owner?.business_business_registration_number ?? "",  // Default if undefined
+        business_industry_sector: owner?.business_industry_sector ?? "",  // Default if undefined
+        business_office_phone_number: owner?.business_office_phone_number ?? "",  // Default if undefined
+        business_whatsapp_contact: owner?.business_whatsapp_contact ?? "",  // Default if undefined
+        business_email: owner?.business_email ?? "",  // Default if undefined
+        business_head_office: owner?.business_head_office ?? "",  // Default if undefined
+        business_po_box: owner?.business_po_box ?? "",  // Default if undefined
+        business_capital: owner?.business_capital ?? 0,  // Default if undefined
+        business_manager_pronouns_title: owner?.business_manager_pronouns_title ?? "",  // Default if undefined
+        business_manager_name: owner?.business_manager_name ?? "",  // Default if undefined
+        business_manager_gender: owner?.business_manager_gender ?? "",  // Default if undefined
+        business_manager_contact: owner?.business_manager_contact ?? "",  // Default if undefined
+        business_manager_date_of_birth: owner?.business_manager_date_of_birth ?? "",  // Default if undefined
+        business_manager_place_of_birth: owner?.business_manager_place_of_birth ?? "",  // Default if undefined
+        business_manager_address: owner?.business_manager_address ?? "",  // Default if undefined
+        business_manager_job_position: owner?.business_manager_job_position ?? "",  // Default if undefined
+        business_manager_type_of_document: owner?.business_manager_type_of_document ?? "",  // Default if undefined
+        business_manager_document_number: owner?.business_manager_document_number ?? "",  // Default if undefined
+        business_manager_date_of_issue: owner?.business_manager_date_of_issue ?? "",  // Default if undefined
+        business_manager_authorizing_authority: owner?.business_manager_authorizing_authority ?? "",  // Default if undefined
+        business_manager_expiry_date: owner?.business_manager_expiry_date ?? "",  // Default if undefined
+        business_photo: owner?.business_photo ?? pfp,  // Default if undefined
+        business_documents: owner?.business_documents ?? [],  // Default if undefined
         is_business_owner: true,  // Default if undefined
         id: owner?.id ,  // Default if undefined
-   
+        
       
     },
   });
@@ -388,7 +388,18 @@ const handleConfirmSubmit = () => {
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Gender" disabled />
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Gender Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Others">Others</SelectItem>
+                      </SelectContent>
+                    </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

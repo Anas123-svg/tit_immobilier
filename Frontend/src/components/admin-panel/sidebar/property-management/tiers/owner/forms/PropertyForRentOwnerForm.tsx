@@ -133,7 +133,7 @@ const PropertyForRentOwnerForm = () => {
 
   
       // owner_id:0,
-      owner: "sample",
+      owner: "",
       // property_name: "",
       // type_of_property: "",
       // number_of_floors: 0,

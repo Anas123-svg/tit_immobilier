@@ -37,8 +37,8 @@ import pfp from "@/assets/avatar-default.png"
 const FormSchema = z.object({
   id:z.number().optional(),
   private_pronouns: z.string().optional(),
-  private_name: z.string(),
-  surname: z.string(),
+  private_name: z.string().optional(),
+  surname: z.string().optional(),
   private_gender: z.string().optional(),
   private_birth_date: z.string().optional(),
   private_place_of_birth: z.string().optional(),
@@ -100,37 +100,37 @@ const handleConfirmSubmit = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id:owner?.id,
-      private_pronouns: owner?.private_pronouns,
-      surname: owner?.surname,
-      private_name: owner?.private_name,
-      private_gender: owner?.private_gender,
-      private_birth_date: owner?.private_birth_date,
-      private_place_of_birth: owner?.private_place_of_birth,
-      private_address: owner?.private_address,
-      private_nationality: owner?.private_nationality,
-      private_document_type: owner?.private_document_type,
-      private_document_number: owner?.private_document_number,
-      private_date_of_issue: owner?.private_date_of_issue,
-      private_expiry_date: owner?.private_expiry_date,
-      private_taxpayer_identification_number: owner?.private_taxpayer_identification_number,
-      private_occupation: owner?.private_occupation,
-      private_contact: owner?.private_contact,
-      private_whatsapp_contact: owner?.private_whatsapp_contact,
-      private_email: owner?.private_email,
-      private_po_box: owner?.private_po_box,
-      private_marital_status: owner?.private_marital_status,
-      private_spouses_name: owner?.private_spouses_name,
-      private_number_of_children: owner?.private_number_of_children,
-      private_employer_name: owner?.private_employer_name,
-      private_bank_statement_rib: owner?.private_bank_statement_rib,
-      private_emergency_contact_name: owner?.private_emergency_contact_name,
-      private_emergency_contact: owner?.private_emergency_contact,
-      private_emergency_contact_relation: owner?.private_emergency_contact_relation,
-      private_photo: owner?.private_photo??pfp,
-      private_documents: owner?.private_documents,
-      is_business_owner: false,
-
+      id: owner?.id ?? 0,
+      private_pronouns: owner?.private_pronouns ?? "",
+      surname: owner?.surname ?? "",
+      private_name: owner?.private_name ?? "",
+      private_gender: owner?.private_gender ?? "",
+      private_birth_date: owner?.private_birth_date ?? "",
+      private_place_of_birth: owner?.private_place_of_birth ?? "",
+      private_address: owner?.private_address ?? "",
+      private_nationality: owner?.private_nationality ?? "",
+      private_document_type: owner?.private_document_type ?? "",
+      private_document_number: owner?.private_document_number ?? "",
+      private_date_of_issue: owner?.private_date_of_issue ?? "",
+      private_expiry_date: owner?.private_expiry_date ?? "",
+      private_taxpayer_identification_number: owner?.private_taxpayer_identification_number ?? "",
+      private_occupation: owner?.private_occupation ?? "",
+      private_contact: owner?.private_contact ?? "",
+      private_whatsapp_contact: owner?.private_whatsapp_contact ?? "",
+      private_email: owner?.private_email ?? "",
+      private_po_box: owner?.private_po_box ?? "",
+      private_marital_status: owner?.private_marital_status ?? "",
+      private_spouses_name: owner?.private_spouses_name ?? "",
+      private_number_of_children: owner?.private_number_of_children ?? 0,
+      private_employer_name: owner?.private_employer_name ?? "",
+      private_bank_statement_rib: owner?.private_bank_statement_rib ?? "",
+      private_emergency_contact_name: owner?.private_emergency_contact_name ?? "",
+      private_emergency_contact: owner?.private_emergency_contact ?? "",
+      private_emergency_contact_relation: owner?.private_emergency_contact_relation ?? "",
+      private_photo: owner?.private_photo ?? pfp ?? "",
+      private_documents: owner?.private_documents ?? [],
+      is_business_owner: false
+      
 
 
       // id: owner?.id,  // Dummy ID
@@ -233,7 +233,19 @@ const handleConfirmSubmit = () => {
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
                     <FormControl>
-                      <Input placeholder="Gender" {...field} disabled />
+                    <Select {...field} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Gender Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Others">Others</SelectItem>
+                      </SelectContent>
+                    </Select>
+                      
                     </FormControl>
                     <FormMessage className="text-xs" />
                   </FormItem>
