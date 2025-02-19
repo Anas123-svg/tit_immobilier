@@ -4,17 +4,17 @@ import { useState } from 'react';
 
 
 interface DeleteMandateDialogProps {
-  mandateId: number;
+  locativeId: number;
 
 }
 
-const DeleteMandateDialog: React.FC<DeleteMandateDialogProps> = ({ mandateId }) => {
+const DeleteMandateDialog: React.FC<DeleteMandateDialogProps> = ({ locativeId }) => {
   const [openDialog, setOpenDialog] = useState(false);
  const { onDelete,loading:deleteLoading } = useDeleteData(); 
   const handleDelete = () => {
     const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
  
-     onDelete(apiUrl,mandateId);
+     onDelete(apiUrl,locativeId);
    
 
     setOpenDialog(false);
@@ -35,7 +35,7 @@ const DeleteMandateDialog: React.FC<DeleteMandateDialogProps> = ({ mandateId }) 
         <AlertDialogHeader>
           <AlertDialogTitle className="text-red-500">Do you really want to delete this mandate?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action will permanently delete the mandate with ID: {mandateId}.
+            This action will permanently delete the mandate with ID: {locativeId}.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

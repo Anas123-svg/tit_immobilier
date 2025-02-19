@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import WalletComponent from './tabs/Wallet'; // Import your components
 import ProfileComponent from './tabs/PersonalDetails';
 import GoodComponent from './tabs/Good';
-import LocativeComponent from './tabs/Locative';
+import LocativeComponent from './tabs/Locative/Locative';
 import MandateComponent from './tabs/Mandate/Mandate';
 import ReversalComponent from './tabs/Reversal';
 import TicketComponent from './tabs/Ticket';
@@ -85,12 +85,12 @@ const OwnerDetailPage = () => {
       icon: <FileText className="inline mr-2" />, 
       component: <GoodComponent goods={owners?.Good}/>
     },
-    // { 
-    //   name: 'locative', 
-    //   label: 'Locative', 
-    //   icon: <Home className="inline mr-2" />, 
-    //   component: <LocativeComponent locatives={owners?.Locative } />
-    // },
+    { 
+      name: 'locative', 
+      label: 'Locative', 
+      icon: <Home className="inline mr-2" />, 
+      component: <LocativeComponent goods={owners?.Locative  } />
+    },
     { 
       name: 'mandate', 
       label: 'Mandate', 
