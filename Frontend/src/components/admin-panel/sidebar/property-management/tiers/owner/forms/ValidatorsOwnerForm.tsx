@@ -7,7 +7,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { number, string, z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -51,11 +51,13 @@ const ValidatorsOwnerForm = () => {
   const { data, loading, error } = useFetchAuthData<User[]>(
     `${import.meta.env.VITE_API_URL}/api/users`
   );
-  const availableUsers = [
-    { id: "1", name: "User1" },
-    { id: "2", name: "User2" },
-    { id: "3", name: "User3" },
-  ];
+
+  if (loading) {
+    
+  }
+  const availableUsers =data?.map((user)=>{
+return  { id: user.id.toString(), name: user.name }
+  });
   const apiUrl =
     import.meta.env.VITE_API_URL + "/api/owner-validator-assignment";
   const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl); // Use custom hook
@@ -104,7 +106,9 @@ const ValidatorsOwnerForm = () => {
               ASSIGN VALIDATORS
             </h2>
             <Selection
-              list={availableUsers}
+              list={availableUsers
+                ||[]
+              }
               selectedList={form.watch("users") || []}
               onChange={(selected) => {
                 form.setValue("users", selected);
