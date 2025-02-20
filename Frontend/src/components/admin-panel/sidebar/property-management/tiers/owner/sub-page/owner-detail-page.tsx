@@ -248,7 +248,7 @@ const OwnerDetailPage = () => {
       </div>
       <MakeDepositOwnerForm open={isDepositFormOpen} onClose={handleDepositFormClose}/>
       <MakeWithdrawalOwnerForm open={isWithdrawalFormOpen} onClose={handleWithdrawalFormClose}/>
-       <PullAccountStatementForm open={isPullAccountFormOpen} onClose={handlePullAccountFormClose}/>
+       <PullAccountStatementForm owner={owners?.profile ||undefined } open={isPullAccountFormOpen} onClose={handlePullAccountFormClose}/>
     </div>
   );
 };

@@ -11,9 +11,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
+import { Owner } from "@/types/DataProps";
+import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 
 // Define schema for form validation using Zod
 const FormSchema = z.object({
+  owner_id:z.number(),
   very_concerned: z.string().optional(),
   date_debut: z.string().optional(),
   date_end: z.string().optional(),
@@ -22,26 +26,24 @@ const FormSchema = z.object({
 interface PullAccountStatementFormProps {
   open: boolean;
   onClose: () => void;
+  owner?:Owner
 }
 
 const PullAccountStatementForm: React.FC<PullAccountStatementFormProps> = ({
   open,
   onClose,
+  owner
 }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      very_concerned: "",
-      date_debut: "",
-      date_end: "",
-    },
+   
   });
 
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
     console.log("Form Data: ", data);
     // You can send the data to the API here or any other logic
   };
-
+const ownerID=form.watch("owner_id")
   return (
     <div>
       {/* Dialog Component */}
@@ -56,19 +58,9 @@ const PullAccountStatementForm: React.FC<PullAccountStatementFormProps> = ({
                 SELECT PERIOD
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="very_concerned"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Very Concerned</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Select a property" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+         <OwnerCombobox name="owner_id" control={form.control} />
+                <OwnerSalePropertyCombobox name="very_concerned" id={ownerID
+                } control={form.control} formState={form.formState}/>
 
                 {/* Date Debut */}
                 <FormField
