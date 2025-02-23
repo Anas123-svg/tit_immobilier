@@ -130,7 +130,7 @@ const GoodComponent: React.FC<GoodProps> = ({goods}) => {
     <div className=" space-y-4">
       <h1  className='bg-secondary text-white p-1  text-center text-lg '>List of Properties</h1>
      {/* Filters or other components can be added here */}
-     <div className="space-y-5 gap-5 grid grid-cols-3">
+     <div className="space-y-5 gap-5 grid md:grid-cols-3 sm:grid-cols-2 p-5 sm:p-0">
         {/* Render each property using the GoodCard component */}
         {goods?.map((property, index) => (
           <GoodCard

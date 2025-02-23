@@ -435,19 +435,20 @@ export interface ClientProfile {
       type_of_property: string;
       number_of_floors: number;
       area: number;
-      market_value: string;
+      market_value: number;
       island: string;
       batch: string;
       cie_identifier_number: string;
       sodeci_identifier_number: string;
-      boundary_marking_done: string;
+      boundary_marking_done: boolean;
       domain_type: string;
-      has_title_deed: string;
-      serviced: string;
-      approved: string;
+      has_title_deed: boolean;
+      serviced: boolean;
+      other_type:string
+      approved: boolean;
       description: string;
       city: string;
-      municipality: string;
+      municipality: string ;
       neighborhood: string;
       longitude: number;
       latitude: number;
@@ -455,14 +456,14 @@ export interface ClientProfile {
       altitude: number;
       number_of_parking_spaces: number;
       number_of_levels: number;
-      garden: string;
-      pool: string;
+      garden: boolean;
+      pool: boolean;
       on_the_corner: string;
       near_water: string;
-      feet_in_water: string;
-      distance_from_water: number;
-      on_main_road: string;
-      distance_from_road: number;
+      feet_in_water: boolean;
+      distance_from_water: string;
+      on_main_road: boolean;
+      distance_from_road: string;
       dry_land: string;
       low_depth: string;
       school_nearby: string;
@@ -474,6 +475,14 @@ export interface ClientProfile {
       updated_at: string;
       status: string;
       details:Locative[]
+      sale_type:string;
+      number_of_rentals:number;
+type_of_numbering:string;
+area_m2:string;
+
+block:string;
+
+
     }
     
 
@@ -596,6 +605,7 @@ export interface ClientProfile {
     photo: string; // URL to the photo of the property
     documents: string[]; // List of document URLs for the property
     status: string; // Current status of the property (e.g., "For Sale", "Sold", etc.)
+    sale_type:string;
   }
   
 
@@ -603,7 +613,45 @@ export interface ClientProfile {
     sale_properties : OwnerSaleProperty[]
 
   }
-
+  export interface OwnerRentProperty {
+    owner_id: number;
+    owner?: string;
+    property_name: string;
+    type_of_property?: string;
+    number_of_floors?: number;
+    number_of_rentals?: number;
+    type_of_numbering?: string;
+    area_m2?: number;
+    market_value?: number;
+    other_type?: string;
+    island?: string;
+    batch?: string;
+    block?: string;
+    cie_identifier_number?: string;
+    sodeci_identifier_number?: string;
+    description?: string;
+    city?: string;
+    municipality?: string;
+    neighborhood?: string;
+    longitude?: number;
+    latitude?: number;
+    height?: number;
+    altitude?: number;
+    on_the_corner?: string;
+    near_water?: string;
+    feet_in_water?: boolean;
+    distance_from_water?: string;
+    on_main_road?: boolean;
+    distance_from_road?: string;
+    dry_land?: string;
+    low_depth?: string;
+    school_nearby?: string;
+    market_nearby?: string;
+    assigned_agents?: string[];
+    photo?: string;
+    documents?: string[];
+    details?: Locative[];
+  }
   // src/types/DataProps.ts
 
 export interface Treasury {

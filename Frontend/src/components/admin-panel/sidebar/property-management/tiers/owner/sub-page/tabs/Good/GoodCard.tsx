@@ -1,15 +1,11 @@
 import React from 'react';
-import { Eye, Edit, Printer } from 'lucide-react'; // Import icons from Lucide
+import { Eye, Edit, Printer, Pen } from 'lucide-react'; // Import icons from Lucide
 import { Link } from 'react-router-dom';
+import { Good } from '@/types/DataProps';
+import PropertyForRentOwnerForm from '../../../forms/PropertyForRentOwnerForm';
+import PropertyForSaleOwnerForm from '../../../forms/PropertyForSaleOwnerForm';
 
-// Interface for the 'Good' object
-interface Good {
-  property_name: string;
-  market_value: string;
-  city: string;
-  neighborhood: string;
-  status: string;
-}
+
 
 interface GoodCardProps {
   good: Good; // Single prop for the 'Good' object
@@ -17,16 +13,21 @@ interface GoodCardProps {
 
 const GoodCard = ({ good }: GoodCardProps) => {
   return (
-    <div className="bg-slate-200 p-6 rounded-lg hover:shadow-xl hover:scale-105 cursor-pointer transition-all delay-75 w-full">
+    <div className="flex flex-col bg-slate-200 p-6 rounded-lg hover:shadow-xl hover:scale-105 cursor-pointer transition-all delay-75 w-full">
       {/* Building Image */}
       <div className="flex justify-center mb-4 p-5 bg-white rounded-lg">
         <img
-          src="https://app.zenapi.immo/assets/images/house-default.png" // Placeholder image URL
+          src={good?good?.photo || undefined:`https://app.zenapi.immo/assets/images/house-default.png`} // Placeholder image URL
           alt="Building"
           className="w-24 h-24 object-cover rounded-md"
         />
+     
       </div>
-
+      <div className="text-center mb-4 self-start">
+        <span className="bg-green-300 text-green-800 py-1 px-3 rounded-md text-xs">
+          {good.sale_type}
+        </span>
+      </div>
       {/* Status Badge */}
       <div className="text-center mb-4">
         <span className="bg-blue-500 text-white py-1 px-3 rounded-full text-xs">
@@ -45,14 +46,19 @@ const GoodCard = ({ good }: GoodCardProps) => {
 
       {/* Actions (View, Edit, Print) */}
       <div className="flex justify-center space-x-4 mt-4">
-        <Link to="/property">
+        <Link to={`/property/${good.id}`}>
           <button className="p-2 bg-blue-500 text-white hover:bg-blue-700 rounded-lg">
             <Eye size={20} />
           </button>
         </Link>
-        <button className="p-2 bg-yellow-500 text-white hover:bg-yellow-700 rounded-lg">
-          <Edit size={20} />
-        </button>
+      {
+        good.sale_type == "For Rent"?
+ <PropertyForRentOwnerForm property={good} customBtn={<button className="p-2 bg-yellow-500 text-white hover:bg-yellow-700 rounded-lg">
+  <Pen size={20} />
+</button>}/>:
+      <PropertyForSaleOwnerForm property={good}  customBtn={<button className="p-2 bg-yellow-500 text-white hover:bg-yellow-700 rounded-lg">
+        <Pen size={20} />
+      </button>}/>}
         <button className="p-2 bg-gray-500 text-white hover:bg-gray-700 rounded-lg">
           <Printer size={20} />
         </button>

@@ -51,7 +51,7 @@ const AdminPanel: React.FC = () => {
             <Route path="/tier/tenants/detail-page/:id" element={<TenantDetailPage/>} />
             <Route path="/tier/owners/detail-page/:id" element={<OwnerDetailPage/>} />
             <Route path="/tier/clients/detail-page/:id" element={<ClientDetailPage/>} />
-            <Route path="/property" element={<PropertyDetailPage/>} />
+            <Route path="/property/:id" element={<PropertyDetailPage/>} />
             <Route path="/treasury/treasury/:id" element={<TreasuryDetailPage/>} />
 
             <Route path="/settings/*" element={<SettingsComponent />} />

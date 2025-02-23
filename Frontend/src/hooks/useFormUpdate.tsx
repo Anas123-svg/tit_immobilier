@@ -11,7 +11,7 @@ export function useFormUpdate<T extends ZodTypeAny>(apiUrl: string,updateid?: nu
       toast.error('Missing ID for update');
       return;
     }
-
+console.log(data)
     try {
       const response = await axios.put(`${apiUrl}/${id?id:updateid}`, values);  // Use the id to update
       console.log('Update Success:', response.data);  // Logging the server response

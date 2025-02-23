@@ -26,16 +26,18 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import MapComponent from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods/MapComponent";
 import Selection from "@/components/common";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "../../../../../UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner, User } from "@/types/DataProps";
+import { Good, Owner, OwnerRentProperty, User } from "@/types/DataProps";
 import Stepper from "@/components/admin-panel/UI-components/Stepper";
 import useFetchAuthData from "@/hooks/useFetchAuthData";
+import { Edit } from "lucide-react";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
 const locativeSchema = z.object({
   door_number: z.string().optional(),
   rental_type: z.string().optional(),
@@ -46,14 +48,14 @@ const locativeSchema = z.object({
 });
 // **Define validation schema**
 const FormSchema = z.object({
+  id: z.number().optional(),
   owner_id: z.number().min(1, "Owner ID is required"),
-  owner: z.string().optional(),
   property_name: z.string(),
   type_of_property: z.string().optional(),
   number_of_floors: z.number().optional(),
   number_of_rentals: z.number().optional(),
   type_of_numbering: z.string().optional(),
-  area_m2: z.number().optional(),
+  area_m2: z.string().optional(),
   market_value: z.number().optional(),
   other_type: z.string().optional(),
   island: z.string().optional(),
@@ -86,8 +88,11 @@ const FormSchema = z.object({
   ).optional(),
   details: z.array(locativeSchema).optional(), // Array of details
 });
-
-const PropertyForRentOwnerForm = () => {
+interface PropertyForRentOwnerFormProps{
+  property?: Good
+  customBtn?:React.ReactNode
+}
+const PropertyForRentOwnerForm: React.FC<PropertyForRentOwnerFormProps> = ({property,customBtn}) => {
   const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for details
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -130,50 +135,44 @@ const PropertyForRentOwnerForm = () => {
       // documents: [
   
       // ],
-
+      id:property?.id,
   
-      // owner_id:0,
-      owner: "",
-      // property_name: "",
-      // type_of_property: "",
-      // number_of_floors: 0,
-      // number_of_rentals: 0,
-      // type_of_numbering: "",
-      // area_m2: 0,
-      // market_value: 0,
-      // island: "",
-      // batch: "",
-      // block: "",
-      // cie_identifier_number: "",
-      // sodeci_identifier_number: "",
-      // description: "",
-      // city: "",
-      // municipality: "",
-      // neighborhood: "",
-      // longitude: "",
-      // latitude: "",
-      height: 0,
-      altitude: 0,
-      on_the_corner: "",
-      near_water: "",
-      feet_in_water: false,
-      distance_from_water: "",
-      on_main_road: false,
-      distance_from_road: "",
-      dry_land: "",
-      low_depth: "",
-      school_nearby: "",
-      market_nearby: "",
-      // assigned_agents: [],
-      // photo: "",
-      // documents: [],
-      // level: 0,
-      // door_number: "",
-      // rental_type: "",
-      // rent: 0,
-      // charges: 0,
-      // room: 0,
-      // area: 0
+  owner_id: property?.owner_id ,
+
+  property_name: property?.property_name ,
+  type_of_property: property?.type_of_property ?? "",
+  number_of_floors: property?.number_of_floors ?? 0,
+  number_of_rentals: property?.number_of_rentals ?? 0,
+  type_of_numbering: property?.type_of_numbering ?? "",
+  area_m2: property?.area_m2 ?? "0",
+  market_value: property?.market_value ?? 0,
+  island: property?.island ?? "",
+  batch: property?.batch ?? "",
+  block: property?.block ?? "",
+  cie_identifier_number: property?.cie_identifier_number ?? "",
+  sodeci_identifier_number: property?.sodeci_identifier_number ?? "",
+  description: property?.description ?? "",
+  city: property?.city ?? "",
+  municipality: property?.municipality ?? "",
+  neighborhood: property?.neighborhood ?? "",
+  longitude: property?.longitude ?? 0,
+  latitude: property?.latitude ?? 0,
+  height: property?.height ?? 0,
+  altitude: property?.altitude ?? 0,
+  on_the_corner: property?.on_the_corner ?? "",
+  near_water: property?.near_water ?? "",
+  feet_in_water: property?.feet_in_water ?? false,
+  distance_from_water: property?.distance_from_water ?? "0",
+  on_main_road: property?.on_main_road  ?? false,
+  distance_from_road: property?.distance_from_road ?? "0",
+  dry_land: property?.dry_land ?? "",
+  low_depth: property?.low_depth ?? "",
+  school_nearby: property?.school_nearby ?? "",
+  market_nearby: property?.market_nearby ?? "",
+  assigned_agents: property?.assigned_agents ?? [],
+  photo: property?.photo ?? "",
+  documents: property?.documents ?? [],
+  details: property?.details ?? [],
     },
   });
        
@@ -199,7 +198,12 @@ const PropertyForRentOwnerForm = () => {
     };
   const TypeofProperty = form.watch("type_of_property")
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-properties';
-  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl,form.reset);  // Use custom hook
+ const onSubmit = property
+       ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+       : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+   
+
+
  const nearWater = form.watch("near_water")
  const nearRoad = form.watch("on_main_road")
  const handleAddLocative = () => {
@@ -213,7 +217,7 @@ const handleRemoveLocative = (index: number) => {
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-      <DialogTrigger>Add a Property for Rent</DialogTrigger>
+      <DialogTrigger> {customBtn? customBtn  :`Add a Property for Rent`}</DialogTrigger>
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[1000px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">Add a Property for Rent</DialogTitle>
         <Form {...form}>
@@ -322,7 +326,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="area_m2" render={({ field }) => (
     <FormItem>
       <FormLabel>Surface (m²)</FormLabel>
-      <FormControl><Input  {...field}  onChange={e => field.onChange(parseInt(e.target.value, 10))}  type="number"  placeholder="0" /></FormControl>
+      <FormControl><Input  {...field}   placeholder="0" /></FormControl>
       <FormMessage />
     </FormItem>
   )} />
@@ -501,7 +505,7 @@ const handleRemoveLocative = (index: number) => {
  {nearWater == "yes" && <FormField control={form.control} name="distance_from_water" render={({ field }) => (
     <FormItem>
       <FormLabel>Distance from water (m) ?</FormLabel>
-      <FormControl><Input  {...field}/></FormControl>
+      <FormControl><Input  placeholder="0 meters" {...field} /></FormControl>
       <FormMessage />
     </FormItem>
   )} />}
@@ -545,7 +549,7 @@ const handleRemoveLocative = (index: number) => {
    {nearRoad && <FormField control={form.control} name="distance_from_road" render={({ field }) => (
     <FormItem>
       <FormLabel>Distance from road (m) ?</FormLabel>
-      <FormControl><Input  {...field}  placeholder="0" /></FormControl>
+      <FormControl><Input placeholder="0 meters" {...field}  /></FormControl>
       <FormMessage />
     </FormItem>
   )} />}

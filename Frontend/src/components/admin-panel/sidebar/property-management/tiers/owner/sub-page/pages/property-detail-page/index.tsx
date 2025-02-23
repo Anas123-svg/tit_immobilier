@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import Good from "./Good"; // Import Good Component
+import GoodDetail from "./GoodDetail"; // Import Good Component
 import Ticket from "./Ticket"; // Import Ticket Component
 import { Wallet } from "lucide-react";
+import { useParams } from "react-router-dom";
+import useFetchData from "@/hooks/useFetchData";
+import { Good } from "@/types/DataProps";
 
 export function PropertyDetailPage() {
   const [activeTab, setActiveTab] = useState("good");
+  const {id} =  useParams()
 
+  const { data, loading, error } = useFetchData<Good>(
+    `${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${id}`
+  );
   const tabs = [
     {
       name: "good",
@@ -15,13 +22,8 @@ export function PropertyDetailPage() {
       icon: <Wallet className="inline mr-2" />, // Replace with the correct icon
       component: (
        
-            <Good
-              propertyName="YAO FERNAND BUILDING"
-              marketValue="2,220,000 XOF"
-              totalRent="2,220,000 XOF"
-              totalCharges="0 XOF"
-              rentalValue="2,220,000 XOF"
-              rentals={{ occupied: 4, available: 11, reserved: 0 }}
+            <GoodDetail
+         property={data ||undefined}
             />
       
       ),

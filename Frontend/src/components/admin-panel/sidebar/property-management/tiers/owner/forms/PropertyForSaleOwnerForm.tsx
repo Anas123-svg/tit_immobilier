@@ -36,7 +36,7 @@ import 'react-toastify/dist/ReactToastify.css';  // Import toastify CSS
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner, User } from "@/types/DataProps";
+import { Good, Owner, User } from "@/types/DataProps";
 import Stepper from "@/components/admin-panel/UI-components/Stepper";
 import useFetchAuthData from "@/hooks/useFetchAuthData";
 // Define validation schema
@@ -75,24 +75,27 @@ const FormSchema = z.object({
   number_of_levels: z.number().optional(),
   garden: z.boolean().optional(),
   pool: z.boolean().optional(),
-  on_the_corner: z.boolean().optional(),
-  near_water: z.boolean().optional(),
+  on_the_corner: z.string().optional(),
+  near_water: z.string().optional(),
   feet_in_water: z.boolean().optional(),
   distance_from_water: z.string().optional(),
   on_main_road: z.boolean().optional(),
   distance_from_road: z.string().optional(),
-  dry_land: z.boolean().optional(),
-  low_depth: z.boolean().optional(),
-  school_nearby: z.boolean().optional(),
-  market_nearby: z.boolean().optional(),
+  dry_land: z.string().optional(),
+  low_depth: z.string().optional(),
+  school_nearby: z.string().optional(),
+  market_nearby: z.string().optional(),
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(z.string()).optional(),
-     locatives: z.array(locativeSchema).optional(), // Array of locatives
+  details: z.array(locativeSchema).optional(), // Array of details
    
 });
-
-const PropertyForSaleOwnerForm = () => {
+interface PropertyForSaleOwnerFormProps{
+  property?: Good
+  customBtn?:React.ReactNode
+}
+const PropertyForSaleOwnerForm: React.FC<PropertyForSaleOwnerFormProps> = ({property,customBtn}) => {
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -165,29 +168,70 @@ const PropertyForSaleOwnerForm = () => {
         // latitude: 0,
         // height: 0,
         // altitude: 0,
-        number_of_parking_spaces: 0,
-        number_of_levels: 0,
-        garden: false,
-        pool: false,
-        on_the_corner: false,
-        near_water: false,
-        feet_in_water: false,
-        distance_from_water: "0",
-        on_main_road: false,
-        distance_from_road: "0",
-        dry_land: false,
-        low_depth: false,
-        school_nearby: false,
-        market_nearby: false,
+        // number_of_parking_spaces: 0,
+        // number_of_levels: 0,
+        // garden: false,
+        // pool: false,
+        // on_the_corner: false,
+        // near_water: false,
+        // feet_in_water: false,
+        // distance_from_water: "0",
+        // on_main_road: false,
+        // distance_from_road: "0",
+        // dry_land: false,
+        // low_depth: false,
+        // school_nearby: false,
+        // market_nearby: false,
         // assigned_agents: [],
         // photo: "",
         // documents: []
      
+        owner_id: property?.owner_id ?? 0,
+
+property_name: property?.property_name ?? "",
+type_of_property: property?.type_of_property ?? "",
+number_of_floors: property?.number_of_floors ?? 0,
+area: property?.area ?? 0,
+market_value: property?.market_value ?? 0,
+cie_identifier_number: property?.cie_identifier_number ?? "",
+sodeci_identifier_number: property?.sodeci_identifier_number ?? "",
+boundary_marking_done: property?.boundary_marking_done ?? false,
+domain_type: property?.domain_type ?? "",
+has_title_deed: property?.has_title_deed ?? false,
+serviced: property?.serviced ?? false,
+approved: property?.approved ?? false,
+description: property?.description ?? "",
+city: property?.city ?? "",
+municipality: property?.municipality ?? "",
+neighborhood: property?.neighborhood ?? "",
+longitude: property?.longitude ?? 0,
+latitude: property?.latitude ?? 0,
+height: property?.height ?? 0,
+altitude: property?.altitude ?? 0,
+number_of_parking_spaces: property?.number_of_parking_spaces ?? 0,
+number_of_levels: property?.number_of_levels ?? 0,
+garden: property?.garden ?? false,
+pool: property?.pool ?? false,
+on_the_corner: property?.on_the_corner ??  "",
+near_water: property?.near_water ??  "",
+feet_in_water: property?.feet_in_water ?? false,
+distance_from_water: property?.distance_from_water ?? "",
+on_main_road: property?.on_main_road ??  false,
+distance_from_road: property?.distance_from_road ?? "",
+dry_land: property?.dry_land ??  "",
+low_depth: property?.low_depth ??  "",
+school_nearby: property?.school_nearby ??  "",
+market_nearby: property?.market_nearby ??  "",
+assigned_agents: property?.assigned_agents ?? [],
+photo: property?.photo ?? "",
+documents: property?.documents ?? [],
+details: property?.details ?? [],
+
       
     },
   });
   const [activeStep, setActiveStep] = useState(0);
-  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for locatives
+  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for details
  
   const handleStepChange = (step: number) => {
     setActiveStep(step);
@@ -224,7 +268,7 @@ const PropertyForSaleOwnerForm = () => {
  };
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-      <DialogTrigger>Add a Property for Sale</DialogTrigger>
+      <DialogTrigger>{customBtn ? customBtn: "Add a Property for Sale"}</DialogTrigger>
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[1000px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle className="text-lg md:text-xl">Property for Sale</DialogTitle>
         <Form {...form}>
@@ -546,7 +590,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>A l'angle?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('on_the_corner', value === 'yes')}>
+      <Select {...field} onValueChange={(value) => form.setValue('on_the_corner', value)}>
           <SelectTrigger>
             <SelectValue placeholder="NON" />
           </SelectTrigger>
@@ -564,7 +608,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>Near the Water?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('near_water', value === 'yes')}>
+      <Select {...field}  onValueChange={(value) => form.setValue('near_water', value)}>
           <SelectTrigger>
             <SelectValue placeholder="NON" />
           </SelectTrigger>
@@ -606,7 +650,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>Edge of a Main Road?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('on_main_road', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('on_main_road', value=="yes")}>
           <SelectTrigger>
             <SelectValue placeholder="NON" />
           </SelectTrigger>
@@ -630,7 +674,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>Dry Land?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('dry_land', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('dry_land', value)}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -649,7 +693,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>Low Depth?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('low_depth', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('low_depth', value)}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -668,7 +712,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>School Nearby?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('school_nearby', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('school_nearby', value)}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -687,7 +731,7 @@ const PropertyForSaleOwnerForm = () => {
     <FormItem>
       <FormLabel>Market Nearby?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('market_nearby', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('market_nearby', value)}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -743,7 +787,7 @@ const PropertyForSaleOwnerForm = () => {
 {locativesstate.map((_, index) => (
   <div key={index} className="grid-cols-7 gap-5 grid">
     {/* Door Number Field */}
-    <FormField control={form.control} name={`locatives.${index}.door_number`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.door_number`} render={({ field }) => (
       <FormItem>
         <FormLabel>Door No *</FormLabel>
         <FormControl><Input {...field} placeholder="e.g. 213" /></FormControl>
@@ -752,7 +796,7 @@ const PropertyForSaleOwnerForm = () => {
     )} />
 
     {/* Rental Type Field */}
-    <FormField control={form.control} name={`locatives.${index}.rental_type`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.rental_type`} render={({ field }) => (
       <FormItem>
         <FormLabel>Rental Type *</FormLabel>
         <Select {...field} onValueChange={field.onChange}>
@@ -775,7 +819,7 @@ const PropertyForSaleOwnerForm = () => {
     )} />
 
     {/* Rent Field */}
-    <FormField control={form.control} name={`locatives.${index}.rent`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.rent`} render={({ field }) => (
       <FormItem>
         <FormLabel>Rent *</FormLabel>
         <FormControl>
@@ -786,7 +830,7 @@ const PropertyForSaleOwnerForm = () => {
     )} />
 
     {/* Charges Field */}
-    <FormField control={form.control} name={`locatives.${index}.charges`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.charges`} render={({ field }) => (
       <FormItem>
         <FormLabel>Charges *</FormLabel>
         <FormControl>
@@ -797,7 +841,7 @@ const PropertyForSaleOwnerForm = () => {
     )} />
 
     {/* Number of Rooms Field */}
-    <FormField control={form.control} name={`locatives.${index}.room`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.room`} render={({ field }) => (
       <FormItem>
         <FormLabel>No. Rooms *</FormLabel>
         <FormControl>
@@ -808,7 +852,7 @@ const PropertyForSaleOwnerForm = () => {
     )} />
 
     {/* Area Field */}
-    <FormField control={form.control} name={`locatives.${index}.area`} render={({ field }) => (
+    <FormField control={form.control} name={`details.${index}.area`} render={({ field }) => (
       <FormItem>
         <FormLabel>Area *</FormLabel>
         <FormControl>
