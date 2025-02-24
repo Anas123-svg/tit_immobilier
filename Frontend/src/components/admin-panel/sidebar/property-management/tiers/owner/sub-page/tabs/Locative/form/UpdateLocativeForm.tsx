@@ -32,9 +32,9 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
     area: z.number().optional(),
   });
   interface UpdateLocativeProps {
-    locative?: Locative;
-    locativeId?:number
-    good?:Good
+    locative: Locative;
+    locativeId:number
+    good:Good
   }
   const UpdateLocativeForm :React.FC<UpdateLocativeProps> = ({locative,good,locativeId}) => {
     const [open, setOpen] = useState(false);
@@ -42,16 +42,16 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
     const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       defaultValues: {
-        door_number: locative.door_number,
-        rental_type: locative.rental_type,
-        rent:locative.rent,
-        charges: locative.charges,
-        room: locative.room,
-        area: locative.area,
+        door_number: locative?.door_number,
+        rental_type: locative?.rental_type,
+        rent:locative?.rent,
+        charges: locative?.charges,
+        room: locative?.room,
+        area: locative?.area,
       },
     });
   
-    const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-property/'+good.id;  // Adjust API URL
+    const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-property/'+good?.id;  // Adjust API URL
   
      const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
        
