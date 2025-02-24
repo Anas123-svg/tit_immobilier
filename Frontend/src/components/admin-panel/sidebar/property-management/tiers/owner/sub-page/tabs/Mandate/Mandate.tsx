@@ -122,12 +122,12 @@ return   {
   action: (
     <>
     <MandateDialog mandate={mandate}/>
-      <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+      {/* <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
         <Edit size={18} />
-      </button>
-      <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
+      </button> */}
+      {/* <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
         <Download size={18} />
-      </button>
+      </button> */}
      <DeleteMandateDialog  mandateId={mandate.id}/>
     </>
   ),

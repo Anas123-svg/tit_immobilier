@@ -4,6 +4,8 @@ import { FilterOption, Good, Locative } from '@/types/DataProps';
 import { Delete, Download, Edit, Eye, Printer, Trash, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import LocativeDialog from './LocativeDialog';
+import DeleteLocativeDialog from './DeleteLocative';
+import UpdateLocativeForm from './form/UpdateLocativeForm';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -65,7 +67,7 @@ interface LocativeComponentProps{
 const LocativeComponent:React.FC<LocativeComponentProps> = ({goods}) => {
  
   const data = goods?.map((good)=>{
-   return  good?.details?.map((detail)=>{
+   return  good?.details?.map((detail,index)=>{
 
 
 
@@ -106,15 +108,11 @@ const LocativeComponent:React.FC<LocativeComponentProps> = ({goods}) => {
          action: (
             <>
         <LocativeDialog good={good}/>
-              <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-                <Edit size={18} />
-              </button>
-              <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
+            {/* <UpdateLocativeForm locative={detail}/> */}
+              {/* <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
                 <Printer size={18} />
-              </button>
-              <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-                <Trash size={18} />
-              </button>
+              </button> */}
+              <DeleteLocativeDialog locative={detail}/>
             </>
           ),
         }

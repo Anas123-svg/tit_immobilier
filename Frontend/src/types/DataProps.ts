@@ -440,12 +440,12 @@ export interface ClientProfile {
       batch: string;
       cie_identifier_number: string;
       sodeci_identifier_number: string;
-      boundary_marking_done: boolean;
+      boundary_marking_done: string;
       domain_type: string;
-      has_title_deed: boolean;
-      serviced: boolean;
+      has_title_deed: string;
+      serviced: string;
       other_type:string
-      approved: boolean;
+      approved: string;
       description: string;
       city: string;
       municipality: string ;
@@ -458,16 +458,16 @@ export interface ClientProfile {
       number_of_levels: number;
       garden: boolean;
       pool: boolean;
-      on_the_corner: string;
-      near_water: string;
+      on_the_corner: boolean;
+      near_water: boolean;
       feet_in_water: boolean;
       distance_from_water: string;
       on_main_road: boolean;
       distance_from_road: string;
-      dry_land: string;
-      low_depth: string;
-      school_nearby: string;
-      market_nearby: string;
+      dry_land: boolean;
+      low_depth: boolean;
+      school_nearby: boolean;
+      market_nearby: boolean;
       assigned_agents: string[];
       photo: string | null;
       documents: any[];  // Adjust type based on the document structure if known

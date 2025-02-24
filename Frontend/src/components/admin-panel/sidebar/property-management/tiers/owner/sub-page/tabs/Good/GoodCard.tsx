@@ -46,7 +46,7 @@ const GoodCard = ({ good }: GoodCardProps) => {
 
       {/* Actions (View, Edit, Print) */}
       <div className="flex justify-center space-x-4 mt-4">
-        <Link to={`/property/${good.id}`}>
+        <Link to={`/property/${good.id}/${good.sale_type =="For Rent"?"rent":"sale"}`}>
           <button className="p-2 bg-blue-500 text-white hover:bg-blue-700 rounded-lg">
             <Eye size={20} />
           </button>

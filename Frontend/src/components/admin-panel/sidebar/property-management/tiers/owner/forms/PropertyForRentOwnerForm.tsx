@@ -29,7 +29,7 @@ import {
 import { ReactElement, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import MapComponent from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods/MapComponent";
-import Selection from "@/components/common";
+import Selection from "@/components/common/selection2";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { OwnerCombobox } from "../../../../../UI-components/Combobox/OwnerCombobox";
 import useFetchData from "@/hooks/useFetchData";
@@ -48,7 +48,7 @@ const locativeSchema = z.object({
 });
 // **Define validation schema**
 const FormSchema = z.object({
-  id: z.number().optional(),
+
   owner_id: z.number().min(1, "Owner ID is required"),
   property_name: z.string(),
   type_of_property: z.string().optional(),
@@ -71,16 +71,16 @@ const FormSchema = z.object({
   latitude: z.number().optional(),
   height: z.number().optional(),
   altitude: z.number().optional(),
-  on_the_corner: z.string().optional(),
-  near_water: z.string().optional(),
+  on_the_corner: z.boolean().optional(),
+  near_water: z.boolean().optional(),
   feet_in_water: z.boolean().optional(),
   distance_from_water: z.string().optional(),
   on_main_road: z.boolean().optional(),
   distance_from_road: z.string().optional(),
-  dry_land: z.string().optional(),
-  low_depth: z.string().optional(),
-  school_nearby: z.string().optional(),
-  market_nearby: z.string().optional(),
+  dry_land: z.boolean().optional(),
+  low_depth: z.boolean().optional(),
+  school_nearby: z.boolean().optional(),
+  market_nearby: z.boolean().optional(),
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(
@@ -135,8 +135,7 @@ const PropertyForRentOwnerForm: React.FC<PropertyForRentOwnerFormProps> = ({prop
       // documents: [
   
       // ],
-      id:property?.id,
-  
+
   owner_id: property?.owner_id ,
 
   property_name: property?.property_name ,
@@ -159,17 +158,18 @@ const PropertyForRentOwnerForm: React.FC<PropertyForRentOwnerFormProps> = ({prop
   latitude: property?.latitude ?? 0,
   height: property?.height ?? 0,
   altitude: property?.altitude ?? 0,
-  on_the_corner: property?.on_the_corner ?? "",
-  near_water: property?.near_water ?? "",
-  feet_in_water: property?.feet_in_water ?? false,
+  on_the_corner: Boolean(property?.on_the_corner) ?? false,
+  near_water: Boolean(property?.near_water) ?? false,
+  feet_in_water: Boolean(property?.feet_in_water) ?? false,
   distance_from_water: property?.distance_from_water ?? "0",
-  on_main_road: property?.on_main_road  ?? false,
+  on_main_road: Boolean(property?.on_main_road) ??  false,
   distance_from_road: property?.distance_from_road ?? "0",
-  dry_land: property?.dry_land ?? "",
-  low_depth: property?.low_depth ?? "",
-  school_nearby: property?.school_nearby ?? "",
-  market_nearby: property?.market_nearby ?? "",
+  dry_land: Boolean(property?.dry_land) ?? false,
+  low_depth: Boolean(property?.low_depth) ?? false,
+  school_nearby: Boolean(property?.school_nearby) ?? false,
+  market_nearby: Boolean(property?.market_nearby) ?? false,
   assigned_agents: property?.assigned_agents ?? [],
+  other_type:property?.other_type ?? "",
   photo: property?.photo ?? "",
   documents: property?.documents ?? [],
   details: property?.details ?? [],
@@ -185,10 +185,9 @@ const PropertyForRentOwnerForm: React.FC<PropertyForRentOwnerFormProps> = ({prop
   const { data: data, loading, error } = useFetchAuthData<User[]>(
     `${import.meta.env.VITE_API_URL}/api/users`
   )
-  const agents: string[] = data?.map((user) => {
-    return user.name 
-    
-  }) || ["", ""];  // Default array in case data is empty or undefined
+  const agents  =data?.map((user)=>{
+    return  { id: user.id.toString(), name: user.name }
+      }); // Default array in case data is empty or undefined
    // Default array in case data is empty or undefined
    const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   
@@ -196,14 +195,14 @@ const PropertyForRentOwnerForm: React.FC<PropertyForRentOwnerFormProps> = ({prop
     const handleLocationChange = (lat: number, lng: number) => {
       setLocation({ lat, lng });
     };
-  const TypeofProperty = form.watch("type_of_property")
+
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-properties';
  const onSubmit = property
-       ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
+       ? useFormUpdate<typeof FormSchema>(apiUrl,property?.id)  // Update if client exists
        : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
    
 
-
+       const TypeofProperty = form.watch("type_of_property")
  const nearWater = form.watch("near_water")
  const nearRoad = form.watch("on_main_road")
  const handleAddLocative = () => {
@@ -468,7 +467,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="on_the_corner" render={({ field }) => (
     <FormItem>
       <FormLabel>A l'angle ?</FormLabel>
-      <Select   {...field} onValueChange={field.onChange}>
+      <Select   onValueChange={(value) => form.setValue('on_the_corner', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -487,7 +486,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="near_water" render={({ field }) => (
     <FormItem>
       <FormLabel>Near the water?</FormLabel>
-      <Select  {...field} onValueChange={field.onChange}>
+      <Select  onValueChange={(value) => form.setValue('near_water', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -502,7 +501,7 @@ const handleRemoveLocative = (index: number) => {
     </FormItem>
   )} />
   {/* Surface Area Field */}
- {nearWater == "yes" && <FormField control={form.control} name="distance_from_water" render={({ field }) => (
+ {nearWater && <FormField control={form.control} name="distance_from_water" render={({ field }) => (
     <FormItem>
       <FormLabel>Distance from water (m) ?</FormLabel>
       <FormControl><Input  placeholder="0 meters" {...field} /></FormControl>
@@ -557,7 +556,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="dry_land" render={({ field }) => (
     <FormItem>
       <FormLabel>Dry land?</FormLabel>
-      <Select {...field} onValueChange={field.onChange}>
+      <Select onValueChange={(value) => form.setValue('dry_land', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -576,7 +575,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="low_depth" render={({ field }) => (
     <FormItem>
       <FormLabel>Low depth?</FormLabel>
-      <Select {...field} onValueChange={field.onChange}>
+      <Select onValueChange={(value) => form.setValue('low_depth', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -595,7 +594,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="school_nearby" render={({ field }) => (
     <FormItem>
       <FormLabel>School nearby?</FormLabel>
-      <Select {...field} onValueChange={field.onChange}>
+      <Select onValueChange={(value) => form.setValue('school_nearby', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -614,7 +613,7 @@ const handleRemoveLocative = (index: number) => {
   <FormField control={form.control} name="market_nearby" render={({ field }) => (
     <FormItem>
       <FormLabel>Market nearby?</FormLabel>
-      <Select {...field} onValueChange={field.onChange}>
+      <Select  onValueChange={(value) => form.setValue('market_nearby', value === 'yes')}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -633,13 +632,17 @@ const handleRemoveLocative = (index: number) => {
   ASSIGN PROPERTY TO AGENTS
 </h2>
 
-  <Selection
-    list={agents}
-    selectedList={form.watch("assigned_agents") || []}
-    onChange={(selected) => {
-      form.setValue("assigned_agents", selected);
-    }}
-  />
+<Selection
+              list={agents
+                ||[]
+              }
+              selectedList={form.watch("assigned_agents") || []}
+              onChange={(selected) => {
+                form.setValue("assigned_agents", selected);
+              }}
+            />
+
+
 
                   <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
                   ADDING FILES

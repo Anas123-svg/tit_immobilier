@@ -30,7 +30,7 @@ import {
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import MapComponent from "@/components/admin-panel/sidebar/extra/extra/GeolocationGoods/MapComponent";
-import Selection from "@/components/common";
+import Selection from "@/components/common/selection2";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Import toastify CSS
 import { useFormSubmit } from "@/hooks/useFormSubmit";
@@ -39,6 +39,7 @@ import useFetchData from "@/hooks/useFetchData";
 import { Good, Owner, User } from "@/types/DataProps";
 import Stepper from "@/components/admin-panel/UI-components/Stepper";
 import useFetchAuthData from "@/hooks/useFetchAuthData";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
 // Define validation schema
 const locativeSchema = z.object({
   door_number: z.string().optional(),
@@ -49,6 +50,7 @@ const locativeSchema = z.object({
   area: z.number().optional(),
 });
 const FormSchema = z.object({
+  id:z.number().optional(),
   owner_id: z.number().min(1, "Owner ID is required"),
   owner: z.string().optional(),
   property_name: z.string(),
@@ -58,11 +60,11 @@ const FormSchema = z.object({
   market_value: z.number().optional(),
   cie_identifier_number: z.string().optional(),
   sodeci_identifier_number: z.string().optional(),
-  boundary_marking_done: z.boolean().optional(),
+  boundary_marking_done: z.string().optional(),
   domain_type: z.string().optional(),
-  has_title_deed: z.boolean().optional(),
-  serviced: z.boolean().optional(),
-  approved: z.boolean().optional(),
+  has_title_deed: z.string().optional(),
+  serviced: z.string().optional(),
+  approved: z.string().optional(),
   description: z.string().optional(),
   city: z.string().optional(),
   municipality: z.string().optional(),
@@ -75,16 +77,16 @@ const FormSchema = z.object({
   number_of_levels: z.number().optional(),
   garden: z.boolean().optional(),
   pool: z.boolean().optional(),
-  on_the_corner: z.string().optional(),
-  near_water: z.string().optional(),
+  on_the_corner: z.boolean().optional(),
+  near_water: z.boolean().optional(),
   feet_in_water: z.boolean().optional(),
   distance_from_water: z.string().optional(),
   on_main_road: z.boolean().optional(),
   distance_from_road: z.string().optional(),
-  dry_land: z.string().optional(),
-  low_depth: z.string().optional(),
-  school_nearby: z.string().optional(),
-  market_nearby: z.string().optional(),
+  dry_land: z.boolean().optional(),
+  low_depth: z.boolean().optional(),
+  school_nearby: z.boolean().optional(),
+  market_nearby: z.boolean().optional(),
   assigned_agents: z.array(z.string()).optional(),
   photo: z.string().optional(),
   documents: z.array(z.string()).optional(),
@@ -100,8 +102,8 @@ const PropertyForSaleOwnerForm: React.FC<PropertyForSaleOwnerFormProps> = ({prop
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-  
-      owner: "",
+      id:property?.id,
+      owner: property?.owner,
       // property_name: "Seaside Villa",
       // type_of_property: "Residential",
       // number_of_floors: 3,
@@ -195,11 +197,11 @@ area: property?.area ?? 0,
 market_value: property?.market_value ?? 0,
 cie_identifier_number: property?.cie_identifier_number ?? "",
 sodeci_identifier_number: property?.sodeci_identifier_number ?? "",
-boundary_marking_done: property?.boundary_marking_done ?? false,
+boundary_marking_done: property?.boundary_marking_done ?? "",
 domain_type: property?.domain_type ?? "",
-has_title_deed: property?.has_title_deed ?? false,
-serviced: property?.serviced ?? false,
-approved: property?.approved ?? false,
+has_title_deed: property?.has_title_deed ?? "",
+serviced: property?.serviced ?? "",
+approved: property?.approved ?? "",
 description: property?.description ?? "",
 city: property?.city ?? "",
 municipality: property?.municipality ?? "",
@@ -210,18 +212,18 @@ height: property?.height ?? 0,
 altitude: property?.altitude ?? 0,
 number_of_parking_spaces: property?.number_of_parking_spaces ?? 0,
 number_of_levels: property?.number_of_levels ?? 0,
-garden: property?.garden ?? false,
-pool: property?.pool ?? false,
-on_the_corner: property?.on_the_corner ??  "",
-near_water: property?.near_water ??  "",
-feet_in_water: property?.feet_in_water ?? false,
+garden: Boolean(property?.garden) ?? false,
+pool: Boolean(property?.pool) ?? false,
+on_the_corner: Boolean(property?.on_the_corner) ?? false,
+near_water: Boolean(property?.near_water) ?? false,
+feet_in_water: Boolean(property?.feet_in_water) ?? false,
 distance_from_water: property?.distance_from_water ?? "",
-on_main_road: property?.on_main_road ??  false,
+on_main_road: Boolean(property?.on_main_road) ??  false,
 distance_from_road: property?.distance_from_road ?? "",
-dry_land: property?.dry_land ??  "",
-low_depth: property?.low_depth ??  "",
-school_nearby: property?.school_nearby ??  "",
-market_nearby: property?.market_nearby ??  "",
+dry_land: Boolean(property?.dry_land) ?? false,
+low_depth: Boolean(property?.low_depth) ?? false,
+school_nearby: Boolean(property?.school_nearby) ?? false,
+market_nearby: Boolean(property?.market_nearby) ?? false,
 assigned_agents: property?.assigned_agents ?? [],
 photo: property?.photo ?? "",
 documents: property?.documents ?? [],
@@ -240,14 +242,17 @@ details: property?.details ?? [],
   const { data: data, loading, error } = useFetchAuthData<User[]>(
     `${import.meta.env.VITE_API_URL}/api/users`
   )
-  const agents: string[] = data?.map((user) => {
-    return user.name 
-    
-  }) || ["", ""];  // Default array in case data is empty or undefined
+  const agents  =data?.map((user)=>{
+    return  { id: user.id.toString(), name: user.name }
+      }); // Default array in case data is empty or undefined
   
   const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-sale-properties';
-  const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl,form.reset);  // Use custom hook
 
+
+  const onSubmit = property      ? useFormUpdate<typeof FormSchema>(apiUrl,property?.id)  // Update if client exists
+         : useFormSubmit<typeof FormSchema>(apiUrl); // Create if no client
+     
+  
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   // Function to handle location change from the map
@@ -364,7 +369,7 @@ details: property?.details ?? [],
   <FormField control={form.control} name="boundary_marking_done" render={({ field }) => (
     <FormItem>
       <FormLabel>Boundary Marking Done?</FormLabel>
-      <Select  onValueChange={(value) => form.setValue('boundary_marking_done', value === 'yes')}>
+      <Select  onValueChange={(value) => form.setValue('boundary_marking_done', value)}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -383,7 +388,7 @@ details: property?.details ?? [],
   <FormField control={form.control} name="serviced" render={({ field }) => (
     <FormItem>
       <FormLabel>Serviced?</FormLabel>
-      <Select  onValueChange={(value) => form.setValue('serviced', value === 'yes')}>
+      <Select  onValueChange={(value) => form.setValue('serviced', value)}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -421,7 +426,7 @@ details: property?.details ?? [],
   <FormField control={form.control} name="approved" render={({ field }) => (
     <FormItem>
       <FormLabel>Approved?</FormLabel>
-      <Select onValueChange={(value) => form.setValue('approved', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('approved', value )}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -440,7 +445,7 @@ details: property?.details ?? [],
   <FormField control={form.control} name="has_title_deed" render={({ field }) => (
     <FormItem>
       <FormLabel>Does he have a title deed? *</FormLabel>
-      <Select onValueChange={(value) => form.setValue('has_title_deed', value === 'yes')}>
+      <Select onValueChange={(value) => form.setValue('has_title_deed', value )}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -590,7 +595,7 @@ details: property?.details ?? [],
     <FormItem>
       <FormLabel>A l'angle?</FormLabel>
       <FormControl>
-      <Select {...field} onValueChange={(value) => form.setValue('on_the_corner', value)}>
+      <Select  onValueChange={(value) => form.setValue('on_the_corner', value === 'yes')}>
           <SelectTrigger>
             <SelectValue placeholder="NON" />
           </SelectTrigger>
@@ -608,7 +613,7 @@ details: property?.details ?? [],
     <FormItem>
       <FormLabel>Near the Water?</FormLabel>
       <FormControl>
-      <Select {...field}  onValueChange={(value) => form.setValue('near_water', value)}>
+      <Select   onValueChange={(value) => form.setValue('near_water', value === 'yes')}>
           <SelectTrigger>
             <SelectValue placeholder="NON" />
           </SelectTrigger>
@@ -674,7 +679,7 @@ details: property?.details ?? [],
     <FormItem>
       <FormLabel>Dry Land?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('dry_land', value)}>
+      <Select onValueChange={(value) => form.setValue('dry_land', value === 'yes')}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -693,7 +698,7 @@ details: property?.details ?? [],
     <FormItem>
       <FormLabel>Low Depth?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('low_depth', value)}>
+      <Select onValueChange={(value) => form.setValue('low_depth', value === 'yes')}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -712,7 +717,7 @@ details: property?.details ?? [],
     <FormItem>
       <FormLabel>School Nearby?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('school_nearby', value)}>
+      <Select onValueChange={(value) => form.setValue('school_nearby', value === 'yes')}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -731,7 +736,7 @@ details: property?.details ?? [],
     <FormItem>
       <FormLabel>Market Nearby?</FormLabel>
       <FormControl>
-      <Select onValueChange={(value) => form.setValue('market_nearby', value)}>
+      <Select onValueChange={(value) => form.setValue('market_nearby', value === 'yes')}>
 
           <SelectTrigger>
             <SelectValue placeholder="NON" />
@@ -750,13 +755,16 @@ details: property?.details ?? [],
   ASSIGN PROPERTY TO AGENTS
 </h2>
 
-  <Selection
-    list={agents}
-    selectedList={form.watch("assigned_agents") || []}
-    onChange={(selected) => {
-      form.setValue("assigned_agents", selected);
-    }}
-  />
+<Selection
+              list={agents
+                ||[]
+              }
+              selectedList={form.watch("assigned_agents") || []}
+              onChange={(selected) => {
+                form.setValue("assigned_agents", selected);
+              }}
+            />
+
 
                   <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
                   ADDING FILES

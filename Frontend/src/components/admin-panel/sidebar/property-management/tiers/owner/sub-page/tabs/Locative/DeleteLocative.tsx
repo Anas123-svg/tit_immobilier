@@ -1,21 +1,21 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";import { useDeleteData } from "@/hooks/useDeleteData";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { Locative } from "@/types/DataProps";
 import { Trash2 } from "lucide-react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
-interface DeleteMandateDialogProps {
-  locativeId: number;
+interface DeleteLocativeDialogProps {
+  locative: Locative;
 
 }
 
-const DeleteMandateDialog: React.FC<DeleteMandateDialogProps> = ({ locativeId }) => {
+const DeleteLocativeDialog: React.FC<DeleteLocativeDialogProps> = ({ locative }) => {
   const [openDialog, setOpenDialog] = useState(false);
  const { onDelete,loading:deleteLoading } = useDeleteData(); 
   const handleDelete = () => {
     const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
  
-     onDelete(apiUrl,locativeId);
-   
 
     setOpenDialog(false);
   };
@@ -35,7 +35,7 @@ const DeleteMandateDialog: React.FC<DeleteMandateDialogProps> = ({ locativeId })
         <AlertDialogHeader>
           <AlertDialogTitle className="text-red-500">Do you really want to delete this mandate?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action will permanently delete the mandate with ID: {locativeId}.
+            This action will permanently delete the mandate with ID: {locative.door_number}.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -49,4 +49,4 @@ const DeleteMandateDialog: React.FC<DeleteMandateDialogProps> = ({ locativeId })
   );
 };
 
-export default DeleteMandateDialog;
+export default DeleteLocativeDialog;

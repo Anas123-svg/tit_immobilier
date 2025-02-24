@@ -10,11 +10,15 @@ import { Good } from "@/types/DataProps";
 
 export function PropertyDetailPage() {
   const [activeTab, setActiveTab] = useState("good");
-  const {id} =  useParams()
-
+  const {id,sale_type} =  useParams()
+ 
   const { data, loading, error } = useFetchData<Good>(
-    `${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${id}`
+    // Ensure data exists before attempting to use it
+    sale_type
+      ? `${import.meta.env.VITE_API_URL}/api/owner-${sale_type}-properties/${id}`
+      : "" // You can return an empty string or a fallback URL if no sale_type is available
   );
+
   const tabs = [
     {
       name: "good",
