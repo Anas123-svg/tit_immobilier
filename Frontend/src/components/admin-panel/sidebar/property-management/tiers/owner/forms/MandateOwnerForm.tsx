@@ -30,6 +30,7 @@ import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/O
 import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
 import useFetchData from "@/hooks/useFetchData";
 import { OwnerSaleProperty } from "@/types/DataProps";
+import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
   const FormSchema = z.object({
     owner_id: z.number(),
     type_of_mandate: z.string().optional(),
@@ -40,9 +41,11 @@ import { OwnerSaleProperty } from "@/types/DataProps";
     tax_payable: z.string().optional(),
     billing_type: z.string().optional(),
     commission: z.number().optional(),
+    sale_amount: z.number().optional(),
+    commission_amount: z.number().optional(),
     commission_percentage: z.number().optional(),
-    deduct_commission: z.boolean().optional(),
-    vat_on_commission: z.boolean().optional(),
+    deduct_commission: z.string().optional(),
+    vat_on_commission: z.string().optional(),
     date_of_signature: z.string().optional(),
     debut_date: z.string().optional(),
     end_date: z.string().optional(),
@@ -58,21 +61,20 @@ import { OwnerSaleProperty } from "@/types/DataProps";
         // owner_id: 1,
         // type_of_mandate: "Exclusive",
         // owner_name: "John Doe",
-        type_of_property: "",
-        neighborhood: "",
-        tax_payable: "Owner",
+        // type_of_property: "",
+        // neighborhood: "",
+        // tax_payable: "Owner",
         // billing_type: "Monthly",
         // commission: 10,
-        deduct_commission: false,
-        vat_on_commission: false,
+   
         // date_of_signature: "2025-01-01",
         // debut_date: "2025-01-01",
         // end_date: "2025-12-31",
-        digital_signature_of_the_mandate: false,
-        tacit_renewal: false,
+        // digital_signature_of_the_mandate: false,
+        // tacit_renewal: false,
 
 
-        owner_name: "",
+        // owner_name: "",
        
       },
     });
@@ -84,7 +86,8 @@ import { OwnerSaleProperty } from "@/types/DataProps";
   const SaleProperty = form.watch("very_concerned")
     const BillingType = form.watch("billing_type")
     const MandateType = form.watch("type_of_mandate")
-
+    const CommisionAmount = form.watch("commission_amount")
+    
 
 
   const { data, loading, error } = useFetchData<OwnerSaleProperty>(
@@ -96,7 +99,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
         <DialogContent className="w-full max-w-[95vw] lg:max-w-[1000px] h-auto max-h-[95vh] overflow-y-auto p-6">
           <DialogTitle className="text-lg md:text-xl">Add a Mandate</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col">
            {/* Property Details Section */}
 <h2 className="bg-orange-500 text-white text-center p-2 text-sm md:text-base">
   DETAILS ON THE PROPERTY CONCERNED
@@ -115,7 +118,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Sale">Sale</SelectItem>
-              <SelectItem value="Location">Location</SelectItem>
+              <SelectItem value="Rental">Rental</SelectItem>
             </SelectContent>
           </Select>
         </FormControl>
@@ -137,9 +140,13 @@ import { OwnerSaleProperty } from "@/types/DataProps";
       </FormItem>
     )}
   /> */}
+{
+MandateType =="Rental"?  <OwnerRentPropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/> :
+
+
 
   <OwnerSalePropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/>
- 
+}
   <FormField
   control={form.control}
   name="type_of_property"
@@ -213,7 +220,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
 </h2>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   
-{ MandateType === "Location" &&
+{ MandateType === "Rental" &&
  
  <FormField
     control={form.control}
@@ -290,24 +297,46 @@ import { OwnerSaleProperty } from "@/types/DataProps";
     )}
   />
   }
-  {/* Deduct Commission Field */}
+{
+  MandateType == "Sale" &&
+
+<FormField
+    control={form.control}
+    name="commission_amount"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>  Commission Amount*</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseFloat(e.target.value))} placeholder="Enter Commission %" />
+    </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+  }{/* Deduct Commission Field */}
   <FormField
     control={form.control}
     name="deduct_commission"
     render={({ field }) => (
       <FormItem>
         <FormLabel>Deduct Commission? *</FormLabel>
-        <Select onValueChange={(value) => form.setValue('deduct_commission', value === 'Yes')}>
+        <Select onValueChange={(value) => form.setValue('deduct_commission', value)}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select Deduct Option" />
             </SelectTrigger>
           </FormControl>
           <SelectContent>
-            <SelectItem value="Yes">Yes</SelectItem>
-            <SelectItem value="No">No</SelectItem>
-          </SelectContent>
-        </Select>
+{MandateType =="Sale"?<>
+          <SelectItem value="WithdrawOnFirstPayment">COMMISSION WITHDRAWN ON FIRST PAYMENT</SelectItem>
+          <SelectItem value="WithdrawInProRata">COMMISSION WITHDRAWN IN PRO RATA OF PAYMENTS</SelectItem>
+          </>:
+
+      <>    <SelectItem value="NoOverCommission">NO OVER COMMISSION</SelectItem>
+        <SelectItem value="AfterAllTaxes">AFTER ALL TAXES</SelectItem>
+        <SelectItem value="OnTotalRents">ON TOTAL RENTS</SelectItem>
+        </>}   </SelectContent>
+              </Select>
         <FormMessage />
       </FormItem>
     )}
@@ -319,15 +348,15 @@ import { OwnerSaleProperty } from "@/types/DataProps";
   render={({ field }) => (
     <FormItem className="col-span-2">
       <FormLabel>VAT on Commission? *</FormLabel>
-      <Select onValueChange={(value) => form.setValue('vat_on_commission', value === 'Yes')}>
+      <Select onValueChange={(value) => form.setValue('vat_on_commission', value)}>
         <FormControl>
           <SelectTrigger>
             <SelectValue placeholder="Select VAT on Commission" />
           </SelectTrigger>
         </FormControl>
         <SelectContent>
-          <SelectItem value="Yes">Yes</SelectItem>
-          <SelectItem value="No">No</SelectItem>
+        <SelectItem value="DeductAtAgency">DEDUCT AT AGENCY</SelectItem>
+        <SelectItem value="DeductFromOwner">DEDUCT FROM OWNER</SelectItem>
         </SelectContent>
       </Select>
       <FormMessage />
@@ -388,7 +417,23 @@ import { OwnerSaleProperty } from "@/types/DataProps";
       </FormItem>
     )}
   />
+{
+  MandateType == "Sale" &&
 
+<FormField
+    control={form.control}
+    name="sale_amount"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>  Sale Amount*</FormLabel>
+        <FormControl>
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseFloat(e.target.value))} placeholder="Enter Commission %" />
+    </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+  }
   {/* Digital Signature of the Mandate */}
   <FormField
     control={form.control}
@@ -437,8 +482,16 @@ import { OwnerSaleProperty } from "@/types/DataProps";
     )}
   />
 </div>
-  
-              <Button type="submit" className="w-full my-2 bg-primary">
+{MandateType =="Sale"&&
+
+<div className=" font-medium w-1/2 self-end ">
+TOTAL AMOUNT OF FEE
+
+ <div className="p-2 py-10 bg-gray-300 hover:text-secondary">
+{CommisionAmount}
+ </div>
+ </div>
+             }             <Button type="submit" className="w-full my-2 bg-primary">
                 Submit
               </Button>
             </form>
