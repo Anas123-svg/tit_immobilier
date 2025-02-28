@@ -240,15 +240,19 @@ const PrivateTenantForm: React.FC<PrivateTenantFormProps> = ({ tenant }) => {
       render={({ field }) => (
         <FormItem>
           <FormLabel>Gender *</FormLabel>
-          <Select onValueChange={field.onChange}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Gender" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Masculin">Masculin</SelectItem>
-              <SelectItem value="Feminin">Feminin</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select {...field} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Gender Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Others">Others</SelectItem>
+                      </SelectContent>
+                    </Select>
+                      
           <FormMessage className="text-xs" />
         </FormItem>
       )}

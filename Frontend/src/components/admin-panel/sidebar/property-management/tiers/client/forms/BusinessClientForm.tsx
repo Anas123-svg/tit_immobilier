@@ -99,34 +99,35 @@ const handleConfirmSubmit = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id:client?.id,
-      business_company_name: client?.business_company_name,
-      business_taxpayer_identification_number: client?.business_taxpayer_identification_number,
-      business_business_registration_number: client?.business_business_registration_number,
-      business_industry_sector: client?.business_industry_sector,
-      business_office_phone_number: client?.business_office_phone_number,
-      business_whatsapp_contact: client?.business_whatsapp_contact,
-      business_email: client?.business_email,
-      business_head_office: client?.business_head_office,
-      business_mail_box: client?.business_mail_box,
-      business_capital: client?.business_capital,
-      business_manager_pronouns_title:client?.business_manager_pronouns_title,
-      business_manager_name: client?.business_manager_name,
-      business_manager_gender: client?.business_manager_gender,
-      business_manager_contact: client?.business_manager_contact,
-      business_manager_date_of_birth: client?.business_manager_date_of_birth,
-      business_manager_place_of_birth: client?.business_manager_place_of_birth,
-      business_manager_address: client?.business_manager_address,
-      business_manager_job_position: client?.business_manager_job_position,
-      business_manager_type_of_document: client?.business_manager_type_of_document,
-      business_manager_document_number:client?.business_manager_document_number,
-      business_manager_date_of_issue: client?.business_manager_date_of_issue,
-      business_manager_signatory_authority: client?.business_manager_signatory_authority,
-      business_manager_expiry_date: client?.business_manager_expiry_date,
-      business_photo:client?.business_photo ?? pfp,
-      business_documents: client?.business_documents,
-      is_business_client: true,
-    },
+      id: client?.id || 0, // number defaults to 0
+      business_company_name: client?.business_company_name || "", // string defaults to ""
+      business_taxpayer_identification_number: client?.business_taxpayer_identification_number || "", // string defaults to ""
+      business_business_registration_number: client?.business_business_registration_number || "", // string defaults to ""
+      business_industry_sector: client?.business_industry_sector || "", // string defaults to ""
+      business_office_phone_number: client?.business_office_phone_number || "", // string defaults to ""
+      business_whatsapp_contact: client?.business_whatsapp_contact || "", // string defaults to ""
+      business_email: client?.business_email || "", // string defaults to ""
+      business_head_office: client?.business_head_office || "", // string defaults to ""
+      business_mail_box: client?.business_mail_box || "", // string defaults to ""
+      business_capital: client?.business_capital || 0, // number defaults to 0
+      business_manager_pronouns_title: client?.business_manager_pronouns_title || "", // string defaults to ""
+      business_manager_name: client?.business_manager_name || "", // string defaults to ""
+      business_manager_gender: client?.business_manager_gender || "", // string defaults to ""
+      business_manager_contact: client?.business_manager_contact || "", // string defaults to ""
+      business_manager_date_of_birth: client?.business_manager_date_of_birth || "", // string defaults to ""
+      business_manager_place_of_birth: client?.business_manager_place_of_birth || "", // string defaults to ""
+      business_manager_address: client?.business_manager_address || "", // string defaults to ""
+      business_manager_job_position: client?.business_manager_job_position || "", // string defaults to ""
+      business_manager_type_of_document: client?.business_manager_type_of_document || "", // string defaults to ""
+      business_manager_document_number: client?.business_manager_document_number || "", // string defaults to ""
+      business_manager_date_of_issue: client?.business_manager_date_of_issue || "", // string defaults to ""
+      business_manager_signatory_authority: client?.business_manager_signatory_authority || "", // string defaults to ""
+      business_manager_expiry_date: client?.business_manager_expiry_date || "", // string defaults to ""
+      business_photo: client?.business_photo ?? pfp , // string defaults to ""
+      business_documents: client?.business_documents || [], // array defaults to []
+      is_business_client: true, // boolean defaults to true
+    }
+    
   });
   const apiUrl = import.meta.env.VITE_API_URL + '/api/clients';
   const onSubmit = client
@@ -351,7 +352,19 @@ const handleConfirmSubmit = () => {
                   <FormItem>
                     <FormLabel>Gender</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Gender" disabled />
+                    <Select {...field} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Gender Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Others">Others</SelectItem>
+                      </SelectContent>
+                    </Select>
+                      
                     </FormControl>
                     <FormMessage />
                   </FormItem>

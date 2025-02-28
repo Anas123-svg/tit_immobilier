@@ -78,9 +78,7 @@ const BusinessClientCard = ({ client }: { client: Client }) => {
                               className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
                             >
                               {({ loading }) =>
-                                loading ? (
-                                  "Preparing PDF..."
-                                ) : (
+                                 (
                                   <Printer size={25} className="text-yellow-700" />
                                 )
                               }

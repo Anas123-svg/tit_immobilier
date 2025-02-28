@@ -140,13 +140,14 @@ import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-component
       </FormItem>
     )}
   /> */}
-{
+{/* {
 MandateType =="Rental"?  <OwnerRentPropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/> :
 
 
 
   <OwnerSalePropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/>
-}
+} */}
+<OwnerRentPropertyCombobox name="very_concerned" id={OwnerId} control={form.control} formState={form.formState}/> 
   <FormField
   control={form.control}
   name="type_of_property"

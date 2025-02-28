@@ -1,6 +1,14 @@
 import { Tenant } from "@/types/DataProps";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
+import  ReactPDF  from "@react-pdf/renderer";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import BusinessTenantForm from "../../forms/BusinessTenantForm";
+import { Link } from "react-router-dom";
+import { TenantPdfComponent } from "@/components/common/assessmentPDF/TenantPdf";
+import { Eye, Printer, Trash } from "lucide-react";
+import { useDeleteData } from "@/hooks/useDeleteData";
+import PrivateTenantForm from "../../forms/PrivateTenantForm";
 
 
 interface PersonalDetailsProps {
@@ -14,6 +22,22 @@ const PersonalDetails = ({ tenant, onFileChange }: PersonalDetailsProps) => {
   // Function to handle the click event for the file input
   const handleFileClick = () => {
     fileInputRef.current?.click();
+  };
+  const [openDialog, setOpenDialog] = useState(false); // For confirmation dialog
+  const { onDelete, loading } = useDeleteData(); // Access both the onDelete function and loading state
+
+  // Handle delete confirmation
+  const handleDeleteClick = () => {
+    setOpenDialog(true); // Show the confirmation dialog
+  };
+  const apiUrl = import.meta.env.VITE_API_URL + '/api/tenants';
+  const handleConfirmDelete = () => {
+    onDelete(apiUrl, tenant?.id ||-1); // Call the delete function
+    setOpenDialog(false); // Close the dialog after confirming
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDialog(false); // Close the dialog without deleting
   };
 
   return (
@@ -135,10 +159,56 @@ const PersonalDetails = ({ tenant, onFileChange }: PersonalDetailsProps) => {
         />
       </div>
 
-      {/* Buttons */}
-      <div className="flex justify-end space-x-4 mt-6">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Modify</button>
-        <button className="px-4 py-2 bg-gray-500 text-white rounded-md">Print</button>
+      {/* Action Buttons */}
+      <div className="flex justify-end space-x-4 mt-4">
+   
+                {
+
+                  tenant?.is_business_tenant ==true ?<BusinessTenantForm tenant={tenant}/>:<PrivateTenantForm  tenant={tenant}/>
+                }     
+                         {/* Delete Tenant Button */}
+     
+                     {/* <ReactPDF.PDFDownloadLink
+                                               document={<TenantPdfComponent tenant={tenant} />}
+                                               fileName={tenant?.is_business_tenant?`${tenant?.business_company_name}.pdf`:`${tenant?.private_name}.pdf`}
+                                               className="p-2 bg-yellow-100 rounded-full shadow hover:bg-yellow-200"
+                                             >
+                                               {({ loading }) =>
+                                                 loading ? (
+                                                   "Preparing PDF..."
+                                                 ) : (
+                                                   <Printer size={25} className="text-yellow-700" />
+                                                 )
+                                               }
+                                             </ReactPDF.PDFDownloadLink> */}
+                       <button
+        className="p-2 bg-red-100 rounded-full shadow hover:bg-red-200"
+        onClick={handleDeleteClick}
+     
+      >
+        <Trash size={25} className="text-red-700" />
+      </button>
+
+      {/* ShadCN AlertDialog for Delete Confirmation */}
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogTrigger asChild />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete <span className="text-red-600">{tenant?.business_company_name}</span> this tenant? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction className="bg-red-600 hover:bg-red-900" onClick={handleConfirmDelete}  disabled={loading}>
+            {loading ? 'Deleting...' : 'Confirm'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       </div>
     </div>
   );

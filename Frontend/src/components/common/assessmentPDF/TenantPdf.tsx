@@ -4,7 +4,7 @@ import { Tenant } from "@/types/DataProps"; // Assuming your Tenant type is in D
 import pfp from "@/assets/avatar-default.png";
 
 interface Props {
-  tenant: Tenant;
+  tenant?: Tenant;
 }
 
 const styles = StyleSheet.create({
@@ -95,7 +95,7 @@ export const TenantPdfComponent = ({ tenant }: Props) => (
     <Page style={styles.page}>
       <View style={styles.header}>
         <Image
-          src={(tenant.is_business_tenant ? tenant.business_photo : tenant.private_photo) || pfp}
+          src={(tenant?.is_business_tenant ? tenant?.business_photo : tenant?.private_photo) || pfp}
           style={styles.logo}
         />
         <Text style={styles.title}>TENANT INFORMATION</Text>
@@ -104,30 +104,30 @@ export const TenantPdfComponent = ({ tenant }: Props) => (
       {/* Identification Section */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>I - TENANT IDENTIFICATION</Text>
-        {tenant.is_business_tenant ? (
+        {tenant?.is_business_tenant ? (
           <>
-            {renderField("Company Name", tenant.business_company_name)}
-            {renderField("Business Registration Number", tenant.business_business_registration_number)}
-            {renderField("Industry Sector", tenant.business_industry_sector)}
-            {renderField("Taxpayer Account Number", tenant.business_taxpayer_account_number)}
-            {renderField("Manager Name", tenant.business_manager_name)}
-            {renderField("Manager Gender", tenant.business_manager_gender)}
-            {renderField("Manager Date of Birth", tenant.business_manager_date_of_birth)}
-            {renderField("Manager Place of Birth", tenant.business_manager_place_of_birth)}
-            {renderField("Manager Document Number", tenant.business_manager_document_number)}
-            {renderField("Manager Expiry Date", tenant.business_manager_expiry_date)}
+            {renderField("Company Name", tenant?.business_company_name)}
+            {renderField("Business Registration Number", tenant?.business_business_registration_number)}
+            {renderField("Industry Sector", tenant?.business_industry_sector)}
+            {renderField("Taxpayer Account Number", tenant?.business_taxpayer_account_number)}
+            {renderField("Manager Name", tenant?.business_manager_name)}
+            {renderField("Manager Gender", tenant?.business_manager_gender)}
+            {renderField("Manager Date of Birth", tenant?.business_manager_date_of_birth)}
+            {renderField("Manager Place of Birth", tenant?.business_manager_place_of_birth)}
+            {renderField("Manager Document Number", tenant?.business_manager_document_number)}
+            {renderField("Manager Expiry Date", tenant?.business_manager_expiry_date)}
           </>
         ) : (
           <>
-            {renderField("Name", `${tenant.private_name} ${tenant.surname}`)}
-            {renderField("Gender", tenant.private_gender)}
-            {renderField("Date of Birth", tenant.private_birth_date)}
-            {renderField("Place of Birth", tenant.private_place_of_birth)}
-            {renderField("Nationality", tenant.private_nationality)}
-            {renderField("Document Type", tenant.private_document_type)}
-            {renderField("Document Number", tenant.private_document_number)}
-            {renderField("Expiry Date", tenant.private_expiry_date)}
-            {renderField("Occupation", tenant.private_occupation)}
+            {renderField("Name", `${tenant?.private_name} ${tenant?.surname}`)}
+            {renderField("Gender", tenant?.private_gender)}
+            {renderField("Date of Birth", tenant?.private_birth_date)}
+            {renderField("Place of Birth", tenant?.private_place_of_birth)}
+            {renderField("Nationality", tenant?.private_nationality)}
+            {renderField("Document Type", tenant?.private_document_type)}
+            {renderField("Document Number", tenant?.private_document_number)}
+            {renderField("Expiry Date", tenant?.private_expiry_date)}
+            {renderField("Occupation", tenant?.private_occupation)}
           </>
         )}
       </View>
@@ -135,31 +135,31 @@ export const TenantPdfComponent = ({ tenant }: Props) => (
       {/* Contact Information Section */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>II - CONTACT INFORMATION</Text>
-        {tenant.is_business_tenant ? (
+        {tenant?.is_business_tenant ? (
           <>
-            {renderField("Office Phone", tenant.business_office_phone_number)}
-            {renderField("WhatsApp Contact", tenant.business_whatsapp_contact)}
-            {renderField("Email", tenant.business_email)}
-            {renderField("Head Office Address", tenant.business_head_office)}
+            {renderField("Office Phone", tenant?.business_office_phone_number)}
+            {renderField("WhatsApp Contact", tenant?.business_whatsapp_contact)}
+            {renderField("Email", tenant?.business_email)}
+            {renderField("Head Office Address", tenant?.business_head_office)}
           </>
         ) : (
           <>
-            {renderField("Contact Number", tenant.private_contact)}
-            {renderField("WhatsApp", tenant.private_whatsapp_contact)}
-            {renderField("Email", tenant.private_email)}
-            {renderField("Mail Box", tenant.private_mail_box)}
-            {renderField("Marital Status", tenant.private_marital_status)}
+            {renderField("Contact Number", tenant?.private_contact)}
+            {renderField("WhatsApp", tenant?.private_whatsapp_contact)}
+            {renderField("Email", tenant?.private_email)}
+            {renderField("Mail Box", tenant?.private_mail_box)}
+            {renderField("Marital Status", tenant?.private_marital_status)}
           </>
         )}
       </View>
 
       {/* Emergency Contact Section */}
-      {!tenant.is_business_tenant && (
+      {!tenant?.is_business_tenant && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>III - EMERGENCY CONTACT INFORMATION</Text>
-          {renderField("Emergency Contact Name", tenant.private_emergency_contact_name)}
-          {renderField("Emergency Contact Number", tenant.private_emergency_contact)}
-          {renderField("Relationship", tenant.private_emergency_contact_relation)}
+          {renderField("Emergency Contact Name", tenant?.private_emergency_contact_name)}
+          {renderField("Emergency Contact Number", tenant?.private_emergency_contact)}
+          {renderField("Relationship", tenant?.private_emergency_contact_relation)}
         </View>
       )}
     </Page>

@@ -50,7 +50,7 @@ const ListOfClientsSection: React.FC<ListOfClientsSectionProps> = () => {
         <RefreshCw/>
       </button></div>
     {/* Loading State */}
-    {loading && <p className="text-center text-gray-500">Loading tenants...</p>}
+    {loading && <p className="text-center text-gray-500">Loading clients...</p>}
 
 {/* Error State */}
 {error && <p className="text-center text-red-500">Error fetching data: {error}</p>}
