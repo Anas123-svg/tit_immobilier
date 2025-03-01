@@ -274,7 +274,7 @@ MandateType =="Rental"?  <OwnerRentPropertyCombobox name="very_concerned" id={Ow
     name="commission"
     render={({ field }) => (
       <FormItem>
-        <FormLabel>  Commission `(XOF)` *</FormLabel>
+        <FormLabel>  Commission (XOF) *</FormLabel>
         <FormControl>
        <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="Enter Commission (XOF)" />
         

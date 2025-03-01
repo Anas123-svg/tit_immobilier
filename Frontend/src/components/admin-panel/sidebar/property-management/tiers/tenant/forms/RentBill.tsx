@@ -27,7 +27,10 @@ type RentFormData = z.infer<typeof RentFormSchema>;
 
 const RentBill = () => {
   const [open, setOpen] = useState(false);
-  const [contracts, setContracts] = useState<any[]>([{id:1,name:"contract1"},{id:2,name:"contract2"}]);
+  const openChange = () => {
+    setOpen(!open);
+    form.reset();
+  };
 
   const form = useForm<RentFormData>({
     resolver: zodResolver(RentFormSchema),
@@ -40,8 +43,10 @@ const RentBill = () => {
           
 const Contract = form.watch("contract_id")
 console.log(Contract)
+
+
   return (
-    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+    <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger>Add Rent Bill</DialogTrigger>
       <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle>Add Rent Bill</DialogTitle>
@@ -55,7 +60,7 @@ console.log(Contract)
 
             <TenantCombobox name="tenant_id" control={form.control}/>
       
-     <ContractCombobox name="contract_id" control={form.control} formState={form.formState}/>
+     <ContractCombobox name="contract_id" control={form.control} />
                   
    
 </div>

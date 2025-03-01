@@ -11,12 +11,7 @@ import React, { useState } from 'react';
         label: "Type",
         name: "type",
         options: [
-          "ALL",
-          "OWNER",
-          "LOCATION",
-          "REAL ESTATE PROGRAM",
-          "SUBDIVISION PROJECT",
-          "CRM"
+        "Notice"
         ]
       },
       {
@@ -126,7 +121,7 @@ const NoticeofExpiry = () => {
       />
         <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable title="List of Notice of Expiry" columns={columns} data={data} pageSize={5} addButton={false} />
+      <DynamicTable title="List of Notice of Expiry" columns={columns} data={[]} pageSize={5} addButton={false} />
     </div>
     </div>
   );

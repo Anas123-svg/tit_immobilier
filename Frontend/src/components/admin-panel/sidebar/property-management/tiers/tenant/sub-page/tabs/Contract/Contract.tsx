@@ -1,8 +1,10 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption, TenantBill, TenantContract } from '@/types/DataProps';
-import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
+import { Contract, FilterOption, TenantBill } from '@/types/DataProps';
+import { Download, Edit, Eye, Printer, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
+import ContractDialog from './ContractDialogue';
+import ContractTenantForm from '../../../forms/ContractTenantForm';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -11,12 +13,8 @@ import React, { useState } from 'react';
         label: "Type",
         name: "type",
         options: [
-          "ALL",
-          "OWNER",
-          "LOCATION",
-          "REAL ESTATE PROGRAM",
-          "SUBDIVISION PROJECT",
-          "CRM"
+    "CONTRACT",
+    "TERMINATION"
         ]
       },
       {
@@ -65,7 +63,7 @@ import React, { useState } from 'react';
     },
   ];
   interface DocumentProps{
-    tenant_cases ?: TenantContract[]
+    tenant_cases ?: Contract[]
   }
 const Documents :React.FC<DocumentProps>= ({tenant_cases}) => {
 
@@ -80,14 +78,13 @@ const Documents :React.FC<DocumentProps>= ({tenant_cases}) => {
       paid: tc.advance_amount+ " XOF",
       action: (
         <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
+       <ContractDialog  contract={tc}/>
+       <ContractTenantForm contract={tc} customBtn={ <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
             <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-green-500 text-white hover:bg-green-600">
-            <Upload size={18} />
+          </button>} />
+         
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Printer size={18} />
           </button>
           <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
             <Download size={18} />

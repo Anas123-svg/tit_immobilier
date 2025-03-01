@@ -1,28 +1,28 @@
-import * as React from "react"
-import useFetchData from "@/hooks/useFetchData"
-import { Contract } from "@/types/DataProps" // Assuming you have the correct `Contract` type
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { Controller } from "react-hook-form"
-import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import * as React from "react";
+import useFetchData from "@/hooks/useFetchData";
+import { Contract } from "@/types/DataProps"; // Assuming you have the correct `Contract` type
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Controller } from "react-hook-form";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface ContractComboboxProps {
-  name: string
-  control: any
-  formState?: any
+  name: string;
+  control: any;
 }
 
-export function ContractCombobox({ name, control, formState }: ContractComboboxProps) {
-  const { data: contracts, loading, error } = useFetchData<Contract[]>(`${import.meta.env.VITE_API_URL}/api/tenant-contract`)
+export function ContractCombobox({ name, control }: ContractComboboxProps) {
+  const { data: contracts, loading, error } = useFetchData<Contract[]>(`${import.meta.env.VITE_API_URL}/api/tenant-contract`);
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error fetching contracts: {error}</div>
+  // Only render once contracts are loaded or if there is an error
+  if (loading) return <div>Loading contracts...</div>;
+  if (error) return <div>Error fetching contracts: {error}</div>;
 
   return (
-    <FormItem className="flex flex-col justify-between gap-2 ">
+    <FormItem className="flex flex-col gap-2">
       <FormLabel>Contracts *</FormLabel>
       <Controller
         name={name}
@@ -34,7 +34,7 @@ export function ContractCombobox({ name, control, formState }: ContractComboboxP
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn(" justify-between", !field.value && "text-muted-foreground")}
+                  className={cn("justify-between", !field.value && "text-muted-foreground")}
                 >
                   {field.value
                     ? contracts?.find((contract) => contract.id === field.value)?.contract_type
@@ -43,8 +43,8 @@ export function ContractCombobox({ name, control, formState }: ContractComboboxP
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className=" p-0">
-              <Command className="">
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
                 <CommandInput placeholder="Search contract..." />
                 <CommandList>
                   <CommandEmpty>No contract found.</CommandEmpty>
@@ -53,15 +53,9 @@ export function ContractCombobox({ name, control, formState }: ContractComboboxP
                       <CommandItem
                         key={contract.id}
                         value={contract.contract_type}
-                        onSelect={() => {
-                            // Allow select if not already selected
-                            if (contract.id !== field.value) {
-                              field.onChange(contract.id)
-                            }
-                          }}
-                          disabled={contract.id === field.value} // Disable the item if it's already selected
-                       >
-                        {contract.contract_type}  {/* Customize this with the relevant property */}
+                        onSelect={() => field.onChange(contract.id)}
+                      >
+                        {contract.contract_type} {/* Display contract type */}
                         <Check
                           className={cn(
                             "ml-auto",
@@ -77,10 +71,7 @@ export function ContractCombobox({ name, control, formState }: ContractComboboxP
           </Popover>
         )}
       />
-      {/* Uncomment if you want to display errors */}
-      {/* {formState.errors[name] && (
-        <FormMessage>{formState.errors[name]?.message}</FormMessage>  
-      )} */}
+      <FormMessage />
     </FormItem>
-  )
+  );
 }

@@ -33,6 +33,8 @@ import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
+import { Contract } from "@/types/DataProps";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
@@ -45,56 +47,64 @@ const FormSchema = z.object({
     date_of_signature: z.string().optional(),
     entry_date: z.string().optional(),
     end_date: z.string().optional(),
-    number_of_months_of_deposit: z.number().optional(),
+    Number_of_months_of_deposit: z.number().optional(),
     deposit_amount: z.number().optional(),
     caution_to_be_paid: z.string().optional(),
     number_of_months_in_advance: z.number().optional(),
     advance_amount: z.number().optional(),
     penalty_for_delay: z.number().optional(),
     payment_limit: z.string().optional(),
-    tacit_renewal: z.string().optional(),
-    frequency: z.string().optional(),
-    digital_signature_of_the_contract: z.string().optional(),
+    tacit_renewal: z.boolean().optional(),
+    Frequency: z.string().optional(),
+    digital_signature_of_the_contract: z.boolean().optional(),
     due_date: z.string().optional(),
+    id: z.number().optional(),
   });
-  
+  interface BusinessTenantFormProps {
+    contract?: Contract;
+    customBtn?:React.ReactNode
+  }
   // Functional component for business tenant form
-  const ContractTenantForm = () => {
+  const ContractTenantForm: React.FC<BusinessTenantFormProps> = ({ contract,customBtn }) => {
     const [open, setOpen] = useState(false);
   // Initialize the form with default values
 const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-
-      // concerned: 'Property Lease Agreement',  // Example for concerned field
-      // location: '1234 Main St, Anytown, USA',  // Example location
-      // cost_of_rent: 1200.00,  // Example rent cost per month
-      // contract_type: 'Lease',  // Example contract type
-      // date_of_signature: '2025-01-01',  // Example date of signature
-      // entry_date: '2025-01-15',  // Example entry date
-      // end_date: '2030-01-15',  // Example end date
-      // number_of_months_of_deposit: 2,  // Example for months of deposit
-      // deposit_amount: 2400.00,  // Example deposit amount
-      // caution_to_be_paid: 'Yes',  // Example caution to be paid
-      // number_of_months_in_advance: 1,  // Example months in advance
-      // advance_amount: 1200.00,  // Example advance payment amount
-      // penalty_for_delay: 50.00,  // Example penalty for delay in payment
-      // payment_limit: '5th of each month',  // Example payment limit
-      // tacit_renewal: 'Yes',  // Example for tacit renewal
-      // frequency: 'Monthly',  // Payment frequency
-      // digital_signature_of_the_contract: 'Signed by digital certificate',  // Example digital signature status
-      // due_date: '2025-02-05',  // Example due date for the next payment
-    }
+   defaultValues:{
+    id:contract?.id || -1,
+    owner_id:  contract?.owner_id || -1,
+    tenant_id:  contract?.tenant_id || -1,
+      concerned: contract?.concerned || 0,  // Keep empty if concerned is undefined
+      location: contract?.location ||0 ,  // Keep empty if location is undefined
+      cost_of_rent: contract?.cost_of_rent || 0,  // Keep empty if cost_of_rent is undefined
+      contract_type: contract?.contract_type || "",  // Keep empty if contract_type is undefined
+      date_of_signature: contract?.date_of_signature || "",  // Keep empty if date_of_signature is undefined
+      entry_date: contract?.entry_date || "",  // Keep empty if entry_date is undefined
+      end_date: contract?.end_date || "",  // Keep empty if end_date is undefined
+      Number_of_months_of_deposit: contract?.Number_of_months_of_deposit || 0,  // Keep empty if number_of_months_of_deposit is undefined
+      deposit_amount: contract?.deposit_amount || 0,  // Keep empty if deposit_amount is undefined
+      caution_to_be_paid: contract?.caution_to_be_paid || "",  // Keep empty if caution_to_be_paid is undefined
+      number_of_months_in_advance: contract?.number_of_months_in_advance || 0,  // Keep empty if number_of_months_in_advance is undefined
+      advance_amount: contract?.advance_amount || 0,  // Keep empty if advance_amount is undefined
+      penalty_for_delay: contract?.penalty_for_delay ||0,  // Keep empty if penalty_for_delay is undefined
+      payment_limit: contract?.payment_limit || "",  // Keep empty if payment_limit is undefined
+      tacit_renewal: contract?.tacit_renewal || false,  // Keep empty if tacit_renewal is undefined
+      Frequency: contract?.Frequency || "",  // Keep empty if frequency is undefined
+      digital_signature_of_the_contract: contract?.digital_signature_of_the_contract || false,  // Keep empty if digital_signature_of_the_contract is undefined
+      due_date: contract?.due_date || "",  // Keep empty if due_date is undefined
+ 
+   }
   });
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
-        const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+        const onSubmit = !contract? useFormSubmit<typeof FormSchema>(apiUrl)  // Use custom hook
+        : useFormUpdate<typeof FormSchema>(apiUrl);  // Use custom hook
    const Ownerid = form.watch("owner_id")
 
   
   
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-        <DialogTrigger>Add a Contract</DialogTrigger>
+        <DialogTrigger>{customBtn?customBtn:'Add a Contract'}</DialogTrigger>
         <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
           <DialogTitle>Add a Contract</DialogTitle>
           <Form {...form}>
@@ -206,7 +216,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
   {/* Number of Months of Deposit Field */}
   <FormField
     control={form.control}
-    name="number_of_months_of_deposit"
+    name="Number_of_months_of_deposit"
     render={({ field }) => (
       <FormItem>
         <FormLabel>Number of Months of Deposit *</FormLabel>
@@ -331,7 +341,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
     render={({ field }) => (
       <FormItem>
         <FormLabel>Tacit Renewal? *</FormLabel>
-        <Select onValueChange={field.onChange}>
+        <Select onValueChange={(value) => form.setValue('tacit_renewal', value === 'Yes')}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select Option" />
@@ -350,7 +360,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
   {/* Frequency Field */}
   <FormField
     control={form.control}
-    name="frequency"
+    name="Frequency"
     render={({ field }) => (
       <FormItem>
         <FormLabel>Frequency *</FormLabel>
@@ -379,7 +389,17 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Digital Signature of the Contract? *</FormLabel>
         <FormControl>
-          <Input {...field} placeholder="Upload File" />
+        <Select onValueChange={(value) => form.setValue('digital_signature_of_the_contract', value === 'Yes')}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select Option" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="Yes">YES</SelectItem>
+            <SelectItem value="No">NO</SelectItem>
+          </SelectContent>
+        </Select>
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>

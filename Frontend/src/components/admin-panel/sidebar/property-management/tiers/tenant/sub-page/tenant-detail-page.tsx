@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PersonalDetails from "./tabs/PersonalDetails";
-import Documents from "./tabs/Contract";
+import Documents from "./tabs/Contract/Contract";
 import EmergencyContact from "./tabs/StateofPlay";
 import OtherInformation from "./tabs/OtherInformation";
 import StateofPlay from "./tabs/StateofPlay";
@@ -28,6 +28,7 @@ import {
 import { useParams } from "react-router-dom";
 import useFetchData from "@/hooks/useFetchData";
 import { Tenant, TenantProfile } from "@/types/DataProps";
+import { LoadingSpinner } from "@/components/admin-panel/UI-components/LoadingSpinner";
 
 
 const TenantDetailPage = () => {
@@ -99,7 +100,7 @@ const TenantDetailPage = () => {
     return activeTabContent ? activeTabContent.component : null;
   };
 
-  return (
+  return (  loading? <div className="w-full h-full flex justify-center items-center"><LoadingSpinner size={100}/></div> :
     <div className="bg-white shadow-lg p-0 sm:p-6 space-y-9 rounded-lg ">
       {/* Profile Header */}
       <div className="flex  sm:flex-row flex-col p-6 gap-5 sm:gap-10 relative shadow-md">

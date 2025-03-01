@@ -41,6 +41,7 @@ import PullAccountStatementForm from "./forms/PullAccountStatementFormProps";
 import useFetchData from "@/hooks/useFetchData";
 import { useParams } from "react-router-dom";
 import { Owner, OwnerProfile } from "@/types/DataProps";
+import { LoadingSpinner } from "@/components/admin-panel/UI-components/LoadingSpinner";
 
 
 // Define the Owner Interface based on the provided model
@@ -148,6 +149,7 @@ const OwnerDetailPage = () => {
   const handlePullAccountFormClose = () => setIsPullAccountFormOpen(false);
 
   return (
+      loading? <div className="w-full h-full flex justify-center items-center"><LoadingSpinner size={100}/></div> :
     <div className="bg-white shadow-lg p-0 sm:p-6 space-y-9 rounded-lg ">
       {/* Profile Header */}
       <div className="flex  sm:flex-row flex-col p-6 gap-5 sm:gap-10 relative shadow-md">

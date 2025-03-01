@@ -50,31 +50,6 @@ export interface CircularDiagramProps {
 
 
 
-  export interface Contract {
-    id: number; // Unique identifier for the contract
-    owner_id: number; // The ID of the contract's owner
-    tenant_id: number; // The ID of the tenant associated with the contract
-    concerned: string; // The concerned party (e.g., "Tenant", "Owner", etc.)
-    location: string; // The location associated with the contract
-    cost_of_rent: number; // The cost of rent in the contract
-    contract_type: string; // The type of the contract (e.g., "Lease", "Rent Agreement")
-    date_of_signature: string; // Date when the contract was signed (ISO string)
-    entry_date: string; // The entry date into the contract (ISO string)
-    end_date: string; // The end date of the contract (ISO string)
-    number_of_months_of_deposit: number; // Number of months for the deposit
-    deposit_amount: number; // The deposit amount
-    caution_to_be_paid: number; // The caution amount to be paid
-    number_of_months_in_advance: number; // The number of months paid in advance
-    advance_amount: number; // The amount paid in advance
-    penalty_for_delay: number; // Penalty amount for delay in payments
-    payment_limit: string; // Payment limit (e.g., "Monthly", "Quarterly")
-    tacit_renewal: boolean; // Whether the contract has tacit renewal
-    frequency: string; // Payment frequency (e.g., "Monthly", "Annually")
-    digital_signature_of_the_contract: boolean; // Whether the contract has a digital signature
-    due_date: string; // The due date for payments (ISO string)
-    status: string; // Current status of the contract (e.g., "Active", "Expired")
-  }
-  
 
 
 
@@ -507,27 +482,27 @@ block:string;
     created_at: string; // ISO 8601 format datetime string
     updated_at: string; // ISO 8601 format datetime string
   }
-  export interface TenantContract {
+  export interface Contract {
     id: number;
-    owner_id: number | null; // 'null' is possible, otherwise use 'number'
+    owner_id: number ; // 'null' is possible, otherwise use 'number'
     tenant_id: number;
-    concerned: string; // The subject of the contract (e.g., maintenance agreement)
-    location: string; // The address of the property
-    cost_of_rent: string; // Rent amount, represented as a string (can change to 'number' if needed)
+    concerned: number; // The subject of the contract (e.g., maintenance agreement)
+    location: number; // The address of the property
+    cost_of_rent: number; // Rent amount, represented as a string (can change to 'number' if needed)
     contract_type: string; // Type of contract (e.g., residential)
     date_of_signature: string; // Date when the contract was signed (ISO 8601 format)
     entry_date: string; // Date when the tenant moves in (ISO 8601 format)
     end_date: string; // Date when the contract ends (ISO 8601 format)
-    number_of_months_of_deposit: number; // Number of months for the deposit
-    deposit_amount: string; // Deposit amount, represented as a string
+    Number_of_months_of_deposit: number; // Number of months for the deposit
+    deposit_amount: number; // Deposit amount, represented as a string
     caution_to_be_paid: string; // "Yes" or "No"
     number_of_months_in_advance: number; // Number of months rent to be paid in advance
-    advance_amount: string; // Advance amount, represented as a string
+    advance_amount: number; // Advance amount, represented as a string
     penalty_for_delay: number; // Penalty rate for delayed payment
     payment_limit: string; // Payment due date each month
-    tacit_renewal: string; // "Yes" or "No" indicating tacit renewal
+    tacit_renewal: boolean; // "Yes" or "No" indicating tacit renewal
     Frequency: string; // Payment frequency (e.g., "Monthly")
-    digital_signature_of_the_contract: string; // Path to the digital signature file
+    digital_signature_of_the_contract: boolean; // Path to the digital signature file
     due_date: string; // Due date for the current payment (ISO 8601 format)
     created_at: string; // Date the contract was created (ISO 8601 format)
     updated_at: string; // Date the contract was last updated (ISO 8601 format)
@@ -555,7 +530,7 @@ block:string;
   export interface TenantProfile {
     profile:Tenant; // 'profile' could be an object or null, adjust as needed
     tenant_bill: TenantBill[];   // Array of tenant bills, adjust type as needed
-    tenant_contract: TenantContract[]; // Array of tenant contracts, adjust type as needed
+    tenant_contract: Contract[]; // Array of tenant contracts, adjust type as needed
     tenant_payment: TenantPayment[];  // Array of tenant payments, adjust type as needed
   }
   

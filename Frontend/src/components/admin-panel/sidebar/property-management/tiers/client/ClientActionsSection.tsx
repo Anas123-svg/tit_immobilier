@@ -11,6 +11,8 @@ import BusinessClientForm from "./forms/BusinessClientForm";
 import PrivateClientForm from "./forms/PrivateClientForm";
 import FileClientForm from "./forms/FileClientForm";
 import MutateFolderClientForm from "./forms/MutateFolderClientForm";
+import CancelFileClientForm from "./forms/CancelFileClientForm";
+import RecordAPaymentClientForm from "./forms/RecordAPaymentClientForm";
 const ClientActionsSection: React.FC = () => {
   return (
     <div className="flex justify-end space-x-4 mb-6">
@@ -28,8 +30,12 @@ const ClientActionsSection: React.FC = () => {
         
        
           <FileClientForm/>
+
+
         <MutateFolderClientForm/>
-     
+       
+     <CancelFileClientForm/>
+     <RecordAPaymentClientForm/>
         </DropdownMenuContent>
       </DropdownMenu>
 
