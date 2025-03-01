@@ -55,9 +55,10 @@ console.log(Contract)
 
                <TenantCombobox name="tenant_id" control={form.control} formState={form.formState}/>
                   
-            
+{/*             
                <ContractCombobox name="contract_id" control={form.control} formState={form.formState}/>
-                  
+                   */}
+       <ContractCombobox name="contract_id" control={form.control} />
       
 
 </div>
