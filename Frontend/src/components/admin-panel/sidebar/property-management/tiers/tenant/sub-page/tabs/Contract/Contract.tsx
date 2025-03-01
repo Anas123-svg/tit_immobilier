@@ -1,10 +1,11 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { Contract, FilterOption, TenantBill } from '@/types/DataProps';
-import { Download, Edit, Eye, Printer, Trash2, Upload } from 'lucide-react';
+import { Download, Edit, Eye, Printer, RefreshCw, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import ContractDialog from './ContractDialogue';
 import ContractTenantForm from '../../../forms/ContractTenantForm';
+import DeleteContractDialog from './DeleteContract';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -64,8 +65,9 @@ import ContractTenantForm from '../../../forms/ContractTenantForm';
   ];
   interface DocumentProps{
     tenant_cases ?: Contract[]
+    handleReload?: ()=>void
   }
-const Documents :React.FC<DocumentProps>= ({tenant_cases}) => {
+const Documents :React.FC<DocumentProps>= ({tenant_cases,handleReload}) => {
 
   const data = tenant_cases?.map((tc)=>{
  return   {
@@ -83,20 +85,20 @@ const Documents :React.FC<DocumentProps>= ({tenant_cases}) => {
             <Edit size={18} />
           </button>} />
          
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+          {/* <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
             <Printer size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
+          </button> */}
+          {/* <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
             <Download size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
+          </button> */}
+
+          <DeleteContractDialog contractId={tc?.id}/>
+
         </>
       )
     }
  
-  })??["Asdad"]
+  })??[""]
 
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
@@ -127,7 +129,13 @@ const Documents :React.FC<DocumentProps>= ({tenant_cases}) => {
       />
         <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable title="Plan of Auxiliary Accounts" columns={columns} data={data} pageSize={5} />
+      <DynamicTable title="Plan of Auxiliary Accounts" columns={columns} data={data} pageSize={5} AddButton={
+ <button
+        onClick={handleReload}
+        className="bg-green-500 text-white px-4 py-2 rounded-md mb-4"
+      >
+        <RefreshCw/>
+      </button>}/>
     </div>
     </div>
   );

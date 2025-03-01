@@ -36,10 +36,14 @@ const TenantDetailPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const { id } = useParams();
 
-
+  const [reloadTrigger, setReloadTrigger] = useState<boolean>(false);
+  // Function to handle reload button click
+  const handleReload = () => {
+    setReloadTrigger(prev => !prev); // Toggle the reloadTrigger to trigger re-fetch
+  };
 
   const { data: tenant, loading, error } = useFetchData<TenantProfile>(
-    `${import.meta.env.VITE_API_URL}/api/profile/tenant/${id}`
+    `${import.meta.env.VITE_API_URL}/api/profile/tenant/${id}`,reloadTrigger
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +65,7 @@ const TenantDetailPage = () => {
       name: 'documents', 
       label: 'Contract', 
       icon: <FileText className="inline mr-2" />, 
-      component: <Documents tenant_cases={tenant?.tenant_contract}  />
+      component: <Documents tenant_cases={tenant?.tenant_contract} handleReload={handleReload}  />
     },
     { 
       name: 'emergency', 
