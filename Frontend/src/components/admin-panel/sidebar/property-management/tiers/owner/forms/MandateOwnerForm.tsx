@@ -33,7 +33,7 @@ import { OwnerSaleProperty } from "@/types/DataProps";
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
   const FormSchema = z.object({
     owner_id: z.number(),
-    type_of_mandate: z.string().optional(),
+    type_of_mandate: z.string(),
     owner_name: z.string().optional(),
     very_concerned: z.number().optional(),
     type_of_property: z.string().optional(),
@@ -83,7 +83,7 @@ import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-component
      const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
      const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
     const OwnerId = form.watch("owner_id")
-  const SaleProperty = form.watch("very_concerned")
+  const RentProperty = form.watch("very_concerned")
     const BillingType = form.watch("billing_type")
     const MandateType = form.watch("type_of_mandate")
     const CommisionAmount = form.watch("commission_amount")
@@ -91,7 +91,7 @@ import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-component
 
 
   const { data, loading, error } = useFetchData<OwnerSaleProperty>(
-    `${import.meta.env.VITE_API_URL}/api/owner-sale-properties/${SaleProperty}`
+    `${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${RentProperty}`
   );
     return (
       <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -168,7 +168,7 @@ MandateType =="Rental"?  <OwnerRentPropertyCombobox name="very_concerned" id={Ow
           <Input
             {...field}
             placeholder="Type of property"
-            value={field.value || data?.type_of_property || ''} // Ensure correct value is used
+            value={field.value || data?.type_of_property } // Ensure correct value is used
             className="bg-gray-200"
           />
         </FormControl>
@@ -199,7 +199,7 @@ MandateType =="Rental"?  <OwnerRentPropertyCombobox name="very_concerned" id={Ow
           <Input
             {...field}
             placeholder="Neighborhood"
-            value={field.value || data?.neighborhood || ''} // Use field value, or fetched data, or fallback to empty string
+            value={field.value || data?.neighborhood } // Use field value, or fetched data, or fallback to empty string
             className="bg-gray-200"
           />
         </FormControl>

@@ -87,15 +87,12 @@ const GoodCard = ({ good }: GoodCardProps) => {
           document={<GoodPdfComponent good={good} />}
           fileName={`${good.property_name}.pdf`}
         >
-          {({ loading }) =>
-            loading ? (
-              "Preparing PDF..."
-            ) : (
+
               <button className="p-2 bg-gray-500 text-white hover:bg-gray-700 rounded-lg">
                 <Printer size={20} />
               </button>
-            )
-          }
+   
+       
         </ReactPDF.PDFDownloadLink>
       </div>
     </div>

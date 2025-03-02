@@ -1,12 +1,14 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { FilterOption, Mandate, OwnerMandate } from '@/types/DataProps';
-import { Download, Edit, Eye, RefreshCcw, Trash2, Upload } from 'lucide-react';
+import { Download, Edit, Eye, Printer, RefreshCcw, Trash2, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { number, string } from 'zod';
 import MandateDialog from './MandateDialog';
 import DeleteMandateDialog from './DeleteMandateDialog';
+import ReactPDF from "@react-pdf/renderer";
 import { Button } from '@/components/ui/button';
+import { MandatePdfComponent } from '@/components/common/assessmentPDF/MandatePdf';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -106,7 +108,7 @@ return   {
     <div className=""> {mandate.neighborhood} <br />
       <span className="text-xs text-gray-500">{mandate.type_of_property}</span>
       <br />
-      <span className="text-xs text-gray-500">Owner id:{mandate.owner_id}</span>
+      <span className="text-xs text-gray-500">Owner:{mandate.owner_name}</span>
     </div>
     </div> 
   ),
@@ -128,6 +130,19 @@ return   {
       {/* <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
         <Download size={18} />
       </button> */}
+
+<ReactPDF.PDFDownloadLink
+          document={<MandatePdfComponent mandate={mandate} />}
+          fileName={`${mandate.id}.pdf`}
+        >
+ 
+              <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+                <Printer size={20} />
+              </button>
+        
+        
+        </ReactPDF.PDFDownloadLink>
+
      <DeleteMandateDialog  mandateId={mandate.id}/>
     </>
   ),

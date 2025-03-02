@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import LocativeDialog from './LocativeDialog';
 import DeleteLocativeDialog from './DeleteLocative';
 import UpdateLocativeForm from './form/UpdateLocativeForm';
+import ReactPDF from "@react-pdf/renderer";
+import { LocativePdfComponent } from '@/components/common/assessmentPDF/LocativePdf';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -114,9 +116,17 @@ const LocativeComponent:React.FC<LocativeComponentProps> = ({goods ,handleReload
             <>
         <LocativeDialog good={good}/>
             <UpdateLocativeForm locative={detail}/>
-              {/* <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
-                <Printer size={18} />
-              </button> */}
+        <ReactPDF.PDFDownloadLink
+                  document={<LocativePdfComponent locative={detail} />}
+                  fileName={`${detail.id}.pdf`}
+                >
+         
+                      <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
+                        <Printer size={20} />
+                      </button>
+                
+                
+                </ReactPDF.PDFDownloadLink>
               <DeleteLocativeDialog locative={detail}/>
             </>
           ),
