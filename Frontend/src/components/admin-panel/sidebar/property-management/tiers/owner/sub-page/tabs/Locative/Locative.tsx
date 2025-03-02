@@ -1,8 +1,8 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { FilterOption, Good, Locative } from '@/types/DataProps';
-import { Delete, Download, Edit, Eye, Printer, Trash, Trash2, Upload } from 'lucide-react';
-import React, { useState } from 'react';
+import { Delete, Download, Edit, Eye, Printer, RefreshCcw, Trash, Trash2, Upload } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import LocativeDialog from './LocativeDialog';
 import DeleteLocativeDialog from './DeleteLocative';
 import UpdateLocativeForm from './form/UpdateLocativeForm';
@@ -62,10 +62,15 @@ import UpdateLocativeForm from './form/UpdateLocativeForm';
   
   
 interface LocativeComponentProps{
-  goods?:Good[]
+  goods?:Good[],
+ handleReload: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
-const LocativeComponent:React.FC<LocativeComponentProps> = ({goods}) => {
+const LocativeComponent:React.FC<LocativeComponentProps> = ({goods ,handleReload}) => {
+  useEffect(()=>{
  
+ 
+   },[handleReload]);
+     
   const data = goods?.map((good)=>{
    return  good?.details?.map((detail,index)=>{
 
@@ -108,7 +113,7 @@ const LocativeComponent:React.FC<LocativeComponentProps> = ({goods}) => {
          action: (
             <>
         <LocativeDialog good={good}/>
-            {/* <UpdateLocativeForm locative={detail}/> */}
+            <UpdateLocativeForm locative={detail}/>
               {/* <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
                 <Printer size={18} />
               </button> */}
@@ -178,7 +183,7 @@ const LocativeComponent:React.FC<LocativeComponentProps> = ({goods}) => {
       />
         <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable title="LIST OF RENTAL PROPERTIES" columns={columns} data={filteredData} pageSize={5} addButton={false} />
+      <DynamicTable title="LIST OF RENTAL PROPERTIES" columns={columns} data={filteredData} pageSize={5}  addButton={true} AddButton={<button onClick={handleReload} className='bg-green-500 px-5 py-2 text-white self-end'><RefreshCcw/></button>}/>
     </div>
     </div>
   );

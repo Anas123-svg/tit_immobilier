@@ -487,7 +487,7 @@ block:string;
     owner_id: number ; // 'null' is possible, otherwise use 'number'
     tenant_id: number;
     concerned: number; // The subject of the contract (e.g., maintenance agreement)
-    location: number; // The address of the property
+    location: string; // The address of the property
     cost_of_rent: number; // Rent amount, represented as a string (can change to 'number' if needed)
     contract_type: string; // Type of contract (e.g., residential)
     date_of_signature: string; // Date when the contract was signed (ISO 8601 format)
@@ -676,11 +676,22 @@ export interface OwnerMandate{
 
 
 export interface Locative {
+  id?: number;
+  rent_property_id?: number;
   door_number?: string;
   rental_type?: string;
   rent?: number;
   charges?: number;
   room?: number;
   area?: number;
+  created_at?: string; // or Date if you plan to work with Date objects
+  updated_at?: string; // or Date if you plan to work with Date objects
 }
 
+
+
+
+export interface RentLocative {
+  message:string,
+  data:Locative[]
+}

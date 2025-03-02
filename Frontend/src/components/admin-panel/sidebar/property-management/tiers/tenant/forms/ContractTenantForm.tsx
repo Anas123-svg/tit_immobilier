@@ -35,13 +35,14 @@ import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-component
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
 import { Contract } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
+import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
     owner_id: z.number().min(1, { message: "Owner ID must be greater than 0" }),
     tenant_id: z.number().min(1, { message: "Tenant ID must be greater than 0" }),
     concerned: z.number().optional(),
-    location: z.number().optional(),
+  location: z.string().optional(),
     cost_of_rent: z.number().optional(),
     contract_type: z.string().optional(),
     date_of_signature: z.string().optional(),
@@ -71,11 +72,11 @@ const FormSchema = z.object({
 const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
    defaultValues:{
-    id:contract?.id || -1,
-    owner_id:  contract?.owner_id || -1,
-    tenant_id:  contract?.tenant_id || -1,
-      concerned: contract?.concerned || 0,  // Keep empty if concerned is undefined
-      location: contract?.location ||0 ,  // Keep empty if location is undefined
+    id:contract?.id ,
+    owner_id:  contract?.owner_id ,
+    tenant_id:  contract?.tenant_id ,
+      concerned: contract?.concerned ,  // Keep empty if concerned is undefined
+      location: contract?.location  ,  // Keep empty if location is undefined
       cost_of_rent: contract?.cost_of_rent || 0,  // Keep empty if cost_of_rent is undefined
       contract_type: contract?.contract_type || "",  // Keep empty if contract_type is undefined
       date_of_signature: contract?.date_of_signature || "",  // Keep empty if date_of_signature is undefined
@@ -95,10 +96,14 @@ const form = useForm<z.infer<typeof FormSchema>>({
  
    }
   });
+  const OwnerId = form.watch("owner_id")
+  const RentPropertyId = form.watch("concerned")
+
+
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
         const onSubmit = !contract? useFormSubmit<typeof FormSchema>(apiUrl)  // Use custom hook
         : useFormUpdate<typeof FormSchema>(apiUrl);  // Use custom hook
-   const Ownerid = form.watch("owner_id")
+   
 
   
   
@@ -118,9 +123,9 @@ const form = useForm<z.infer<typeof FormSchema>>({
   <TenantCombobox name="tenant_id" control={form.control} formState={form.formState}/>
  <OwnerCombobox name="owner_id" control={form.control}/>
 
-<OwnerSalePropertyCombobox name="concerned" control={form.control} id={Ownerid} formState={form.formState}/>
-<OwnerRentPropertyCombobox name="location" control={form.control} id={Ownerid} formState={form.formState}/>
 
+<OwnerRentPropertyCombobox name="concerned" control={form.control} id={OwnerId} formState={form.formState}/>
+<LocativeCombobox name="location" control={form.control} rentPropertyId={RentPropertyId} formState={form.formState}/>
 
 
 

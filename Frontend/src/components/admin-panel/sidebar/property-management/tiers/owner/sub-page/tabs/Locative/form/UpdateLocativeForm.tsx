@@ -22,6 +22,14 @@ import {
 import { Edit } from "lucide-react";
 import { Good, Locative } from "@/types/DataProps";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { useFormUpdate } from "@/hooks/useFormUpdate";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
   
   const FormSchema = z.object({
     door_number: z.string().optional(),
@@ -33,10 +41,10 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
   });
   interface UpdateLocativeProps {
     locative: Locative;
-    locativeId:number
-    good:Good
+  
+
   }
-  const UpdateLocativeForm :React.FC<UpdateLocativeProps> = ({locative,good,locativeId}) => {
+  const UpdateLocativeForm :React.FC<UpdateLocativeProps> = ({locative}) => {
     const [open, setOpen] = useState(false);
   
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -51,9 +59,9 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
       },
     });
   
-    const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-property/'+good?.id;  // Adjust API URL
+    const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-locative' // Adjust API URL
   
-     const onSubmit = useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
+     const onSubmit = useFormUpdate<typeof FormSchema>(apiUrl,locative.id);  // Use custom hook
        
      
   
@@ -92,9 +100,23 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Rental Type</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="Enter Rental Type" />
-                      </FormControl>
+                    
+                      <Select {...field} onValueChange={field.onChange}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select property type" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent  >
+            <SelectItem value="APARTMENT">APARTMENT</SelectItem>
+            <SelectItem value="STUDIO">STUDIO</SelectItem>
+            <SelectItem value="VILLA">VILLA</SelectItem>
+            <SelectItem value="HOUSE">HOUSE</SelectItem>
+            <SelectItem value="COMMERCIAL">COMMERCIAL</SelectItem>
+            <SelectItem value="OTHERS">OTHERS</SelectItem>
+          </SelectContent>
+        </Select>
+                  
                       <FormMessage />
                     </FormItem>
                   )}
@@ -107,7 +129,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
                     <FormItem>
                       <FormLabel>Rent Amount</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" placeholder="Enter Rent" />
+                        <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Rent" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -121,7 +143,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
                     <FormItem>
                       <FormLabel>Charges</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" placeholder="Enter Charges" />
+                        <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Charges" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -135,7 +157,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
                     <FormItem>
                       <FormLabel>Number of Rooms</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" placeholder="Number of Rooms" />
+                        <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Number of Rooms" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -149,7 +171,7 @@ import { useFormSubmit } from "@/hooks/useFormSubmit";
                     <FormItem>
                       <FormLabel>Area (m²)</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" placeholder="Enter Area" />
+                        <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Area" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

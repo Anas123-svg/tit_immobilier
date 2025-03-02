@@ -93,7 +93,7 @@ interface PropertyForRentOwnerFormProps{
   customBtn?:React.ReactNode
 }
 const PropertyForRentOwnerForm: React.FC<PropertyForRentOwnerFormProps> = ({property,customBtn}) => {
-  const [locativesstate, setLocatives] = useState([{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for details
+  const [locativesstate, setLocatives] = useState(property?.details || [{ door_number: '', rental_type: '', rent: 0, charges: 0, room: 1, area: 0 }]); // Initial state for details
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

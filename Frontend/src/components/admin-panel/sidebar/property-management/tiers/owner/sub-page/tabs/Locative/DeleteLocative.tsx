@@ -14,9 +14,10 @@ const DeleteLocativeDialog: React.FC<DeleteLocativeDialogProps> = ({ locative })
   const [openDialog, setOpenDialog] = useState(false);
  const { onDelete,loading:deleteLoading } = useDeleteData(); 
   const handleDelete = () => {
-    const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-mandate';
+    const apiUrl = import.meta.env.VITE_API_URL + '/api/owner-rent-locative';
  
-
+    onDelete(apiUrl,locative?.id||-1);
+   
     setOpenDialog(false);
   };
 

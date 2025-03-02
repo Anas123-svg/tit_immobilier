@@ -132,7 +132,7 @@ interface MakeDepositOwnerFormProps {
                     <FormItem>
                       <FormLabel>Amount</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" placeholder="Enter Amount" />
+                        <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Amount" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

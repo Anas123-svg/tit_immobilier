@@ -90,7 +90,7 @@ const OwnerDetailPage = () => {
       name: 'locative', 
       label: 'Locative', 
       icon: <Home className="inline mr-2" />, 
-      component: <LocativeComponent goods={owners?.Locative  } />
+      component: <LocativeComponent goods={owners?.Locative  } handleReload={handleReload}/>
     },
     { 
       name: 'mandate', 

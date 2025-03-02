@@ -31,6 +31,9 @@ import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
+import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
+import useFetchData from "@/hooks/useFetchData";
+import { Locative, RentLocative } from "@/types/DataProps";
 
 // Define validation schema
 const FormSchema = z.object({
@@ -60,10 +63,12 @@ const ShortTermContractTenantForm = () => {
 
 const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract ";
   const onSubmit =  useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
-  const Ownerid = form.watch("owner_id")
-
-  
-
+  const OwnerId = form.watch("owner_id")
+  const RentPropertyId = form.watch("concerned")
+  const LocativeId = form.watch("location")
+  const { data: rentLocative, loading, error } = useFetchData<Locative>(
+    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${LocativeId?LocativeId:'0'}`
+  )
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Short Contract</DialogTrigger>
@@ -81,10 +86,9 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
             <OwnerCombobox name="owner_id" control={form.control}/>
            
            
+<OwnerRentPropertyCombobox name="concerned" control={form.control} id={OwnerId} formState={form.formState}/>
+<LocativeCombobox name="location" control={form.control} rentPropertyId={RentPropertyId} formState={form.formState}/>
 
-              <OwnerSalePropertyCombobox name="concerned" control={form.control} id={Ownerid} formState={form.formState}/>
-              <OwnerRentPropertyCombobox name="location" control={form.control} id={Ownerid} formState={form.formState}/>
-              
               
 
               {/* Billing Type Field */}
@@ -193,7 +197,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
                   <FormItem>
                     <FormLabel>Rental Amount</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="0" />
+                      <Input type="number" {...field} defaultValue={rentLocative?.rent} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

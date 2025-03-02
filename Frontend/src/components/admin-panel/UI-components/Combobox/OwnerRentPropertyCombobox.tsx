@@ -19,7 +19,6 @@ interface OwnerRentPropertyComboboxProps {
 export function OwnerRentPropertyCombobox({ name, control, formState,id }: OwnerRentPropertyComboboxProps) {
   const { data: properties, loading, error } = useFetchData<OwnerProperties>(`${import.meta.env.VITE_API_URL}/api/rent/properties/owner/${id?id:''}`)
 
-  if (loading) return <div>Loading...</div>
 
   return (
     <FormItem className="flex flex-col justify-between gap-2 ">
