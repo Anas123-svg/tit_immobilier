@@ -40,7 +40,7 @@ export function LocativeCombobox({ name, control ,rentPropertyId,formState}: Loc
                   className={cn("justify-between", !field.value && "text-muted-foreground")}
                 >
                   {field.value
-                    ? rentLocative?.data?.find((locative) => locative.id === field.value)?.door_number
+                    ? `${rentLocative?.data?.find((locative) => locative.id === field.value)?.rental_type} ${ rentLocative?.data?.find((locative) => locative.id === field.value)?.door_number}`
                     : "Select a locative"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>

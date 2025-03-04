@@ -1,6 +1,6 @@
 import * as React from "react"
 import useFetchData from "@/hooks/useFetchData"
-import { Contract } from "@/types/DataProps" // You might need to define this type based on the contract response
+import { Contract, Good, Locative, OwnerProperties } from "@/types/DataProps" // You might need to define this type based on the contract response
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
@@ -12,15 +12,29 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/f
 interface ContractComboboxProps {
   name: string
   control: any
+  tenantId:number
 }
 
-export function ContractCombobox({ name, control }: ContractComboboxProps) {
+export function ContractCombobox({ name, control,tenantId }: ContractComboboxProps) {
+  const [locationId, setlocationId] = React.useState(-1)
+  const [contract, setcontract] = React.useState<Contract>()
+  const [concernedId, setconcernedId] = React.useState(-1)
   const { data: contracts, loading, error } = useFetchData<Contract[]>(
-    `${import.meta.env.VITE_API_URL}/api/tenant-contract`
+    `${import.meta.env.VITE_API_URL}/api/tenant-contract/tenant/${tenantId}`
+  )
+  const { data: rentLocative } = useFetchData<Locative>(
+    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${locationId}`
   )
 
+  const { data: property } = useFetchData<Good>(`${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${concernedId}`)
+
+React.useEffect(()=>{
+  setlocationId(contract?.location??-1)
+  setconcernedId(contract?.concerned??-1)
+
+},[contract,tenantId])
   if (loading) return <div>Loading...</div>
-  if (error) return <div>Error fetching contracts: {error}</div>
+
 
   return (
     <FormItem className="flex flex-col gap-2">
@@ -38,8 +52,10 @@ export function ContractCombobox({ name, control }: ContractComboboxProps) {
                   className={cn("justify-between", !field.value && "text-muted-foreground")}
                 >
                   {field.value
-                    ? contracts?.find((contract) => contract.id === field.value)?.location
+                    ? `${ contract?.contract_type} Contract for property ${property?.property_name} door No. ${rentLocative?.door_number} `
                     : "Select a contract"}
+
+                   
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -53,10 +69,10 @@ export function ContractCombobox({ name, control }: ContractComboboxProps) {
                     {contracts?.map((contract) => (
                       <CommandItem
                         key={contract.id}
-                        value={contract.location}
-                        onSelect={() => field.onChange(contract.id)}
+                        value={String( contract.location)}
+                        onSelect={() => {field.onChange(contract.id); setcontract(contract)}}
                       >
-                        {contract.location} - {contract.contract_type}
+                      { contracts?.find((contract) => contract.id === field.value)?.contract_type} Contract for property {property?.property_name} door No. {rentLocative?.door_number} 
                         <Check
                           className={cn(
                             "ml-auto",

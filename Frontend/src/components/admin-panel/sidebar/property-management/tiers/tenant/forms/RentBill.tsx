@@ -12,6 +12,7 @@ import axios from "axios";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobox/ContractCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import { Contract } from "@/types/DataProps";
 
 // Define validation schema
 const RentFormSchema = z.object({
@@ -42,13 +43,17 @@ const RentBill = () => {
             const onSubmit = useFormSubmit<typeof RentFormSchema>(apiUrl);  // Use custom hook
           
 const Contract = form.watch("contract_id")
-console.log(Contract)
+const TenantId = form.watch("tenant_id")
 
+console.log(Contract)
+const { data:contract, loading, error } = useFetchData<Contract>(
+  `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract?Contract:'0'}`
+)
 
   return (
     <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger>Add Rent Bill</DialogTrigger>
-      <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
+      <DialogContent className="w-full max-w-[95vw] lg:max-w-[1200px] h-auto max-h-[95vh] overflow-y-auto p-6">
         <DialogTitle>Add Rent Bill</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -60,18 +65,77 @@ console.log(Contract)
 
             <TenantCombobox name="tenant_id" control={form.control}/>
       
-     <ContractCombobox name="contract_id" control={form.control} />
+     <ContractCombobox name="contract_id" control={form.control}  tenantId={TenantId}/>
                   
    
 </div>
   {  Contract !==undefined
- &&
-  <div className="">        {/* Rent Field */}
+ &&<>
+  <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+  CONTRACT DETAILS
+</h2>
+
+
+<div className="grid grid-cols-5 gap-4">
+  <FormItem>
+    <FormLabel>Locative</FormLabel>
+    <FormControl>
+      <Input type="text" placeholder="Locative Not Found" disabled />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+
+  <FormItem>
+    <FormLabel>Cost of Rent</FormLabel>
+    <FormControl>
+      <Input type="number" placeholder="Rent Amount Not Found" disabled />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+
+  <FormItem>
+    <FormLabel>Payment Deadline</FormLabel>
+    <FormControl>
+      <Input type="number" defaultValue={contract?.payment_limit} placeholder="Payment Deadline Not Found" disabled />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+
+  <FormItem>
+    <FormLabel>Penalty for Late Payment %</FormLabel>
+    <FormControl>
+      <Input type="number" defaultValue={contract?.penalty_for_delay} placeholder="Penalty Percentage Not Found" disabled />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+
+  <FormItem>
+    <FormLabel>Periodicity</FormLabel>
+    <FormControl>
+      <Input type="text" defaultValue={contract?.Frequency} placeholder="Periodicity Not Found" disabled />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+</div>
+
+
+  <div className="grid grid-cols-4 gap-4">        {/* Rent Field */}
+
+      {/* Month Field */}
+      <FormField control={form.control} name="month" render={({ field }) => (
+              <FormItem>
+                <FormLabel>Month</FormLabel>
+                <FormControl>
+                  <Input {...field} type="month" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField control={form.control} name="rent" render={({ field }) => (
               <FormItem>
                 <FormLabel>Rent</FormLabel>
                 <FormControl>
-                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Rent" />
+                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Rent" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,35 +146,28 @@ console.log(Contract)
               <FormItem>
                 <FormLabel>Charge</FormLabel>
                 <FormControl>
-                  <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))}  type="number" placeholder="Enter Charge" />
+                  <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Charge" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )} />
 
-            {/* Total Field */}
-            <FormField control={form.control} name="total" render={({ field }) => (
+        
+
+          
+
+                {/* Total Field */}
+                <FormField control={form.control} name="total" render={({ field }) => (
               <FormItem>
                 <FormLabel>Total</FormLabel>
                 <FormControl>
-                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} type="number" placeholder="Enter Total" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )} />
-
-            {/* Month Field */}
-            <FormField control={form.control} name="month" render={({ field }) => (
-              <FormItem>
-                <FormLabel>Month</FormLabel>
-                <FormControl>
-                  <Input {...field} type="month" />
+                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Total" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )} />
 </div>
-              }      {/* Submit Button */}
+</>        }      {/* Submit Button */}
             <DialogFooter>
               <Button type="submit">Save</Button>
             </DialogFooter>

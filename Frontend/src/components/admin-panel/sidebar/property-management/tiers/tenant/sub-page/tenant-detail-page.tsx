@@ -147,7 +147,7 @@ const TenantDetailPage = () => {
           </div>
 
           <div className="  text-red-500 text-center font-semibold ">
-            <p className="text-lg">OWE: 585,000 XOF</p>
+            <p className="text-lg">OWE: 0 XOF</p>
           </div>
         </div>
       </div>

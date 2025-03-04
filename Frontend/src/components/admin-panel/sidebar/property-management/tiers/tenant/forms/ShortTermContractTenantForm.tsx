@@ -24,7 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InvoiceOptionsForm from "./InvoiceOptionsForm";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
@@ -69,6 +69,18 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
   const { data: rentLocative, loading, error } = useFetchData<Locative>(
     `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${LocativeId?LocativeId:'0'}`
   )
+
+
+  
+          useEffect(() => {
+            if (rentLocative !== null && rentLocative !== undefined) {
+              form.setValue('rental_amount', rentLocative?.rent);
+             
+            } else {
+              form.setValue('rental_amount', 0); // Set default value to 0 if cost is null or undefined
+            }
+          
+          }, [rentLocative, form]);
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger>Add a Short Contract</DialogTrigger>
@@ -197,7 +209,7 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
                   <FormItem>
                     <FormLabel>Rental Amount</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} defaultValue={rentLocative?.rent} onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="0" />
+                      <Input type="number" {...field}  onChange={(e)=>field.onChange(parseInt(e.target.value))} placeholder="0" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

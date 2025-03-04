@@ -487,7 +487,7 @@ block:string;
     owner_id: number ; // 'null' is possible, otherwise use 'number'
     tenant_id: number;
     concerned: number; // The subject of the contract (e.g., maintenance agreement)
-    location: string; // The address of the property
+    location: number; // The address of the property
     cost_of_rent: number; // Rent amount, represented as a string (can change to 'number' if needed)
     contract_type: string; // Type of contract (e.g., residential)
     date_of_signature: string; // Date when the contract was signed (ISO 8601 format)
@@ -500,9 +500,9 @@ block:string;
     advance_amount: number; // Advance amount, represented as a string
     penalty_for_delay: number; // Penalty rate for delayed payment
     payment_limit: string; // Payment due date each month
-    tacit_renewal: boolean; // "Yes" or "No" indicating tacit renewal
+    tacit_renewal: string; // "Yes" or "No" indicating tacit renewal
     Frequency: string; // Payment frequency (e.g., "Monthly")
-    digital_signature_of_the_contract: boolean; // Path to the digital signature file
+    digital_signature_of_the_contract: string; // Path to the digital signature file
     due_date: string; // Due date for the current payment (ISO 8601 format)
     created_at: string; // Date the contract was created (ISO 8601 format)
     updated_at: string; // Date the contract was last updated (ISO 8601 format)

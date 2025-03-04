@@ -26,23 +26,24 @@ import {
     FormLabel,
     FormMessage,
   } from "@/components/ui/form";
-  import { useState } from "react";
+  import { useEffect, useState } from "react";
   import { Separator } from "@/components/ui/separator";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
-import { Contract } from "@/types/DataProps";
+import { Contract, Locative, RentLocative } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
+import useFetchData from "@/hooks/useFetchData";
 
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
     owner_id: z.number().min(1, { message: "Owner ID must be greater than 0" }),
     tenant_id: z.number().min(1, { message: "Tenant ID must be greater than 0" }),
     concerned: z.number().optional(),
-  location: z.string().optional(),
+  location: z.number().optional(),
     cost_of_rent: z.number().optional(),
     contract_type: z.string().optional(),
     date_of_signature: z.string().optional(),
@@ -82,30 +83,52 @@ const form = useForm<z.infer<typeof FormSchema>>({
       date_of_signature: contract?.date_of_signature || "",  // Keep empty if date_of_signature is undefined
       entry_date: contract?.entry_date || "",  // Keep empty if entry_date is undefined
       end_date: contract?.end_date || "",  // Keep empty if end_date is undefined
-      Number_of_months_of_deposit: contract?.Number_of_months_of_deposit || 0,  // Keep empty if number_of_months_of_deposit is undefined
+      Number_of_months_of_deposit: contract?.Number_of_months_of_deposit || 2,  // Keep empty if number_of_months_of_deposit is undefined
       deposit_amount: contract?.deposit_amount || 0,  // Keep empty if deposit_amount is undefined
       caution_to_be_paid: contract?.caution_to_be_paid || "",  // Keep empty if caution_to_be_paid is undefined
-      number_of_months_in_advance: contract?.number_of_months_in_advance || 0,  // Keep empty if number_of_months_in_advance is undefined
+      number_of_months_in_advance: contract?.number_of_months_in_advance || 2,  // Keep empty if number_of_months_in_advance is undefined
       advance_amount: contract?.advance_amount || 0,  // Keep empty if advance_amount is undefined
-      penalty_for_delay: contract?.penalty_for_delay ||0,  // Keep empty if penalty_for_delay is undefined
+      penalty_for_delay: contract?.penalty_for_delay ||10,  // Keep empty if penalty_for_delay is undefined
       payment_limit: contract?.payment_limit || "",  // Keep empty if payment_limit is undefined
-      tacit_renewal: contract?.tacit_renewal || false,  // Keep empty if tacit_renewal is undefined
+      tacit_renewal: contract?.tacit_renewal === '1' ? true : false|| false,      // Keep empty if tacit_renewal is undefined
       Frequency: contract?.Frequency || "",  // Keep empty if frequency is undefined
-      digital_signature_of_the_contract: contract?.digital_signature_of_the_contract || false,  // Keep empty if digital_signature_of_the_contract is undefined
+      digital_signature_of_the_contract: contract?.digital_signature_of_the_contract === '1' ? true : false|| false,  // Keep empty if digital_signature_of_the_contract is undefined
       due_date: contract?.due_date || "",  // Keep empty if due_date is undefined
  
    }
   });
   const OwnerId = form.watch("owner_id")
   const RentPropertyId = form.watch("concerned")
+  const LocativeId = form.watch("location")
+  const depositMonths = form.watch("Number_of_months_of_deposit")
+
+  const { data: rentLocative, loading, error } = useFetchData<Locative>(
+    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${LocativeId?LocativeId:-1}`
+  )
 
 
+  
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
         const onSubmit = !contract? useFormSubmit<typeof FormSchema>(apiUrl)  // Use custom hook
         : useFormUpdate<typeof FormSchema>(apiUrl);  // Use custom hook
    
 
-  
+
+        useEffect(() => {
+          if (rentLocative !== null && rentLocative !== undefined) {
+            form.setValue('cost_of_rent', rentLocative?.rent);
+           
+          } else {
+            form.setValue('cost_of_rent', 0); // Set default value to 0 if cost is null or undefined
+          }
+        
+        }, [rentLocative, form]);
+        useEffect(() => {
+          form.setValue('deposit_amount', ((rentLocative?.charges ||0) * (depositMonths ||0)));
+          form.setValue('advance_amount', rentLocative?.charges);
+        }, [depositMonths]);
+        
+  console.log(" this is tactit" + form.watch("tacit_renewal"))
   
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -226,7 +249,9 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Number of Months of Deposit *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))}/>
+          <Input type="number" {...field} onChange={(e)=>{field.onChange(parseInt(e.target.value))
+
+          }} min={0}/>
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -241,7 +266,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Deposit Amount *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} min={0} />
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -279,7 +304,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Number of Months in Advance *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(e.target.value)} min={0} placeholder="0"/>
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -294,7 +319,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Advance Amount *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} min={0}/>
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -309,7 +334,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Penalty for Delay % *</FormLabel>
         <FormControl>
-          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} />
+          <Input type="number" {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} min={0}/>
         </FormControl>
         <FormMessage className="text-xs" />
       </FormItem>
@@ -346,7 +371,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
     render={({ field }) => (
       <FormItem>
         <FormLabel>Tacit Renewal? *</FormLabel>
-        <Select onValueChange={(value) => form.setValue('tacit_renewal', value === 'Yes')}>
+        <Select value={form.watch("tacit_renewal") ===true ? 'Yes' : 'No'} onValueChange={(value) => form.setValue('tacit_renewal', value === 'Yes')}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select Option" />
@@ -394,7 +419,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       <FormItem>
         <FormLabel>Digital Signature of the Contract? *</FormLabel>
         <FormControl>
-        <Select onValueChange={(value) => form.setValue('digital_signature_of_the_contract', value === 'Yes')}>
+        <Select value={form.watch("digital_signature_of_the_contract") ===true ? 'Yes' : 'No'} onValueChange={(value) => form.setValue('digital_signature_of_the_contract', value === 'Yes')}>
           <FormControl>
             <SelectTrigger>
               <SelectValue placeholder="Select Option" />
