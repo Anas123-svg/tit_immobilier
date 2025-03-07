@@ -102,11 +102,11 @@ const LocativeComponent:React.FC<LocativeComponentProps> = ({goods ,handleReload
             </div>
             </div>
           ),
-          occupant:good.owner,
-          state: (
-            <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
-         {good.status}
-            </span>
+          occupant:detail.occupant ?detail.occupant:"N/A" ,
+          state: (<div className="w-[100px]">
+            <span className={`${detail.state == "not occupied"?  "bg-green-500 ":"bg-red-500"}  text-white px-2 py-1 rounded-full text-xs`}>
+         {detail.state}
+            </span></div>
           ),
           createIt: good.created_at,
           noRent:<span className='text-yellow-500'> {detail.rent} XOF</span>,

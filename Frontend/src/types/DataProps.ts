@@ -507,6 +507,9 @@ block:string;
     created_at: string; // Date the contract was created (ISO 8601 format)
     updated_at: string; // Date the contract was last updated (ISO 8601 format)
     status: string; // The status of the contract (e.g., "active")
+    rent_locative:Locative
+    owner:Owner
+    tenant:Tenant
   }
   
   export interface TenantPayment {
@@ -683,6 +686,8 @@ export interface Locative {
   rent?: number;
   charges?: number;
   room?: number;
+  state?:string,
+  occupant?:string;
   area?: number;
   created_at?: string; // or Date if you plan to work with Date objects
   updated_at?: string; // or Date if you plan to work with Date objects

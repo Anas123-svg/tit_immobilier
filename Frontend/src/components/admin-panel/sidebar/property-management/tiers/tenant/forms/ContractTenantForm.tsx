@@ -37,7 +37,25 @@ import { Contract, Locative, RentLocative } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
 import useFetchData from "@/hooks/useFetchData";
-
+import Stepper from "@/components/admin-panel/UI-components/Stepper";
+import { Trash } from "lucide-react";
+const invoiceSchema = z.object({
+  designation: z.string().optional(),
+  unit_price: z.number().optional(),
+  qty: z.number().optional(),
+  vat: z.number().optional(),
+  discount: z.number().optional(),
+  total: z.number().optional(),
+});
+const previousInvoiceSchema = z.object({
+  month: z.string().optional(),
+  type: z.string().optional(),
+  rent: z.number().optional(),
+  charge: z.number().optional(),
+  total: z.number().optional(),
+  verse: z.number().optional(),
+  remaining: z.number().optional(),
+});
 // Define the validation schema using Zod with additional validation rules
 const FormSchema = z.object({
     owner_id: z.number().min(1, { message: "Owner ID must be greater than 0" }),
@@ -45,7 +63,7 @@ const FormSchema = z.object({
     concerned: z.number().optional(),
   location: z.number().optional(),
     cost_of_rent: z.number().optional(),
-    contract_type: z.string().optional(),
+    contract_type: z.string(),
     date_of_signature: z.string().optional(),
     entry_date: z.string().optional(),
     end_date: z.string().optional(),
@@ -61,6 +79,8 @@ const FormSchema = z.object({
     digital_signature_of_the_contract: z.boolean().optional(),
     due_date: z.string().optional(),
     id: z.number().optional(),
+    previouse_invoices: z.array(previousInvoiceSchema).optional(),
+     invoices: z.array(invoiceSchema).optional(),
   });
   interface BusinessTenantFormProps {
     contract?: Contract;
@@ -105,7 +125,61 @@ const form = useForm<z.infer<typeof FormSchema>>({
   const { data: rentLocative, loading, error } = useFetchData<Locative>(
     `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${LocativeId?LocativeId:-1}`
   )
+  const [activeStep, setActiveStep] = useState(0);
 
+  const handleStepChange = (step: number) => {
+    setActiveStep(step);
+  };
+  const [invoiceState, setInvoice] = useState([
+      { 
+        designation: '', 
+        unit_price: 0, 
+        qty: 1, 
+        vat: 0, 
+        discount: 0, 
+        total: 0 
+      }
+    ]); // Initial state for invoices
+    const [previousInvoiceState, setPreviousInvoiceState] = useState([
+      {
+        month: '',
+        type: '',
+        rent: 0,
+        charge: 0,
+        total: 0,
+        verse: 0,
+        remaining: 0,
+      },
+    ]);
+    const handleRemovePreviousInvoice = (index: number) => {
+      const updatedPreviousInvoice = previousInvoiceState.filter((_, i) => i !== index);
+      setPreviousInvoiceState(updatedPreviousInvoice);
+    };
+    const handleAddPreviousInvoice = () => {
+      setPreviousInvoiceState([
+        ...previousInvoiceState,
+        {
+          month: '',
+          type: '',
+          rent: 0,
+          charge: 0,
+          total: 0,
+          verse: 0,
+          remaining: 0,
+        },
+      ]);
+    };
+    const handleAddInvoice = () => {
+      setInvoice([
+        ...invoiceState,
+        { designation: '', unit_price: 0, qty: 1, vat: 0, discount: 0, total: 0 }
+      ]);
+    };
+    
+    const handleRemoveInvoice = (index: number) => {
+      const updatedInvoice = invoiceState.filter((_, i) => i !== index);
+      setInvoice(updatedInvoice);
+    };
 
   
   const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-contract';
@@ -133,10 +207,16 @@ const form = useForm<z.infer<typeof FormSchema>>({
     return (
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
         <DialogTrigger>{customBtn?customBtn:'Add a Contract'}</DialogTrigger>
-        <DialogContent className="w-full max-w-[95vw] lg:max-w-[900px] h-auto max-h-[95vh] overflow-y-auto p-6">
+        <DialogContent className="w-full max-w-[95vw] lg:max-w-[1100px] h-auto max-h-[95vh] overflow-y-auto p-6">
           <DialogTitle>Add a Contract</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                 <Stepper
+                                activeStep={activeStep}
+                                onStepChange={handleStepChange}
+                                stepsTitle={["CONTRACT", "Bill","Previous RENTS"]}
+                              > 
+                             <div className="space-y-6"> 
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
   TENANT AND OWNER DETAILS
 </h2>
@@ -452,11 +532,228 @@ const form = useForm<z.infer<typeof FormSchema>>({
   />
 </div>
 
+
+</div>
+
+<div className="space-y-5">
+<h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+ADD OPTIONS TO THIS INVOICE
+</h2>
+<div className="flex flex-col space-y-5">
+  {invoiceState.map((_, index) => (
+    <div key={index} className="grid-cols-7 gap-5 grid">
+      {/* Designation Field */}
+      <FormField control={form.control} name={`invoices.${index}.designation`} render={({ field }) => (
+        <FormItem>
+          <FormLabel>Designation *</FormLabel>
+          <FormControl>
+            <Input {...field} placeholder="e.g. Service Charge" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )} />
+
+      {/* Unit Price Field */}
+      <FormField control={form.control} name={`invoices.${index}.unit_price`} render={({ field }) => (
+        <FormItem>
+          <FormLabel>Unit Price *</FormLabel>
+          <FormControl>
+            <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )} />
+
+      {/* Quantity Field */}
+      <FormField control={form.control} name={`invoices.${index}.qty`} render={({ field }) => (
+        <FormItem>
+          <FormLabel>Quantity *</FormLabel>
+          <FormControl>
+            <Input type="number" {...field} placeholder="1" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )} />
+
+      {/* VAT Field */}
+      <FormField control={form.control} name={`invoices.${index}.vat`} render={({ field }) => (
+        <FormItem>
+          <FormLabel>VAT *</FormLabel>
+          <FormControl>
+            <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )} />
+
+      {/* Discount Field */}
+      <FormField control={form.control} name={`invoices.${index}.discount`} render={({ field }) => (
+        <FormItem>
+          <FormLabel>Discount *</FormLabel>
+          <FormControl>
+            <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )} />
+
+      {/* Total Field */}
+      <FormField control={form.control} name={`invoices.${index}.total`} render={({ field }) => (
+        <FormItem>
+          <FormLabel>Total *</FormLabel>
+          <FormControl>
+            <Input type="number" {...field} placeholder="0" disabled />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )} />
+
+      {/* Remove Button */}
+      <button type="button" className="bg-red-500 w-fit self-end text-white px-4 py-2 rounded-md" onClick={() => handleRemoveInvoice(index)}>
+        Remove
+      </button>
+    </div>
+  ))}
+
+  {/* Button to Add New Invoice Item */}
+  <button type="button" className="bg-secondary w-fit self-end text-white px-4 py-2 rounded-md" onClick={handleAddInvoice}>
+    Add
+  </button>
+</div>
+  {/* Summary Section */}
+  <div className="bg-gray-100 p-4 mt-6 rounded-md">
+        <div className="text-right text-gray-600 text-sm">
       
+          <p>TOTAL HT : {0}</p>
+          <p>TOTAL DISCOUNT : {0}</p>
+          <p>TOTAL VAT : {0}</p>
+        </div>
+        <h2 className="text-blue-600 text-lg font-bold text-right mt-2">
+          TOTAL : <span className="text-green-500">{0}</span>
+        </h2>
+      </div> 
+      
+       </div>
+
+
+
+       <div className="space-y-5">
+  <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+    ADD OPTIONS TO THIS INVOICE
+  </h2>
+  <div className="flex flex-col space-y-5">
+    {previousInvoiceState.map((_, index) => (
+      <div key={index} className="grid grid-cols-8 gap-5">
+        {/* Month Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.month`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Month</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="e.g. Loyer de mars 2025" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Type Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.type`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Type</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="e.g. AVANCE" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Rent Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.rent`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Rent</FormLabel>
+            <FormControl>
+              <Input {...field} type="number" placeholder="0" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Charge Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.charge`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Charge</FormLabel>
+            <FormControl>
+              <Input {...field} type="number" placeholder="0" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Total Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.total`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Total</FormLabel>
+            <FormControl>
+              <Input {...field} type="number" disabled placeholder="0" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Verse Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.verse`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Verse</FormLabel>
+            <FormControl>
+              <Input {...field} type="number" disabled placeholder="0" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Remaining Field */}
+        <FormField control={form.control} name={`previouse_invoices.${index}.remaining`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Remaining</FormLabel>
+            <FormControl>
+              <Input {...field} type="number" disabled placeholder="0" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
+
+        {/* Remove Button */}
+        <button type="button" className="bg-red-500 text-white w-fit self-end px-4 py-2 rounded-md" onClick={() => handleRemovePreviousInvoice(index)}>
+          <Trash/>
+        </button>
+      </div>
+    ))}
+
+    {/* Button to Add New Invoice Item */}
+    <button type="button" className="bg-secondary text-white w-fit self-end px-4 py-2 rounded-md" onClick={handleAddPreviousInvoice}>
+      Add
+    </button>
+  </div>
+
+  {/* Summary Section */}
+  <div className="bg-gray-100 p-4 mt-6 rounded-md">
+    <div className="text-right text-gray-600 text-sm">
+      <p>TOTAL HT : 0</p>
+      <p>TOTAL DISCOUNT : 0</p>
+      <p>TOTAL VAT : 0</p>
+    </div>
+    <h2 className="text-blue-600 text-lg font-bold text-right mt-2">
+      TOTAL : <span className="text-green-500">0 XOF</span>
+    </h2>
+  </div>
+</div>
+
+       </Stepper> 
               <Button type="submit" className="w-full my-2 bg-primary">
                 Submit
               </Button>
-            </form>
+            
+            
+                </form>
           </Form>
         </DialogContent>
       </Dialog>

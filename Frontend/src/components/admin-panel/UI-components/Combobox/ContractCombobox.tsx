@@ -16,23 +16,20 @@ interface ContractComboboxProps {
 }
 
 export function ContractCombobox({ name, control,tenantId }: ContractComboboxProps) {
-  const [locationId, setlocationId] = React.useState(-1)
+ 
   const [contract, setcontract] = React.useState<Contract>()
-  const [concernedId, setconcernedId] = React.useState(-1)
+
   const { data: contracts, loading, error } = useFetchData<Contract[]>(
     `${import.meta.env.VITE_API_URL}/api/tenant-contract/tenant/${tenantId}`
   )
-  const { data: rentLocative } = useFetchData<Locative>(
-    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${locationId}`
-  )
-
+  const [concernedId, setconcernedId] = React.useState(-1)
   const { data: property } = useFetchData<Good>(`${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${concernedId}`)
+  React.useEffect(()=>{
+ 
+    setconcernedId(contract?.concerned??-1)
+  
+  },[contract,tenantId])
 
-React.useEffect(()=>{
-  setlocationId(contract?.location??-1)
-  setconcernedId(contract?.concerned??-1)
-
-},[contract,tenantId])
   if (loading) return <div>Loading...</div>
 
 
@@ -52,7 +49,7 @@ React.useEffect(()=>{
                   className={cn("justify-between", !field.value && "text-muted-foreground")}
                 >
                   {field.value
-                    ? `${ contract?.contract_type} Contract for property ${property?.property_name} door No. ${rentLocative?.door_number} `
+                    ? `${ contract?.contract_type} Contract for property ${property?.property_name} door No. ${contract?.rent_locative?.door_number} `
                     : "Select a contract"}
 
                    
@@ -72,7 +69,7 @@ React.useEffect(()=>{
                         value={String( contract.location)}
                         onSelect={() => {field.onChange(contract.id); setcontract(contract)}}
                       >
-                      { contracts?.find((contract) => contract.id === field.value)?.contract_type} Contract for property {property?.property_name} door No. {rentLocative?.door_number} 
+                      { contracts?.find((contract) => contract.id === field.value)?.contract_type} Contract for property {property?.property_name} door No. {contract?.rent_locative?.door_number} 
                         <Check
                           className={cn(
                             "ml-auto",

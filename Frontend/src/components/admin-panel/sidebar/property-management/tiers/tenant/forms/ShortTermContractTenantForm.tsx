@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useEffect, useState } from "react";
-import InvoiceOptionsForm from "./InvoiceOptionsForm";
+import InvoiceOptionsForm from "../UI/InvoiceOptionsForm";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";

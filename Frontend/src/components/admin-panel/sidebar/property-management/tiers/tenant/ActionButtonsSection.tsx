@@ -14,6 +14,10 @@ import ShortTermContractTenantForm from "./forms/ShortTermContractTenantForm";
 import RentBill from "./forms/RentBill";
 import PenaltyBills from "./forms/PenaltyBills";
 import GenerationButton from "./GenerationButton";
+import RenewalContract from "./forms/RenewalContractTenantForm";
+import AddPayment from "./forms/AddPaymentTenantForm";
+import OthersForm from "./forms/OthersTenantForm";
+import FillInventoryTenantForm from "./forms/FillInventoryTenantForm";
 
 
 const TenantActionsSection: React.FC = () => {
@@ -37,13 +41,15 @@ const TenantActionsSection: React.FC = () => {
     
          
             <ShortTermContractTenantForm />
-    
+    <FillInventoryTenantForm/>
          
             <RentBill />
     
          
             <PenaltyBills />
-    
+            <RenewalContract/>
+            <AddPayment/>
+      <OthersForm/>
         </DropdownMenuContent>
       </DropdownMenu>
 
