@@ -80,7 +80,7 @@ const FormSchema = z.object({
     due_date: z.string().optional(),
     id: z.number().optional(),
     previouse_invoices: z.array(previousInvoiceSchema).optional(),
-     invoices: z.array(invoiceSchema).optional(),
+   invoices: z.array(invoiceSchema).optional(),
   });
   interface BusinessTenantFormProps {
     contract?: Contract;

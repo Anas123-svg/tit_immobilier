@@ -18,6 +18,7 @@ import RenewalContract from "./forms/RenewalContractTenantForm";
 import AddPayment from "./forms/AddPaymentTenantForm";
 import OthersForm from "./forms/OthersTenantForm";
 import FillInventoryTenantForm from "./forms/FillInventoryTenantForm";
+import ContractTerminationTenantForm from "./forms/ContractTerminationTenantForm";
 
 
 const TenantActionsSection: React.FC = () => {
@@ -44,7 +45,7 @@ const TenantActionsSection: React.FC = () => {
     <FillInventoryTenantForm/>
          
             <RentBill />
-    
+    <ContractTerminationTenantForm/>
          
             <PenaltyBills />
             <RenewalContract/>

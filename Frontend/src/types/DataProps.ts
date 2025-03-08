@@ -510,6 +510,10 @@ block:string;
     rent_locative:Locative
     owner:Owner
     tenant:Tenant
+    total_amount_due:number;
+
+    previous_invoices: []
+    invoices:[]
   }
   
   export interface TenantPayment {
@@ -699,4 +703,27 @@ export interface Locative {
 export interface RentLocative {
   message:string,
   data:Locative[]
+}
+
+
+
+// Interface for an invoice
+export interface Invoice {
+  designation?: string;
+  unit_price?: number;
+  qty?: number;
+  vat?: number;
+  discount?: number;
+  total?: number;
+}
+
+// Interface for a previous invoice
+export interface PreviousInvoice {
+  month?: string;
+  type?: string;
+  rent?: number;
+  charge?: number;
+  total?: number;
+  verse?: number;
+  remaining?: number;
 }
