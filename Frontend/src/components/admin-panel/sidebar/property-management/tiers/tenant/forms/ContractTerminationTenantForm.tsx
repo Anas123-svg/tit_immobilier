@@ -262,13 +262,14 @@ const [previousInvoiceState, setPreviousInvoiceState] = useState([
   {/* Column 1 - Left side (Details of Items to be Returned) */}
   <div className="space-y-4">
     <h3 className="font-semibold">DETAILS OF ITEMS TO BE RETURNED TO THE TENANT</h3>
-    
-    {/* Designation Field */}
-    <FormField
+    <div className="grid grid-cols-3 gap-2">
+
+ {/* Designation Field */}
+ <FormField
       control={form.control}
       name="designation"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="col-span-2">
           <FormLabel>Designation</FormLabel>
           <FormControl>
             <Input
@@ -301,6 +302,8 @@ const [previousInvoiceState, setPreviousInvoiceState] = useState([
         </FormItem>
       )}
     />
+    </div>
+   
 
     {/* Total to be Returned */}
     <div className="font-semibold mt-4">
@@ -313,12 +316,13 @@ const [previousInvoiceState, setPreviousInvoiceState] = useState([
   <div className="space-y-4">
     <h3 className="font-semibold">DETAILS OF ELEMENTS DEDUCTIBLE TO THE TENANT</h3>
 
-    {/* Designation Field */}
-    <FormField
+    <div className="grid grid-cols-3 gap-2">
+   {/* Designation Field */}
+   <FormField
       control={form.control}
       name="deductible_designation"
       render={({ field }) => (
-        <FormItem>
+        <FormItem  className="col-span-2">
           <FormLabel>Designation</FormLabel>
           <FormControl>
             <Input
@@ -351,6 +355,8 @@ const [previousInvoiceState, setPreviousInvoiceState] = useState([
         </FormItem>
       )}
     />
+   </div>
+ 
 
     {/* Total to Deduct */}
     <div className="font-semibold mt-4">
@@ -368,7 +374,7 @@ const [previousInvoiceState, setPreviousInvoiceState] = useState([
 
     <div className="space-y-5">
 <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
-ADD OPTIONS TO THIS INVOICE
+OTHER ELEMENTS DEDUCTIBLE TO THE TENANT
 </h2>
 <div className="flex flex-col space-y-5">
   {invoiceState.map((_, index) => (

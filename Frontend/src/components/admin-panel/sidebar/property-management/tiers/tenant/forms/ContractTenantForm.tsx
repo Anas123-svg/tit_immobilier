@@ -79,8 +79,8 @@ const FormSchema = z.object({
     digital_signature_of_the_contract: z.boolean().optional(),
     due_date: z.string().optional(),
     id: z.number().optional(),
-    previouse_invoices: z.array(previousInvoiceSchema).optional(),
-   invoices: z.array(invoiceSchema).optional(),
+    tenant_contract_details: z.array(previousInvoiceSchema).optional(),
+   tenant_contract_bills: z.array(invoiceSchema).optional(),
   });
   interface BusinessTenantFormProps {
     contract?: Contract;
@@ -139,7 +139,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
         discount: 0, 
         total: 0 
       }
-    ]); // Initial state for invoices
+    ]); // Initial state for tenant_contract_bills
     const [previousInvoiceState, setPreviousInvoiceState] = useState([
       {
         month: '',
@@ -543,7 +543,7 @@ ADD OPTIONS TO THIS INVOICE
   {invoiceState.map((_, index) => (
     <div key={index} className="grid-cols-7 gap-5 grid">
       {/* Designation Field */}
-      <FormField control={form.control} name={`invoices.${index}.designation`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_contract_bills.${index}.designation`} render={({ field }) => (
         <FormItem>
           <FormLabel>Designation *</FormLabel>
           <FormControl>
@@ -554,7 +554,7 @@ ADD OPTIONS TO THIS INVOICE
       )} />
 
       {/* Unit Price Field */}
-      <FormField control={form.control} name={`invoices.${index}.unit_price`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_contract_bills.${index}.unit_price`} render={({ field }) => (
         <FormItem>
           <FormLabel>Unit Price *</FormLabel>
           <FormControl>
@@ -565,7 +565,7 @@ ADD OPTIONS TO THIS INVOICE
       )} />
 
       {/* Quantity Field */}
-      <FormField control={form.control} name={`invoices.${index}.qty`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_contract_bills.${index}.qty`} render={({ field }) => (
         <FormItem>
           <FormLabel>Quantity *</FormLabel>
           <FormControl>
@@ -576,7 +576,7 @@ ADD OPTIONS TO THIS INVOICE
       )} />
 
       {/* VAT Field */}
-      <FormField control={form.control} name={`invoices.${index}.vat`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_contract_bills.${index}.vat`} render={({ field }) => (
         <FormItem>
           <FormLabel>VAT *</FormLabel>
           <FormControl>
@@ -587,7 +587,7 @@ ADD OPTIONS TO THIS INVOICE
       )} />
 
       {/* Discount Field */}
-      <FormField control={form.control} name={`invoices.${index}.discount`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_contract_bills.${index}.discount`} render={({ field }) => (
         <FormItem>
           <FormLabel>Discount *</FormLabel>
           <FormControl>
@@ -598,7 +598,7 @@ ADD OPTIONS TO THIS INVOICE
       )} />
 
       {/* Total Field */}
-      <FormField control={form.control} name={`invoices.${index}.total`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_contract_bills.${index}.total`} render={({ field }) => (
         <FormItem>
           <FormLabel>Total *</FormLabel>
           <FormControl>
@@ -645,7 +645,7 @@ ADD OPTIONS TO THIS INVOICE
     {previousInvoiceState.map((_, index) => (
       <div key={index} className="grid grid-cols-8 gap-5">
         {/* Month Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.month`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.month`} render={({ field }) => (
           <FormItem>
             <FormLabel>Month</FormLabel>
             <FormControl>
@@ -656,7 +656,7 @@ ADD OPTIONS TO THIS INVOICE
         )} />
 
         {/* Type Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.type`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.type`} render={({ field }) => (
           <FormItem>
             <FormLabel>Type</FormLabel>
             <FormControl>
@@ -667,29 +667,29 @@ ADD OPTIONS TO THIS INVOICE
         )} />
 
         {/* Rent Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.rent`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.rent`} render={({ field }) => (
           <FormItem>
             <FormLabel>Rent</FormLabel>
             <FormControl>
-              <Input {...field} type="number" placeholder="0" />
+              <Input {...field} type="number" placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )} />
 
         {/* Charge Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.charge`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.charge`} render={({ field }) => (
           <FormItem>
             <FormLabel>Charge</FormLabel>
             <FormControl>
-              <Input {...field} type="number" placeholder="0" />
+              <Input {...field} type="number" placeholder="0" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )} />
 
         {/* Total Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.total`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.total`} render={({ field }) => (
           <FormItem>
             <FormLabel>Total</FormLabel>
             <FormControl>
@@ -700,7 +700,7 @@ ADD OPTIONS TO THIS INVOICE
         )} />
 
         {/* Verse Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.verse`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.verse`} render={({ field }) => (
           <FormItem>
             <FormLabel>Verse</FormLabel>
             <FormControl>
@@ -711,7 +711,7 @@ ADD OPTIONS TO THIS INVOICE
         )} />
 
         {/* Remaining Field */}
-        <FormField control={form.control} name={`previouse_invoices.${index}.remaining`} render={({ field }) => (
+        <FormField control={form.control} name={`tenant_contract_details.${index}.remaining`} render={({ field }) => (
           <FormItem>
             <FormLabel>Remaining</FormLabel>
             <FormControl>

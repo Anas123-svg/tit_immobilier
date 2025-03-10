@@ -25,13 +25,13 @@ const data: TableRow[] = [
 const PaymentFormSchema = z.object({
   tenant_id: z.number().min(1, "Tenant ID is required"),
   contract_id: z.number().min(1, "Contract ID is required"),
-  payment_method: z.string().min(1, "Payment method is required"),
-  payment_date: z.string().min(1, "Payment date is required"),
-  amount: z.number().min(0.01, "Amount must be greater than 0"),
+  payment_method: z.string().optional(),
+  payment_date: z.string().optional(),
+  amount: z.number().optional(),
   designation: z.string().min(1, "Designation is required"),
-  invoice_type:z.string(),
+  invoice_type:z.string().optional(),
   total: z.number().optional(),
-  treasury_type:z.string(),
+  treasury_type:z.string().optional(),
   documents: z.array(z.string()).optional(),
   done_by: z.string().optional(),
   cheque: z.string().optional(),
@@ -54,15 +54,15 @@ const AddPayment = () => {
     resolver: zodResolver(PaymentFormSchema),
   });
 
-  const apiUrl = import.meta.env.VITE_API_URL + "/api/payment";
+  const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-payment";
   const onSubmit = useFormSubmit<typeof PaymentFormSchema>(apiUrl);
 
   const Contract = form.watch("contract_id");
   const TenantId = form.watch("tenant_id");
 
-  const { data: contract, loading, error } = useFetchData<Contract>(
-    `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract ? Contract : "0"}`
-  );
+  // const { data: contract, loading, error } = useFetchData<Contract>(
+  //   `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract ? Contract : "0"}`
+  // );
 
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -97,7 +97,7 @@ const AddPayment = () => {
   <FormItem>
     <FormLabel>Selection of Invoice Type *</FormLabel>
     <FormControl>
-      <Select {...field}>
+      <Select onValueChange={field.onChange}>
         <SelectTrigger>
           <SelectValue placeholder="Select a contract" />
         </SelectTrigger>
@@ -152,7 +152,7 @@ const AddPayment = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, index) => (
+          {data?.map((row, index) => (
             <tr key={index}>
               <td className="border border-gray-300 p-2">
               <input
@@ -179,7 +179,7 @@ const AddPayment = () => {
   <FormItem>
     <FormLabel>Treasury Method</FormLabel>
     <FormControl>
-      <Select {...field}>
+      <Select onValueChange={field.onChange}>
         <SelectTrigger>
           <SelectValue placeholder="Select method" />
         </SelectTrigger>
