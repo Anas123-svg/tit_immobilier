@@ -1,28 +1,57 @@
-import * as React from "react"
-import useFetchData from "@/hooks/useFetchData"
-import { Locative, RentLocative } from "@/types/DataProps"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { Controller } from "react-hook-form"
-import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import * as React from "react";
+import useFetchData from "@/hooks/useFetchData";
+import { Locative, RentLocative } from "@/types/DataProps";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Controller } from "react-hook-form";
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface LocativeComboboxProps {
-  name: string
-  control: any
-  rentPropertyId?:number
-  formState?: any
+  name: string;
+  control: any;
+  rentPropertyId?: number;
+  formState?: any;
 }
 
-export function LocativeCombobox({ name, control ,rentPropertyId,formState}: LocativeComboboxProps) {
-  const { data: rentLocative, loading, error } = useFetchData<RentLocative>(
-    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/property/${rentPropertyId?rentPropertyId:'0'}`
-  )
+export function LocativeCombobox({
+  name,
+  control,
+  rentPropertyId,
+  formState,
+}: LocativeComboboxProps) {
+  const {
+    data: rentLocative,
+    loading,
+    error,
+  } = useFetchData<RentLocative>(
+    `${
+      import.meta.env.VITE_API_URL
+    }/api/owner-rent-locative/not-occupied/property/${
+      rentPropertyId ? rentPropertyId : "0"
+    }`
+  );
 
-//   if (loading) return <div>Loading...</div>
-//   if (error) return <div>Error fetching rentLocative: {error}</div>
+  //   if (loading) return <div>Loading...</div>
+  //   if (error) return <div>Error fetching rentLocative: {error}</div>
 
   return (
     <FormItem className="flex flex-col gap-2">
@@ -37,10 +66,21 @@ export function LocativeCombobox({ name, control ,rentPropertyId,formState}: Loc
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn("justify-between", !field.value && "text-muted-foreground")}
+                  className={cn(
+                    "justify-between",
+                    !field.value && "text-muted-foreground"
+                  )}
                 >
                   {field.value
-                    ? `${rentLocative?.data?.find((locative) => locative.id === field.value)?.rental_type} ${ rentLocative?.data?.find((locative) => locative.id === field.value)?.door_number}`
+                    ? `${
+                        rentLocative?.data?.find(
+                          (locative) => locative.id === field.value
+                        )?.rental_type
+                      } ${
+                        rentLocative?.data?.find(
+                          (locative) => locative.id === field.value
+                        )?.door_number
+                      }`
                     : "Select a locative"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -58,11 +98,13 @@ export function LocativeCombobox({ name, control ,rentPropertyId,formState}: Loc
                         value={locative.door_number}
                         onSelect={() => field.onChange(locative.id)}
                       >
-                        {locative.rental_type } {locative.door_number}
+                        {locative.rental_type} {locative.door_number}
                         <Check
                           className={cn(
                             "ml-auto",
-                            locative.id === field.value ? "opacity-100" : "opacity-0"
+                            locative.id === field.value
+                              ? "opacity-100"
+                              : "opacity-0"
                           )}
                         />
                       </CommandItem>
@@ -75,11 +117,10 @@ export function LocativeCombobox({ name, control ,rentPropertyId,formState}: Loc
         )}
       />
       {/* Uncomment if you want to display errors */}
-            {formState.errors[name] && (
-              <FormMessage>{formState.errors[name]?.message}</FormMessage>  
-            )}
+      {formState.errors[name] && (
+        <FormMessage>{formState.errors[name]?.message}</FormMessage>
+      )}
       <FormMessage />
-      
     </FormItem>
-  )
+  );
 }

@@ -1,10 +1,17 @@
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
-import { Good, Mandate } from '@/types/DataProps';
-import { Eye } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Good, Mandate } from "@/types/DataProps";
+import { Eye } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 // Define form schema using Zod for validation
 const FormSchema = z.object({
   documents: z.array(z.string()).optional(),
@@ -30,20 +37,35 @@ const LocativeDialog: React.FC<MandateDialogProps> = ({ good }) => {
           <Eye size={18} />
         </button>
       </DialogTrigger>
-      <DialogContent className='min-w-[200px] md:min-w-[600px]'>
-        <DialogTitle className=''></DialogTitle>
-        <DialogDescription className='space-y-5'>
+      <DialogContent className="min-w-[200px] md:min-w-[600px]">
+        <DialogTitle className=""></DialogTitle>
+        <DialogDescription className="space-y-5">
           <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
-            Property Details: <span className='font-bold'>{good.neighborhood}</span>
+            Property Details:{" "}
+            <span className="font-bold">{good.property_name}</span>
           </h2>
-          <div className='grid md:grid-cols-2 gap-2'>
-            <p><strong>Code:</strong> {good.details?.[0]?.door_number}</p>
-            <p><strong>Owner:</strong> {good.owner}</p>
-            <p><strong>Rental Type:</strong> {good.details?.[0]?.rental_type}</p>
-            <p><strong>Status:</strong> {good.status}</p>
-            <p><strong>Rent:</strong> {rent} XOF</p>
-            <p><strong>Charge:</strong> {charge} XOF</p>
-            <p><strong>Total Rent:</strong> {total} XOF</p>
+          <div className="grid md:grid-cols-2 gap-2">
+            <p>
+              <strong>Code:</strong> {good.details?.[0]?.door_number}
+            </p>
+            <p>
+              <strong>Owner:</strong> {good.owner}
+            </p>
+            <p>
+              <strong>Rental Type:</strong> {good.details?.[0]?.rental_type}
+            </p>
+            <p>
+              <strong>Status:</strong> {good.status}
+            </p>
+            <p>
+              <strong>Rent:</strong> {rent} XOF
+            </p>
+            <p>
+              <strong>Charge:</strong> {charge} XOF
+            </p>
+            <p>
+              <strong>Total Rent:</strong> {total} XOF
+            </p>
           </div>
         </DialogDescription>
 
