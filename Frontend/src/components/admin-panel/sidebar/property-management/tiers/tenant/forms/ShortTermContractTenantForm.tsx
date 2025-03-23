@@ -34,6 +34,34 @@ import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-component
 import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
 import useFetchData from "@/hooks/useFetchData";
 import { Locative, RentLocative } from "@/types/DataProps";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+// Type definition for an Invoice Item
+type InvoiceItem = {
+  designation: string;
+  price: number;
+  qty: number;
+  vat: number;
+  discount: number;
+  total: number;
+};
+
+// Invoice Item Schema (with optional fields)
+const invoiceItemSchema = z.object({
+  designation: z.string(),
+  price: z.number(),
+  qty: z.number(),
+  vat: z.number(),
+  discount: z.number(),
+  total: z.number(),
+});
 
 // Define validation schema
 const FormSchema = z.object({
@@ -48,6 +76,7 @@ const FormSchema = z.object({
   due_date: z.string().optional(),
   number_of_hours: z.number().optional(),
   rental_amount: z.number().optional(),
+  details: z.array(invoiceItemSchema).optional(),
 });
 
 const ShortTermContractTenantForm = () => {
@@ -61,6 +90,61 @@ const ShortTermContractTenantForm = () => {
     },
   });
 
+  const [items, setItems] = useState<InvoiceItem[]>([
+    {
+      designation: "",
+      price: 0,
+      qty: 1,
+      vat: 0,
+      discount: 0,
+      total: 0,
+    },
+  ]);
+
+  // Function to calculate totals for each row
+
+
+  // Handle change in form fields
+
+  // Function to add a new row dynamically
+  const addRow = () => {
+    setItems([
+      ...items,
+      { designation: "", price: 0, qty: 1, vat: 0, discount: 0, total: 0 },
+    ]);
+  };
+ // Watch changes in price, qty, vat, and discount for each invoice item
+const watchedDetails = form.watch('details');
+
+// Function to calculate total
+const calculateTotal = (price: number, qty: number, vat: number, discount: number): number => {
+  return (price || 0) * (qty || 1) + (vat || 0) - (discount || 0);
+};
+
+// UseEffect to update the total whenever the watched values change
+useEffect(() => {
+  if (watchedDetails) {
+    watchedDetails.forEach((item, index) => {
+      const total = calculateTotal(item.price, item.qty, item.vat, item.discount);
+      form.setValue(`details.${index}.total`, total);
+    });
+  }
+}, [watchedDetails, form.setValue]);
+
+  // Function to delete a row
+  const deleteRow = (index: number) => {
+    if (items.length > 1) {
+      setItems(items.filter((_, i) => i !== index));
+    }
+  };
+
+  // Compute summary totals
+  const totalHT = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const totalDiscount = items.reduce((sum, item) => sum + item.discount, 0);
+  const totalVAT = items.reduce((sum, item) => sum + item.vat, 0);
+  const grandTotal = totalHT + totalVAT - totalDiscount;
+
+
 const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract ";
   const onSubmit =  useFormSubmit<typeof FormSchema>(apiUrl);  // Use custom hook
   const OwnerId = form.watch("owner_id")
@@ -71,7 +155,6 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
   )
 
 
-  
           useEffect(() => {
             if (rentLocative !== null && rentLocative !== undefined) {
               form.setValue('rental_amount', rentLocative?.rent);
@@ -216,7 +299,130 @@ const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-short-term-contract "
                 )}
               />
             </div>
-            <InvoiceOptionsForm/>
+            <div className="p-4 border rounded-md shadow-md">
+        <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+          ADD OPTIONS TO THIS INVOICE
+        </h2>
+        <Table className="w-full mt-4">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Designation *</TableHead>
+              <TableHead>Unit Price *</TableHead>
+              <TableHead>Qty *</TableHead>
+              <TableHead>VAT</TableHead>
+              <TableHead>Discount</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <FormField control={form.control} name={`details.${index}.designation`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Designation *</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="e.g. Service Charge" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
+
+                <TableCell>
+                  <FormField control={form.control} name={`details.${index}.price`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Unit Price *</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="0" min="0" onChange={e => field.onChange(parseFloat(e.target.value))}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
+
+                <TableCell>
+                  <FormField control={form.control} name={`details.${index}.qty`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Quantity *</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="1" min="1" onChange={e => field.onChange(parseFloat(e.target.value))}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
+
+                <TableCell>
+                  <FormField control={form.control} name={`details.${index}.vat`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>VAT</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="0" min="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
+
+                <TableCell>
+                  <FormField control={form.control} name={`details.${index}.discount`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Discount</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="0" min="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
+
+                <TableCell>
+                <FormField control={form.control} name={`details.${index}.total`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Total</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" disabled placeholder="0" min="0" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
+
+                <TableCell>
+                  <Button
+                    onClick={() => deleteRow(index)}
+                    className="bg-red-500 text-white px-2 py-1"
+                    disabled={items.length === 1}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        {/* Add Button */}
+        <div className="flex justify-end mt-4">
+          <Button onClick={addRow} className="bg-secondary text-white">
+            Add+
+          </Button>
+        </div>
+          {/* Summary Section */}
+      {/* <div className="bg-gray-100 p-4 mt-6 rounded-md">
+        <div className="text-right text-gray-600 text-sm">
+          <p>NUMBER OF HOURS : {items.length}</p>
+          <p>TOTAL HT : {totalHT.toFixed(2)}</p>
+          <p>TOTAL DISCOUNT : {totalDiscount.toFixed(2)}</p>
+          <p>TOTAL VAT : {totalVAT.toFixed(2)}</p>
+        </div>
+        <h2 className="text-blue-600 text-lg font-bold text-right mt-2">
+          TOTAL : <span className="text-green-500">{grandTotal.toFixed(2)}</span>
+        </h2>
+      </div> */}
+      </div>
             <Button type="submit" className="w-full mt-4 bg-primary">
               Submit
             </Button>

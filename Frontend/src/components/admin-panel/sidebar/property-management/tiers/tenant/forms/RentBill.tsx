@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
@@ -35,6 +35,7 @@ const RentBill = () => {
 
   const form = useForm<RentFormData>({
     resolver: zodResolver(RentFormSchema),
+   
   });
 
 
@@ -44,11 +45,32 @@ const RentBill = () => {
           
 const Contract = form.watch("contract_id")
 const TenantId = form.watch("tenant_id")
+const Charge = form.watch("charge")
+const Rent = form.watch("rent")
+
+// Function to calculate the total based on rent and charge
 
 console.log(Contract)
 const { data:contract, loading, error } = useFetchData<Contract>(
   `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract?Contract:'0'}`
 )
+useEffect(() => {
+  if (contract?.rent_locative) {
+    // Set rent and charge values
+    const rent = contract.rent_locative.rent || 0;
+    const charge = contract.rent_locative.charges || 0;
+
+    // Set rent and charge values in the form
+    form.setValue('charge', charge);
+    form.setValue('rent', rent);
+
+    // Calculate total as sum of rent and charge
+    const total = rent + charge;
+
+    // Set total in the form
+    form.setValue('total', total);
+  }
+}, [contract, form]);
 
   return (
     <Dialog open={open} onOpenChange={openChange}>
@@ -135,7 +157,7 @@ const { data:contract, loading, error } = useFetchData<Contract>(
               <FormItem>
                 <FormLabel>Rent</FormLabel>
                 <FormControl>
-                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Rent" />
+                  <Input  {...field}  onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Rent" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -146,7 +168,7 @@ const { data:contract, loading, error } = useFetchData<Contract>(
               <FormItem>
                 <FormLabel>Charge</FormLabel>
                 <FormControl>
-                  <Input {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Charge" />
+                  <Input {...field}  onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Charge" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -161,7 +183,7 @@ const { data:contract, loading, error } = useFetchData<Contract>(
               <FormItem>
                 <FormLabel>Total</FormLabel>
                 <FormControl>
-                  <Input  {...field} onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Total" />
+                  <Input  {...field}   onChange={(e)=>field.onChange(parseInt(e.target.value))} disabled type="number" placeholder=" Total" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

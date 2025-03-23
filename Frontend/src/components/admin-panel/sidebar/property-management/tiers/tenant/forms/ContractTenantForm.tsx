@@ -123,7 +123,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
   const depositMonths = form.watch("Number_of_months_of_deposit")
 
   const { data: rentLocative, loading, error } = useFetchData<Locative>(
-    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${LocativeId?LocativeId:-1}`
+    `${import.meta.env.VITE_API_URL}/api/owner-rent-locative/${LocativeId?LocativeId:""}`
   )
   const [activeStep, setActiveStep] = useState(0);
 

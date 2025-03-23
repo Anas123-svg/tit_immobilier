@@ -9,17 +9,19 @@ import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobo
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
+import FileUploader from "@/components/common/uploader";
 
 const FillInventoryTenantForm = () => {
   const [open, setOpen] = useState(false);
   const [inventoryState, setInventoryState] = useState([
-    { item: "", quantity: 0, condition: "", description: "" },
+    { equipment: "", quantity: 0, state: "", comment: "" },
   ]);
 
   const handleAddInventory = () => {
     setInventoryState([
       ...inventoryState,
-      { item: "", quantity: 0, condition: "", description: "" },
+      { equipment: "", quantity: 0, state: "", comment: "" },
     ]);
   };
 
@@ -28,28 +30,36 @@ const FillInventoryTenantForm = () => {
     setInventoryState(updatedInventory);
   };
 
-  // Form schema
+
+
   const inventorySchema = z.object({
     tenant_id: z.number().min(1, "Tenant ID is required"),
     contract_id: z.number().min(1, "Contract ID is required"),
-    inventory: z.array(
+    date_of_establishment: z.string().optional(),
+    state_type: z.string().optional(),
+    observation: z.string().optional(),
+    inventory_of_elements: z.array(
       z.object({
-        item: z.string().optional(),
-        quantity: z.number().optional(),
-        condition: z.string().optional(),
-        description: z.string().optional(),
+        equipment: z.string().optional(),
+        state: z.string().optional(),
+        comment: z.string().optional(),
+        upload: z.array(z.string().url()), // Assuming upload contains a URL
       })
-    ),
+    ).optional(),
+    documents: z.array(z.string().url()), // Assuming documents contain URLs
   });
+  
 
-  const form = useForm({
+  
+
+  const form = useForm<z.infer<typeof inventorySchema>>({
     resolver: zodResolver(inventorySchema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log("Form submitted with data: ", data);
-    // Handle form submission
-  };
+
+const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-fill-inventory";
+  const onSubmit =  useFormSubmit<typeof inventorySchema>(apiUrl);  // Use custom hook
+ 
 const TenantId = form.watch("tenant_id")
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -62,9 +72,59 @@ const TenantId = form.watch("tenant_id")
             <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               SELECT TENANT AND CONTRACT
             </h2>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-3 gap-5">
               <TenantCombobox name="tenant_id" control={form.control} />
-              <ContractCombobox name="contract_id" tenantId={TenantId} control={form.control} />
+              <div className=" col-span-2"><ContractCombobox name="contract_id" tenantId={TenantId} control={form.control} />
+            </div>
+         </div>   <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+            REGISTRATION DETAILS
+            </h2>
+            <div className="grid grid-cols-3 gap-5">
+              {/* Date of Signature Field */}
+  <FormField
+    control={form.control}
+    name="date_of_establishment"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>Date of Signature *</FormLabel>
+        <FormControl>
+          <Input type="date" {...field} />
+        </FormControl>
+        <FormMessage className="text-xs" />
+      </FormItem>
+    )}
+  />
+    {/* Contract Type Field */}
+    <FormField
+    control={form.control}
+    name="state_type"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>State type *</FormLabel>
+        <Select onValueChange={field.onChange}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select State Type" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="ENTREE">ENTREE</SelectItem>
+            <SelectItem value="Exit">Exit</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage className="text-xs" />
+      </FormItem>
+    )}
+  />
+    <FormField control={form.control} name={`observation`} render={({ field }) => (
+          <FormItem>
+            <FormLabel>Observations or reservations</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Enter Here" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )} />
             </div>
 
             {/* Inventory Details */}
@@ -76,10 +136,10 @@ const TenantId = form.watch("tenant_id")
                 <div key={index} className="grid grid-cols-4 gap-5">
                   <FormField
                     control={form.control}
-                    name={`inventory.${index}.item`}
+                    name={`inventory_of_elements.${index}.equipment`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Item</FormLabel>
+                        <FormLabel>Equipment *</FormLabel>
                         <FormControl>
                           <Input {...field} placeholder="Item Name" />
                         </FormControl>
@@ -87,27 +147,17 @@ const TenantId = form.watch("tenant_id")
                       </FormItem>
                     )}
                   />
+ 
+                      
+                 
 
                   <FormField
                     control={form.control}
-                    name={`inventory.${index}.quantity`}
+                    name={`inventory_of_elements.${index}.state`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Quantity</FormLabel>
-                        <FormControl>
-                          <Input type="number" {...field} placeholder="0" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`inventory.${index}.condition`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Condition</FormLabel>
+                        <FormLabel>
+                        State *</FormLabel>
                         <FormControl>
                           <Input {...field} placeholder="Good/Bad" />
                         </FormControl>
@@ -118,10 +168,10 @@ const TenantId = form.watch("tenant_id")
 
                   <FormField
                     control={form.control}
-                    name={`inventory.${index}.description`}
+                    name={`inventory_of_elements.${index}.comment`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel>Comment</FormLabel>
                         <FormControl>
                           <Input {...field} placeholder="Additional notes" />
                         </FormControl>
@@ -129,7 +179,12 @@ const TenantId = form.watch("tenant_id")
                       </FormItem>
                     )}
                   />
-
+  <FileUploader
+                                onChange={(files) => form.setValue(`inventory_of_elements.${index}.upload`, files)}
+                                maxFiles={1}
+                                addedFiles={form.watch(`inventory_of_elements.${index}.upload`) || []}
+                              />
+                   
                   <button
                     type="button"
                     className="bg-red-500 w-fit self-end text-white px-4 py-2 rounded-md"
@@ -148,6 +203,16 @@ const TenantId = form.watch("tenant_id")
               </button>
             </div>
 
+            <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+            ATTACHMENTS
+            </h2>
+            <div className="p-4 border-2 border-dashed ">
+  <FileUploader
+                                             onChange={(files) => form.setValue("documents", files)}
+                                             maxFiles={5}
+                                             addedFiles={form.watch("documents") || []}
+                                           />
+            </div>
             {/* Submit Button */}
             <DialogFooter>
               <Button type="submit">Save</Button>

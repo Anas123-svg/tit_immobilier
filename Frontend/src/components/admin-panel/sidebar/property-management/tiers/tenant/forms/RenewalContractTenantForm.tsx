@@ -31,7 +31,7 @@ const PenaltyFormSchema = z.object({
   charge: z.number().optional(),
   total: z.number().optional(),
   month: z.string().optional(),
-   invoices: z.array(invoiceSchema).optional(),
+  invoices: z.array(invoiceSchema).optional(),
 });
 
 type PenaltyFormData = z.infer<typeof PenaltyFormSchema>;
