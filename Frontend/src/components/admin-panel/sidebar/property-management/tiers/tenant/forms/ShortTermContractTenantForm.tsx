@@ -33,7 +33,7 @@ import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-component
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
 import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
 import useFetchData from "@/hooks/useFetchData";
-import { Locative, RentLocative } from "@/types/DataProps";
+import { InvoiceItem, Locative, RentLocative } from "@/types/DataProps";
 import {
   Table,
   TableBody,
@@ -44,14 +44,6 @@ import {
 } from "@/components/ui/table";
 
 // Type definition for an Invoice Item
-type InvoiceItem = {
-  designation: string;
-  price: number;
-  qty: number;
-  vat: number;
-  discount: number;
-  total: number;
-};
 
 // Invoice Item Schema (with optional fields)
 const invoiceItemSchema = z.object({

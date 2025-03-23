@@ -1,37 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import useFetchData from "@/hooks/useFetchData";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobox/ContractCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { Contract } from "@/types/DataProps";
+import { Contract, InvoiceItem } from "@/types/DataProps";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-const invoiceSchema = z.object({
-    designation: z.string().optional(),
-    unit_price: z.number().optional(),
-    qty: z.number().optional(),
-    vat: z.number().optional(),
-    discount: z.number().optional(),
-    total: z.number().optional(),
-  });
+const invoiceItemSchema = z.object({
+  designation: z.string(),
+  price: z.number(),
+  qty: z.number(),
+  vat: z.number(),
+  discount: z.number(),
+  total: z.number().optional(),
+});
+
   
-// Define validation schema
+// Main form schema
 const PenaltyFormSchema = z.object({
   tenant_id: z.number().min(1, "Tenant ID is required"),
   contract_id: z.number().min(1, "Contract ID is required"),
+  end_date: z.string().optional(),
+  date: z.string().optional(),
   rent: z.number().optional(),
   charge: z.number().optional(),
-  total: z.number().optional(),
-  month: z.string().optional(),
-  invoices: z.array(invoiceSchema).optional(),
+  penalty_for_late_payment: z.number().min(0, "Penalty must be a positive number").optional(),
+  payment_limit: z.string().optional(),
+
+  // Invoices array containing multiple invoice items
+  tenant_renew_contract_invoices: z.array(invoiceItemSchema).optional(),
 });
 
 type PenaltyFormData = z.infer<typeof PenaltyFormSchema>;
@@ -41,40 +54,101 @@ const RenewalContract = () => {
 
   const form = useForm<PenaltyFormData>({
     resolver: zodResolver(PenaltyFormSchema),
+    
   });
 
 
-    const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-penalty';
+    const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-renew-contract';
           const onSubmit = useFormSubmit<typeof PenaltyFormSchema>(apiUrl);  // Use custom hook
           
 const Contract = form.watch("contract_id")
 const TenantId = form.watch("tenant_id")
 
-console.log(Contract)
+
+
+
 const { data:contract, loading, error } = useFetchData<Contract>(
 `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract?Contract:'0'}`
 )
-const [invoiceState, setInvoice] = useState([
-    { 
-      designation: '', 
-      unit_price: 0, 
-      qty: 1, 
-      vat: 0, 
-      discount: 0, 
-      total: 0 
-    }
-  ]); // Initial state for invoices
-  const handleAddInvoice = () => {
-    setInvoice([
-      ...invoiceState,
-      { designation: '', unit_price: 0, qty: 1, vat: 0, discount: 0, total: 0 }
+
+const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "tenant_renew_contract_invoices",
+  });
+
+  const [items, setItems] = useState<InvoiceItem[]>([
+    {
+      designation: "",
+      price: 0,
+      qty: 1,
+      vat: 0,
+      discount: 0,
+      total: 0,
+    },
+  ]);
+
+  // Handle change in form fields
+
+  // Function to add a new row dynamically
+  const addRow = () => {
+    setItems([
+      ...items,
+      { designation: "", price: 0, qty: 1, vat: 0, discount: 0, total: 0 },
     ]);
   };
-  
-  const handleRemoveInvoice = (index: number) => {
-    const updatedInvoice = invoiceState.filter((_, i) => i !== index);
-    setInvoice(updatedInvoice);
+ 
+
+// Function to calculate total
+const calculateTotal = (price: number, qty: number, vat: number, discount: number): number => {
+  return (price || 0) * (qty || 1) + (vat || 0) - (discount || 0);
+};
+
+
+
+
+useEffect(() => {
+  if (contract?.rent_locative) {
+    // Get rent and charge values from contract data
+    const rent = contract.rent_locative.rent || 0;
+    const charge = contract.rent_locative.charges || 0;
+    form.setValue(`end_date`, contract?.end_date);
+    form.setValue(`date`, contract?.end_date);
+    form.setValue(`rent`, rent);
+    form.setValue(`charge`, charge);
+    form.setValue(`penalty_for_late_payment`, contract?.penalty_for_delay); 
+    form.setValue(`payment_limit`, contract?.payment_limit);
+    
+    
+  }
+
+  items.forEach((_, index) => {
+    const price = form.getValues(`tenant_renew_contract_invoices.${index}.price`) || 0;
+    const qty = form.getValues(`tenant_renew_contract_invoices.${index}.qty`) || 1;
+    const vat = form.getValues(`tenant_renew_contract_invoices.${index}.vat`) || 0;
+    const discount = form.getValues(`tenant_renew_contract_invoices.${index}.discount`) || 0;
+
+    // Calculate the total for the current row
+    const total = calculateTotal(price, qty, vat, discount);
+
+    // Set the total in the form
+    form.setValue(`tenant_renew_contract_invoices.${index}.total`, 0);
+  });
+ 
+
+}, [contract, form,items]);
+
+  // Function to delete a row
+  const deleteRow = (index: number) => {
+    if (items.length > 1) {
+      setItems(items.filter((_, i) => i !== index));
+    }
   };
+
+  // Compute summary totals
+  const totalHT = items.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const totalDiscount = items.reduce((sum, item) => sum + item.discount, 0);
+  const totalVAT = items.reduce((sum, item) => sum + item.vat, 0);
+  const grandTotal = totalHT + totalVAT - totalDiscount;
   
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -149,103 +223,138 @@ const [invoiceState, setInvoice] = useState([
   </FormItem>
 </div>
 
-<h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
-ADD OPTIONS TO THIS INVOICE
-       </h2>
-       
-       
-<div className="flex flex-col space-y-5">
-  {invoiceState.map((_, index) => (
-    <div key={index} className="grid-cols-7 gap-5 grid">
-      {/* Designation Field */}
-      <FormField control={form.control} name={`invoices.${index}.designation`} render={({ field }) => (
-        <FormItem>
-          <FormLabel>Designation *</FormLabel>
-          <FormControl>
-            <Input {...field} placeholder="e.g. Service Charge" />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+<div className="p-4 border rounded-md shadow-md">
+        <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
+          ADD OPTIONS TO THIS INVOICE
+        </h2>
+        <Table className="w-full mt-4">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Designation *</TableHead>
+              <TableHead>Unit Price *</TableHead>
+              <TableHead>Qty *</TableHead>
+              <TableHead>VAT</TableHead>
+              <TableHead>Discount</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <FormField control={form.control} name={`tenant_renew_contract_invoices.${index}.designation`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Designation *</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="e.g. Service Charge" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
 
-      {/* Unit Price Field */}
-      <FormField control={form.control} name={`invoices.${index}.unit_price`} render={({ field }) => (
-        <FormItem>
-          <FormLabel>Unit Price *</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+                <TableCell>
+                  <FormField control={form.control} name={`tenant_renew_contract_invoices.${index}.price`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Unit Price *</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="0" min="0" onChange={e => field.onChange(parseFloat(e.target.value))}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
 
-      {/* Quantity Field */}
-      <FormField control={form.control} name={`invoices.${index}.qty`} render={({ field }) => (
-        <FormItem>
-          <FormLabel>Quantity *</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} placeholder="1" onChange={e => field.onChange(parseInt(e.target.value, 10))} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+                <TableCell>
+                  <FormField control={form.control} name={`tenant_renew_contract_invoices.${index}.qty`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Quantity *</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="1" min="1" onChange={e => field.onChange(parseFloat(e.target.value))}/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
 
-      {/* VAT Field */}
-      <FormField control={form.control} name={`invoices.${index}.vat`} render={({ field }) => (
-        <FormItem>
-          <FormLabel>VAT *</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+                <TableCell>
+                  <FormField control={form.control} name={`tenant_renew_contract_invoices.${index}.vat`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>VAT</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="0" min="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
 
-      {/* Discount Field */}
-      <FormField control={form.control} name={`invoices.${index}.discount`} render={({ field }) => (
-        <FormItem>
-          <FormLabel>Discount *</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} placeholder="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+                <TableCell>
+                  <FormField control={form.control} name={`tenant_renew_contract_invoices.${index}.discount`} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Discount</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" placeholder="0" min="0" onChange={e => field.onChange(parseFloat(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </TableCell>
 
-      {/* Total Field */}
-      <FormField control={form.control} name={`invoices.${index}.total`} render={({ field }) => (
-        <FormItem>
-          <FormLabel>Total *</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} placeholder="0" disabled />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )} />
+                <TableCell>
+                <FormField control={form.control} name={`tenant_renew_contract_invoices.${index}.total`} render={({ field }) => (
+  <FormItem>
+    <FormLabel>Total</FormLabel>
+    <FormControl>
+      <Input
+        {...field}
+        type="number"
+        disabled
+        placeholder="0"
+        min="0"
+        value={form.getValues(`tenant_renew_contract_invoices.${index}.total`) || ""} // Ensure value is never undefined
+      />
+    </FormControl>
+    <FormMessage />
+  </FormItem>
+)} />
 
-      {/* Remove Button */}
-      <button type="button" className="bg-red-500 w-fit self-end text-white px-4 py-2 rounded-md" onClick={() => handleRemoveInvoice(index)}>
-        Remove
-      </button>
-    </div>
-  ))}
 
-  {/* Button to Add New Invoice Item */}
-  <button type="button" className="bg-secondary w-fit self-end text-white px-4 py-2 rounded-md" onClick={handleAddInvoice}>
-    Add
-  </button>
-</div>
-  {/* Summary Section */}
-  <div className="bg-gray-100 p-4 mt-6 rounded-md">
+                </TableCell>
+
+                <TableCell>
+                  <Button
+                    onClick={() => deleteRow(index)}
+                    className="bg-red-500 text-white px-2 py-1"
+                    disabled={items.length === 1}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        {/* Add Button */}
+        <div className="flex justify-end mt-4">
+          <Button onClick={addRow} className="bg-secondary text-white">
+            Add+
+          </Button>
+        </div>
+          {/* Summary Section */}
+      {/* <div className="bg-gray-100 p-4 mt-6 rounded-md">
         <div className="text-right text-gray-600 text-sm">
-      
-          <p>TOTAL HT : {0}</p>
-          <p>TOTAL DISCOUNT : {0}</p>
-          <p>TOTAL VAT : {0}</p>
+          <p>NUMBER OF HOURS : {items.length}</p>
+          <p>TOTAL HT : {totalHT.toFixed(2)}</p>
+          <p>TOTAL DISCOUNT : {totalDiscount.toFixed(2)}</p>
+          <p>TOTAL VAT : {totalVAT.toFixed(2)}</p>
         </div>
         <h2 className="text-blue-600 text-lg font-bold text-right mt-2">
-          TOTAL : <span className="text-green-500">{0}</span>
+          TOTAL : <span className="text-green-500">{grandTotal.toFixed(2)}</span>
         </h2>
+      </div> */}
       </div>
         
        </>        }      {/* Submit Button */}

@@ -27,10 +27,10 @@ const invoiceSchema = z.object({
 const PenaltyFormSchema = z.object({
   tenant_id: z.number().min(1, "Tenant ID is required"),
   contract_id: z.number().min(1, "Contract ID is required"),
-  Label:z.string().optional(),
-  Echeance:z.string().optional(),
+  label:z.string().optional(),
+  due_date:z.string().optional(),
   date:z.string().optional(),
-   details: z.array(invoiceSchema).optional(),
+   tenant_other_details: z.array(invoiceSchema).optional(),
 });
 
 type PenaltyFormData = z.infer<typeof PenaltyFormSchema>;
@@ -43,7 +43,7 @@ const OthersForm = () => {
   });
 
 
-    const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-invoice';
+    const apiUrl = import.meta.env.VITE_API_URL + '/api/tenant-other';
           const onSubmit = useFormSubmit<typeof PenaltyFormSchema>(apiUrl);  // Use custom hook
           
 const Contract = form.watch("contract_id")
@@ -62,7 +62,7 @@ const [invoiceState, setInvoice] = useState([
       discount: 0, 
       total: 0 
     }
-  ]); // Initial state for details
+  ]); // Initial state for tenant_other_details
   const handleAddInvoice = () => {
     setInvoice([
       ...invoiceState,
@@ -102,10 +102,10 @@ const [invoiceState, setInvoice] = useState([
        
        
        <div className="grid grid-cols-4 gap-4"> {/* Payment Limit */}
-  {/* Label */}
-  <FormField control={form.control} name="Label" render={({ field }) => (
+  {/* label */}
+  <FormField control={form.control} name="label" render={({ field }) => (
         <FormItem className="col-span-2">
-          <FormLabel>Label</FormLabel>
+          <FormLabel>label</FormLabel>
           <FormControl>
             <Input {...field} placeholder="Designation" />
           </FormControl>
@@ -124,10 +124,10 @@ const [invoiceState, setInvoice] = useState([
         </FormItem>
       )} />
 
-      {/* Echeance */}
-      <FormField control={form.control} name="Echeance" render={({ field }) => (
+      {/* due_date */}
+      <FormField control={form.control} name="due_date" render={({ field }) => (
         <FormItem>
-          <FormLabel>Echeance</FormLabel>
+          <FormLabel>Due Date</FormLabel>
           <FormControl>
             <Input type="date" {...field} />
           </FormControl>
@@ -142,7 +142,7 @@ const [invoiceState, setInvoice] = useState([
   {invoiceState.map((_, index) => (
     <div key={index} className="grid-cols-7 gap-5 grid">
       {/* Designation Field */}
-      <FormField control={form.control} name={`details.${index}.designation`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_other_details.${index}.designation`} render={({ field }) => (
         <FormItem>
           <FormLabel>Designation *</FormLabel>
           <FormControl>
@@ -153,7 +153,7 @@ const [invoiceState, setInvoice] = useState([
       )} />
 
       {/* Unit Price Field */}
-      <FormField control={form.control} name={`details.${index}.unit_price`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_other_details.${index}.unit_price`} render={({ field }) => (
         <FormItem>
           <FormLabel>Unit Price *</FormLabel>
           <FormControl>
@@ -164,7 +164,7 @@ const [invoiceState, setInvoice] = useState([
       )} />
 
       {/* Quantity Field */}
-      <FormField control={form.control} name={`details.${index}.qty`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_other_details.${index}.qty`} render={({ field }) => (
         <FormItem>
           <FormLabel>Quantity *</FormLabel>
           <FormControl>
@@ -175,7 +175,7 @@ const [invoiceState, setInvoice] = useState([
       )} />
 
       {/* VAT Field */}
-      <FormField control={form.control} name={`details.${index}.vat`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_other_details.${index}.vat`} render={({ field }) => (
         <FormItem>
           <FormLabel>VAT *</FormLabel>
           <FormControl>
@@ -186,7 +186,7 @@ const [invoiceState, setInvoice] = useState([
       )} />
 
       {/* Discount Field */}
-      <FormField control={form.control} name={`details.${index}.discount`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_other_details.${index}.discount`} render={({ field }) => (
         <FormItem>
           <FormLabel>Discount *</FormLabel>
           <FormControl>
@@ -197,7 +197,7 @@ const [invoiceState, setInvoice] = useState([
       )} />
 
       {/* Total Field */}
-      <FormField control={form.control} name={`details.${index}.total`} render={({ field }) => (
+      <FormField control={form.control} name={`tenant_other_details.${index}.total`} render={({ field }) => (
         <FormItem>
           <FormLabel>Total *</FormLabel>
           <FormControl>

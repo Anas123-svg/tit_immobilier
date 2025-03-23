@@ -727,3 +727,13 @@ export interface PreviousInvoice {
   verse?: number;
   remaining?: number;
 }
+
+
+export type InvoiceItem = {
+  designation: string;
+  price: number;
+  qty: number;
+  vat: number;
+  discount: number;
+  total: number;
+};
