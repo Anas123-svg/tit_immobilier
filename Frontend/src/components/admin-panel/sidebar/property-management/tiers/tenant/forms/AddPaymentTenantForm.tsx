@@ -12,15 +12,11 @@ import axios from "axios";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobox/ContractCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { Contract } from "@/types/DataProps";
+import { Contract, TenantBill, TenantRentBill } from "@/types/DataProps";
 import SelectionDetails, { TableRow } from "../UI/SelectionDetails";
 import Treasury from "@/components/admin-panel/sidebar/profile/Settings/accounting/Treasury";
 import FileUploader from "@/components/common/uploader";
-const data: TableRow[] = [
-  { designation: 'Facture du loyer de janvier 2025', total: 93000, paid: 0, unpaid: 93000 },
-  { designation: 'Facture du loyer de février 2025', total: 93000, paid: 0, unpaid: 93000 },
-  { designation: 'Facture du loyer de mars 2025', total: 93000, paid: 0, unpaid: 93000 },
-];
+
 // Define validation schema
 const PaymentFormSchema = z.object({
   tenant_id: z.number().min(1, "Tenant ID is required"),
@@ -44,6 +40,8 @@ const PaymentFormSchema = z.object({
 type PaymentFormData = z.infer<typeof PaymentFormSchema>;
 
 const AddPayment = () => {
+
+
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
@@ -57,13 +55,27 @@ const AddPayment = () => {
   const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-payment";
   const onSubmit = useFormSubmit<typeof PaymentFormSchema>(apiUrl);
 
-  const Contract = form.watch("contract_id");
+  const ContractId = form.watch("contract_id");
   const TenantId = form.watch("tenant_id");
 
   // const { data: contract, loading, error } = useFetchData<Contract>(
   //   `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract ? Contract : "0"}`
   // );
 
+  const { data: TenantRentBill, loading, error } = useFetchData<TenantBill[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-bill/tenant/${TenantId ? TenantId: ""}`
+  );
+
+  const rentBillData: TableRow[] | undefined = TenantRentBill?.map((bill) => {
+    return {
+      designation: `Rent Bill for the month ${bill.month}`,  // Correctly use string interpolation for the designation
+      total: parseInt( bill.total),  // Directly assign the total value
+      paid: 0,  // Assuming you want to initialize as 0
+      unpaid: parseInt( bill.total),  // Unpaid value is the same as total initially
+    };
+  });
+  
+  
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
@@ -79,6 +91,9 @@ const AddPayment = () => {
     setSelectedRows(updatedSelectedRows);
   };
 
+
+  const InvoiceType = form.watch("invoice_type")
+  console.log("contractId"+ContractId)
   const paymentMethod = form.watch("payment_method")
    const doneBy = form.watch("done_by")
   return (
@@ -120,7 +135,7 @@ const AddPayment = () => {
               <ContractCombobox name="contract_id" control={form.control} tenantId={TenantId} />
             </div>
 
-            {Contract !== undefined && (
+            {ContractId !== undefined && (
               <>
           <div className='space-y-6'>
       <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">SELECTION DETAILS</h2>
@@ -152,7 +167,7 @@ const AddPayment = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((row, index) => (
+          {rentBillData?.map((row, index) => (
             <tr key={index}>
               <td className="border border-gray-300 p-2">
               <input
@@ -160,7 +175,9 @@ const AddPayment = () => {
                   checked={selectedRows.has(index)}
                   onChange={() => handleCheckboxChange(index, row.unpaid)}
                 />{' '}
+               {row.designation}
               </td>
+              
               <td className="border border-gray-300 p-2">{row.total}</td>
               <td className="border border-gray-300 p-2">{row.paid}</td>
               <td className="border border-gray-300 p-2 text-red-500">{row.unpaid}</td>
