@@ -1,10 +1,10 @@
 import React from 'react';
 
 export type TableRow = {
-  designation: string;
-  total: number;
-  paid: number;
-  unpaid: number;
+  designation?: string;
+  total?: number;
+  paid?: number;
+  unpaid?: number;
 };
 
 const SelectionDetails: React.FC = () => {

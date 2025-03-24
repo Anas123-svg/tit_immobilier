@@ -482,6 +482,11 @@ block:string;
     created_at: string; // ISO 8601 format datetime string
     updated_at: string; // ISO 8601 format datetime string
   }
+
+
+  export interface TenantRentBill{
+    bills : TenantBill
+  }
   export interface Contract {
     id: number;
     owner_id: number ; // 'null' is possible, otherwise use 'number'
@@ -709,6 +714,7 @@ export interface RentLocative {
 
 // Interface for an invoice
 export interface Invoice {
+  id:number
   designation?: string;
   unit_price?: number;
   qty?: number;
@@ -737,3 +743,20 @@ export type InvoiceItem = {
   discount: number;
   total: number;
 };
+
+
+
+export interface TenantOtherInvoice {
+  tenant_id: number;
+  contract_id: number;
+  label?: string;
+  due_date?: string;
+  date?: string;
+  tenant_other_details?: Invoice[];
+}
+
+export interface TenantRenewInvoice {
+ 
+  tenant_renew_contract_invoices?: Invoice[];
+}
+

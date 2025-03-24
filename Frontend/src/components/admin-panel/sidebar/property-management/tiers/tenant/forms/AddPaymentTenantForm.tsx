@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
@@ -12,7 +12,7 @@ import axios from "axios";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobox/ContractCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { Contract, TenantBill, TenantRentBill } from "@/types/DataProps";
+import { Contract, Invoice, TenantBill, TenantOtherInvoice, TenantRenewInvoice, TenantRentBill } from "@/types/DataProps";
 import SelectionDetails, { TableRow } from "../UI/SelectionDetails";
 import Treasury from "@/components/admin-panel/sidebar/profile/Settings/accounting/Treasury";
 import FileUploader from "@/components/common/uploader";
@@ -24,7 +24,7 @@ const PaymentFormSchema = z.object({
   payment_method: z.string().optional(),
   payment_date: z.string().optional(),
   amount: z.number().optional(),
-  designation: z.string().min(1, "Designation is required"),
+
   invoice_type:z.string().optional(),
   total: z.number().optional(),
   treasury_type:z.string().optional(),
@@ -62,10 +62,24 @@ const AddPayment = () => {
   //   `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract ? Contract : "0"}`
   // );
 
-  const { data: TenantRentBill, loading, error } = useFetchData<TenantBill[]>(
+  const { data: TenantPenaltyBill } = useFetchData<TenantBill[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-penalty/tenant/${TenantId ? TenantId: ""}`
+  );
+  const { data: TenantRentBill } = useFetchData<TenantBill[]>(
     `${import.meta.env.VITE_API_URL}/api/tenant-bill/tenant/${TenantId ? TenantId: ""}`
   );
+  const { data: tenantOtherInvoice } = useFetchData<TenantOtherInvoice[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-other/tenant/${TenantId ? TenantId: ""}`
+  );
 
+
+  const { data: tenantRenewInvoice } = useFetchData<TenantRenewInvoice[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-renew-contract/tenant/${TenantId ? TenantId: ""}`
+  );
+
+  const { data: tenantShortTerm } = useFetchData<Invoice[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-short-term-contract/details/tenant/${TenantId ? TenantId: ""}`
+  );
   const rentBillData: TableRow[] | undefined = TenantRentBill?.map((bill) => {
     return {
       designation: `Rent Bill for the month ${bill.month}`,  // Correctly use string interpolation for the designation
@@ -74,7 +88,46 @@ const AddPayment = () => {
       unpaid: parseInt( bill.total),  // Unpaid value is the same as total initially
     };
   });
-  
+
+
+  const tenantShortTermInvoices: TableRow[] | undefined = tenantShortTerm?.map((bill) => {
+    return {
+      designation: bill.designation,  // Correctly use string interpolation for the designation
+      total: bill.total,  // Directly assign the total value
+      paid: 0,  // Assuming you want to initialize as 0
+      unpaid: bill.total,  // Unpaid value is the same as total initially
+    };
+  });
+
+
+  const penaltyBillData: TableRow[] | undefined = TenantPenaltyBill?.map((bill) => {
+    return {
+      designation: `Penalty Bill for the month ${bill.month}`,  // Correctly use string interpolation for the designation
+      total: parseInt( bill.total),  // Directly assign the total value
+      paid: 0,  // Assuming you want to initialize as 0
+      unpaid: parseInt( bill.total),  // Unpaid value is the same as total initially
+    };
+  });
+  const tenantOther: TableRow[] | undefined = tenantOtherInvoice?.flatMap((bills) => {
+    return bills.tenant_other_details?.map((bill) => {
+      return {
+        designation: bill.designation,  // Correctly assign the designation
+        total: bill.total,  // Directly assign the total value
+        paid: 0,  // Initialize as 0
+        unpaid: bill.total,  // Unpaid value is the same as total initially
+      };
+    }) || []; // In case tenant_other_details is undefined, return an empty array
+  });
+  const tenantRenew: TableRow[] | undefined = tenantRenewInvoice?.flatMap((bills) => {
+    return bills.tenant_renew_contract_invoices?.map((bill) => {
+      return {
+        designation: bill.designation,  // Correctly assign the designation
+        total: bill.total,  // Directly assign the total value
+        paid: 0,  // Initialize as 0
+        unpaid: bill.total,  // Unpaid value is the same as total initially
+      };
+    }) || []; // In case tenant_other_details is undefined, return an empty array
+  });
   
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -90,6 +143,12 @@ const AddPayment = () => {
     }
     setSelectedRows(updatedSelectedRows);
   };
+
+  useEffect(() => {
+
+    form.setValue("amount",totalAmount)
+  }, [form,totalAmount])
+  
 
 
   const InvoiceType = form.watch("invoice_type")
@@ -167,13 +226,13 @@ const AddPayment = () => {
           </tr>
         </thead>
         <tbody>
-          {rentBillData?.map((row, index) => (
+          {(InvoiceType == "RENT"? rentBillData :InvoiceType == "PENALTY"?penaltyBillData:InvoiceType == "OTHER_INVOICES"?tenantOther:InvoiceType == "RENEWAL"?tenantRenew:InvoiceType == "COURT_TERME"?tenantShortTermInvoices:[])?.map((row, index) => (
             <tr key={index}>
               <td className="border border-gray-300 p-2">
               <input
                   type="checkbox"
                   checked={selectedRows.has(index)}
-                  onChange={() => handleCheckboxChange(index, row.unpaid)}
+                  onChange={() => handleCheckboxChange(index, row.unpaid??0)}
                 />{' '}
                {row.designation}
               </td>
