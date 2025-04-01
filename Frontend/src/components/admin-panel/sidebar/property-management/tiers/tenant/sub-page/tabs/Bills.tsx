@@ -84,37 +84,104 @@ import React, { useState } from 'react';
   ];
   // Define the columns for the table
   const columns = [
-    { label: "ID", accessor: "id" },
-    { label: "Tenant ID", accessor: "tenant_id" },
-    { label: "Contract ID", accessor: "contract_id" },
-    { label: "Month", accessor: "month" },
-    { label: "Rent", accessor: "rent" },
-    { label: "Charge", accessor: "charge" },
-    { label: "Total", accessor: "total" },
-    { label: "Created At", accessor: "created_at" },
-    { label: "Updated At", accessor: "updated_at" },
+    { label: "Locative", accessor: "locative" },
+    { label: "State", accessor: "state" },
+    { label: "Period", accessor: "period" },
+    { label: "Amount", accessor: "amount" },
+    { label: "Paid", accessor: "paid" },
+    { label: "Remaining", accessor: "remaining" },
+    { label: "Action", accessor: "action" }, // Action buttons (view, edit, delete, etc.)
   ];
+  
   
     interface BillsProps{
       tenant_bills ?: TenantBill[]
     }
-const Bills: React.FC<BillsProps> = ({tenant_bills}) => {
-
-  const data = tenant_bills?.map((tb)=>{
-   return {
-      id: tb.id,
-      tenant_id: tb.tenant_id,
-      contract_id:  tb.contract_id,
-      month:  tb.month,
-      rent:  tb.rent,
-      charge:  tb.charge,
-      total: tb.total,
-      created_at: tb.created_at,
-      updated_at:  tb.updated_at,
+const Bills: React.FC<BillsProps> = ({}) => {
+  
+  const data = [
+    {
+      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
+      "room_details": "Surface area: m² - 2 room(s)",
+      "owner": "Mr. YAO KOUADIO FERNAND",
+      "contract_type": "HABITATION",
+      "state_type": "AWAITING PAYMENT",
+      "period": "Rent from April 2025",
+      "amount": 150000,
+      "paid": 0,
+      "remaining": 150000,
+      "created_at": "2025-03-22T19:36:46.000000Z",
+      "updated_at": "2025-03-22T19:36:46.000000Z"
+    },
+    {
+      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
+      "room_details": "Surface area: m² - 2 room(s)",
+      "owner": "Mr. YAO KOUADIO FERNAND",
+      "contract_type": "HABITATION",
+      "state_type": "PAY",
+      "period": "Rent for March 2025",
+      "amount": 150000,
+      "paid": 0,
+      "remaining": 150000,
+      "created_at": "2025-03-22T19:36:46.000000Z",
+      "updated_at": "2025-03-22T19:36:46.000000Z"
+    },
+    {
+      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
+      "room_details": "Surface area: m² - 2 room(s)",
+      "owner": "Mr. YAO KOUADIO FERNAND",
+      "contract_type": "HABITATION",
+      "state_type": "AWAITING PAYMENT",
+      "period": "Rent for February 2025",
+      "amount": 150000,
+      "paid": 0,
+      "remaining": 150000,
+      "created_at": "2025-03-22T19:36:46.000000Z",
+      "updated_at": "2025-03-22T19:36:46.000000Z"
+    },
+    {
+      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
+      "room_details": "Surface area: m² - 2 room(s)",
+      "owner": "Mr. YAO KOUADIO FERNAND",
+      "contract_type": "HABITATION",
+      "state_type": "PAY",
+      "period": "Rent for January 2025",
+      "amount": 150000,
+      "paid": 0,
+      "remaining": 150000,
+      "created_at": "2025-03-22T19:36:46.000000Z",
+      "updated_at": "2025-03-22T19:36:46.000000Z"
     }
-
-  })??[]
-    
+  ]
+  ?.map((item) => {
+    return {
+      locative: <p>{item.locative} <br /> {item.room_details}</p>, // Example: "YAO FERNAND BUILDING - STUDIO N°A5"
+      type: item.contract_type, // You can adjust this based on the available field
+      state: item.state_type, // Example: "AWAITING PAYMENT"
+      period: item.period, // Example: "Rent from April 2025"
+      amount: `${item.amount} XOF`, // Example: "150,000 XOF"
+      paid: `${item.paid} XOF`, // Example: "0 XOF"
+      remaining: `${item.remaining} XOF`, // Example: "150,000 XOF"
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          {item.state_type === "AWAITING PAYMENT" && (
+            <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
+              <Edit size={18} />
+            </button>
+          )}
+          {item.state_type === "PAY" && (
+            <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+              <Trash2 size={18} />
+            </button>
+          )}
+        </>
+      ),
+    };
+  }) ?? [];
+  
   
     // Add more rows as needed
  

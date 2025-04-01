@@ -525,28 +525,59 @@ block:string;
     id: number;
     tenant_id: number;
     contract_id: number;
-    type_payment: string; // Type of payment (e.g., "Rent Payment")
-    Treasury: string; // The treasury source (e.g., "Bank")
-    payment_method: string; // Method used for payment (e.g., "Bank Transfer")
-    payment_date: string; // Payment date (ISO 8601 format)
-    done_by: string; // The person who made the payment
-    other_name: string; // Other relevant name (e.g., co-signatory)
-    phone_no: string; // Contact phone number
-    Transaction_details: string; // Description of the transaction
-    amount: string; // Amount paid, represented as a string
-    documents: string[] | null; // Any associated documents (can be a path or null)
-    created_at: string; // Date when the payment was created (ISO 8601 format)
-    updated_at: string; // Date when the payment was last updated (ISO 8601 format)
+    payment_method: string; // e.g. "CHEQUE"
+    payment_date: string; // ISO date format (e.g. "2025-04-03")
+    done_by: string; // e.g. "OTHER"
+    other_name: string | null;
+    phone_no: string | null;
+    Transaction_details: string | null;
+    amount: number | null;
+    documents: string | null;
+    created_at: string; // ISO date format (e.g. "2025-03-24T00:07:10.000000Z")
+    updated_at: string; // ISO date format (e.g. "2025-03-24T00:07:10.000000Z")
+    designation: string | null;
+    invoice_type: string; // e.g. "OTHER_INVOICES"
+    total: number | null;
+    treasury_type: string | null;
+    cheque: string; // e.g. "123"
+    bank: string; // e.g. "123"
+    transaction: string | null;
+    tiers: string; // e.g. "2313"
   }
+  
   
   export interface TenantProfile {
     profile:Tenant; // 'profile' could be an object or null, adjust as needed
     tenant_bill: TenantBill[];   // Array of tenant bills, adjust type as needed
     tenant_contract: Contract[]; // Array of tenant contracts, adjust type as needed
     tenant_payment: TenantPayment[];  // Array of tenant payments, adjust type as needed
+    state_of_play:StateOfPlay[];
+    notice_of_expirey:NoticeOfExpiry[]
   }
   
-
+  export interface StateOfPlay {
+    id: number;
+    tenant_id: number;
+    contract_id: number;
+    date_of_establishment: string; // ISO date format (e.g. "2025-03-06")
+    state_type: string;
+    observation: string;
+    created_at: string; // ISO date format (e.g. "2025-03-23T15:39:16.000000Z")
+    updated_at: string; // ISO date format (e.g. "2025-03-23T15:39:16.000000Z")
+    documents: string | null; // assuming documents can be a string or null
+  }
+  export interface NoticeOfExpiry {
+    id: number;
+    tenant_id: number;
+    contract_id: number;
+    month: string | null; // Assuming it can be a string or null
+    rent: number | null; // Assuming it can be a number or null
+    charge: number | null; // Assuming it can be a number or null
+    total: number | null; // Assuming it can be a number or null
+    created_at: string; // ISO date format (e.g. "2025-03-22T19:36:46.000000Z")
+    updated_at: string; // ISO date format (e.g. "2025-03-22T19:36:46.000000Z")
+  }
+  
 
   export interface OwnerSaleProperty {
     id: number; // Unique identifier for the property

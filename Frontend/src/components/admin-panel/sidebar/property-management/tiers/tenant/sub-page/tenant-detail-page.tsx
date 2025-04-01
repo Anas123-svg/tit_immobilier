@@ -71,7 +71,7 @@ const TenantDetailPage = () => {
       name: 'emergency', 
       label: 'State of Play', 
       icon: <File className="inline mr-2" />, 
-      component: <StateofPlay />
+      component: <StateofPlay stateOfPlay={tenant?.state_of_play} handleReload={handleReload} />
     },
     { 
       name: 'bills', 

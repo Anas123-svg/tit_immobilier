@@ -1,8 +1,8 @@
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, StateOfPlay } from '@/types/DataProps';
 
 import React, { useState } from 'react';
-import { Download, Edit, Eye, Flag, Trash2, Upload } from 'lucide-react';
+import { CheckCircle, Download, Edit, Eye, Flag, Trash2, Upload } from 'lucide-react';
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 
 interface EmergencyContactProps {
@@ -55,43 +55,54 @@ const filterOptions: FilterOption[] = [
   }
 
 ];
-const data = [
-{
-  locative: "YAO FERNAND BUILDING - APARTMENT N°A7",
-  type: "HABITATION",
-  period: "Due date in 730 days",
-  state: "ACTIVE",
-  createIt: "January 9, 2025 at 9:27:20 AM",
-  depositAmount: "300,000 XOF",
-  paid: "300,000 XOF",
-  remaining: "0 XOF",
-  action: (
-    <>
-      <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-        <Eye size={18} />
-      </button>
-      <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
-        <Edit size={18} />
-      </button>
-      <button className="p-2 rounded-full bg-green-500 text-white hover:bg-green-600">
-        <Upload size={18} />
-      </button>
-      <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
-        <Download size={18} />
-      </button>
-      <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-        <Trash2 size={18} />
-      </button>
-    </>
-  ),
-},
-// Add more rows as necessary
-];
-// Define the columns for the table
-const columns :any= [
 
+const columns = [
+  { label: "Locative", accessor: "locative" },
+  { label: "Type", accessor: "type" },
+  { label: "State", accessor: "state" },
+  {
+    label: "Action",
+    accessor: "action", // Render action buttons (eye, edit, check, upload, trash)
+    // You can use custom rendering logic for this column when rendering the data in the table
+  },
 ];
-const StateofPlay = () => {
+
+
+ interface StateofPlayProps{
+    stateOfPlay ?: StateOfPlay[]
+    handleReload?: ()=>void
+  }
+const StateofPlay :React.FC<StateofPlayProps>= ({stateOfPlay,handleReload}) => {
+
+
+  const data = stateOfPlay?.map((item) => {
+  
+    return {
+      locative: item.observation, // Adjust this if you want to display different data
+      type: item.state_type, // Adjust accordingly
+      state: item.state_type, // Adjust accordingly (e.g., ACTIVE, WAITING)
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
+            <Edit size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-green-500 text-white hover:bg-green-600">
+            <CheckCircle size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
+            <Upload size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+        </>
+      ),
+    };
+  }) ?? [];
+  
 
    // State to manage filters
       const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({

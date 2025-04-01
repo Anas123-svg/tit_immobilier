@@ -50,52 +50,137 @@ import React, { useState } from 'react';
   
   ];
 
-  // Define the columns for the table
   const columns = [
-    { label: "ID", accessor: "id" },
-    { label: "Tenant ID", accessor: "tenant_id" },
-    { label: "Contract ID", accessor: "contract_id" },
-    { label: "Type of Payment", accessor: "type_payment" },
-    { label: "Treasury", accessor: "Treasury" },
-    { label: "Payment Method", accessor: "payment_method" },
-    { label: "Payment Date", accessor: "payment_date" },
-    { label: "Done By", accessor: "done_by" },
-    { label: "Other Name", accessor: "other_name" },
-    { label: "Phone Number", accessor: "phone_no" },
-    { label: "Transaction Details", accessor: "Transaction_details" },
+    { label: "Locative", accessor: "locative" },
+    { label: "Invoice Number", accessor: "invoice_number" },
+    { label: "State", accessor: "state" },
+    { label: "Invoice Concerned", accessor: "invoice_concerned" },
+    { label: "Date", accessor: "date" },
     { label: "Amount", accessor: "amount" },
-    { label: "Documents", accessor: "documents" },
-    { label: "Created At", accessor: "created_at" },
-    { label: "Updated At", accessor: "updated_at" },
     { label: "Action", accessor: "action" },
-    
   ];
+  const data = [
+    {
+      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
+      invoice_number: "ZA-6972-2162-01",
+      state: "AWAITING CONFIRMATION",
+      invoice_concerned: "November 2019 rent invoice",
+      date: "February 28, 2025",
+      amount: "150,000 XOF",
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+        </>
+      ),
+    },
+    {
+      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
+      invoice_number: "ZA-6972-8894-01",
+      state: "AWAITING CONFIRMATION",
+      invoice_concerned: "September 2019 rent invoice",
+      date: "February 28, 2025",
+      amount: "150,000 XOF",
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+        </>
+      ),
+    },
+    {
+      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
+      invoice_number: "ZA-6972-5052-01",
+      state: "AWAITING CONFIRMATION",
+      invoice_concerned: "October 2019 rent invoice",
+      date: "February 28, 2025",
+      amount: "150,000 XOF",
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+        </>
+      ),
+    },
+    {
+      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
+      invoice_number: "ZA-6972-0808-01",
+      state: "AWAITING CONFIRMATION",
+      invoice_concerned: "August 2019 rent invoice",
+      date: "February 28, 2025",
+      amount: "150,000 XOF",
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+        </>
+      ),
+    },
+    {
+      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
+      invoice_number: "ZA-6972-7594-01",
+      state: "CONFIRMED",
+      invoice_concerned: "Entrance invoice for the YAO FERNAND BUILDING Door No. A5",
+      date: "August 5, 2019",
+      amount: "240,000 XOF",
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+        </>
+      ),
+    },
+  ];
+  
+  
   
       interface PaymentsProps{
         tenant_payments ?: TenantPayment[]
       }
+
+
+
+
+
+
 const Payments : React.FC<PaymentsProps> =({tenant_payments}) => {
-  console.log(tenant_payments)
-  const data = tenant_payments?.map((tp) => {
-    return {
-      id: tp?.id,
-      tenant_id: tp?.tenant_id,
-      contract_id: tp?.contract_id,
-      type_payment: tp?.type_payment,
-      Treasury: tp?.Treasury,
-      payment_method: tp?.payment_method,
-      payment_date: tp?.payment_date,
-      done_by: tp?.done_by,
-      other_name: tp?.other_name,
-      phone_no: tp?.phone_no,
-      Transaction_details: tp?.Transaction_details,
-      amount: tp?.amount,
-      documents: tp?.documents ? `Transaction ID: ${tp?.documents[0]??""}, Status: ${tp?.documents[1]}` : 'No documents',
-      created_at: tp?.created_at,
-      updated_at: tp?.updated_at,
-    };
-  }) ?? [];
-  
+
+ 
    
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
