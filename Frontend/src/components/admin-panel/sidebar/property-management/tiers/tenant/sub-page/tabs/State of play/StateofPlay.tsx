@@ -2,9 +2,11 @@ import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection'
 import { Contract, FilterOption, Good, StateOfPlay } from '@/types/DataProps';
 
 import React, { useState } from 'react';
-import { CheckCircle, Download, Edit, Eye, Flag, Trash2, Upload } from 'lucide-react';
+import { CheckCircle, Download, Edit, Eye, Flag, RefreshCw, Trash2, Upload } from 'lucide-react';
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import useFetchData from '@/hooks/useFetchData';
+import DeleteStateOfPlayDialog from './DeleteStateofPlay';
+import StateOfPlayDialog from './StateOfPlayDialog';
 
 interface EmergencyContactProps {
   emergencyContactName: string;
@@ -104,10 +106,8 @@ const StateofPlay :React.FC<StateofPlayProps>= ({stateOfPlay,handleReload}) => {
       state: item.state.toUpperCase(), // Adjust accordingly (e.g., ACTIVE, WAITING)
       action: (
         <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
+     <StateOfPlayDialog  stateOfPlay={item}/>
+          {/* <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
             <Edit size={18} />
           </button>
           <button className="p-2 rounded-full bg-green-500 text-white hover:bg-green-600">
@@ -115,10 +115,8 @@ const StateofPlay :React.FC<StateofPlayProps>= ({stateOfPlay,handleReload}) => {
           </button>
           <button className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600">
             <Upload size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
+          </button> */}
+          <DeleteStateOfPlayDialog StateOfPlayId={item?.id}/>
         </>
       ),
     };
@@ -154,7 +152,13 @@ const StateofPlay :React.FC<StateofPlayProps>= ({stateOfPlay,handleReload}) => {
       />
    <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable addButton={false} title="LIST OF STATE REPORTS" columns={columns} data={data} pageSize={5} />
+      <DynamicTable addButton={false} title="LIST OF STATE REPORTS" columns={columns} data={data} pageSize={5} AddButton={
+ <button
+        onClick={handleReload}
+        className="bg-green-500 text-white px-4 py-2 rounded-md mb-4"
+      >
+        <RefreshCw/>
+      </button>}/>
     </div>
     </div>
   );

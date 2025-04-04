@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import PersonalDetails from "./tabs/PersonalDetails";
 import Documents from "./tabs/Contract/Contract";
-import EmergencyContact from "./tabs/StateofPlay";
+import EmergencyContact from "./tabs/State of play/StateofPlay";
 import OtherInformation from "./tabs/OtherInformation";
-import StateofPlay from "./tabs/StateofPlay";
-import Bills from "./tabs/Bills";
+import StateofPlay from "./tabs/State of play/StateofPlay";
+import Bills from "./tabs/Bills/Bills";
 import NoticeofExpiry from "./tabs/NoticeofExpiry";
 import Payments from "./tabs/Payments";
 import Tickets from "./tabs/Tickets";
@@ -77,7 +77,7 @@ const TenantDetailPage = () => {
       name: 'bills', 
       label: 'Bills', 
       icon: <File className="inline mr-2" />, 
-      component: <Bills tenant_bills={tenant?.tenant_bill}/>
+      component: <Bills tenant_bills={tenant?.tenant_bill} handleReload={handleReload}/>
     },
     { 
       name: 'noticeofexpiry', 

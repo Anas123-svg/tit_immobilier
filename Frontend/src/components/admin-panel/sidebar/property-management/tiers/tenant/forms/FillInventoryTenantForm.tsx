@@ -41,10 +41,10 @@ const FillInventoryTenantForm = () => {
     date_of_establishment: z.string().optional(),
     state_type: z.string().optional(),
     observation: z.string().optional(),
-    parts: z
+    element_inventories: z
       .array(
         z.object({
-          part_name: z.string().optional(),
+          part_concerned: z.string().optional(),
           inventory_of_elements: z.array(
             z.object({
               equipment: z.string().optional(),
@@ -63,9 +63,9 @@ const FillInventoryTenantForm = () => {
   const form = useForm<z.infer<typeof inventorySchema>>({
     resolver: zodResolver(inventorySchema),
     defaultValues: {
-      parts: [
+      element_inventories: [
         {
-          part_name: "General",
+          part_concerned: "General",
           inventory_of_elements: [
             { equipment: "", state: "", comment: "", upload: [] },
           ],
@@ -80,11 +80,11 @@ const FillInventoryTenantForm = () => {
 
   // Add a new part
   const handleAddPart = () => {
-    const currentParts = form.getValues("parts") || [];
-    form.setValue("parts", [
+    const currentParts = form.getValues("element_inventories") || [];
+    form.setValue("element_inventories", [
       ...currentParts,
       {
-        part_name: "",
+        part_concerned: "",
         inventory_of_elements: [
           { equipment: "", state: "", comment: "", upload: [] },
         ],
@@ -94,16 +94,16 @@ const FillInventoryTenantForm = () => {
 
   // Remove a part
   const handleRemovePart = (partIndex: number) => {
-    const currentParts = form.getValues("parts") || [];
+    const currentParts = form.getValues("element_inventories") || [];
     form.setValue(
-      "parts",
+      "element_inventories",
       currentParts.filter((_, i) => i !== partIndex)
     );
   };
 
   // Add inventory item to a specific part
   const handleAddInventoryItem = (partIndex: number) => {
-    const currentParts = form.getValues("parts") || [];
+    const currentParts = form.getValues("element_inventories") || [];
     const updatedParts = [...currentParts];
 
     if (updatedParts[partIndex]) {
@@ -114,13 +114,13 @@ const FillInventoryTenantForm = () => {
         upload: [],
       });
 
-      form.setValue("parts", updatedParts);
+      form.setValue("element_inventories", updatedParts);
     }
   };
 
   // Remove inventory item from a specific part
   const handleRemoveInventoryItem = (partIndex: number, itemIndex: number) => {
-    const currentParts = form.getValues("parts") || [];
+    const currentParts = form.getValues("element_inventories") || [];
     const updatedParts = [...currentParts];
 
     if (updatedParts[partIndex]) {
@@ -128,12 +128,12 @@ const FillInventoryTenantForm = () => {
         partIndex
       ].inventory_of_elements.filter((_, i) => i !== itemIndex);
 
-      form.setValue("parts", updatedParts);
+      form.setValue("element_inventories", updatedParts);
     }
   };
 
   const TenantId = form.watch("tenant_id");
-  const parts = form.watch("parts") || [];
+  const element_inventories = form.watch("element_inventories") || [];
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -217,7 +217,7 @@ const FillInventoryTenantForm = () => {
               PARTS AND INVENTORY DETAILS
             </h2>
 
-            {parts.map((part, partIndex) => (
+            {element_inventories.map((part, partIndex) => (
               <div key={partIndex} className="border p-4 mb-6 rounded-md">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="font-bold text-lg">Part {partIndex + 1}</h3>
@@ -232,7 +232,7 @@ const FillInventoryTenantForm = () => {
 
                 <FormField
                   control={form.control}
-                  name={`parts.${partIndex}.part_name`}
+                  name={`element_inventories.${partIndex}.part_concerned`}
                   render={({ field }) => (
                     <FormItem className="mb-4">
                       <FormLabel>Part Name</FormLabel>
@@ -252,7 +252,7 @@ const FillInventoryTenantForm = () => {
                   >
                     <FormField
                       control={form.control}
-                      name={`parts.${partIndex}.inventory_of_elements.${itemIndex}.equipment`}
+                      name={`element_inventories.${partIndex}.inventory_of_elements.${itemIndex}.equipment`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Equipment *</FormLabel>
@@ -266,7 +266,7 @@ const FillInventoryTenantForm = () => {
 
                     <FormField
                       control={form.control}
-                      name={`parts.${partIndex}.inventory_of_elements.${itemIndex}.state`}
+                      name={`element_inventories.${partIndex}.inventory_of_elements.${itemIndex}.state`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>State *</FormLabel>
@@ -280,7 +280,7 @@ const FillInventoryTenantForm = () => {
 
                     <FormField
                       control={form.control}
-                      name={`parts.${partIndex}.inventory_of_elements.${itemIndex}.comment`}
+                      name={`element_inventories.${partIndex}.inventory_of_elements.${itemIndex}.comment`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Comment</FormLabel>
@@ -297,14 +297,14 @@ const FillInventoryTenantForm = () => {
                       <FileUploader
                         onChange={(files) =>
                           form.setValue(
-                            `parts.${partIndex}.inventory_of_elements.${itemIndex}.upload`,
+                            `element_inventories.${partIndex}.inventory_of_elements.${itemIndex}.upload`,
                             files
                           )
                         }
                         maxFiles={1}
                         addedFiles={
                           form.watch(
-                            `parts.${partIndex}.inventory_of_elements.${itemIndex}.upload`
+                            `element_inventories.${partIndex}.inventory_of_elements.${itemIndex}.upload`
                           ) || []
                         }
                       />
