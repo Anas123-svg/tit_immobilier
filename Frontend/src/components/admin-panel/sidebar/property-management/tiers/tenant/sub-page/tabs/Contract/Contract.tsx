@@ -1,11 +1,12 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { Contract, FilterOption, TenantBill } from '@/types/DataProps';
+import { Contract, FilterOption, Good, Owner, TenantBill } from '@/types/DataProps';
 import { Download, Edit, Eye, Printer, RefreshCw, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import ContractDialog from './ContractDialogue';
 import ContractTenantForm from '../../../forms/ContractTenantForm';
 import DeleteContractDialog from './DeleteContract';
+import useFetchData from '@/hooks/useFetchData';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -69,9 +70,41 @@ import DeleteContractDialog from './DeleteContract';
   }
 const Documents :React.FC<DocumentProps>= ({tenant_cases,handleReload}) => {
 
+
+
+
+
+
   const data = tenant_cases?.map((tc)=>{
- return   {
-      locative: tc.location,
+    const {
+      data: owner,
+   
+      error,
+    } = useFetchData<Owner>(
+      `${import.meta.env.VITE_API_URL}/api/owners/${tc.owner_id}`
+    );
+    const { data: property   ,loading } = useFetchData<Good>(`${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${tc.concerned}`)
+ return  loading? {}:  {
+      locative: <div>
+   
+      <h2 id="property-name" className="text-md font-bold text-gray-800">
+        {property?.property_name} - {tc.rent_locative.rental_type} N°{tc.rent_locative.door_number}
+      </h2>
+     
+      <p className="text-gray-600">
+        Surface area: 
+        <span id="surface-area" className="font-medium">{tc.rent_locative.area}m²</span> — 
+        <span id="room-count" className="font-medium">{tc.rent_locative.room}</span> room(s)
+      </p>
+    
+      <p className="text-gray-600">
+        Owner: 
+        <span id="owner-name" className="font-medium">{owner?.is_business_owner ? owner?.business_company_name : owner?.private_name}</span>
+      </p>
+     
+    </div>
+    
+    ,
       type: tc.contract_type,
       period: tc.entry_date,
       state: tc.status,

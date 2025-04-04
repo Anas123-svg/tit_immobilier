@@ -83,7 +83,7 @@ const TenantDetailPage = () => {
       name: 'noticeofexpiry', 
       label: 'Notice of Expiry', 
       icon: <Clock className="inline mr-2" />, 
-      component: <NoticeofExpiry />
+      component: <NoticeofExpiry  notice_of_expirey={tenant?.notice_of_expirey}/>
     },
     { 
       name: 'payments', 

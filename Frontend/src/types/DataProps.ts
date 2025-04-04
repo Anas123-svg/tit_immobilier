@@ -475,13 +475,15 @@ block:string;
     id: number;
     tenant_id: number;
     contract_id: number;
-    month: string; // Format: "YYYY-MM"
-    rent: string; // Assuming rent is represented as a string
-    charge: string; // Assuming charge is represented as a string
-    total: string; // Assuming total is represented as a string
-    created_at: string; // ISO 8601 format datetime string
-    updated_at: string; // ISO 8601 format datetime string
+    month: string;  // e.g., "January" or "YYYY-MM"
+    rent: string;   // "500.00"
+    charge: string; // "50.00"
+    total: string;  // "550.00"
+    created_at: string; // e.g., "2025-03-22T20:59:38.000000Z"
+    updated_at: string; // e.g., "2025-03-22T20:59:38.000000Z"
+    state: string;      // e.g., "waiting"
   }
+  
 
 
   export interface TenantRentBill{
@@ -516,7 +518,7 @@ block:string;
     owner:Owner
     tenant:Tenant
     total_amount_due:number;
-
+    rent_property:Good;
     previous_invoices: []
     invoices:[]
   }
@@ -543,7 +545,10 @@ block:string;
     bank: string; // e.g. "123"
     transaction: string | null;
     tiers: string; // e.g. "2313"
+    state: string; // e.g. "waiting"
+    invoice_number: string; // e.g. "INV-67EFAFD7E3148"
   }
+  
   
   
   export interface TenantProfile {
@@ -565,6 +570,7 @@ block:string;
     created_at: string; // ISO date format (e.g. "2025-03-23T15:39:16.000000Z")
     updated_at: string; // ISO date format (e.g. "2025-03-23T15:39:16.000000Z")
     documents: string | null; // assuming documents can be a string or null
+    state: string; // e.g. "waiting"
   }
   export interface NoticeOfExpiry {
     id: number;

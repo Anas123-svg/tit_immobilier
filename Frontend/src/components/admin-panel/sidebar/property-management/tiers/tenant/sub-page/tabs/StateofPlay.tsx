@@ -1,9 +1,10 @@
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption, StateOfPlay } from '@/types/DataProps';
+import { Contract, FilterOption, Good, StateOfPlay } from '@/types/DataProps';
 
 import React, { useState } from 'react';
 import { CheckCircle, Download, Edit, Eye, Flag, Trash2, Upload } from 'lucide-react';
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
+import useFetchData from '@/hooks/useFetchData';
 
 interface EmergencyContactProps {
   emergencyContactName: string;
@@ -76,11 +77,31 @@ const StateofPlay :React.FC<StateofPlayProps>= ({stateOfPlay,handleReload}) => {
 
 
   const data = stateOfPlay?.map((item) => {
-  
-    return {
-      locative: item.observation, // Adjust this if you want to display different data
+   
+
+
+    const { data:contract,loading } = useFetchData<Contract>(`${import.meta.env.VITE_API_URL}/api/tenant-contract/${item.contract_id}`)
+    return  loading? {}: {
+      locative: <div>
+   
+      <h2 id="property-name" className="text-md font-bold text-gray-800">
+        {contract?.rent_property.property_name} - {contract?.rent_locative.rental_type} N°{contract?.rent_locative.door_number}
+      </h2>
+     
+      <p className="text-gray-600">
+        Surface area: 
+        <span id="surface-area" className="font-medium">{contract?.rent_locative.area}m²</span> — 
+        <span id="room-count" className="font-medium">{contract?.rent_locative.room}</span> room(s)
+      </p>
+    
+      <p className="text-gray-600">
+        Owner: 
+        <span id="owner-name" className="font-medium">{contract?.rent_property.owner}</span>
+      </p>
+     
+    </div>,
       type: item.state_type, // Adjust accordingly
-      state: item.state_type, // Adjust accordingly (e.g., ACTIVE, WAITING)
+      state: item.state.toUpperCase(), // Adjust accordingly (e.g., ACTIVE, WAITING)
       action: (
         <>
           <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">

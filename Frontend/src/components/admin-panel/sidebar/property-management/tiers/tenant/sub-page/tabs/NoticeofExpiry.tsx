@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption } from '@/types/DataProps';
+import { FilterOption, NoticeOfExpiry } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -54,78 +54,11 @@ import React, { useState } from 'react';
     { label: "I Am Fine", accessor: "i_am_fine" },
     { label: "Action", accessor: "action" }, // Action buttons (view, delete, etc.)
   ];
-  const data = [
-    {
-      dragonfly: "Contract No. ZA-6972-4144-01",
-      rent: "Rent from April 2025",
-      amount: "9,750,000 XOF",
-      pay: "0 XOF",
-      i_am_fine: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      dragonfly: "Contract No. ZA-6972-4144-01",
-      rent: "Rent for March 2025",
-      amount: "10,200,000 XOF",
-      pay: "0 XOF",
-      i_am_fine: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      dragonfly: "Contract No. ZA-6972-4144-01",
-      rent: "February 2025 rent",
-      amount: "10,050,000 XOF",
-      pay: "0 XOF",
-      i_am_fine: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      dragonfly: null,
-      rent: "Total",
-      amount: "30,000,000 XOF",
-      pay: "0 XOF",
-      i_am_fine: "450,000 XOF",
-      action: null, // No action for the total row
-    },
-  ];
-  
-const NoticeofExpiry = () => {
+ 
+   interface NoticeofExpiryProps{
+    notice_of_expirey ?: NoticeOfExpiry[]
+      }
+const NoticeofExpiry: React.FC<NoticeofExpiryProps> = ({notice_of_expirey}) => {
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",
@@ -145,6 +78,39 @@ const NoticeofExpiry = () => {
     console.log("Filters submitted:", filterValues);
     // Add logic to filter data or make API calls based on filterValues
   };
+
+
+
+
+  const data =  notice_of_expirey?.map((item) => {
+
+   return {
+      dragonfly: `Contract No. ${item.contract_id}`,
+      rent: `Rent for ${item.month}`,
+      amount: `${item.total} XOF`,
+      pay: "0 XOF",
+      i_am_fine: `${item.total} XOF`,
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+        </>
+      ),
+    };
+   
+  }) ?? [];
+
+
+
+
+
   return (
     <div className='space-y-5'>
        <HeaderSection

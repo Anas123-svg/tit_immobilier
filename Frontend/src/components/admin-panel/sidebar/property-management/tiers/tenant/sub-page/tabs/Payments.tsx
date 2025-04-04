@@ -1,6 +1,7 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption, TenantPayment } from '@/types/DataProps';
+import useFetchData from '@/hooks/useFetchData';
+import { Contract, FilterOption, TenantPayment } from '@/types/DataProps';
 import { Download, Edit, Edit2, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -59,114 +60,7 @@ import React, { useState } from 'react';
     { label: "Amount", accessor: "amount" },
     { label: "Action", accessor: "action" },
   ];
-  const data = [
-    {
-      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
-      invoice_number: "ZA-6972-2162-01",
-      state: "AWAITING CONFIRMATION",
-      invoice_concerned: "November 2019 rent invoice",
-      date: "February 28, 2025",
-      amount: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
-      invoice_number: "ZA-6972-8894-01",
-      state: "AWAITING CONFIRMATION",
-      invoice_concerned: "September 2019 rent invoice",
-      date: "February 28, 2025",
-      amount: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
-      invoice_number: "ZA-6972-5052-01",
-      state: "AWAITING CONFIRMATION",
-      invoice_concerned: "October 2019 rent invoice",
-      date: "February 28, 2025",
-      amount: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
-      invoice_number: "ZA-6972-0808-01",
-      state: "AWAITING CONFIRMATION",
-      invoice_concerned: "August 2019 rent invoice",
-      date: "February 28, 2025",
-      amount: "150,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-        </>
-      ),
-    },
-    {
-      locative: "YAO FERNAND BUILDING - STUDIO N°A5",
-      invoice_number: "ZA-6972-7594-01",
-      state: "CONFIRMED",
-      invoice_concerned: "Entrance invoice for the YAO FERNAND BUILDING Door No. A5",
-      date: "August 5, 2019",
-      amount: "240,000 XOF",
-      action: (
-        <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
-            <Trash2 size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
-            <Edit size={18} />
-          </button>
-        </>
-      ),
-    },
-  ];
-  
+ 
   
   
       interface PaymentsProps{
@@ -201,6 +95,60 @@ const Payments : React.FC<PaymentsProps> =({tenant_payments}) => {
     console.log("Filters submitted:", filterValues);
     // Add logic to filter data or make API calls based on filterValues
   };
+
+
+
+
+
+
+  const data = tenant_payments?.map((item) => {
+    const { data:contract,loading } = useFetchData<Contract>(`${import.meta.env.VITE_API_URL}/api/tenant-contract/${item.contract_id}`)
+      
+ return loading? {}:  {
+  locative: <div>
+   
+  <h2 id="property-name" className="text-md font-bold text-gray-800">
+    {contract?.rent_property.property_name} - {contract?.rent_locative.rental_type} N°{contract?.rent_locative.door_number}
+  </h2>
+ 
+  <p className="text-gray-600">
+    Surface area: 
+    <span id="surface-area" className="font-medium">{contract?.rent_locative.area}m²</span> — 
+    <span id="room-count" className="font-medium">{contract?.rent_locative.room}</span> room(s)
+  </p>
+
+  <p className="text-gray-600">
+    Owner: 
+    <span id="owner-name" className="font-medium">{contract?.rent_property.owner}</span>
+  </p>
+ 
+</div>, 
+  invoice_number: item.invoice_number,
+      state: item.state,
+      invoice_concerned:item.payment_date+ " rent invoice",
+      date: item.payment_date,
+      amount: item.amount+ " XOF",
+      action: (
+        <>
+          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
+            <Eye size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
+            <Trash2 size={18} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+            <Edit size={18} />
+          </button>
+        </>
+      ),
+    }
+
+}) ?? [];
+
+
+
+
+
   return (
 <div className='space-y-5'>
        <HeaderSection

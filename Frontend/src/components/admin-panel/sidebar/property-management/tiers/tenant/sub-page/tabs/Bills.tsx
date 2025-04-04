@@ -1,6 +1,7 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { FilterOption, TenantBill } from '@/types/DataProps';
+import useFetchData from '@/hooks/useFetchData';
+import { Contract, FilterOption, TenantBill } from '@/types/DataProps';
 import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 // Filter options for the HeaderSection
@@ -97,82 +98,49 @@ import React, { useState } from 'react';
     interface BillsProps{
       tenant_bills ?: TenantBill[]
     }
-const Bills: React.FC<BillsProps> = ({}) => {
+const Bills: React.FC<BillsProps> = ({tenant_bills}) => {
   
-  const data = [
-    {
-      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
-      "room_details": "Surface area: m² - 2 room(s)",
-      "owner": "Mr. YAO KOUADIO FERNAND",
-      "contract_type": "HABITATION",
-      "state_type": "AWAITING PAYMENT",
-      "period": "Rent from April 2025",
-      "amount": 150000,
-      "paid": 0,
-      "remaining": 150000,
-      "created_at": "2025-03-22T19:36:46.000000Z",
-      "updated_at": "2025-03-22T19:36:46.000000Z"
-    },
-    {
-      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
-      "room_details": "Surface area: m² - 2 room(s)",
-      "owner": "Mr. YAO KOUADIO FERNAND",
-      "contract_type": "HABITATION",
-      "state_type": "PAY",
-      "period": "Rent for March 2025",
-      "amount": 150000,
-      "paid": 0,
-      "remaining": 150000,
-      "created_at": "2025-03-22T19:36:46.000000Z",
-      "updated_at": "2025-03-22T19:36:46.000000Z"
-    },
-    {
-      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
-      "room_details": "Surface area: m² - 2 room(s)",
-      "owner": "Mr. YAO KOUADIO FERNAND",
-      "contract_type": "HABITATION",
-      "state_type": "AWAITING PAYMENT",
-      "period": "Rent for February 2025",
-      "amount": 150000,
-      "paid": 0,
-      "remaining": 150000,
-      "created_at": "2025-03-22T19:36:46.000000Z",
-      "updated_at": "2025-03-22T19:36:46.000000Z"
-    },
-    {
-      "locative": "YAO FERNAND BUILDING - STUDIO N°A5",
-      "room_details": "Surface area: m² - 2 room(s)",
-      "owner": "Mr. YAO KOUADIO FERNAND",
-      "contract_type": "HABITATION",
-      "state_type": "PAY",
-      "period": "Rent for January 2025",
-      "amount": 150000,
-      "paid": 0,
-      "remaining": 150000,
-      "created_at": "2025-03-22T19:36:46.000000Z",
-      "updated_at": "2025-03-22T19:36:46.000000Z"
-    }
-  ]
-  ?.map((item) => {
-    return {
-      locative: <p>{item.locative} <br /> {item.room_details}</p>, // Example: "YAO FERNAND BUILDING - STUDIO N°A5"
-      type: item.contract_type, // You can adjust this based on the available field
-      state: item.state_type, // Example: "AWAITING PAYMENT"
-      period: item.period, // Example: "Rent from April 2025"
-      amount: `${item.amount} XOF`, // Example: "150,000 XOF"
-      paid: `${item.paid} XOF`, // Example: "0 XOF"
-      remaining: `${item.remaining} XOF`, // Example: "150,000 XOF"
+  const data =  tenant_bills?.map((item) => {
+
+
+    
+        const { data:contract,loading } = useFetchData<Contract>(`${import.meta.env.VITE_API_URL}/api/tenant-contract/${item.contract_id}`)
+      
+    return loading? {}: {
+      locative: <div>
+   
+      <h2 id="property-name" className="text-md font-bold text-gray-800">
+        {contract?.rent_property.property_name} - {contract?.rent_locative.rental_type} N°{contract?.rent_locative.door_number}
+      </h2>
+     
+      <p className="text-gray-600">
+        Surface area: 
+        <span id="surface-area" className="font-medium">{contract?.rent_locative.area}m²</span> — 
+        <span id="room-count" className="font-medium">{contract?.rent_locative.room}</span> room(s)
+      </p>
+    
+      <p className="text-gray-600">
+        Owner: 
+        <span id="owner-name" className="font-medium">{contract?.rent_property.owner}</span>
+      </p>
+     
+    </div>, 
+      state: item.state.toUpperCase(), // Example: "AWAITING PAYMENT"
+      period: item.month, // Example: "Rent from April 2025"
+      amount: `${item.total} XOF`, // Example: "150,000 XOF"
+      paid: `${0} XOF`, // Example: "0 XOF"
+      remaining: `${item.total} XOF`, // Example: "150,000 XOF"
       action: (
         <>
           <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
             <Eye size={18} />
           </button>
-          {item.state_type === "AWAITING PAYMENT" && (
+          {item.state === "waiting" && (
             <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
               <Edit size={18} />
             </button>
           )}
-          {item.state_type === "PAY" && (
+          {item.state === "pay" && (
             <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
               <Trash2 size={18} />
             </button>
