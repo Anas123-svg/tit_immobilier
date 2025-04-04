@@ -16,10 +16,11 @@ import {
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import useFetchData from "@/hooks/useFetchData";
-import { Owner, Treasury } from "@/types/DataProps";
-import Selection from "@/components/common";
+import { Owner, Treasury, User } from "@/types/DataProps";
+import Selection from "@/components/common/selection2";
 import { Edit } from "lucide-react";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
+import useFetchAuthData from "@/hooks/useFetchAuthData";
 const FormSchema = z.object({
   manager_id: z.number(),
   cash_type: z.string().nonempty({ message: "Cash Type is required" }),
@@ -47,21 +48,22 @@ const AddTreasuryForm: React.FC<AddTreasuryFormProps> = ({treasury}) => {
   minimum_threshold:   treasury?.minimum_threshold,
   maximum_threshold:   treasury?.maximum_threshold,
   comment:   treasury?.comment,
-  validator_assignment:    treasury?.validator_assignment??[],
+  validator_assignment:    [],
    }
   });   
   
   
   
-  const { data, loading, error } = useFetchData<Owner[]>(
-    `${import.meta.env.VITE_API_URL}/api/get-all-owners`
-  )
-  const validators: string[] = data?.map((owner) => {
-    return owner.is_business_owner 
-      ? owner.business_company_name || ""  // Default to empty string if undefined
-      : owner.private_name || "";           // Default to empty string if undefined
-  }) || ["", ""];  // Default array in case data is empty or undefined
-  
+  const { data, loading, error } = useFetchAuthData<User[]>(
+    `${import.meta.env.VITE_API_URL}/api/users`
+  );
+
+  if (loading) {
+    
+  }
+  const availableUsers =data?.map((user)=>{
+return  { id: user.id.toString(), name: user.name }
+  });
  const apiUrl = import.meta.env.VITE_API_URL + '/api/treasury/add';
   const onSubmit = treasury
          ? useFormUpdate<typeof FormSchema>(apiUrl)  // Update if client exists
@@ -171,12 +173,14 @@ const AddTreasuryForm: React.FC<AddTreasuryFormProps> = ({treasury}) => {
                 ASSIGN VALIDATORS
               </h2>
               <Selection
-                list={validators}
-                selectedList={form.watch("validator_assignment") || []}
-                onChange={(selected) => {
-                  form.setValue("validator_assignment", selected);
-                }}
-              />
+              list={availableUsers
+                ||[]
+              }
+              selectedList={form.watch("validator_assignment") || []}
+              onChange={(selected) => {
+                form.setValue("validator_assignment", selected);
+              }}
+            />
       <Button type="submit" className="w-full mt-4 bg-primary" >
     Submit
       </Button>
