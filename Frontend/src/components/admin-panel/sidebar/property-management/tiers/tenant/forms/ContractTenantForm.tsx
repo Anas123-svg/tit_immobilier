@@ -33,7 +33,7 @@ import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/
 import { OwnerCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerCombobox";
 import { OwnerSalePropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerSalePropertyCombobox";
 import { OwnerRentPropertyCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentPropertyCombobox";
-import { Contract, Locative, RentLocative } from "@/types/DataProps";
+import { Contract, Locative, RentLocative, TenantContract } from "@/types/DataProps";
 import { useFormUpdate } from "@/hooks/useFormUpdate";
 import { LocativeCombobox } from "@/components/admin-panel/UI-components/Combobox/OwnerRentLocatives";
 import useFetchData from "@/hooks/useFetchData";
@@ -83,7 +83,7 @@ const FormSchema = z.object({
    tenant_contract_bills: z.array(invoiceSchema).optional(),
   });
   interface BusinessTenantFormProps {
-    contract?: Contract;
+    contract?: TenantContract;
     customBtn?:React.ReactNode
   }
   // Functional component for business tenant form

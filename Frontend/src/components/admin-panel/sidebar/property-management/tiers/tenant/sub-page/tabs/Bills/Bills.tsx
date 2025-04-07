@@ -76,24 +76,24 @@ const Bills: React.FC<BillsProps> = ({tenant_bills,handleReload}) => {
 
 
     
-        const { data:contract,loading } = useFetchData<Contract>(`${import.meta.env.VITE_API_URL}/api/tenant-contract/${item.contract_id}`)
+        // const { data:contract,loading } = useFetchData<Contract>(`${import.meta.env.VITE_API_URL}/api/tenant-contract/${item.contract_id}`)
       
-    return loading? {}: {
+    return  {
       locative: <div>
    
       <h2 id="property-name" className="text-md font-bold text-gray-800">
-        {contract?.rent_property.property_name} - {contract?.rent_locative.rental_type} N°{contract?.rent_locative.door_number}
+        {item.contract?.rent_property.property_name} - {item.contract?.rent_locative.rental_type} N°{item.contract?.rent_locative.door_number}
       </h2>
      
       <p className="text-gray-600">
         Surface area: 
-        <span id="surface-area" className="font-medium">{contract?.rent_locative.area}m²</span> — 
-        <span id="room-count" className="font-medium">{contract?.rent_locative.room}</span> room(s)
+        <span id="surface-area" className="font-medium">{item.contract?.rent_locative.area}m²</span> — 
+        <span id="room-count" className="font-medium">{item.contract?.rent_locative.room}</span> room(s)
       </p>
     
       <p className="text-gray-600">
         Owner: 
-        <span id="owner-name" className="font-medium">{contract?.rent_property.owner}</span>
+        <span id="owner-name" className="font-medium">{item.contract?.rent_property.owner}</span>
       </p>
      
     </div>, 

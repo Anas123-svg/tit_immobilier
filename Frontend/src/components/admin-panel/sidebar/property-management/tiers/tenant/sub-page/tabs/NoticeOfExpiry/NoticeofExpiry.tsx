@@ -1,8 +1,9 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
 import { FilterOption, NoticeOfExpiry } from '@/types/DataProps';
-import { Download, Edit, Eye, Trash2, Upload } from 'lucide-react';
+import { Download, Edit, Eye, RefreshCw, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
+import NoticeOfExpiryDialog from './NoticeOfExpiryDialog';
 // Filter options for the HeaderSection
   const filterOptions: FilterOption[] = [
   
@@ -57,8 +58,9 @@ import React, { useState } from 'react';
  
    interface NoticeofExpiryProps{
     notice_of_expirey ?: NoticeOfExpiry[]
+     handleReload?: ()=>void
       }
-const NoticeofExpiry: React.FC<NoticeofExpiryProps> = ({notice_of_expirey}) => {
+const NoticeofExpiry: React.FC<NoticeofExpiryProps> = ({notice_of_expirey,handleReload}) => {
   // State to manage filters
     const [filterValues, setFilterValues] = useState<{ [key: string]: string }>({
       type: "",
@@ -92,10 +94,8 @@ const NoticeofExpiry: React.FC<NoticeofExpiryProps> = ({notice_of_expirey}) => {
       i_am_fine: `${item.total} XOF`,
       action: (
         <>
-          <button className="p-2 rounded-full bg-gray-300 text-white hover:bg-gray-400">
-            <Eye size={18} />
-          </button>
-          <button className="p-2 rounded-full bg-yellow-500 text-white hover:bg-yellow-600">
+       <NoticeOfExpiryDialog notice={item}/>
+          <button className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600">
             <Edit size={18} />
           </button>
           <button className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600">
@@ -121,7 +121,13 @@ const NoticeofExpiry: React.FC<NoticeofExpiryProps> = ({notice_of_expirey}) => {
       />
         <div className="space-y-5 overflow-x-auto">
       {/* Render the DynamicTable with the provided data and columns */}
-      <DynamicTable title="List of Notice of Expiry" columns={columns} data={data} pageSize={5} addButton={false} />
+      <DynamicTable title="List of Notice of Expiry" columns={columns} data={data} pageSize={5}  AddButton={
+ <button
+        onClick={handleReload}
+        className="bg-green-500 text-white px-4 py-2 rounded-md mb-4"
+      >
+        <RefreshCw/>
+      </button>} />
     </div>
     </div>
   );

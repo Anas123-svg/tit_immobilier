@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye } from 'lucide-react';
-import { Contract } from '@/types/DataProps';
+import { Contract, TenantContract } from '@/types/DataProps';
 
 // Define form schema using Zod for validation
 const FormSchema = z.object({
@@ -36,7 +36,7 @@ const FormSchema = z.object({
 });
 
 interface ContractDialogProps {
-  contract: Contract; // Assuming contract data will be passed as props
+  contract: TenantContract; // Assuming contract data will be passed as props
 }
 
 const ContractDialog: React.FC<ContractDialogProps> = ({ contract }) => {

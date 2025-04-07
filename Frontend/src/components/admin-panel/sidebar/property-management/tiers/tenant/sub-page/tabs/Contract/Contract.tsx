@@ -1,6 +1,6 @@
 import DynamicTable from '@/components/admin-panel/UI-components/DynamicTable';
 import HeaderSection from '@/components/admin-panel/UI-components/HeaderSection';
-import { Contract, FilterOption, Good, Owner, TenantBill } from '@/types/DataProps';
+import { Contract, FilterOption, Good, Owner, TenantBill, TenantContract } from '@/types/DataProps';
 import { Download, Edit, Eye, Printer, RefreshCw, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import ContractDialog from './ContractDialogue';
@@ -65,7 +65,7 @@ import useFetchData from '@/hooks/useFetchData';
     },
   ];
   interface DocumentProps{
-    tenant_cases ?: Contract[]
+    tenant_cases ?: TenantContract[]
     handleReload?: ()=>void
   }
 const Documents :React.FC<DocumentProps>= ({tenant_cases,handleReload}) => {
@@ -76,19 +76,19 @@ const Documents :React.FC<DocumentProps>= ({tenant_cases,handleReload}) => {
 
 
   const data = tenant_cases?.map((tc)=>{
-    const {
-      data: owner,
+    // const {
+    //   data: owner,
    
-      error,
-    } = useFetchData<Owner>(
-      `${import.meta.env.VITE_API_URL}/api/owners/${tc.owner_id}`
-    );
-    const { data: property   ,loading } = useFetchData<Good>(`${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${tc.concerned}`)
- return  loading? {}:  {
+    //   error,
+    // } = useFetchData<Owner>(
+    //   `${import.meta.env.VITE_API_URL}/api/owners/${tc.owner_id}`
+    // );
+    // const { data: property   ,loading } = useFetchData<Good>(`${import.meta.env.VITE_API_URL}/api/owner-rent-properties/${tc.concerned}`)
+ return    {
       locative: <div>
    
       <h2 id="property-name" className="text-md font-bold text-gray-800">
-        {property?.property_name} - {tc.rent_locative.rental_type} N°{tc.rent_locative.door_number}
+        {tc.rent_property?.property_name} - {tc.rent_locative.rental_type} N°{tc.rent_locative.door_number}
       </h2>
      
       <p className="text-gray-600">
@@ -99,7 +99,7 @@ const Documents :React.FC<DocumentProps>= ({tenant_cases,handleReload}) => {
     
       <p className="text-gray-600">
         Owner: 
-        <span id="owner-name" className="font-medium">{owner?.is_business_owner ? owner?.business_company_name : owner?.private_name}</span>
+        <span id="owner-name" className="font-medium">{tc.owner?.is_business_owner ? tc.owner?.business_company_name : tc.owner?.private_name}</span>
       </p>
      
     </div>

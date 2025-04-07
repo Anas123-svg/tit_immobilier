@@ -5,8 +5,8 @@ import EmergencyContact from "./tabs/State of play/StateofPlay";
 import OtherInformation from "./tabs/OtherInformation";
 import StateofPlay from "./tabs/State of play/StateofPlay";
 import Bills from "./tabs/Bills/Bills";
-import NoticeofExpiry from "./tabs/NoticeofExpiry";
-import Payments from "./tabs/Payments";
+import NoticeofExpiry from "./tabs/NoticeOfExpiry/NoticeofExpiry";
+import Payments from "./tabs/Payment/Payments";
 import Tickets from "./tabs/Tickets";
 import {
   User,
@@ -83,13 +83,13 @@ const TenantDetailPage = () => {
       name: 'noticeofexpiry', 
       label: 'Notice of Expiry', 
       icon: <Clock className="inline mr-2" />, 
-      component: <NoticeofExpiry  notice_of_expirey={tenant?.notice_of_expirey}/>
+      component: <NoticeofExpiry  notice_of_expirey={tenant?.notice_of_expirey} handleReload={handleReload}/>
     },
     { 
       name: 'payments', 
       label: 'Payments', 
       icon: <CreditCard className="inline mr-2" />, 
-      component: <Payments tenant_payments={tenant?.tenant_payment}/>
+      component: <Payments tenant_payments={tenant?.tenant_payment}  handleReload={handleReload}/>
     },
     { 
       name: 'tickets', 

@@ -481,7 +481,12 @@ block:string;
     total: string;  // "550.00"
     created_at: string; // e.g., "2025-03-22T20:59:38.000000Z"
     updated_at: string; // e.g., "2025-03-22T20:59:38.000000Z"
-    state: string;      // e.g., "waiting"
+    state: string;  
+    contract:Contract
+    owner:Owner
+    rent_property:Good
+
+        // e.g., "waiting"
   }
   
 
@@ -547,14 +552,46 @@ block:string;
     tiers: string; // e.g. "2313"
     state: string; // e.g. "waiting"
     invoice_number: string; // e.g. "INV-67EFAFD7E3148"
+    contract:Contract
+    owner:Owner
+    rent_property:Good
   }
-  
+ export interface TenantContract {
+    id: number;
+    owner_id: number;
+    tenant_id: number;
+    location: number;
+    cost_of_rent: number;
+    contract_type: string;
+    date_of_signature: string;
+    entry_date: string;
+    end_date: string;
+    Number_of_months_of_deposit: number;
+    deposit_amount: number;
+    caution_to_be_paid: string;
+    number_of_months_in_advance: number;
+    advance_amount: number;
+    penalty_for_delay: number;
+    payment_limit: string;
+    tacit_renewal: string;
+    Frequency: string;
+    digital_signature_of_the_contract: string;
+    due_date: string;
+    created_at: string;
+    updated_at: string;
+    status: string;
+    occupant: string;
+    concerned: number;
+    rent_locative: Locative; // Object can be expanded based on its structure
+    owner: Owner; // Object can be expanded based on its structure
+    rent_property: Good; // Object can be expanded based on its structure
+  }
   
   
   export interface TenantProfile {
     profile:Tenant; // 'profile' could be an object or null, adjust as needed
     tenant_bill: TenantBill[];   // Array of tenant bills, adjust type as needed
-    tenant_contract: Contract[]; // Array of tenant contracts, adjust type as needed
+    tenant_contract: TenantContract[]; // Array of tenant contracts, adjust type as needed
     tenant_payment: TenantPayment[];  // Array of tenant payments, adjust type as needed
     state_of_play:StateOfPlay[];
     notice_of_expirey:NoticeOfExpiry[]
@@ -571,6 +608,9 @@ block:string;
     updated_at: string; // ISO date format (e.g. "2025-03-23T15:39:16.000000Z")
     documents: string | null; // assuming documents can be a string or null
     state: string; // e.g. "waiting"
+    contract:Contract
+    owner:Owner
+    rent_property:Good
   }
   export interface NoticeOfExpiry {
     id: number;
@@ -582,6 +622,7 @@ block:string;
     total: number | null; // Assuming it can be a number or null
     created_at: string; // ISO date format (e.g. "2025-03-22T19:36:46.000000Z")
     updated_at: string; // ISO date format (e.g. "2025-03-22T19:36:46.000000Z")
+    
   }
   
 
