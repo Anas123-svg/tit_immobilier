@@ -27,9 +27,20 @@ import useFetchData from "@/hooks/useFetchData";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import axios from "axios";
 import { TenantCombobox } from "@/components/admin-panel/UI-components/Combobox/TenantCombobox";
 import { ContractCombobox } from "@/components/admin-panel/UI-components/Combobox/ContractCombobox";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
+import {
+  Contract,
+  Invoice,
+  TenantBill,
+  TenantOtherInvoice,
+  TenantRenewInvoice,
+  TenantRentBill,
+} from "@/types/DataProps";
+import SelectionDetails, { TableRow } from "../UI/SelectionDetails";
+import Treasury from "@/components/admin-panel/sidebar/profile/Settings/accounting/Treasury";
 import FileUploader from "@/components/common/uploader";
 
 // Define validation schema
@@ -39,7 +50,9 @@ const PaymentFormSchema = z.object({
   payment_method: z.string().optional(),
   payment_date: z.string().optional(),
   amount: z.number().optional(),
+
   invoice_type: z.string().optional(),
+  total: z.number().optional(),
   treasury_type: z.string().optional(),
   documents: z.array(z.string()).optional(),
   done_by: z.string().optional(),
@@ -51,148 +64,140 @@ const PaymentFormSchema = z.object({
     .optional(),
   transaction: z.string().optional(),
   tiers: z.string().optional(),
-  selected_invoices: z.array(z.number()).optional(),
 });
 
 type PaymentFormData = z.infer<typeof PaymentFormSchema>;
-
-// Define type for rent bill from API
-interface TenantBill {
-  id: number;
-  tenant_id: number;
-  contract_id: number;
-  month: string;
-  rent: string;
-  charge: string;
-  total: string;
-  created_at: string;
-  updated_at: string;
-  state: string;
-}
-
-// Type for penalty bill
-interface PenaltyBill {
-  id: number;
-  tenant_id: number;
-  contract_id: number;
-  month: string;
-  total: string;
-  created_at: string;
-  updated_at: string;
-  state: string;
-}
-
-// Type for invoice row in table
-interface InvoiceRow {
-  id: number;
-  designation: string;
-  total: number;
-  paid: number;
-  unpaid: number;
-  isSelected?: boolean;
-}
 
 const AddPayment = () => {
   const [open, setOpen] = useState(false);
   const openChange = () => {
     setOpen(!open);
     form.reset();
-    setSelectedInvoices([]);
-    setTotalAmount(0);
-    setTotalPaid(0);
-    setTotalUnpaid(0);
   };
 
   const form = useForm<PaymentFormData>({
     resolver: zodResolver(PaymentFormSchema),
-    defaultValues: {
-      amount: 0,
-      selected_invoices: [],
-    },
   });
 
   const apiUrl = import.meta.env.VITE_API_URL + "/api/tenant-payment";
   const onSubmit = useFormSubmit<typeof PaymentFormSchema>(apiUrl);
 
-  const contractId = form.watch("contract_id");
-  const tenantId = form.watch("tenant_id");
-  const invoiceType = form.watch("invoice_type");
-  const paymentMethod = form.watch("payment_method");
-  const doneBy = form.watch("done_by");
+  const ContractId = form.watch("contract_id");
+  const TenantId = form.watch("tenant_id");
 
-  // Fetch rent bills when tenant ID is available
-  const { data: tenantRentBills } = useFetchData<TenantBill[]>(
-    `${import.meta.env.VITE_API_URL}/api/tenant-bill/tenant/${tenantId || ""}`
-  );
+  // const { data: contract, loading, error } = useFetchData<Contract>(
+  //   `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract ? Contract : "0"}`
+  // );
 
-  // Fetch penalty bills when tenant ID is available
-  const { data: tenantPenaltyBills } = useFetchData<PenaltyBill[]>(
+  const { data: TenantPenaltyBill } = useFetchData<TenantBill[]>(
     `${import.meta.env.VITE_API_URL}/api/tenant-penalty/tenant/${
-      tenantId || ""
+      TenantId ? TenantId : ""
+    }`
+  );
+  const { data: TenantRentBill } = useFetchData<TenantBill[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-bill/tenant/${
+      TenantId ? TenantId : ""
+    }`
+  );
+  const { data: tenantOtherInvoice } = useFetchData<TenantOtherInvoice[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-other/tenant/${
+      TenantId ? TenantId : ""
     }`
   );
 
-  // State for selected invoices and totals
-  const [selectedInvoices, setSelectedInvoices] = useState<number[]>([]);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [totalPaid, setTotalPaid] = useState(0);
-  const [totalUnpaid, setTotalUnpaid] = useState(0);
+  const { data: tenantRenewInvoice } = useFetchData<TenantRenewInvoice[]>(
+    `${import.meta.env.VITE_API_URL}/api/tenant-renew-contract/tenant/${
+      TenantId ? TenantId : ""
+    }`
+  );
 
-  // Convert API data to invoice rows
-  const getInvoiceRows = (): InvoiceRow[] => {
-    if (invoiceType === "RENT" && tenantRentBills) {
-      return tenantRentBills.map((bill) => ({
-        id: bill.id,
-        designation: `${bill.month} ${new Date().getFullYear()} rent invoice`,
-        total: parseFloat(bill.total),
-        paid: 0,
-        unpaid: parseFloat(bill.total),
-        isSelected: selectedInvoices.includes(bill.id),
-      }));
-    } else if (invoiceType === "PENALTY" && tenantPenaltyBills) {
-      return tenantPenaltyBills.map((bill) => ({
-        id: bill.id,
-        designation: `Penalty Bill for the month ${bill.month}`,
-        total: parseFloat(bill.total),
-        paid: 0,
-        unpaid: parseFloat(bill.total),
-        isSelected: selectedInvoices.includes(bill.id),
-      }));
+  const { data: tenantShortTerm } = useFetchData<Invoice[]>(
+    `${
+      import.meta.env.VITE_API_URL
+    }/api/tenant-short-term-contract/details/tenant/${TenantId ? TenantId : ""}`
+  );
+  const rentBillData: TableRow[] | undefined = TenantRentBill?.map((bill) => {
+    return {
+      designation: `Rent Bill for the month ${bill.month}`, // Correctly use string interpolation for the designation
+      total: parseInt(bill.total), // Directly assign the total value
+      paid: 0, // Assuming you want to initialize as 0
+      unpaid: parseInt(bill.total), // Unpaid value is the same as total initially
+    };
+  });
+
+  const tenantShortTermInvoices: TableRow[] | undefined = tenantShortTerm?.map(
+    (bill) => {
+      return {
+        designation: bill.designation, // Correctly use string interpolation for the designation
+        total: bill.total, // Directly assign the total value
+        paid: 0, // Assuming you want to initialize as 0
+        unpaid: bill.total, // Unpaid value is the same as total initially
+      };
     }
-    return [];
-  };
+  );
 
-  const invoiceRows = getInvoiceRows();
+  const penaltyBillData: TableRow[] | undefined = TenantPenaltyBill?.map(
+    (bill) => {
+      return {
+        designation: `Penalty Bill for the month ${bill.month}`, // Correctly use string interpolation for the designation
+        total: parseInt(bill.total), // Directly assign the total value
+        paid: 0, // Assuming you want to initialize as 0
+        unpaid: parseInt(bill.total), // Unpaid value is the same as total initially
+      };
+    }
+  );
+  const tenantOther: TableRow[] | undefined = tenantOtherInvoice?.flatMap(
+    (bills) => {
+      return (
+        bills.tenant_other_details?.map((bill) => {
+          return {
+            designation: bill.designation, // Correctly assign the designation
+            total: bill.total, // Directly assign the total value
+            paid: 0, // Initialize as 0
+            unpaid: bill.total, // Unpaid value is the same as total initially
+          };
+        }) || []
+      ); // In case tenant_other_details is undefined, return an empty array
+    }
+  );
+  const tenantRenew: TableRow[] | undefined = tenantRenewInvoice?.flatMap(
+    (bills) => {
+      return (
+        bills.tenant_renew_contract_invoices?.map((bill) => {
+          return {
+            designation: bill.designation, // Correctly assign the designation
+            total: bill.total, // Directly assign the total value
+            paid: 0, // Initialize as 0
+            unpaid: bill.total, // Unpaid value is the same as total initially
+          };
+        }) || []
+      ); // In case tenant_other_details is undefined, return an empty array
+    }
+  );
 
-  // Handle checkbox change
-  const handleInvoiceSelection = (invoice: InvoiceRow) => {
-    let newSelectedInvoices = [...selectedInvoices];
-    let newTotalAmount = totalAmount;
-    let newTotalUnpaid = totalUnpaid;
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
-    if (newSelectedInvoices.includes(invoice.id)) {
-      // Deselect invoice
-      newSelectedInvoices = newSelectedInvoices.filter(
-        (id) => id !== invoice.id
-      );
-      newTotalAmount -= invoice.unpaid;
-      newTotalUnpaid -= invoice.unpaid;
+  const handleCheckboxChange = (index: number, unpaid: number) => {
+    const updatedSelectedRows = new Set(selectedRows);
+    if (updatedSelectedRows.has(index)) {
+      updatedSelectedRows.delete(index);
+      setTotalAmount((prev) => prev - unpaid);
     } else {
-      // Select invoice
-      newSelectedInvoices.push(invoice.id);
-      newTotalAmount += invoice.unpaid;
-      newTotalUnpaid += invoice.unpaid;
+      updatedSelectedRows.add(index);
+      setTotalAmount((prev) => prev + unpaid);
     }
-
-    setSelectedInvoices(newSelectedInvoices);
-    setTotalAmount(newTotalAmount);
-    setTotalUnpaid(newTotalUnpaid);
-
-    // Update form values
-    form.setValue("amount", newTotalAmount);
-    form.setValue("selected_invoices", newSelectedInvoices);
+    setSelectedRows(updatedSelectedRows);
   };
 
+  useEffect(() => {
+    form.setValue("amount", totalAmount);
+  }, [form, totalAmount]);
+
+  const InvoiceType = form.watch("invoice_type");
+  console.log("contractId" + ContractId);
+  const paymentMethod = form.watch("payment_method");
+  const doneBy = form.watch("done_by");
   return (
     <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger>Add Payment</DialogTrigger>
@@ -200,31 +205,23 @@ const AddPayment = () => {
         <DialogTitle>Add Payment</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* SELECTION OF INVOICE TYPE section */}
-            <div className="bg-green-200 text-center p-3 font-semibold rounded-md">
+            <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
               SELECTION OF INVOICE TYPE
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            </h2>
+            <div className="grid grid-cols-2 gap-5">
               {/* Tenant Field */}
               <TenantCombobox name="tenant_id" control={form.control} />
 
-              {/* Invoice Type Field */}
               <FormField
                 control={form.control}
                 name="invoice_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex mb-4">
-                      Invoice Type <span className="text-red-500 ml-1">*</span>
-                    </FormLabel>
+                    <FormLabel>Selection of Invoice Type *</FormLabel>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
+                      <Select onValueChange={field.onChange}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select invoice type" />
+                          <SelectValue placeholder="Select a contract" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="RENT">RENT</SelectItem>
@@ -252,100 +249,89 @@ const AddPayment = () => {
               <ContractCombobox
                 name="contract_id"
                 control={form.control}
-                tenantId={tenantId}
+                tenantId={TenantId}
               />
             </div>
 
-            {/* Show SELECTION DETAILS section when contract is selected */}
-            {contractId && invoiceType && (
+            {ContractId !== undefined && (
               <>
                 <div className="space-y-6">
-                  <div className="bg-green-200 text-center p-3 font-semibold rounded-md">
+                  <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
                     SELECTION DETAILS
-                  </div>
-
-                  {/* Status boxes */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  </h2>
+                  <div className="grid grid-cols-3 gap-4">
+                    {/* Total */}
                     <div className="bg-blue-500 text-white p-4 text-center rounded-md">
-                      <h3 className="text-lg font-semibold">
-                        TOTAL: {totalAmount.toLocaleString()} XOF
-                      </h3>
+                      <h3 className="text-lg font-semibold">TOTAL: 0 XOF</h3>
                     </div>
-                    <div className="bg-green-400 text-white p-4 text-center rounded-md">
-                      <h3 className="text-lg font-semibold">
-                        PAY: {totalPaid.toLocaleString()} XOF
-                      </h3>
+
+                    {/* Payment */}
+                    <div className="bg-green-500 text-white p-4 text-center rounded-md">
+                      <h3 className="text-lg font-semibold">PAYMENT: 0 XOF</h3>
                     </div>
+
+                    {/* Impact */}
                     <div className="bg-red-500 text-white p-4 text-center rounded-md">
-                      <h3 className="text-lg font-semibold">
-                        UNPAID: {totalUnpaid.toLocaleString()} XOF
-                      </h3>
+                      <h3 className="text-lg font-semibold">IMPACT: 0 XOF</h3>
                     </div>
                   </div>
 
-                  {/* Invoice selection table */}
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse border border-gray-200">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="w-12 border p-2"></th>
-                          <th className="border p-2 text-left">DESIGNATION</th>
-                          <th className="border p-2 text-right">TOTAL</th>
-                          <th className="border p-2 text-right">PAID</th>
-                          <th className="border p-2 text-right">UNPAID</th>
+                  {/* Table for Designations */}
+                  <table className="table-auto w-full mt-4 border-collapse border border-gray-300">
+                    <thead>
+                      <tr>
+                        <th className="border border-gray-300 p-2">
+                          Designation
+                        </th>
+                        <th className="border border-gray-300 p-2">Total</th>
+                        <th className="border border-gray-300 p-2">Paid</th>
+                        <th className="border border-gray-300 p-2">Unpaid</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(InvoiceType == "RENT"
+                        ? rentBillData
+                        : InvoiceType == "PENALTY"
+                        ? penaltyBillData
+                        : InvoiceType == "OTHER_INVOICES"
+                        ? tenantOther
+                        : InvoiceType == "RENEWAL"
+                        ? tenantRenew
+                        : InvoiceType == "COURT_TERME"
+                        ? tenantShortTermInvoices
+                        : []
+                      )?.map((row, index) => (
+                        <tr key={index}>
+                          <td className="border border-gray-300 p-2">
+                            <input
+                              type="checkbox"
+                              checked={selectedRows.has(index)}
+                              onChange={() =>
+                                handleCheckboxChange(index, row.unpaid ?? 0)
+                              }
+                            />{" "}
+                            {row.designation}
+                          </td>
+
+                          <td className="border border-gray-300 p-2">
+                            {row.total}
+                          </td>
+                          <td className="border border-gray-300 p-2">
+                            {row.paid}
+                          </td>
+                          <td className="border border-gray-300 p-2 text-red-500">
+                            {row.unpaid}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {invoiceRows.length > 0 ? (
-                          invoiceRows.map((invoice) => (
-                            <tr key={invoice.id} className="hover:bg-gray-50">
-                              <td className="border p-2 text-center">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedInvoices.includes(
-                                    invoice.id
-                                  )}
-                                  onChange={() =>
-                                    handleInvoiceSelection(invoice)
-                                  }
-                                  className="h-4 w-4"
-                                />
-                              </td>
-                              <td className="border p-2">
-                                {invoice.designation}
-                              </td>
-                              <td className="border p-2 text-right">
-                                {invoice.total.toLocaleString()}
-                              </td>
-                              <td className="border p-2 text-right">
-                                {invoice.paid.toLocaleString()}
-                              </td>
-                              <td className="border p-2 text-right text-red-500 font-medium">
-                                {invoice.unpaid.toLocaleString()}
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td
-                              colSpan={5}
-                              className="border p-4 text-center text-gray-500"
-                            >
-                              No invoices available for this selection
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
 
-                {/* DETAILS OF THE RULES section */}
-                <div className="bg-green-200 text-center p-3 font-semibold rounded-md">
+                <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
                   DETAILS OF THE RULES
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {/* Treasury Method */}
+                </h2>
+                <div className="grid grid-cols-3 gap-5">
                   <FormField
                     control={form.control}
                     name="treasury_type"
@@ -353,10 +339,7 @@ const AddPayment = () => {
                       <FormItem>
                         <FormLabel>Treasury Method</FormLabel>
                         <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
+                          <Select onValueChange={field.onChange}>
                             <SelectTrigger>
                               <SelectValue placeholder="Select method" />
                             </SelectTrigger>
@@ -397,17 +380,13 @@ const AddPayment = () => {
                     )}
                   />
 
-                  {/* Payment Method */}
                   <FormField
                     control={form.control}
                     name="payment_method"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Payment Method</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
+                        <Select onValueChange={field.onChange}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select Payment Method" />
@@ -436,10 +415,7 @@ const AddPayment = () => {
                       <FormItem>
                         <FormLabel>Done By</FormLabel>
                         <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value}
-                          >
+                          <Select onValueChange={field.onChange}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Done By" />
@@ -456,22 +432,19 @@ const AddPayment = () => {
                     )}
                   />
 
-                  {/* Conditional fields based on payment method */}
-                  {(paymentMethod === "MOBILE MONEY" ||
-                    paymentMethod === "WAVE" ||
-                    paymentMethod === "PAYMENT") && (
+                  {(paymentMethod == "MOBILE MONEY" ||
+                    paymentMethod == "WAVE" ||
+                    paymentMethod == "PAYMENT") && (
                     <>
+                      {" "}
                       <FormField
                         control={form.control}
                         name="phone_no"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone Number</FormLabel>
+                            <FormLabel>Phone no</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder="Example: +1234567890"
-                              />
+                              <Input {...field} placeholder="Enter Phone" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -482,11 +455,11 @@ const AddPayment = () => {
                         name="transaction"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Transaction Number</FormLabel>
+                            <FormLabel>Transaction no</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
-                                placeholder="Enter Transaction number"
+                                placeholder="Enter Transaction no"
                               />
                             </FormControl>
                             <FormMessage />
@@ -495,18 +468,17 @@ const AddPayment = () => {
                       />
                     </>
                   )}
-
-                  {/* Conditional fields for CHEQUE payment method */}
-                  {paymentMethod === "CHEQUE" && (
+                  {paymentMethod == "CHEQUE" && (
                     <>
+                      {" "}
                       <FormField
                         control={form.control}
                         name="bank"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Bank</FormLabel>
+                            <FormLabel>Bank no</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Enter Bank name" />
+                              <Input {...field} placeholder="Enter Bank" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -517,12 +489,9 @@ const AddPayment = () => {
                         name="cheque"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Cheque Number</FormLabel>
+                            <FormLabel>Cheque no</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder="Enter Cheque number"
-                              />
+                              <Input {...field} placeholder="Enter Cheque no" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -531,18 +500,17 @@ const AddPayment = () => {
                     </>
                   )}
 
-                  {/* Show Tiers field when Done By is OTHER */}
-                  {doneBy === "OTHER" && (
+                  {doneBy == "OTHER" && (
                     <FormField
                       control={form.control}
                       name="tiers"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Third Party</FormLabel>
+                          <FormLabel>Tiers</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
-                              placeholder="Name of the third party"
+                              placeholder="Name of the third paryy"
                             />
                           </FormControl>
                           <FormMessage />
@@ -551,20 +519,24 @@ const AddPayment = () => {
                     />
                   )}
 
-                  {/* Amount field */}
                   <FormField
                     control={form.control}
                     name="amount"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Amount</FormLabel>
-                        <FormControl>
+                        <FormControl className=" p-5 bg-gray-200  hover:text-green-700">
                           <Input
-                            className="bg-gray-100 font-bold text-green-700"
+                            className=" disabled:text-black"
                             {...field}
-                            value={totalAmount}
+                            value={totalAmount} // Bind input value to the totalAmount state
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value);
+                              field.onChange(value); // Update the form field
+                              setTotalAmount(value); // Update the totalAmount state
+                            }}
                             type="number"
-                            readOnly
+                            placeholder="Enter Amount"
                           />
                         </FormControl>
                         <FormMessage />
@@ -573,10 +545,9 @@ const AddPayment = () => {
                   />
                 </div>
 
-                {/* ATTACHMENTS section */}
-                <div className="bg-green-200 text-center p-3 font-semibold rounded-md">
+                <h2 className="bg-primary text-white text-center p-2 text-sm md:text-base">
                   ATTACHMENTS
-                </div>
+                </h2>
                 <div className="grid grid-cols-1 gap-5">
                   <FileUploader
                     onChange={(files) => form.setValue("documents", files)}
@@ -589,13 +560,7 @@ const AddPayment = () => {
 
             {/* Submit Button */}
             <DialogFooter>
-              <Button
-                type="submit"
-                disabled={selectedInvoices.length === 0}
-                className="bg-primary hover:bg-primary/90"
-              >
-                Save Payment
-              </Button>
+              <Button type="submit">Save</Button>
             </DialogFooter>
           </form>
         </Form>

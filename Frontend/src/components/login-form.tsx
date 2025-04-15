@@ -6,58 +6,61 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useAuthStore from "@/store/authStore";
+import { login } from "@/hooks/auth";
 
-export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
+interface LoginFormProps extends React.ComponentPropsWithoutRef<"form"> {
+  setLogin?: (value: boolean) => void;
+}
+
+export function LoginForm({ className, setLogin, ...props }: LoginFormProps) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ userLogin: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setUser, setToken } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Clear any previous error message
-    setError(null);
-
+    const { userLogin, password } = formData;
+    if (!userLogin || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
     try {
-      // Make the POST request using axios
-      const response = await axios.post(import.meta.env.VITE_API_URL +"/api/login", {
-        userLogin: formData.userLogin,
-        password: formData.password,
-      });
-      
-      // Check if the response is successful
-      if (response.data.token) {
-        // Save the token (if needed) and navigate to the portfolio page on success
-        localStorage.setItem("authToken", response.data.token);
-        navigate("/portfolio");
-
-        // Show success notification using react-toastify
-        toast.success("Login successful!");
-      } else {
-        // If login fails, show an error message
-        setError("Invalid username or password");
-        toast.error("Invalid username or password");
+      setIsSubmitting(true);
+      const { user, token } = await login(userLogin, password);
+      setUser(user);
+      setToken(token);
+      setIsSubmitting(false);
+      toast.success("Logged in successfully");
+      navigate("/dashboard");
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        toast.error("Invalid email or password");
+        return;
       }
-    } catch (err) {
-      // If there's an error (network error, server error, etc.)
-      setError("An error occurred. Please try again.");
-      toast.error("An error occurred. Please try again.");
+      toast.error("Something went wrong, please try again");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)} {...props}>
+    <form
+      onSubmit={handleSubmit}
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-4xl font-bold">Tit Immobiler</h1>
       </div>
 
       <div className="grid gap-6">
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
         {/* User Login Field */}
         <div className="grid gap-2">
           <Label htmlFor="userLogin">Username</Label>
@@ -65,7 +68,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             id="userLogin"
             name="userLogin"
             placeholder="m@example"
-            required
             value={formData.userLogin}
             onChange={handleChange}
           />
@@ -75,7 +77,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
+            <a
+              href="#"
+              className="ml-auto text-sm underline-offset-4 hover:underline"
+            >
               Forgot your password?
             </a>
           </div>
@@ -83,24 +88,26 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             id="password"
             name="password"
             type="password"
-            required
             value={formData.password}
             onChange={handleChange}
           />
         </div>
 
         {/* Login Button */}
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <span className="loader">Loading...</span> : "Login"}
         </Button>
       </div>
 
       {/* Sign Up Link */}
       <div className="text-center text-sm">
         Don't have an account?{" "}
-        <a href="#" className="underline underline-offset-4">
+        <button
+          className="underline underline-offset-4"
+          onClick={() => setLogin?.(false)}
+        >
           Sign up
-        </a>
+        </button>
       </div>
     </form>
   );

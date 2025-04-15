@@ -1,15 +1,19 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // Add useNavigate
 import UserImage from "../../../assets/avatar-default.png";
 import { sidebarOptions } from "@/data/sidebarOptions";
 import { ChevronRight, ChevronLeft, ChevronDown, LogOut } from "lucide-react";
+import useAuthStore from "@/store/authStore";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false); // State to toggle sidebar
   const [isProfileExpanded, setIsProfileExpanded] = useState(false); // State to toggle profile section
-  const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({}); // State for expanded sections
+  const [expandedSections, setExpandedSections] = useState<{
+    [key: string]: boolean;
+  }>({}); // State for expanded sections
   const location = useLocation(); // Get the current route
   const navigate = useNavigate(); // Hook to navigate programmatically
+  const { user } = useAuthStore();
 
   // Function to toggle expanded section
   const toggleSection = (sectionName: string) => {
@@ -18,9 +22,11 @@ const Sidebar: React.FC = () => {
       [sectionName]: !prevState[sectionName],
     }));
   };
-  
+
   return (
-    <div   className={`absolute top-16  z-50 sm:top-0 sm:relative flex border shadow-xl rounded transition-all duration-300 ease-in-out `}>
+    <div
+      className={`absolute top-16  z-50 sm:top-0 sm:relative flex border shadow-xl rounded transition-all duration-300 ease-in-out `}
+    >
       {/* Sidebar */}
       <aside
         className={`top-0 left-0 bg-white text-secondary transition-all duration-300 ease-in-out ${
@@ -31,9 +37,15 @@ const Sidebar: React.FC = () => {
         <div className="">
           <div
             className="flex flex-col items-center justify-center mt-4 cursor-pointer"
-            onClick={() =>{ setIsProfileExpanded(!isProfileExpanded);}}
+            onClick={() => {
+              setIsProfileExpanded(!isProfileExpanded);
+            }}
           >
-            <div className={`w-16 h-16 ${isOpen?"visible":" opacity-0 md:opacity-100"}   transition-all  rounded-full shadow-md border-4 border-white overflow-hidden`}>
+            <div
+              className={`w-16 h-16 ${
+                isOpen ? "visible" : " opacity-0 md:opacity-100"
+              }   transition-all  rounded-full shadow-md border-4 border-white overflow-hidden`}
+            >
               <img
                 src={UserImage}
                 alt="Profile"
@@ -42,7 +54,7 @@ const Sidebar: React.FC = () => {
             </div>
             {isOpen && (
               <div className="ml-3 flex text-primary">
-                <h3 className="text-lg font-semibold">TIT-immobilier</h3>
+                <h3 className="text-lg font-semibold">{user?.name}</h3>
                 <ChevronDown
                   size={20}
                   className={`transition-transform ${
@@ -57,7 +69,7 @@ const Sidebar: React.FC = () => {
           {isProfileExpanded && isOpen && (
             <ul className="mt-2 pl-6">
               {sidebarOptions[0].options.map((item, index) => (
-                <li key={index} className="py-2"  >
+                <li key={index} className="py-2">
                   <Link
                     to={item.path}
                     className="flex items-center space-x-2 text-sm text-secondary hover:text-primary"
@@ -72,7 +84,11 @@ const Sidebar: React.FC = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className={`mt-4 border-y border-[#ffffff79] ${isOpen?"visible":" opacity-0 md:opacity-100"}  transition-all delay-300 ease-in-out`}>
+        <ul
+          className={`mt-4 border-y border-[#ffffff79] ${
+            isOpen ? "visible" : " opacity-0 md:opacity-100"
+          }  transition-all delay-300 ease-in-out`}
+        >
           {sidebarOptions.slice(1).map((section, sectionIndex) => (
             <div key={sectionIndex}>
               {/* Section Title */}
@@ -96,14 +112,11 @@ const Sidebar: React.FC = () => {
                           ? "bg-white text-primary"
                           : "hover:bg-secondary hover:text-white"
                       }`}
-                      onClick={() =>{
-                      
+                      onClick={() => {
                         item.subOptions
                           ? toggleSection(item.name)
                           : navigate(item.path); // Navigate directly if no sub-options
-                        
-                        
-                        }                      }
+                      }}
                     >
                       {item.icon && <item.icon size={20} />}
                       {isOpen && <span>{item.name}</span>}
@@ -119,29 +132,28 @@ const Sidebar: React.FC = () => {
                   </li>
 
                   {/* Render Sub-Options if expanded */}
-                  {item.subOptions &&
-                    expandedSections[item.name] &&
-                    isOpen && (
-                      <ul className="pl-8">
-                        {item.subOptions.map((subItem, subIndex) => (
-                          <li key={subIndex} className="py-1">
-                            <Link
-                              to={subItem.path}
-                              className={`text-sm text-secondary hover:text-primary ${
-                                location.pathname === subItem.path
-                                  ? "text-primary font-semibold"
-                                  : ""
-                              }`}
-                            >
-                              <div className="flex items-center justify-start gap-3 border-b pb-3">
-                                <ChevronRight size={15} /> {/* Render icon if available */}
-                                <span>{subItem.name}</span>
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                  {item.subOptions && expandedSections[item.name] && isOpen && (
+                    <ul className="pl-8">
+                      {item.subOptions.map((subItem, subIndex) => (
+                        <li key={subIndex} className="py-1">
+                          <Link
+                            to={subItem.path}
+                            className={`text-sm text-secondary hover:text-primary ${
+                              location.pathname === subItem.path
+                                ? "text-primary font-semibold"
+                                : ""
+                            }`}
+                          >
+                            <div className="flex items-center justify-start gap-3 border-b pb-3">
+                              <ChevronRight size={15} />{" "}
+                              {/* Render icon if available */}
+                              <span>{subItem.name}</span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
@@ -161,7 +173,7 @@ const Sidebar: React.FC = () => {
           </Link>
         </div>
       </aside>
-   
+
       {/* Toggle Button */}
       <button
         className={`fixed top-20 transition-all duration-300 ease-in-out ${

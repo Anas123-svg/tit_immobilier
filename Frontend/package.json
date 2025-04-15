@@ -44,7 +44,8 @@
     "react-toastify": "^11.0.3",
     "tailwind-merge": "^2.6.0",
     "tinymce": "^7.6.1",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
