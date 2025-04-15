@@ -93,7 +93,7 @@ const AddPayment = () => {
   const TenantId = form.watch("tenant_id");
 
   const { data: TenantPenaltyBill } = useFetchData<TenantBill[]>(
-    `${import.meta.env.VITE_API_URL}/api/tenant-penalty/tenant/${
+    `${import.meta.env.VITE_API_URL}/api/tenant-penalty/details/tenant/${
       TenantId ? TenantId : ""
     }`
   );
@@ -103,13 +103,13 @@ const AddPayment = () => {
     }`
   );
   const { data: tenantOtherInvoice } = useFetchData<TenantOtherInvoice[]>(
-    `${import.meta.env.VITE_API_URL}/api/tenant-other/tenant/${
+    `${import.meta.env.VITE_API_URL}/api/tenant-other/details/tenant/${
       TenantId ? TenantId : ""
     }`
   );
 
   const { data: tenantRenewInvoice } = useFetchData<TenantRenewInvoice[]>(
-    `${import.meta.env.VITE_API_URL}/api/tenant-renew-contract/tenant/${
+    `${import.meta.env.VITE_API_URL}/api/tenant-renew-contract/details/tenant/${
       TenantId ? TenantId : ""
     }`
   );
@@ -132,84 +132,116 @@ const AddPayment = () => {
         month: "long",
         year: "numeric",
       })}`,
-      total: parseInt(bill.total),
-      paid: 0,
-      unpaid: parseInt(bill.total),
+      total: parseInt(bill.total || "0"),
+      paid: parseInt(bill.paid),
+      unpaid: parseInt(bill.Unpaid || "0"),
     };
   });
 
-  const tenantShortTermInvoices: TableRow[] | undefined = tenantShortTerm?.map(
+  const tenantShortTermInvoices: any[] | undefined = tenantShortTerm?.map(
     (bill) => {
       return {
         id: bill.id,
         designation: bill.designation,
-        total: bill.total,
-        paid: 0,
-        unpaid: bill.total,
+        total: parseInt(bill.total ?? "0"),
+        paid: bill.paid,
+        unpaid: parseInt(bill.Unpaid || "0"),
       };
     }
   );
 
-  const penaltyBillData: TableRow[] | undefined = TenantPenaltyBill?.map(
-    (bill) => {
-      return {
-        id: bill.id,
-        designation: `Penalty Bill for the month ${bill.created_at}`,
-        total: parseInt(bill.total),
-        paid: 0,
-        unpaid: parseInt(bill.total),
-      };
-    }
-  );
+  const penaltyBillData: any[] | undefined = TenantPenaltyBill?.map((bill) => {
+    return {
+      id: bill.id,
+      designation: `Penalty Bill for the month ${bill.created_at}`,
+      total: parseInt(bill.total),
+      paid: parseInt(bill.paid),
+      unpaid: parseInt(bill.Unpaid),
+    };
+  });
 
-  const tenantOther: TableRow[] | undefined = tenantOtherInvoice?.flatMap(
-    (bills) => {
-      return (
-        bills.tenant_other_details?.map((bill) => {
-          return {
-            id: bill.id,
-            designation: bill.designation,
-            total: bill.total,
-            paid: 0,
-            unpaid: bill.total,
-          };
-        }) || []
-      );
-    }
-  );
+  const tenantOther: any[] | undefined = tenantOtherInvoice?.map((bill) => {
+    return {
+      id: bill.id,
+      designation: bill.designation,
+      total: parseInt(bill.total),
+      paid: parseInt(bill.paid),
+      unpaid: parseInt(bill.Unpaid),
+    };
+  });
 
-  const tenantRenew: TableRow[] | undefined = tenantRenewInvoice?.flatMap(
-    (bills) => {
-      return (
-        bills.tenant_renew_contract_invoices?.map((bill) => {
-          return {
-            id: bill.id,
-            designation: bill.designation,
-            total: bill.total,
-            paid: 0,
-            unpaid: bill.total,
-          };
-        }) || []
-      );
-    }
-  );
+  const tenantRenew: any[] | undefined = tenantRenewInvoice?.map((bill) => {
+    return {
+      id: bill.id,
+      designation: bill.designation,
+      total: parseInt(bill.total),
+      paid: parseInt(bill.paid),
+      unpaid: parseInt(bill.Unpaid),
+    };
+  });
 
   // Changed to store actual IDs instead of indices
   const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(new Set());
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
+  // New state variables for summary calculations
+  const [summaryTotal, setSummaryTotal] = useState<number>(0);
+  const [summaryPaid, setSummaryPaid] = useState<number>(0);
+  const [summaryUnpaid, setSummaryUnpaid] = useState<number>(0);
+
+  // Get current active data based on invoice type
+  const getCurrentData = () => {
+    const InvoiceType = form.watch("invoice_type");
+
+    if (InvoiceType === "RENT") return rentBillData;
+    if (InvoiceType === "PENALTY") return penaltyBillData;
+    if (InvoiceType === "OTHER_INVOICES") return tenantOther;
+    if (InvoiceType === "RENEWAL") return tenantRenew;
+    if (InvoiceType === "COURT_TERME") return tenantShortTermInvoices;
+    return [];
+  };
+
   // Updated to handle IDs instead of indices
   const handleCheckboxChange = (id: number, unpaid: number) => {
     const updatedSelectedRows = new Set(selectedRowIds);
+
+    // Find the current row data
+    const currentData = getCurrentData();
+    const rowData = currentData?.find((row) => row.id === id);
+
+    if (!rowData) return;
+
     if (updatedSelectedRows.has(id)) {
+      // Remove from selection
       updatedSelectedRows.delete(id);
       setTotalAmount((prev) => prev - unpaid);
+
+      // Update summaries
+      setSummaryTotal((prev) => prev - rowData.total);
+      setSummaryPaid((prev) => prev - rowData.paid);
+      setSummaryUnpaid((prev) => prev - rowData.unpaid);
     } else {
+      // Add to selection
       updatedSelectedRows.add(id);
       setTotalAmount((prev) => prev + unpaid);
+
+      // Update summaries
+      setSummaryTotal((prev) => prev + rowData.total);
+      setSummaryPaid((prev) => prev + rowData.paid);
+      setSummaryUnpaid((prev) => prev + rowData.unpaid);
     }
+
     setSelectedRowIds(updatedSelectedRows);
   };
+
+  // Reset summary and selected rows when invoice type changes
+  useEffect(() => {
+    setSelectedRowIds(new Set());
+    setTotalAmount(0);
+    setSummaryTotal(0);
+    setSummaryPaid(0);
+    setSummaryUnpaid(0);
+  }, [form.watch("invoice_type")]);
 
   useEffect(() => {
     // Set amount value
@@ -238,6 +270,11 @@ const AddPayment = () => {
   const paymentMethod = form.watch("payment_method");
   const doneBy = form.watch("done_by");
   const treasuryType = form.watch("treasury_type");
+
+  // Format number for display
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat("fr-FR").format(num);
+  };
 
   return (
     <Dialog open={open} onOpenChange={openChange}>
@@ -303,17 +340,23 @@ const AddPayment = () => {
                   <div className="grid grid-cols-3 gap-4">
                     {/* Total */}
                     <div className="bg-blue-500 text-white p-4 text-center rounded-md">
-                      <h3 className="text-lg font-semibold">TOTAL: 0 XOF</h3>
+                      <h3 className="text-lg font-semibold">
+                        TOTAL: {formatNumber(summaryTotal)} XOF
+                      </h3>
                     </div>
 
                     {/* Payment */}
                     <div className="bg-green-500 text-white p-4 text-center rounded-md">
-                      <h3 className="text-lg font-semibold">PAYMENT: 0 XOF</h3>
+                      <h3 className="text-lg font-semibold">
+                        PAYMENT: {formatNumber(summaryPaid)} XOF
+                      </h3>
                     </div>
 
                     {/* Impact */}
                     <div className="bg-red-500 text-white p-4 text-center rounded-md">
-                      <h3 className="text-lg font-semibold">IMPACT: 0 XOF</h3>
+                      <h3 className="text-lg font-semibold">
+                        IMPACT: {formatNumber(summaryUnpaid)} XOF
+                      </h3>
                     </div>
                   </div>
 
