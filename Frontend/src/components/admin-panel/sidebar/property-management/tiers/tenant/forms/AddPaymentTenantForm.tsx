@@ -54,6 +54,7 @@ const PaymentFormSchema = z.object({
   invoice_type: z.string().optional(),
   total: z.number().optional(),
   treasury_type: z.string().optional(),
+  treasury_id: z.number().optional(), // Added treasury_id field
   documents: z.array(z.string()).optional(),
   done_by: z.string().optional(),
   cheque: z.string().optional(),
@@ -64,6 +65,12 @@ const PaymentFormSchema = z.object({
     .optional(),
   transaction: z.string().optional(),
   tiers: z.string().optional(),
+  rent_bills: z.array(z.number()).optional(),
+  penalty_bills: z.array(z.number()).optional(),
+  other_invoices: z.array(z.number()).optional(),
+  renewal_contracts: z.array(z.number()).optional(),
+  short_contracts: z.array(z.number()).optional(),
+  termination_invoices: z.array(z.number()).optional(),
 });
 
 type PaymentFormData = z.infer<typeof PaymentFormSchema>;
@@ -84,10 +91,6 @@ const AddPayment = () => {
 
   const ContractId = form.watch("contract_id");
   const TenantId = form.watch("tenant_id");
-
-  // const { data: contract, loading, error } = useFetchData<Contract>(
-  //   `${import.meta.env.VITE_API_URL}/api/tenant-contract/${Contract ? Contract : "0"}`
-  // );
 
   const { data: TenantPenaltyBill } = useFetchData<TenantBill[]>(
     `${import.meta.env.VITE_API_URL}/api/tenant-penalty/tenant/${
@@ -116,22 +119,33 @@ const AddPayment = () => {
       import.meta.env.VITE_API_URL
     }/api/tenant-short-term-contract/details/tenant/${TenantId ? TenantId : ""}`
   );
-  const rentBillData: TableRow[] | undefined = TenantRentBill?.map((bill) => {
+
+  // Fetch treasury data for treasury_id selection
+  const { data: treasuries } = useFetchData<any[]>(
+    `${import.meta.env.VITE_API_URL}/api/treasury/add`
+  );
+
+  const rentBillData: any[] | undefined = TenantRentBill?.map((bill) => {
     return {
-      designation: `Rent Bill for the month ${bill.month}`, // Correctly use string interpolation for the designation
-      total: parseInt(bill.total), // Directly assign the total value
-      paid: 0, // Assuming you want to initialize as 0
-      unpaid: parseInt(bill.total), // Unpaid value is the same as total initially
+      id: bill.id,
+      designation: `${new Date(bill.created_at).toLocaleString("default", {
+        month: "long",
+        year: "numeric",
+      })}`,
+      total: parseInt(bill.total),
+      paid: 0,
+      unpaid: parseInt(bill.total),
     };
   });
 
   const tenantShortTermInvoices: TableRow[] | undefined = tenantShortTerm?.map(
     (bill) => {
       return {
-        designation: bill.designation, // Correctly use string interpolation for the designation
-        total: bill.total, // Directly assign the total value
-        paid: 0, // Assuming you want to initialize as 0
-        unpaid: bill.total, // Unpaid value is the same as total initially
+        id: bill.id,
+        designation: bill.designation,
+        total: bill.total,
+        paid: 0,
+        unpaid: bill.total,
       };
     }
   );
@@ -139,65 +153,92 @@ const AddPayment = () => {
   const penaltyBillData: TableRow[] | undefined = TenantPenaltyBill?.map(
     (bill) => {
       return {
-        designation: `Penalty Bill for the month ${bill.month}`, // Correctly use string interpolation for the designation
-        total: parseInt(bill.total), // Directly assign the total value
-        paid: 0, // Assuming you want to initialize as 0
-        unpaid: parseInt(bill.total), // Unpaid value is the same as total initially
+        id: bill.id,
+        designation: `Penalty Bill for the month ${bill.created_at}`,
+        total: parseInt(bill.total),
+        paid: 0,
+        unpaid: parseInt(bill.total),
       };
     }
   );
+
   const tenantOther: TableRow[] | undefined = tenantOtherInvoice?.flatMap(
     (bills) => {
       return (
         bills.tenant_other_details?.map((bill) => {
           return {
-            designation: bill.designation, // Correctly assign the designation
-            total: bill.total, // Directly assign the total value
-            paid: 0, // Initialize as 0
-            unpaid: bill.total, // Unpaid value is the same as total initially
+            id: bill.id,
+            designation: bill.designation,
+            total: bill.total,
+            paid: 0,
+            unpaid: bill.total,
           };
         }) || []
-      ); // In case tenant_other_details is undefined, return an empty array
+      );
     }
   );
+
   const tenantRenew: TableRow[] | undefined = tenantRenewInvoice?.flatMap(
     (bills) => {
       return (
         bills.tenant_renew_contract_invoices?.map((bill) => {
           return {
-            designation: bill.designation, // Correctly assign the designation
-            total: bill.total, // Directly assign the total value
-            paid: 0, // Initialize as 0
-            unpaid: bill.total, // Unpaid value is the same as total initially
+            id: bill.id,
+            designation: bill.designation,
+            total: bill.total,
+            paid: 0,
+            unpaid: bill.total,
           };
         }) || []
-      ); // In case tenant_other_details is undefined, return an empty array
+      );
     }
   );
 
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  // Changed to store actual IDs instead of indices
+  const [selectedRowIds, setSelectedRowIds] = useState<Set<number>>(new Set());
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
-  const handleCheckboxChange = (index: number, unpaid: number) => {
-    const updatedSelectedRows = new Set(selectedRows);
-    if (updatedSelectedRows.has(index)) {
-      updatedSelectedRows.delete(index);
+  // Updated to handle IDs instead of indices
+  const handleCheckboxChange = (id: number, unpaid: number) => {
+    const updatedSelectedRows = new Set(selectedRowIds);
+    if (updatedSelectedRows.has(id)) {
+      updatedSelectedRows.delete(id);
       setTotalAmount((prev) => prev - unpaid);
     } else {
-      updatedSelectedRows.add(index);
+      updatedSelectedRows.add(id);
       setTotalAmount((prev) => prev + unpaid);
     }
-    setSelectedRows(updatedSelectedRows);
+    setSelectedRowIds(updatedSelectedRows);
   };
 
   useEffect(() => {
+    // Set amount value
     form.setValue("amount", totalAmount);
-  }, [form, totalAmount]);
+
+    // Convert Set to Array for submission
+    const selectedIdsArray = Array.from(selectedRowIds);
+
+    // Update the corresponding form field based on invoice type
+    if (form.watch("invoice_type") === "RENT") {
+      form.setValue("rent_bills", selectedIdsArray);
+    } else if (form.watch("invoice_type") === "PENALTY") {
+      form.setValue("penalty_bills", selectedIdsArray);
+    } else if (form.watch("invoice_type") === "OTHER_INVOICES") {
+      form.setValue("other_invoices", selectedIdsArray);
+    } else if (form.watch("invoice_type") === "RENEWAL") {
+      form.setValue("renewal_contracts", selectedIdsArray);
+    } else if (form.watch("invoice_type") === "COURT_TERME") {
+      form.setValue("short_contracts", selectedIdsArray);
+    } else if (form.watch("invoice_type") === "TERMINATION") {
+      form.setValue("termination_invoices", selectedIdsArray);
+    }
+  }, [form, totalAmount, selectedRowIds]);
 
   const InvoiceType = form.watch("invoice_type");
-  console.log("contractId" + ContractId);
   const paymentMethod = form.watch("payment_method");
   const doneBy = form.watch("done_by");
+  const treasuryType = form.watch("treasury_type");
+
   return (
     <Dialog open={open} onOpenChange={openChange}>
       <DialogTrigger>Add Payment</DialogTrigger>
@@ -300,14 +341,14 @@ const AddPayment = () => {
                         : InvoiceType == "COURT_TERME"
                         ? tenantShortTermInvoices
                         : []
-                      )?.map((row, index) => (
-                        <tr key={index}>
+                      )?.map((row) => (
+                        <tr key={row.id}>
                           <td className="border border-gray-300 p-2">
                             <input
                               type="checkbox"
-                              checked={selectedRows.has(index)}
+                              checked={selectedRowIds.has(row.id)}
                               onChange={() =>
-                                handleCheckboxChange(index, row.unpaid ?? 0)
+                                handleCheckboxChange(row.id, row.unpaid ?? 0)
                               }
                             />{" "}
                             {row.designation}
@@ -364,6 +405,42 @@ const AddPayment = () => {
                       </FormItem>
                     )}
                   />
+
+                  {/* Treasury ID field - shows only when treasury_type is selected */}
+                  {treasuryType && (
+                    <FormField
+                      control={form.control}
+                      name="treasury_id"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Treasury</FormLabel>
+                          <FormControl>
+                            <Select
+                              onValueChange={(value) =>
+                                field.onChange(parseInt(value))
+                              }
+                              value={field.value?.toString()}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select treasury" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {treasuries?.map((treasury) => (
+                                  <SelectItem
+                                    key={treasury.id}
+                                    value={treasury.id.toString()}
+                                  >
+                                    {treasury.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
                   {/* Payment Date */}
                   <FormField
